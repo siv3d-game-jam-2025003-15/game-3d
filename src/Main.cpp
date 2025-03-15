@@ -2,6 +2,7 @@
 # include "Title.hpp"
 # include "Game.hpp"
 # include "Ranking.hpp"
+# include "CameraTest.hpp"
 
 void Main()
 {
@@ -14,6 +15,7 @@ void Main()
 	manager.add<Title>(State::Title);
 	manager.add<Game>(State::Game);
 	manager.add<Ranking>(State::Ranking);
+	manager.add<CameraTest>(State::CameraTest);
 
 	while (System::Update())
 	{

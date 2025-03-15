@@ -34,3 +34,8 @@
 App
 empty.xcodeproj
 Info.plist
+
+.vs/
+Intermediate/
+game-3d/
+*.sln
