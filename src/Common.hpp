@@ -10,6 +10,7 @@ enum class State
 	CameraTest,
     ModelView,
     Result,
+    Stage,
 };
 
 // 共有するデータ

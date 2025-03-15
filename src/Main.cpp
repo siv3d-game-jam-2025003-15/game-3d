@@ -5,6 +5,7 @@
 # include "CameraTest.hpp"
 # include "ModelView.hpp"
 # include "Result.hpp"
+# include "Stage.hpp"
 
 void Main()
 {
@@ -25,6 +26,7 @@ void Main()
     manager.add<ModelView>(State::ModelView);
     manager.add<CameraTest>(State::CameraTest);
     manager.add<Result>(State::Result);
+    manager.add<Stage>(State::Stage);
 
 	while (System::Update())
 	{
