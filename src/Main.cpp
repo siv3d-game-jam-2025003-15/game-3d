@@ -3,6 +3,7 @@
 # include "Game.hpp"
 # include "Ranking.hpp"
 # include "CameraTest.hpp"
+# include "ModelView.hpp"
 # include "Result.hpp"
 
 void Main()
@@ -25,6 +26,8 @@ void Main()
 	manager.add<Title>(State::Title);
 	manager.add<Game>(State::Game);
 	manager.add<Ranking>(State::Ranking);
+	manager.add<CameraTest>(State::CameraTest);
+    manager.add<ModelView>(State::ModelView);
     manager.add<CameraTest>(State::CameraTest);
     manager.add<Result>(State::Result);
 

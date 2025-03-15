@@ -1,14 +1,34 @@
+newmtl T_EV_Bed01SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd T_EV_Bed01_D.png
+Ni 1.00
+newmtl T_EV_Door01SG
+illum 4
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+map_Kd T_EV_Door01_D.png
+Ni 1.00
 newmtl T_EV_Floor01SG
 illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
 Tf 1.00 1.00 1.00
 map_Kd T_EV_Floor01_D.png
 Ni 1.00
+newmtl initialShadingGroup
+illum 4
+Kd 0.50 0.50 0.50
+Ka 1.00 1.00 1.00
+Tf 1.00 1.00 1.00
+Ni 1.00
 newmtl lambert2SG
 illum 4
-Kd 0.00 0.00 0.00
-Ka 0.00 0.00 0.00
+Kd 1.00 1.00 1.00
+Ka 1.00 1.00 1.00
 Tf 1.00 1.00 1.00
 map_Kd T_EV_Wall01_D.png
 Ni 1.00
