@@ -76,11 +76,14 @@ private:
 
 	double m_nearClip = DefaultNearClip;
 
-	double m_focusY = [this]
-		{
-			const auto focusVector = (m_focusPosition - m_eyePosition);
-			return (focusVector.y / std::hypot(focusVector.x, focusVector.z));
-		}();
+	//double m_focusY = [this]
+	//	{
+	//		const auto focusVector = (m_focusPosition - m_eyePosition);
+	//		return (focusVector.y / std::hypot(focusVector.x, focusVector.z));
+	//	}();
+
+	// ŠJŽnŽž‚Ì–Ú‚ÌŠp“x
+	double m_focusY = 0;
 
 	double m_phi = std::atan2((m_focusPosition.z - m_eyePosition.z),
 		(m_focusPosition.x - m_eyePosition.x));
