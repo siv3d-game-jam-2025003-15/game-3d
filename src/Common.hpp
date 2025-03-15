@@ -7,6 +7,7 @@ enum class State
 	Title,
 	Game,
 	Ranking,
+	CameraTest,
 };
 
 // 共有するデータ
