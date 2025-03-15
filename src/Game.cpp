@@ -98,6 +98,15 @@ void DrawGame(const GameState& gameState, const Texture& blockTexture)
 Game::Game(const InitData& init)
     : IScene{ init }
 {
+    // 環境光を設定する
+    Graphics3D::SetGlobalAmbientColor(ColorF{ 0.75, 0.75, 0.75 });
+
+    // 太陽光を設定する
+    Graphics3D::SetSunColor(ColorF{ 0.5, 0.5, 0.5 });
+
+    // 太陽の方向を設定する
+    Graphics3D::SetSunDirection(Vec3{ 0, 1, -0.3 }.normalized());
+
     // ゲームの状態
     gameState.s[0][0][0] = gameState.s[1][0][1] = 1;
     gameState.s[4][0][4] = gameState.s[5][0][4] = 2;
@@ -108,6 +117,11 @@ Game::Game(const InitData& init)
 
 void Game::update()
 {
+    if (resultButton.leftClicked()) // リザルトへ
+    {
+        changeScene(State::Result);
+    }
+    
     ////////////////////////////////
     //
     //    状態の更新
@@ -203,5 +217,9 @@ void Game::draw() const
         {
             //gameState = GameState{};
         }
+        
+        resultButton.draw(ColorF{ 1.0, resultTransition.value() }).drawFrame(2);
+        const Font& boldFont = FontAsset(U"Bold");
+        boldFont(U"リザルトへ").drawAt(36, resultButton.center(), ColorF{ 0.1 });
     }
 }

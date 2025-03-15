@@ -9,6 +9,7 @@ enum class State
 	Ranking,
 	CameraTest,
     ModelView,
+    Result,
 };
 
 // 共有するデータ
