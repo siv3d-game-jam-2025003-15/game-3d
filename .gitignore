@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+App
+empty.xcodeproj
+Info.plist
