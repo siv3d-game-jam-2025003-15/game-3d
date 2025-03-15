@@ -56,8 +56,8 @@ private:
 
 	bool m_padPressed = false;
 
-	Vec3 m_eyePosition = Vec3{ 0, 4, -4 };
-	Vec3 last_eyePosition = Vec3{ 0, 4, -4 };
+	Vec3 m_eyePosition = Vec3{ 0, 1.5, -4 };
+	Vec3 last_eyePosition = Vec3{ 0, 1.5, -4 };
 
 	Vec3 m_focusPosition = Vec3{ 0, 0, 0 };
 

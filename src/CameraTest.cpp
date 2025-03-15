@@ -15,7 +15,9 @@ CameraTest::CameraTest(const InitData& init)
 	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
 
 	//camera = DebugCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
-	camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
+	//camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
+	//camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
+	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 	//	DebugCamera3D camera{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 //	DebugCamera3D camera{ renderTexture.size(), 120_deg, Vec3{ 10, 16, -32 } };
@@ -196,10 +198,10 @@ void CameraTest::update()
 	Print << m_eyePosition;
 
 	// ÉRÉäÉWÉáÉì
-	if (m_eyePosition.x < -5.0
-	|| m_eyePosition.x > 10.0
-	|| m_eyePosition.z < -5.0
-	|| m_eyePosition.z > 10.0
+	if (m_eyePosition.x < -3.5
+	|| m_eyePosition.x > 3.5
+	|| m_eyePosition.z < -4.5
+	|| m_eyePosition.z > 4.5
 	|| m_eyePosition.y < 0.5	// çÇÇ≥
 	|| m_eyePosition.y > 5.0	// çÇÇ≥
 	)
@@ -225,7 +227,7 @@ void CameraTest::update()
 
 
 	{
-		Transformer3D t{ Mat4x4::RotateY(45_deg).scaled(roomScale).translated(roomPos) };
+		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 		// ÉÇÉfÉãÇï`âÊ
 		model.draw();
 	}
@@ -248,6 +250,7 @@ void CameraTest::update()
 	}
 
 
+	Box{ Vec3{0, 0, 5.5}, 10 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO îºìßñæÇ…Ç≈Ç´Ç»Ç¢
 
 
 }
