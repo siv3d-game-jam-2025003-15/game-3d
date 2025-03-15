@@ -20,27 +20,36 @@ CameraTest::CameraTest(const InitData& init)
 	//	DebugCamera3D camera{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 //	DebugCamera3D camera{ renderTexture.size(), 120_deg, Vec3{ 10, 16, -32 } };
 
-	Audio audio(U"close.wav");
+	//Audio audio(U"close.wav");
 
-	audio.setVolume(0.5);
+	//audio.setVolume(0.5);
+
+	// モデルに付随するテクスチャをアセット管理に登録
+	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
+
+	// おまじない
+	// 牢屋のような薄暗い雰囲気の設定
+	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
+	Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
+	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
 }
 
 void CameraTest::update()
 {
 	ClearPrint();
 
-	if (MouseL.down())
-	{
-		count++;
-	}
-	if (KeyUp.pressed())
-	{
-		count++;
-	}
-	if (KeySpace.down())
-	{
-		audio.play();
-	}
+	//if (MouseL.down())
+	//{
+	//	count++;
+	//}
+	//if (KeyUp.pressed())
+	//{
+	//	count++;
+	//}
+	//if (KeySpace.down())
+	//{
+	//	audio.play();
+	//}
 
 
 	Ray ray = getMouseRay();
@@ -193,21 +202,25 @@ void CameraTest::update()
 
 
 
-
-
-
-
-
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
-	blacksmithModel.draw(Vec3{ 8, 0, 4 });
+
+	{
+		Transformer3D t{ Mat4x4::RotateY(45_deg).scaled(roomScale).translated(roomPos) };
+		// モデルを描画
+		model.draw();
+	}
+
+
+	//blacksmithModel.draw(Vec3{ 8, 0, 4 });
+
 
 	// 地面の描画
-	groundPlane.draw(groundTexture);
+	//groundPlane.draw(groundTexture);
 
 	// マウスの位置を判定
 	//Box box = Box{ Vec3{0, 0, 0}, 1.0 }.draw(ColorF{ 1.0, 1.0, 1.0, 1.0 });
-	Box box = Box{ Vec3{0, 0, 0}, 1.0 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
+	Box box = Box{ Vec3{0, 0, 0}, 1 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
 	//const Box box = Box::FromPoints(Vec3{ 1, 4, 4 }, Vec3{ 0, 4, 4 });
 
 	if (box.intersects(ray))
@@ -215,12 +228,9 @@ void CameraTest::update()
 		Print << U"HIT";
 	}
 
-	// [RenderTexture を 2D シーンに描画]
-	{
-		Graphics3D::Flush();
-		renderTexture.resolve();
-		Shader::LinearToScreen(renderTexture);
-	}
+
+
+
 }
 
 void CameraTest::draw() const
@@ -246,4 +256,11 @@ void CameraTest::draw() const
 
 	// シーンにカメラを設定する
 	//Graphics3D::SetCameraTransform(m_camera);
+
+	// [RenderTexture を 2D シーンに描画]
+	{
+		Graphics3D::Flush();
+		renderTexture.resolve();
+		Shader::LinearToScreen(renderTexture);
+	}
 }
