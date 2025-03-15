@@ -113,12 +113,15 @@ Game::Game(const InitData& init)
 
     // アクティブなボクセル
     Point activeVoxelXZ{ -1, -1 };
+    
+    AudioAsset(U"BGM").play();
 }
 
 void Game::update()
 {
     if (resultButton.leftClicked()) // リザルトへ
     {
+        AudioAsset(U"BGM").stop();
         changeScene(State::Result);
     }
     if (walk45SecLoopButton.leftClicked()) // リザルトへ

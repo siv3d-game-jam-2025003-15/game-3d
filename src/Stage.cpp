@@ -11,6 +11,8 @@ Stage::Stage(const InitData& init)
     Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
     Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
     Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
+    
+    AudioAsset(U"BGM").play();
 }
 
 void Stage::update()
@@ -18,6 +20,7 @@ void Stage::update()
     if (MouseL.down())
     {
         // タイトルシーンへ
+        AudioAsset(U"BGM").stop();
         changeScene(State::Title);
     }
     
