@@ -84,4 +84,18 @@ private:
 
 	double m_phi = std::atan2((m_focusPosition.z - m_eyePosition.z),
 		(m_focusPosition.x - m_eyePosition.x));
+
+
+
+	/// モデル配置
+	// モデルの読み込み（マテリアル参照を無視）
+	const Model model{ U"assets/models/Room/EV_Room01.obj" };
+
+	const Texture floorTexture{ U"assets/models/Room/T_EV_Floor01_D.png", TextureDesc::Mipped };
+	const Texture wallTexture{ U"assets/models/Room/T_EV_Wall01_D.png", TextureDesc::Mipped };
+
+	// 各オブジェクトの位置
+	const Vec3 roomPos{ 0, 0, 0 };
+	// スケーリングの倍率
+	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 };
