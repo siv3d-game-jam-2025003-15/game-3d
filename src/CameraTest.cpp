@@ -11,7 +11,13 @@ CameraTest::CameraTest(const InitData& init)
 	blacksmithModel = Model{ U"example/obj/blacksmith.obj" };
 //	blacksmithModel = Model{ U"assets/models/Room/EV_Room01.obj" };
 
-	DebugCamera3D camera{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
+	groundTexture = Texture{ U"example/texture/ground.jpg", TextureDesc::MippedSRGB };
+	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
+
+	//camera = DebugCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
+	camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
+	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
+	//	DebugCamera3D camera{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 //	DebugCamera3D camera{ renderTexture.size(), 120_deg, Vec3{ 10, 16, -32 } };
 
 	Audio audio(U"close.wav");
@@ -37,7 +43,7 @@ void CameraTest::update()
 	}
 
 
-	const Ray ray = getMouseRay();
+	Ray ray = getMouseRay();
 
 	Print << ray;
 	Print << ray.direction;	// 角度
@@ -49,16 +55,155 @@ void CameraTest::update()
 	Print << ray.origin.getY();	// 座標
 	Print << ray.origin.getZ();	// 座標
 
+	Vec3 fixedPosition{ 0, 5, -10 };
+	Vec3 fixedForward{ 0, 0, 1 };
 
-	camera.update(2.0);
+	if (ray.origin.getX() < -2.0)
+	{
+
+	}
+	else
+	{
+		// 移動できる
+		//camera.update(2.0);
+	}
+
+	//camera.setView(fixedPosition, fixedPosition, fixedPosition);
+
+	//Graphics3D::SetCameraTransform(camera);
+
+
+
+
+
+
+	float speed = 2.0f;
+
+	const double deltaTime = Scene::DeltaTime();
+	const double scaledSpeed =
+		speed * ((KeyControl | KeyCommand).pressed() ? 20.0 : KeyShift.pressed() ? 5.0 : 1.0)
+		* deltaTime;
+
+	if (KeyLeft.pressed())
+	{
+		m_phi += (60_deg * deltaTime);
+
+		if (m_phi < 0_deg)
+		{
+			m_phi += 360_deg;
+		}
+	}
+
+	if (KeyRight.pressed())
+	{
+		m_phi -= (60_deg * deltaTime);
+
+		if (360_deg < m_phi)
+		{
+			m_phi -= 360_deg;
+		}
+	}
+
+	const double s = (Math::Cos(m_phi));
+	const double c = (Math::Sin(m_phi));
+
+	{
+		const double xr = (scaledSpeed * s);
+		const double zr = (scaledSpeed * c);
+
+		if (KeyW.pressed())
+		{
+			m_eyePosition.x += xr;
+			m_eyePosition.z += zr;
+		}
+
+		if (KeyS.pressed())
+		{
+			m_eyePosition.x -= xr;
+			m_eyePosition.z -= zr;
+		}
+
+		if (KeyA.pressed())
+		{
+			m_eyePosition.x -= zr;
+			m_eyePosition.z += xr;
+		}
+
+		if (KeyD.pressed())
+		{
+			m_eyePosition.x += zr;
+			m_eyePosition.z -= xr;
+		}
+	}
+
+	{
+		const double yDelta = deltaTime;
+
+		if (KeyUp.pressed())
+		{
+			m_focusY += yDelta;
+		}
+
+		if (KeyDown.pressed())
+		{
+			m_focusY -= yDelta;
+		}
+	}
+
+	if (KeyE.pressed())
+	{
+		m_eyePosition.y += scaledSpeed;
+	}
+
+	if (KeyX.pressed())
+	{
+		m_eyePosition.y -= scaledSpeed;
+	}
+
+	const Vec3 focusVector{ s, m_focusY, c };
+
+	camera.setProjection(Graphics3D::GetRenderTargetSize(), m_verticalFOV, m_nearClip);
+
+
+	Print << m_eyePosition;
+
+	// コリジョン
+	if (m_eyePosition.x < -5.0
+	|| m_eyePosition.x > 10.0
+	|| m_eyePosition.z < -5.0
+	|| m_eyePosition.z > 10.0
+	|| m_eyePosition.y < 0.5	// 高さ
+	|| m_eyePosition.y > 5.0	// 高さ
+	)
+	{
+		// 進めない
+		m_eyePosition = last_eyePosition;
+	}
+
+	camera.setView(m_eyePosition, (m_eyePosition + focusVector), m_upDirection);
+
+
 	Graphics3D::SetCameraTransform(camera);
 
-	// 床を描画
-	Plane{ 16 }.draw(ColorF{ 0.3 });
+	last_eyePosition = m_eyePosition;
+
+
+
+
+
+
+
+
+
+
+
 
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
 	blacksmithModel.draw(Vec3{ 8, 0, 4 });
+
+	// 地面の描画
+	groundPlane.draw(groundTexture);
 
 	// [RenderTexture を 2D シーンに描画]
 	{
