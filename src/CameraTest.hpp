@@ -33,8 +33,8 @@ private:
 
 	//double m_theta = 50_deg;
 
-	//BasicCamera3D m_camera;
-	DebugCamera3D camera;
+	BasicCamera3D camera;
+	//DebugCamera3D camera;
 
 	Size SceneSize{ 256, 192 };
 
@@ -47,4 +47,37 @@ private:
 	int count = 0;
 
 	Audio audio;
+
+	double m_fastMove = 1.0;
+
+	bool m_padPressed = false;
+
+	Vec3 m_eyePosition = Vec3{ 0, 4, -4 };
+	Vec3 last_eyePosition = Vec3{ 0, 4, -4 };
+
+	Vec3 m_focusPosition = Vec3{ 0, 0, 0 };
+
+	Vec3 m_upDirection = Vec3{ 0, 1, 0 };
+
+	double DefaultVerticalFOV = 30_deg;
+
+	double DefaultNearClip = 0.2;
+
+	//
+	// Proj
+	//
+	Size m_sceneSize = Scene::Size();
+
+	double m_verticalFOV = DefaultVerticalFOV;
+
+	double m_nearClip = DefaultNearClip;
+
+	double m_focusY = [this]
+		{
+			const auto focusVector = (m_focusPosition - m_eyePosition);
+			return (focusVector.y / std::hypot(focusVector.x, focusVector.z));
+		}();
+
+	double m_phi = std::atan2((m_focusPosition.z - m_eyePosition.z),
+		(m_focusPosition.x - m_eyePosition.x));
 };
