@@ -32,6 +32,8 @@ CameraTest::CameraTest(const InitData& init)
 	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
 	Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
 	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
+
+	AudioAsset(U"BGM").play();
 }
 
 void CameraTest::update()
@@ -120,28 +122,45 @@ void CameraTest::update()
 		const double xr = (scaledSpeed * s);
 		const double zr = (scaledSpeed * c);
 
+		bool isWalk = false;
 		if (KeyW.pressed())
 		{
 			m_eyePosition.x += xr;
 			m_eyePosition.z += zr;
+			isWalk = true;
 		}
 
 		if (KeyS.pressed())
 		{
 			m_eyePosition.x -= xr;
 			m_eyePosition.z -= zr;
+			isWalk = true;
 		}
 
 		if (KeyA.pressed())
 		{
 			m_eyePosition.x -= zr;
 			m_eyePosition.z += xr;
+			isWalk = true;
 		}
 
 		if (KeyD.pressed())
 		{
 			m_eyePosition.x += zr;
 			m_eyePosition.z -= xr;
+			isWalk = true;
+		}
+		
+		if (isWalk)
+		{
+			if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
+				AudioAsset(U"足音45秒のループ").play();
+			}
+		}
+		else {
+			if (AudioAsset(U"足音45秒のループ").isPlaying()) {
+				AudioAsset(U"足音45秒のループ").stop();
+			}
 		}
 	}
 
