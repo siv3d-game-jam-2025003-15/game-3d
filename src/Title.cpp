@@ -20,7 +20,7 @@ void Title::update()
 		//|| m_rankingButton.mouseOver()
 		|| m_exitButton.mouseOver()
 		|| m_cameraTestButton.mouseOver()
-            || m_modelViewButton.mouseOver()
+        || m_modelViewButton.mouseOver()
 		)
 		{
 			Cursor::RequestStyle(CursorStyle::Hand);
