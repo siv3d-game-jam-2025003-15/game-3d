@@ -15,7 +15,9 @@ CameraTest::CameraTest(const InitData& init)
 	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
 
 	//camera = DebugCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
-	camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
+	//camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
+	//camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
+	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 	//	DebugCamera3D camera{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 //	DebugCamera3D camera{ renderTexture.size(), 120_deg, Vec3{ 10, 16, -32 } };
@@ -32,6 +34,8 @@ CameraTest::CameraTest(const InitData& init)
 	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
 	Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
 	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
+
+	AudioAsset(U"BGM").play();
 }
 
 void CameraTest::update()
@@ -120,28 +124,45 @@ void CameraTest::update()
 		const double xr = (scaledSpeed * s);
 		const double zr = (scaledSpeed * c);
 
+		bool isWalk = false;
 		if (KeyW.pressed())
 		{
 			m_eyePosition.x += xr;
 			m_eyePosition.z += zr;
+			isWalk = true;
 		}
 
 		if (KeyS.pressed())
 		{
 			m_eyePosition.x -= xr;
 			m_eyePosition.z -= zr;
+			isWalk = true;
 		}
 
 		if (KeyA.pressed())
 		{
 			m_eyePosition.x -= zr;
 			m_eyePosition.z += xr;
+			isWalk = true;
 		}
 
 		if (KeyD.pressed())
 		{
 			m_eyePosition.x += zr;
 			m_eyePosition.z -= xr;
+			isWalk = true;
+		}
+		
+		if (isWalk)
+		{
+			if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
+				AudioAsset(U"足音45秒のループ").play();
+			}
+		}
+		else {
+			if (AudioAsset(U"足音45秒のループ").isPlaying()) {
+				AudioAsset(U"足音45秒のループ").stop();
+			}
 		}
 	}
 
@@ -177,10 +198,10 @@ void CameraTest::update()
 	Print << m_eyePosition;
 
 	// コリジョン
-	if (m_eyePosition.x < -5.0
-	|| m_eyePosition.x > 10.0
-	|| m_eyePosition.z < -5.0
-	|| m_eyePosition.z > 10.0
+	if (m_eyePosition.x < -3.5
+	|| m_eyePosition.x > 3.5
+	|| m_eyePosition.z < -4.5
+	|| m_eyePosition.z > 4.5
 	|| m_eyePosition.y < 0.5	// 高さ
 	|| m_eyePosition.y > 5.0	// 高さ
 	)
@@ -206,7 +227,7 @@ void CameraTest::update()
 
 
 	{
-		Transformer3D t{ Mat4x4::RotateY(45_deg).scaled(roomScale).translated(roomPos) };
+		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 		// モデルを描画
 		model.draw();
 	}
@@ -229,6 +250,7 @@ void CameraTest::update()
 	}
 
 
+	Box{ Vec3{0, 0, 5.5}, 10 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
 
 
 }
