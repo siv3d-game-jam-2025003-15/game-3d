@@ -121,6 +121,30 @@ void Game::update()
     {
         changeScene(State::Result);
     }
+    if (walk45SecLoopButton.leftClicked()) // リザルトへ
+    {
+        if (AudioAsset(U"足音45秒のループ").isPlaying()) {
+            AudioAsset(U"足音45秒のループ").stop();
+        } else {
+            AudioAsset(U"足音45秒のループ").play();
+        }
+    }
+    if (doorOpenButton.leftClicked()) // リザルトへ
+    {
+        if (AudioAsset(U"牢屋の扉を開ける").isPlaying()) {
+            AudioAsset(U"牢屋の扉を開ける").stop();
+        } else {
+            AudioAsset(U"牢屋の扉を開ける").play();
+        }
+    }
+    if (doorCloseButton.leftClicked()) // リザルトへ
+    {
+        if (AudioAsset(U"牢屋の扉を閉める").isPlaying()) {
+            AudioAsset(U"牢屋の扉を閉める").stop();
+        } else {
+            AudioAsset(U"牢屋の扉を閉める").play();
+        }
+    }
     
     ////////////////////////////////
     //
@@ -218,8 +242,18 @@ void Game::draw() const
             //gameState = GameState{};
         }
         
-        resultButton.draw(ColorF{ 1.0, resultTransition.value() }).drawFrame(2);
         const Font& boldFont = FontAsset(U"Bold");
+
+        resultButton.draw(ColorF{ 1.0, resultTransition.value() }).drawFrame(2);
         boldFont(U"リザルトへ").drawAt(36, resultButton.center(), ColorF{ 0.1 });
+        
+        resultButton.draw(ColorF{ 1.0, walk45SecLoopTransition.value() }).drawFrame(2);
+        boldFont(U"足音45秒のループ").drawAt(36, walk45SecLoopButton.center(), ColorF{ 0.1 });
+        
+        resultButton.draw(ColorF{ 1.0, doorOpenTransition.value() }).drawFrame(2);
+        boldFont(U"牢屋を開ける音").drawAt(36, doorOpenButton.center(), ColorF{ 0.1 });
+        
+        resultButton.draw(ColorF{ 1.0, doorCloseTransition.value() }).drawFrame(2);
+        boldFont(U"牢屋を閉める音").drawAt(36, doorCloseButton.center(), ColorF{ 0.1 });
     }
 }

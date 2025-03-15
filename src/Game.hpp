@@ -158,4 +158,13 @@ private:
     RoundRect resultButton{ Arg::center(1100, 100), 300, 60, 8 };
     Transition resultTransition{ 0.4s, 0.2s };
 
+    RoundRect walk45SecLoopButton{ Arg::center(1100, 200), 300, 60, 8 };
+    Transition walk45SecLoopTransition{ 0.4s, 0.2s };
+    
+    RoundRect doorOpenButton{ Arg::center(1100, 300), 300, 60, 8 };
+    Transition doorOpenTransition{ 0.4s, 0.2s };
+    
+    RoundRect doorCloseButton{ Arg::center(1100, 400), 300, 60, 8 };
+    Transition doorCloseTransition{ 0.4s, 0.2s };
+    
 };
