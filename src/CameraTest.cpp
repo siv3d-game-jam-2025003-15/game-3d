@@ -11,6 +11,9 @@ CameraTest::CameraTest(const InitData& init)
 	blacksmithModel = Model{ U"example/obj/blacksmith.obj" };
 //	blacksmithModel = Model{ U"assets/models/Room/EV_Room01.obj" };
 
+	groundTexture = Texture{ U"example/texture/ground.jpg", TextureDesc::MippedSRGB };
+	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
+
 	//camera = DebugCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
 	camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
 	//camera = BasicCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
@@ -169,6 +172,8 @@ void CameraTest::update()
 	|| m_eyePosition.x > 10.0
 	|| m_eyePosition.z < -5.0
 	|| m_eyePosition.z > 10.0
+	|| m_eyePosition.y < 0.5	// 高さ
+	|| m_eyePosition.y > 5.0	// 高さ
 	)
 	{
 		// 進めない
@@ -196,6 +201,9 @@ void CameraTest::update()
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
 	blacksmithModel.draw(Vec3{ 8, 0, 4 });
+
+	// 地面の描画
+	groundPlane.draw(groundTexture);
 
 	// [RenderTexture を 2D シーンに描画]
 	{

@@ -41,6 +41,10 @@ private:
 	Model blacksmithModel{ U"" };
 
 	MSRenderTexture renderTexture;
+	
+	// ’n–Ê
+	Texture groundTexture;
+	Mesh groundPlane;
 
 	ColorF backgroundColor;
 
