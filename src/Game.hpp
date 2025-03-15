@@ -154,4 +154,8 @@ private:
 
     // アクティブなボクセル
     Point activeVoxelXZ;
+    
+    RoundRect resultButton{ Arg::center(1100, 100), 300, 60, 8 };
+    Transition resultTransition{ 0.4s, 0.2s };
+
 };
