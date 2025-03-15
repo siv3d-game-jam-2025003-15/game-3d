@@ -205,6 +205,16 @@ void CameraTest::update()
 	// 地面の描画
 	groundPlane.draw(groundTexture);
 
+	// マウスの位置を判定
+	//Box box = Box{ Vec3{0, 0, 0}, 1.0 }.draw(ColorF{ 1.0, 1.0, 1.0, 1.0 });
+	Box box = Box{ Vec3{0, 0, 0}, 1.0 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
+	//const Box box = Box::FromPoints(Vec3{ 1, 4, 4 }, Vec3{ 0, 4, 4 });
+
+	if (box.intersects(ray))
+	{
+		Print << U"HIT";
+	}
+
 	// [RenderTexture を 2D シーンに描画]
 	{
 		Graphics3D::Flush();
