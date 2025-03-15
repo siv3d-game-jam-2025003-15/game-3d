@@ -1,104 +1,207 @@
 # include "Game.hpp"
 
-Game::Game(const InitData& init)
-	: IScene{ init }
+// テーブル用のテクスチャを手続き的に生成する関数
+Image CreateTableImage()
 {
-	for (int32 y = 0; y < 5; ++y)
-	{
-		for (int32 x = 0; x < (800 / BrickSize.x); ++x)
-		{
-			m_bricks << Rect{ (x * BrickSize.x), (60 + y * BrickSize.y), BrickSize };
-		}
-	}
+    PerlinNoise noise;
+    return Image::Generate(Size{ 1024, 1024 }, [&](Point p)
+    {
+        const double x = Fraction(noise.octave2D0_1(p * Vec2{ 0.03, 0.0005 }, 2) * 25) * 0.3 + 0.55;
+        return ColorF{ x, 0.85 * x, 0.7 * x }.removeSRGBCurve();
+    }).gaussianBlurred(3);
+}
+
+// ブロック用のテクスチャを手続き的に生成する関数
+Image CreateBlockImage()
+{
+    PerlinNoise noise;
+    return Image::Generate(Size{ 256, 256 }, [&](Point p)
+    {
+        const double x = Fraction(noise.octave2D0_1(p * Vec2{ 0.05, 0.0005 }, 2) * 25) * 0.15 + 0.85;
+        return ColorF{ x }.removeSRGBCurve();
+    }).gaussianBlurred(2);
+}
+
+// テーブルを描画する関数
+void DrawTable(const Texture& tableTexture)
+{
+    Plane{ Vec3{ 0, -0.4, 0 }, 24 }.draw(tableTexture);
+}
+
+// 盤を描画する関数
+void DrawBoard(const Mesh& mesh)
+{
+    const ColorF BoardColor = ColorF{ 0.9, 0.85, 0.75 }.removeSRGBCurve();
+    const ColorF LineColor = ColorF{ 0.3, 0.2, 0.0 }.removeSRGBCurve();
+
+    mesh.draw(BoardColor);
+
+    // 盤上の線
+    for (int32 i = -4; i <= 4; ++i)
+    {
+        Line3D{ Vec3{ -4, 0.01, i }, Vec3{ 4, 0.01, i } }.draw(LineColor);
+        Line3D{ Vec3{ i, 0.01, -4 }, Vec3{ i, 0.01, 4 } }.draw(LineColor);
+    }
+    Line3D{ Vec3{ -4.1, 0.01, -4.1 }, Vec3{ 4.1, 0.01, -4.1 } }.draw(LineColor);
+    Line3D{ Vec3{ -4.1, 0.01, 4.1 }, Vec3{ 4.1, 0.01, 4.1 } }.draw(LineColor);
+    Line3D{ Vec3{ -4.1, 0.01, 4.1 }, Vec3{ -4.1, 0.01, -4.1 } }.draw(LineColor);
+    Line3D{ Vec3{ 4.1, 0.01, 4.1 }, Vec3{ 4.1, 0.01, -4.1 } }.draw(LineColor);
+}
+
+// 盤上のインデックス (x, y, z) から Box を作成する関数
+Box MakeBox(int32 x, int32 y, int32 z)
+{
+    return Box::FromPoints(Vec3{ (x - 4), (y + 1), (4 - z) }, Vec3{ (x - 3), y, (3 - z) });
+}
+
+// ブロックを描く関数
+void DrawBlock(int32 x, int32 y, int32 z, const ColorF& color, double scale = 1.0)
+{
+    MakeBox(x, y, z).scaled(scale).draw(color);
+}
+
+// ブロックを描く関数
+void DrawBlock(int32 x, int32 y, int32 z, const ColorF& color, const Texture& blockTexture)
+{
+    MakeBox(x, y, z).draw(blockTexture, color);
+}
+
+
+// ゲームの状態に基づいてブロックを描く関数
+void DrawGame(const GameState& gameState, const Texture& blockTexture)
+{
+    const ColorF BlockColor1 = ColorF{ 1.0, 0.85, 0.6 }.removeSRGBCurve();
+    const ColorF BlockColor2 = ColorF{ 0.4, 0.15, 0.15 }.removeSRGBCurve();
+
+    for (int32 y = 0; y <= GameState::MaxY; ++y)
+    {
+        for (int32 x = 0; x < 8; ++x)
+        {
+            for (int32 z = 0; z < 8; ++z)
+            {
+                const int32 s = gameState.s[x][y][z];
+
+                if (s == 1)
+                {
+                    DrawBlock(x, y, z, BlockColor1, blockTexture);
+                }
+                else if (s == 2)
+                {
+                    DrawBlock(x, y, z, BlockColor2, blockTexture);
+                }
+            }
+        }
+    }
+}
+
+
+Game::Game(const InitData& init)
+    : IScene{ init }
+{
+    // ゲームの状態
+    gameState.s[0][0][0] = gameState.s[1][0][1] = 1;
+    gameState.s[4][0][4] = gameState.s[5][0][4] = 2;
+
+    // アクティブなボクセル
+    Point activeVoxelXZ{ -1, -1 };
 }
 
 void Game::update()
 {
-	// ボールを移動させる
-	m_ball.moveBy(m_ballVelocity * Scene::DeltaTime());
+    ////////////////////////////////
+    //
+    //    状態の更新
+    //
+    ////////////////////////////////
+    {
+        if (not cameraController.isGrabbing())
+        {
+            const Ray ray = cameraController.getMouseRay();
+            float minDistance = 99999.9f;
 
-	// ブロックを順にチェックする
-	for (auto it = m_bricks.begin(); it != m_bricks.end(); ++it)
-	{
-		// ブロックとボールが交差していたら
-		if (it->intersects(m_ball))
-		{
-			// ブロックの上辺、または底辺と交差していたら
-			if (it->bottom().intersects(m_ball) || it->top().intersects(m_ball))
-			{
-				m_ballVelocity.y *= -1;
-			}
-			else // ブロックの左辺または右辺と交差していたら
-			{
-				m_ballVelocity.x *= -1;
-			}
+            for (int32 x = 0; x < 8; ++x)
+            {
+                for (int32 z = 0; z < 8; ++z)
+                {
+                    const int32 height = gameState.getHeight(x, z);
 
-			// ブロックを配列から削除する（イテレータは無効になる）
-			m_bricks.erase(it);
+                    const Box box = MakeBox(x, height, z);
 
-			m_brickSound.playOneShot(0.5);
+                    if (Optional<float> distacne = box.intersects(ray))
+                    {
+                        if (*distacne < minDistance)
+                        {
+                            minDistance = *distacne;
+                            activeVoxelXZ.set(x, z);
+                        }
+                    }
+                }
+            }
 
-			++m_score;
+            if (activeVoxelXZ != Point{ -1, -1 })
+            {
+                auto& voxel = gameState.s[activeVoxelXZ.x][gameState.getHeight(activeVoxelXZ.x, activeVoxelXZ.y)][activeVoxelXZ.y];
 
-			break;
-		}
-	}
+                if (MouseL.down())
+                {
+                    voxel = 1;
+                }
+                else if (MouseR.down())
+                {
+                    voxel = 2;
+                }
+            }
+        }
 
-	// 天井にぶつかったら
-	if ((m_ball.y < 0) && (m_ballVelocity.y < 0))
-	{
-		m_ballVelocity.y *= -1;
-	}
-
-	// 左右の壁にぶつかったら
-	if (((m_ball.x < 0) && (m_ballVelocity.x < 0))
-		|| ((800 < m_ball.x) && (0 < m_ballVelocity.x)))
-	{
-		m_ballVelocity.x *= -1;
-	}
-
-	// パドルにあたったらはね返る
-	if (const Rect paddle = getPaddle();
-		(0 < m_ballVelocity.y) && paddle.intersects(m_ball))
-	{
-		// パドルの中心からの距離に応じてはね返る方向を変える
-		m_ballVelocity = Vec2{ (m_ball.x - paddle.center().x) * 10, -m_ballVelocity.y }.setLength(BallSpeed);
-	}
-
-	// 画面外に出るか、ブロックが無くなったら
-	if ((600 < m_ball.y) || m_bricks.isEmpty())
-	{
-		// ランキング画面へ
-		changeScene(State::Ranking);
-
-		getData().lastScore = m_score;
-	}
+        cameraController.update();
+    }
 }
 
 void Game::draw() const
 {
-	Scene::SetBackground(ColorF{ 0.2 });
+    ////////////////////////////////
+    //
+    //    3D 描画
+    //
+    ////////////////////////////////
+    {
+        {
+            // renderTexture を背景色で塗りつぶし、3D 描画のレンダーターゲットに
+            const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
-	// すべてのブロックを描画する
-	for (const auto& brick : m_bricks)
-	{
-		brick.stretched(-1).draw(HSV{ brick.y - 40 });
-	}
+            DrawTable(tableTexture);
+            DrawBoard(meshBoard);
+            DrawGame(gameState, blockTexture);
 
-	// ボールを描く
-	m_ball.draw();
+            {
+                // 半透明を有効に
+                const ScopedRenderStates3D blend{ BlendState::OpaqueAlphaToCoverage };
 
-	// パドルを描く
-	getPaddle().rounded(3).draw();
+                for (int32 x = 0; x < 8; ++x)
+                {
+                    for (int32 z = 0; z < 8; ++z)
+                    {
+                        const int32 height = gameState.getHeight(x, z);
+                        DrawBlock(x, height, z, ColorF{ 0.2, 0.8, 0.8, 0.5 }, ((activeVoxelXZ == Point{ x, z }) ? 1.0 : 0.25));
+                    }
+                }
+            }
+        }
 
-	// マウスカーソルを非表示にする
-	Cursor::RequestStyle(CursorStyle::Hidden);
+        Graphics3D::Flush();
+        renderTexture.resolve();
+        Shader::LinearToScreen(renderTexture);
+    }
 
-	// スコアを描く
-	FontAsset(U"Bold")(m_score).draw(24, Vec2{ 400, 16 });
-}
-
-Rect Game::getPaddle() const
-{
-	return{ Arg::center(Cursor::Pos().x, 500), 60, 10 };
+    ////////////////////////////////
+    //
+    //    2D 描画
+    //
+    ////////////////////////////////
+    {
+        if (SimpleGUI::Button(U"片づける", Vec2{ 1100, 20 }, 160))
+        {
+            //gameState = GameState{};
+        }
+    }
 }
