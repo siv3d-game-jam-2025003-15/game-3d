@@ -205,28 +205,34 @@ void CameraTest::update()
 	}
 
 	// 鍵の描画
+	if (isKeyHave == false)
 	{
-		Mat4x4 mat = Mat4x4::Translate(0, 0.9, 0);
-		Mat4x4 m = Mat4x4::Identity();
-		m *= Mat4x4::Rotate(
-			Vec3{ 1,1,1 },
-			45_deg,
-			Vec3{ 0, 0.9, 0 }
-		);
-		const Transformer3D transform{ mat * m };
-		modelKey.draw();
+		{
+			Mat4x4 mat = Mat4x4::Translate(0, 0.9, 0);
+			Mat4x4 m = Mat4x4::Identity();
+			m *= Mat4x4::Rotate(
+				Vec3{ 1,1,1 },
+				45_deg,
+				Vec3{ 0, 0.9, 0 }
+			);
+			const Transformer3D transform{ mat * m };
+			modelKey.draw();
+		}
+
+		// マウスの当たり判定
+		Box box = Box{ Vec3{0, 0.9, 0}, 0.3 }.drawFrame(ColorF{ 0, 0, 0, 0 });
+
+		if (box.intersects(ray))
+		{
+			// マウスが当たっている
+			Print << U"HIT";
+
+			if (MouseL.down())
+			{
+				isKeyHave = true;
+			}
+		}
 	}
-
-
-	// マウスの当たり判定
-	Box box = Box{ Vec3{0, 0.9, 0}, 0.3 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });
-
-	if (box.intersects(ray))
-	{
-		// マウスが当たっている
-		Print << U"HIT";
-	}
-
 
 }
 
