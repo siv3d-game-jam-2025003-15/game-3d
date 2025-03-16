@@ -5,7 +5,7 @@ CameraTest::CameraTest(const InitData& init)
 {
 	backgroundColor = ColorF{ 0.05, 0.08, 0.1 }.removeSRGBCurve();
 
-	renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
+//	renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
 //	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	camera = BasicCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
@@ -274,19 +274,80 @@ void CameraTest::update()
 		}
 	}
 
-}
 
-void CameraTest::draw() const
-{
-	Scene::SetBackground(ColorF{ 0.4, 0.6, 0.9 });
-	
-	// 現在のフレームレートを出力
-	Print << Profiler::FPS() << U" FPS";
+	// 点滅
+	int value = Random(0, 50);
+	if ( value == 0 )
+	{
+		isGlowEffect = isGlowEffect ? false : true;
+	}
 
+	// ライト
+	if (isGlowEffect)
+	{ 
+		PhongMaterial phong;
+		phong.ambientColor = ColorF{ 1.0 };
+		phong.diffuseColor = ColorF{ 0.0 };
+		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (2);
+		Sphere{ {0, 4, 0}, 0.1 }.draw(phong);
+	}
 	// [RenderTexture を 2D シーンに描画]
 	{
 		Graphics3D::Flush();
 		renderTexture.resolve();
 		Shader::LinearToScreen(renderTexture);
 	}
+
+	if (isGlowEffect)
+	{
+		// 高輝度部分を抽出
+		{
+			const ScopedCustomShader2D shader{ psBright };
+			const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
+			renderTexture.scaled(0.25).draw();
+		}
+
+		// 高輝度部分のぼかしテクスチャの生成
+		{
+			Shader::GaussianBlur(gaussianA4, gaussianB4, gaussianA4);
+			Shader::Downsample(gaussianA4, gaussianA8);
+			Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
+			Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
+			Shader::Downsample(gaussianA8, gaussianA16);
+			Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+			Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+			Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+		}
+
+		// Glow エフェクト
+		{
+			const ScopedRenderStates2D blend{ BlendState::AdditiveRGB };
+
+			{
+				const ScopedRenderTarget2D target{ gaussianA8 };
+				gaussianA16.scaled(2.0).draw(ColorF{ 3.0 });
+			}
+
+			{
+				const ScopedRenderTarget2D target{ gaussianA4 };
+				gaussianA8.scaled(2.0).draw(ColorF{ 1.0 });
+			}
+
+			gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
+		}
+	}
+
+}
+
+void CameraTest::draw() const
+{
+	Scene::SetBackground(ColorF{ 0, 0, 0 });
+	
+	// 現在のフレームレートを出力
+	//Print << Profiler::FPS() << U" FPS";
+
+
+
+
+
 }
