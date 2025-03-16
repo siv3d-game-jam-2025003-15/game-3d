@@ -255,10 +255,10 @@ void CameraTest::update()
 					// クリア
 					AudioAsset(U"牢屋の扉を開ける").play();
 					isClear = true;
+					changeScene(State::Title);
 				}
 			}
 		}
-
 	}
 
 }

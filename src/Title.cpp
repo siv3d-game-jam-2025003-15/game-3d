@@ -44,6 +44,7 @@ void Title::update()
 	}
 	else if (m_cameraTestButton.leftClicked()) // カメラへ
 	{
+		AudioAsset(U"牢屋の扉を閉める").play();
 		changeScene(State::CameraTest);
 	}
     else if (m_modelViewButton.leftClicked()) // modelviewへ
