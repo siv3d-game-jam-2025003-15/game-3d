@@ -79,4 +79,6 @@ private:
 
 	bool isKeyHave = false;
 	bool isClear = false;
+
+	float bgmStopCount = 0.0f;
 };

@@ -240,6 +240,18 @@ void CameraTest::update()
 	 && isClear == false
 	)
 	{
+		// BGMの再開
+		if (bgmStopCount > 4.0f)
+		{
+			if (!AudioAsset(U"BGM").isPlaying())
+			{
+				AudioAsset(U"BGM").play();
+			}
+		}
+		else {
+			bgmStopCount += deltaTime;
+		}
+
 		// 扉に入れるようにする
 		{
 			// マウスの当たり判定
@@ -253,6 +265,7 @@ void CameraTest::update()
 				if (MouseL.down())
 				{
 					// クリア
+					AudioAsset(U"BGM").stop();
 					AudioAsset(U"牢屋の扉を開ける").play();
 					isClear = true;
 					changeScene(State::Title);

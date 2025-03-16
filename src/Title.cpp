@@ -61,6 +61,10 @@ void Title::draw() const
 {
 	Scene::SetBackground(ColorF{ 0.2, 0.8, 0.4 });
 
+	// 背景
+	BG.draw(0, 0);
+	BG.draw(1024, 0);
+
 	// タイトル描画
 	FontAsset(U"TitleFont")(U"Siv3D脱出ゲーム")
 		.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 640, 100 });
@@ -82,4 +86,13 @@ void Title::draw() const
         //boldFont(U"MODEL VIEW").drawAt(36, m_modelViewButton.center(), ColorF{ 0.1 });
         //boldFont(U"STAGE").drawAt(36, m_stageButton.center(), ColorF{ 0.1 });
 	}
+
+	{
+		const Font& boldFont = FontAsset(U"Bold");
+		boldFont(U"操作説明").drawAt(36, { 800, 300 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"AWSD：移動").drawAt(36, { 800, 400 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"↑↓←→：視点").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"左ｸﾘｯｸ：鍵").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
+	}
+
 }
