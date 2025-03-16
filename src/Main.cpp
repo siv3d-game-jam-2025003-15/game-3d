@@ -1,4 +1,4 @@
-# include "Common.hpp"
+﻿# include "Common.hpp"
 # include "Title.hpp"
 # include "Game.hpp"
 # include "Ranking.hpp"
@@ -20,7 +20,7 @@ void Main()
     AudioAsset::Register(U"足音45秒のループ", U"assets/sound/se/足音45秒のループ.wav", true);
     AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
     AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
-    AudioAsset::Register(U"鍵をゲットしたBGM", U"assets/sound/bgm/鍵をゲットしたBGM.wav");
+    AudioAsset::Register(U"GET", U"assets/sound/bgm/GET.wav");
     AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3");
 
     App manager;

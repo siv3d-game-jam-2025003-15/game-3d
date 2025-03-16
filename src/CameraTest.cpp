@@ -1,4 +1,4 @@
-# include "CameraTest.hpp"
+ï»¿# include "CameraTest.hpp"
 
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
@@ -10,15 +10,15 @@ CameraTest::CameraTest(const InitData& init)
 //	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	camera = BasicCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 
-	// ƒ‚ƒfƒ‹‚É•t‚·‚éƒeƒNƒXƒ`ƒƒ‚ğƒAƒZƒbƒgŠÇ—‚É“o˜^
+	// ãƒ¢ãƒ‡ãƒ«ã«ä»˜éšã™ã‚‹ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚’ã‚¢ã‚»ãƒƒãƒˆç®¡ç†ã«ç™»éŒ²
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
-	// ‚¨‚Ü‚¶‚È‚¢
-	// ˜S‰®‚Ì‚æ‚¤‚È”–ˆÃ‚¢•µˆÍ‹C‚Ìİ’è
-	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ‚Ù‚ÚˆÃˆÅ
-	Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // ŒõŒ¹‚ğã‚ß‚é
-	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // ‰e‚ğ‹­’²
+	// ãŠã¾ã˜ãªã„
+	// ç‰¢å±‹ã®ã‚ˆã†ãªè–„æš—ã„é›°å›²æ°—ã®è¨­å®š
+	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ã»ã¼æš—é—‡
+	Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // å…‰æºã‚’å¼±ã‚ã‚‹
+	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // å½±ã‚’å¼·èª¿
 
 	AudioAsset(U"BGM").play();
 }
@@ -30,14 +30,14 @@ void CameraTest::update()
 	Ray ray = getMouseRay();
 
 	Print << ray;
-	Print << ray.direction;	// Šp“x
-	Print << ray.direction.getX();	// Šp“x
-	Print << ray.direction.getY();	// Šp“x
-	Print << ray.direction.getZ();	// Šp“x
-	Print << ray.origin;	// À•W
-	Print << ray.origin.getX();	// À•W
-	Print << ray.origin.getY();	// À•W
-	Print << ray.origin.getZ();	// À•W
+	Print << ray.direction;	// è§’åº¦
+	Print << ray.direction.getX();	// è§’åº¦
+	Print << ray.direction.getY();	// è§’åº¦
+	Print << ray.direction.getZ();	// è§’åº¦
+	Print << ray.origin;	// åº§æ¨™
+	Print << ray.origin.getX();	// åº§æ¨™
+	Print << ray.origin.getY();	// åº§æ¨™
+	Print << ray.origin.getZ();	// åº§æ¨™
 
 
 	float speed = 2.0f;
@@ -105,13 +105,13 @@ void CameraTest::update()
 		
 		if (isWalk)
 		{
-			if (!AudioAsset(U"‘«‰¹45•b‚Ìƒ‹[ƒv").isPlaying()) {
-				AudioAsset(U"‘«‰¹45•b‚Ìƒ‹[ƒv").play();
+			if (!AudioAsset(U"è¶³éŸ³45ç§’ã®ãƒ«ãƒ¼ãƒ—").isPlaying()) {
+				AudioAsset(U"è¶³éŸ³45ç§’ã®ãƒ«ãƒ¼ãƒ—").play();
 			}
 		}
 		else {
-			if (AudioAsset(U"‘«‰¹45•b‚Ìƒ‹[ƒv").isPlaying()) {
-				AudioAsset(U"‘«‰¹45•b‚Ìƒ‹[ƒv").stop();
+			if (AudioAsset(U"è¶³éŸ³45ç§’ã®ãƒ«ãƒ¼ãƒ—").isPlaying()) {
+				AudioAsset(U"è¶³éŸ³45ç§’ã®ãƒ«ãƒ¼ãƒ—").stop();
 			}
 		}
 	}
@@ -147,16 +147,16 @@ void CameraTest::update()
 
 	Print << m_eyePosition;
 
-	// ƒRƒŠƒWƒ‡ƒ“
+	// ã‚³ãƒªã‚¸ãƒ§ãƒ³
 	if (m_eyePosition.x < -3.5
 	|| m_eyePosition.x > 3.5
 	|| m_eyePosition.z < -4.5
 	|| m_eyePosition.z > 4.5
-	|| m_eyePosition.y < 0.5	// ‚‚³
-	|| m_eyePosition.y > 5.0	// ‚‚³
+	|| m_eyePosition.y < 0.5	// é«˜ã•
+	|| m_eyePosition.y > 5.0	// é«˜ã•
 	)
 	{
-		// i‚ß‚È‚¢
+		// é€²ã‚ãªã„
 		m_eyePosition = last_eyePosition;
 	}
 	last_eyePosition = m_eyePosition;
@@ -170,17 +170,17 @@ void CameraTest::update()
 
 
 
-	// ”wŒi‚Ì•`‰æ
+	// èƒŒæ™¯ã®æç”»
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
 
-	// ƒ‚ƒfƒ‹‚ğ•`‰æ
+	// ãƒ¢ãƒ‡ãƒ«ã‚’æç”»
 	{
 		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 		
 		model.draw();
 
-		/* ƒIƒuƒWƒFƒNƒg‚ğ‰ñ“]‚³‚¹‚éÀŒ±
+		/* ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å›è»¢ã•ã›ã‚‹å®Ÿé¨“
 		const auto& materials = model.materials();
 
 		Mat4x4 mat = Mat4x4::Translate(0, 0, 0);
@@ -189,7 +189,7 @@ void CameraTest::update()
 		{
 			Mat4x4 m = Mat4x4::Identity();
 
-			// ”à‚ğŠJ‚­
+			// æ‰‰ã‚’é–‹ã
 			if (object.name == U"FixRoom EV_Floor")
 			{
 				m *= Mat4x4::Rotate(Vec3{ 0,1,0 }, (Scene::Time() * -120_deg), Vec3{ 0, 0, 0 });
@@ -204,7 +204,7 @@ void CameraTest::update()
 		*/
 	}
 
-	// Œ®‚Ì•`‰æ
+	// éµã®æç”»
 	if (isKeyHave == false)
 	{
 		{
@@ -219,19 +219,46 @@ void CameraTest::update()
 			modelKey.draw();
 		}
 
-		// ƒ}ƒEƒX‚Ì“–‚½‚è”»’è
-		Box box = Box{ Vec3{0, 0.9, 0}, 0.3 }.drawFrame(ColorF{ 0, 0, 0, 0 });
+		// ãƒã‚¦ã‚¹ã®å½“ãŸã‚Šåˆ¤å®š
+		Box box = Box{ Vec3{0, 0.9, 0}, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
 		if (box.intersects(ray))
 		{
-			// ƒ}ƒEƒX‚ª“–‚½‚Á‚Ä‚¢‚é
+			// ãƒã‚¦ã‚¹ãŒå½“ãŸã£ã¦ã„ã‚‹
 			Print << U"HIT";
 
 			if (MouseL.down())
 			{
 				isKeyHave = true;
+				AudioAsset(U"GET").play();
+				AudioAsset(U"BGM").stop();
 			}
 		}
+	}
+
+	if (isKeyHave == true
+	 && isClear == false
+	)
+	{
+		// æ‰‰ã«å…¥ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹
+		{
+			// ãƒã‚¦ã‚¹ã®å½“ãŸã‚Šåˆ¤å®š
+			Box box = Box{ Vec3{-1.6, 1.0, -4.9}, 0.2 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+
+			if (box.intersects(ray))
+			{
+				// ãƒã‚¦ã‚¹ãŒå½“ãŸã£ã¦ã„ã‚‹
+				Print << U"HIT";
+
+				if (MouseL.down())
+				{
+					// ã‚¯ãƒªã‚¢
+					AudioAsset(U"ç‰¢å±‹ã®æ‰‰ã‚’é–‹ã‘ã‚‹").play();
+					isClear = true;
+				}
+			}
+		}
+
 	}
 
 }
@@ -240,10 +267,10 @@ void CameraTest::draw() const
 {
 	Scene::SetBackground(ColorF{ 0.4, 0.6, 0.9 });
 	
-	// Œ»İ‚ÌƒtƒŒ[ƒ€ƒŒ[ƒg‚ğo—Í
+	// ç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ ãƒ¬ãƒ¼ãƒˆã‚’å‡ºåŠ›
 	Print << Profiler::FPS() << U" FPS";
 
-	// [RenderTexture ‚ğ 2D ƒV[ƒ“‚É•`‰æ]
+	// [RenderTexture ã‚’ 2D ã‚·ãƒ¼ãƒ³ã«æç”»]
 	{
 		Graphics3D::Flush();
 		renderTexture.resolve();

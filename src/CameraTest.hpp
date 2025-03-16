@@ -78,4 +78,5 @@ private:
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 
 	bool isKeyHave = false;
+	bool isClear = false;
 };
