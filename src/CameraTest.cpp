@@ -222,8 +222,9 @@ void CameraTest::update()
 			modelKey.draw();
 		}
 
+#ifndef _DEBUG
 		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-
+#endif
 		// マウスの当たり判定
 		Box box = Box{
 			Vec3{ keyX, keyY, keyZ }, 0.3
@@ -261,8 +262,9 @@ void CameraTest::update()
 
 		// 扉に入れるようにする
 		{
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100})};	// 見えない位置へ
-
+#ifndef _DEBUG
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
+#endif
 			// マウスの当たり判定
 			Box box = Box{ Vec3{-1.6, 1.0, -4.9}, 0.2 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
