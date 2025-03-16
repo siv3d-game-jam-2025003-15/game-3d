@@ -1,4 +1,4 @@
-# include "Game.hpp"
+﻿# include "Game.hpp"
 
 // テーブル用のテクスチャを手続き的に生成する関数
 Image CreateTableImage()

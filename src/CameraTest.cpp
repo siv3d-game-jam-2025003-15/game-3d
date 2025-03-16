@@ -29,15 +29,15 @@ void CameraTest::update()
 
 	Ray ray = getMouseRay();
 
-	Print << ray;
-	Print << ray.direction;	// 角度
-	Print << ray.direction.getX();	// 角度
-	Print << ray.direction.getY();	// 角度
-	Print << ray.direction.getZ();	// 角度
-	Print << ray.origin;	// 座標
-	Print << ray.origin.getX();	// 座標
-	Print << ray.origin.getY();	// 座標
-	Print << ray.origin.getZ();	// 座標
+	//Print << ray;
+	//Print << ray.direction;	// 角度
+	//Print << ray.direction.getX();	// 角度
+	//Print << ray.direction.getY();	// 角度
+	//Print << ray.direction.getZ();	// 角度
+	//Print << ray.origin;	// 座標
+	//Print << ray.origin.getX();	// 座標
+	//Print << ray.origin.getY();	// 座標
+	//Print << ray.origin.getZ();	// 座標
 
 
 	float speed = 2.0f;
@@ -145,7 +145,7 @@ void CameraTest::update()
 	camera.setProjection(Graphics3D::GetRenderTargetSize(), m_verticalFOV, m_nearClip);
 
 
-	Print << m_eyePosition;
+	//Print << m_eyePosition;
 
 	// コリジョン
 	if (m_eyePosition.x < -3.5
@@ -205,27 +205,32 @@ void CameraTest::update()
 	}
 
 	// 鍵の描画
+	float keyX = 3.25;
+	float keyY = 0.6;
+	float keyZ = 3.3;
 	if (isKeyHave == false)
 	{
 		{
-			Mat4x4 mat = Mat4x4::Translate(0, 0.9, 0);
+			Mat4x4 mat = Mat4x4::Translate(keyX, keyY, keyZ);
 			Mat4x4 m = Mat4x4::Identity();
 			m *= Mat4x4::Rotate(
 				Vec3{ 1,1,1 },
 				45_deg,
-				Vec3{ 0, 0.9, 0 }
+				Vec3{ keyX, keyY, keyZ }
 			);
 			const Transformer3D transform{ mat * m };
 			modelKey.draw();
 		}
 
 		// マウスの当たり判定
-		Box box = Box{ Vec3{0, 0.9, 0}, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+		Box box = Box{
+			Vec3{ keyX, keyY, keyZ }, 0.3
+		}.drawFrame(ColorF{ 1, 1, 1, 1 });
 
 		if (box.intersects(ray))
 		{
 			// マウスが当たっている
-			Print << U"HIT";
+			//Print << U"HIT";
 
 			if (MouseL.down())
 			{
@@ -260,7 +265,7 @@ void CameraTest::update()
 			if (box.intersects(ray))
 			{
 				// マウスが当たっている
-				Print << U"HIT";
+				//Print << U"HIT";
 
 				if (MouseL.down())
 				{
@@ -276,6 +281,7 @@ void CameraTest::update()
 
 
 	// 点滅
+	/*
 	int value = Random(0, 50);
 	if ( value == 0 )
 	{
@@ -291,6 +297,8 @@ void CameraTest::update()
 		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (2);
 		Sphere{ {0, 4, 0}, 0.1 }.draw(phong);
 	}
+	*/
+
 	// [RenderTexture を 2D シーンに描画]
 	{
 		Graphics3D::Flush();
@@ -298,6 +306,7 @@ void CameraTest::update()
 		Shader::LinearToScreen(renderTexture);
 	}
 
+	/*
 	if (isGlowEffect)
 	{
 		// 高輝度部分を抽出
@@ -336,6 +345,7 @@ void CameraTest::update()
 			gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 		}
 	}
+	*/
 
 }
 

@@ -41,10 +41,12 @@ private:
 
 	bool m_padPressed = false;
 
-	Vec3 m_eyePosition = Vec3{ 0, 1.5, -4 };
-	Vec3 last_eyePosition = Vec3{ 0, 1.5, -4 };
+	// ƒJƒƒ‰‚Ì‰ŠúˆÊ’u
+	Vec3 m_eyePosition = Vec3{ 0, 1.5, 4 };
+	Vec3 last_eyePosition = Vec3{ 0, 1.5, 4 };
 
-	Vec3 m_focusPosition = Vec3{ 0, 0, 0 };
+	// ƒJƒƒ‰‚ÌŒü‚«
+	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
 
 	Vec3 m_upDirection = Vec3{ 0, 1, 0 };
 
