@@ -3,21 +3,16 @@
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
 {
-	//backgroundColor = ColorF{ 0.4, 0.6, 0.8 }.removeSRGBCurve();
 	backgroundColor = ColorF{ 0.05, 0.08, 0.1 }.removeSRGBCurve();
 
 	renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
-
-//	blacksmithModel = Model{ U"example/obj/blacksmith.obj" };
-
-//	groundTexture = Texture{ U"example/texture/ground.jpg", TextureDesc::MippedSRGB };
-//	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
 
 //	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	camera = BasicCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 
 	// モデルに付随するテクスチャをアセット管理に登録
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
 	// おまじない
 	// 牢屋のような薄暗い雰囲気の設定
@@ -164,26 +159,67 @@ void CameraTest::update()
 		// 進めない
 		m_eyePosition = last_eyePosition;
 	}
+	last_eyePosition = m_eyePosition;
+
+
 
 	camera.setView(m_eyePosition, (m_eyePosition + focusVector), m_upDirection);
 
 	Graphics3D::SetCameraTransform(camera);
 
-	last_eyePosition = m_eyePosition;
 
 
 
+	// 背景の描画
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
+
+	// モデルを描画
 	{
 		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-		// モデルを描画
+		
 		model.draw();
+
+		/* オブジェクトを回転させる実験
+		const auto& materials = model.materials();
+
+		Mat4x4 mat = Mat4x4::Translate(0, 0, 0);
+
+		for (const auto& object : model.objects())
+		{
+			Mat4x4 m = Mat4x4::Identity();
+
+			// 扉を開く
+			if (object.name == U"FixRoom EV_Floor")
+			{
+				m *= Mat4x4::Rotate(Vec3{ 0,1,0 }, (Scene::Time() * -120_deg), Vec3{ 0, 0, 0 });
+			}
+
+			Print << object.name;
+
+			const Transformer3D transform{ (m * mat) };
+
+			object.draw(materials);
+		}
+		*/
+	}
+
+	// 鍵の描画
+	{
+		Mat4x4 mat = Mat4x4::Translate(0, 0.9, 0);
+		Mat4x4 m = Mat4x4::Identity();
+		m *= Mat4x4::Rotate(
+			Vec3{ 1,1,1 },
+			45_deg,
+			Vec3{ 0, 0.9, 0 }
+		);
+		const Transformer3D transform{ mat * m };
+		modelKey.draw();
 	}
 
 
-	// マウスの位置を判定
-	Box box = Box{ Vec3{0, 0, 0}, 1 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
+	// マウスの当たり判定
+	Box box = Box{ Vec3{0, 0.9, 0}, 0.3 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });
 
 	if (box.intersects(ray))
 	{
@@ -200,7 +236,6 @@ void CameraTest::draw() const
 	
 	// 現在のフレームレートを出力
 	Print << Profiler::FPS() << U" FPS";
-	Print << count;
 
 	// [RenderTexture を 2D シーンに描画]
 	{
