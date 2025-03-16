@@ -14,27 +14,13 @@ public:
 
 	Ray getMouseRay() const
 	{
-		//return m_camera.screenToRay(Cursor::PosF());
 		return camera.screenToRay(Cursor::PosF());
 	}
 
 private:
 
-	// 縦方向の視野角（ラジアン）
-	//double m_verticalFOV = 25_deg;
-
-	// カメラの視点の位置
-	//Vec3 m_eyePosition{ 16, 16, -16 };
-
-	// カメラの注視点の位置
-	//Vec3 m_focusPosition{ 0, 0, 0 };
-
-	//double m_phi = -20_deg;
-
-	//double m_theta = 50_deg;
-
 	BasicCamera3D camera;
-	//DebugCamera3D camera;
+//	DebugCamera3D camera;
 
 	Size SceneSize{ 256, 192 };
 
@@ -67,28 +53,17 @@ private:
 
 	double DefaultNearClip = 0.2;
 
-	//
-	// Proj
-	//
 	Size m_sceneSize = Scene::Size();
 
 	double m_verticalFOV = DefaultVerticalFOV;
 
 	double m_nearClip = DefaultNearClip;
 
-	//double m_focusY = [this]
-	//	{
-	//		const auto focusVector = (m_focusPosition - m_eyePosition);
-	//		return (focusVector.y / std::hypot(focusVector.x, focusVector.z));
-	//	}();
-
 	// 開始時の目の角度
 	double m_focusY = 0;
 
 	double m_phi = std::atan2((m_focusPosition.z - m_eyePosition.z),
 		(m_focusPosition.x - m_eyePosition.x));
-
-
 
 	/// モデル配置
 	// モデルの読み込み（マテリアル参照を無視）
@@ -99,6 +74,7 @@ private:
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
+
 	// スケーリングの倍率
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 };

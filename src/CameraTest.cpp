@@ -2,29 +2,19 @@
 
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
-	//, m_camera{ SceneSize, m_verticalFOV, m_eyePosition, m_focusPosition }
 {
-	backgroundColor = ColorF{ 0.4, 0.6, 0.8 }.removeSRGBCurve();
+	//backgroundColor = ColorF{ 0.4, 0.6, 0.8 }.removeSRGBCurve();
+	backgroundColor = ColorF{ 0.05, 0.08, 0.1 }.removeSRGBCurve();
 
 	renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
-	blacksmithModel = Model{ U"example/obj/blacksmith.obj" };
-//	blacksmithModel = Model{ U"assets/models/Room/EV_Room01.obj" };
+//	blacksmithModel = Model{ U"example/obj/blacksmith.obj" };
 
-	groundTexture = Texture{ U"example/texture/ground.jpg", TextureDesc::MippedSRGB };
-	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
+//	groundTexture = Texture{ U"example/texture/ground.jpg", TextureDesc::MippedSRGB };
+//	groundPlane = Mesh{ MeshData::OneSidedPlane(2000, { 400, 400 }) };
 
-	//camera = DebugCamera3D{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
-	//camera = DebugCamera3D{ renderTexture.size(), 45_deg, Vec3{ 10, 10, -10 } };
-	//camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
-	//camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
+//	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	camera = BasicCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
-	//	DebugCamera3D camera{ renderTexture.size(), 30_deg, Vec3{ 10, 16, -32 } };
-//	DebugCamera3D camera{ renderTexture.size(), 120_deg, Vec3{ 10, 16, -32 } };
-
-	//Audio audio(U"close.wav");
-
-	//audio.setVolume(0.5);
 
 	// モデルに付随するテクスチャをアセット管理に登録
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
@@ -36,27 +26,11 @@ CameraTest::CameraTest(const InitData& init)
 	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
 
 	AudioAsset(U"BGM").play();
-
-	//m_focusY = 0.0f;
 }
 
 void CameraTest::update()
 {
 	ClearPrint();
-
-	//if (MouseL.down())
-	//{
-	//	count++;
-	//}
-	//if (KeyUp.pressed())
-	//{
-	//	count++;
-	//}
-	//if (KeySpace.down())
-	//{
-	//	audio.play();
-	//}
-
 
 	Ray ray = getMouseRay();
 
@@ -69,27 +43,6 @@ void CameraTest::update()
 	Print << ray.origin.getX();	// 座標
 	Print << ray.origin.getY();	// 座標
 	Print << ray.origin.getZ();	// 座標
-
-	Vec3 fixedPosition{ 0, 5, -10 };
-	Vec3 fixedForward{ 0, 0, 1 };
-
-	if (ray.origin.getX() < -2.0)
-	{
-
-	}
-	else
-	{
-		// 移動できる
-		//camera.update(2.0);
-	}
-
-	//camera.setView(fixedPosition, fixedPosition, fixedPosition);
-
-	//Graphics3D::SetCameraTransform(camera);
-
-
-
-
 
 
 	float speed = 2.0f;
@@ -214,19 +167,13 @@ void CameraTest::update()
 
 	camera.setView(m_eyePosition, (m_eyePosition + focusVector), m_upDirection);
 
-
 	Graphics3D::SetCameraTransform(camera);
 
 	last_eyePosition = m_eyePosition;
 
 
 
-
-
-
-
 	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
-
 
 	{
 		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
@@ -235,24 +182,14 @@ void CameraTest::update()
 	}
 
 
-	//blacksmithModel.draw(Vec3{ 8, 0, 4 });
-
-
-	// 地面の描画
-	//groundPlane.draw(groundTexture);
-
 	// マウスの位置を判定
-	//Box box = Box{ Vec3{0, 0, 0}, 1.0 }.draw(ColorF{ 1.0, 1.0, 1.0, 1.0 });
 	Box box = Box{ Vec3{0, 0, 0}, 1 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
-	//const Box box = Box::FromPoints(Vec3{ 1, 4, 4 }, Vec3{ 0, 4, 4 });
 
 	if (box.intersects(ray))
 	{
+		// マウスが当たっている
 		Print << U"HIT";
 	}
-
-	// コリジョン確認用
-	// Box{ Vec3{0, 0, 5.5}, 10 }.drawFrame(ColorF{ 1.0, 1.0, 1.0, 1.0 });	// TODO 半透明にできない
 
 
 }
@@ -260,26 +197,10 @@ void CameraTest::update()
 void CameraTest::draw() const
 {
 	Scene::SetBackground(ColorF{ 0.4, 0.6, 0.9 });
-	const Font& boldFont = FontAsset(U"Bold");
-
-	boldFont(U"Camera Test").drawAt(400, 60);
-
-
-
+	
 	// 現在のフレームレートを出力
-	//ClearPrint();
 	Print << Profiler::FPS() << U" FPS";
 	Print << count;
-
-
-	// 視点を球面座標系で計算する
-	//m_eyePosition = Spherical{ 24, m_theta, (270_deg - m_phi) };
-
-	// カメラを更新する
-	//m_camera.setView(m_eyePosition, m_focusPosition);
-
-	// シーンにカメラを設定する
-	//Graphics3D::SetCameraTransform(m_camera);
 
 	// [RenderTexture を 2D シーンに描画]
 	{
