@@ -21,6 +21,10 @@ CameraTest::CameraTest(const InitData& init)
 	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
 
 	AudioAsset(U"BGM").play();
+
+	toCameraPos = m_eyePosition;
+
+	to_m_focusY = m_focusY;
 }
 
 void CameraTest::update()
@@ -39,8 +43,19 @@ void CameraTest::update()
 	//Print << ray.origin.getY();	// 座標
 	//Print << ray.origin.getZ();	// 座標
 
+	//double t = Min(stopwatch.sF(), 1.0);
+
+	//Print << t;
+
+	// イージング関数を適用
+	//const double e = EaseInOutExpo(t);
+
+	//Print << e;
 
 	float speed = 2.0f;
+	//float speed = 2.0f * e;
+
+	//Print << U"speed：" << speed;
 
 	const double deltaTime = Scene::DeltaTime();
 	const double scaledSpeed =
@@ -67,8 +82,15 @@ void CameraTest::update()
 		}
 	}
 
-	const double s = (Math::Cos(m_phi));
-	const double c = (Math::Sin(m_phi));
+	const double to_s = (Math::Cos(m_phi));
+	const double to_c = (Math::Sin(m_phi));
+
+	s = Math::Lerp(s, to_s, 0.1); // 回転もスムーズに
+	c = Math::Lerp(c, to_c, 0.1); // 回転もスムーズに
+
+	//Vec3 oldCameraPos = { 0.0, 2.0, -5.0 };
+	//Quat oldRotation = Quat::Identity();
+	//Quat targetRotation = oldRotation;
 
 	{
 		const double xr = (scaledSpeed * s);
@@ -77,29 +99,34 @@ void CameraTest::update()
 		bool isWalk = false;
 		if (KeyW.pressed())
 		{
-			m_eyePosition.x += xr;
-			m_eyePosition.z += zr;
+			//m_eyePosition.x += xr;
+			//m_eyePosition.z += zr;
+			toCameraPos.x += xr;
+			toCameraPos.z += zr;
 			isWalk = true;
 		}
-
 		if (KeyS.pressed())
 		{
-			m_eyePosition.x -= xr;
-			m_eyePosition.z -= zr;
+			//m_eyePosition.x -= xr;
+			//m_eyePosition.z -= zr;
+			toCameraPos.x -= xr;
+			toCameraPos.z -= zr;
 			isWalk = true;
 		}
-
 		if (KeyA.pressed())
 		{
-			m_eyePosition.x -= zr;
-			m_eyePosition.z += xr;
+			//m_eyePosition.x -= zr;
+			//m_eyePosition.z += xr;
+			toCameraPos.x -= zr;
+			toCameraPos.z += xr;
 			isWalk = true;
 		}
-
 		if (KeyD.pressed())
 		{
-			m_eyePosition.x += zr;
-			m_eyePosition.z -= xr;
+			//m_eyePosition.x += zr;
+			//m_eyePosition.z -= xr;
+			toCameraPos.x += zr;
+			toCameraPos.z -= xr;
 			isWalk = true;
 		}
 		
@@ -113,6 +140,14 @@ void CameraTest::update()
 			if (AudioAsset(U"足音45秒のループ").isPlaying()) {
 				AudioAsset(U"足音45秒のループ").stop();
 			}
+
+			// スタート位置を現在の位置に
+			//fromCameraPos = m_eyePosition;
+
+			// ゴール位置をマウスカーソルの位置に
+			//toCameraPos = Cursor::Pos();
+
+			stopwatch.restart();
 		}
 	}
 
@@ -121,15 +156,17 @@ void CameraTest::update()
 
 		if (KeyUp.pressed())
 		{
-			m_focusY += yDelta;
+			//m_focusY += yDelta;
+			to_m_focusY += yDelta;
 		}
 
 		if (KeyDown.pressed())
 		{
-			m_focusY -= yDelta;
+			//m_focusY -= yDelta;
+			to_m_focusY -= yDelta;
 		}
 	}
-
+	/*
 	if (KeyE.pressed())
 	{
 		m_eyePosition.y += scaledSpeed;
@@ -139,22 +176,34 @@ void CameraTest::update()
 	{
 		m_eyePosition.y -= scaledSpeed;
 	}
+	*/
+
+	// 移動の割合 0.0～1.0
+	//const double t = Min(stopwatch.sF(), 1.0);
+
+	// ゆっくり移動
+	//m_eyePosition = m_eyePosition.lerp(toCameraPos, e);
+	m_eyePosition = m_eyePosition.lerp(toCameraPos, 0.1);
+
+	//Print << m_eyePosition;
+	//Print << fromCameraPos;
+	//Print << toCameraPos;
 
 	//Print << m_eyePosition;
 
 	// コリジョン
-	if (m_eyePosition.x < -3.5
-	|| m_eyePosition.x > 3.5
-	|| m_eyePosition.z < -4.5
-	|| m_eyePosition.z > 4.5
-	|| m_eyePosition.y < 0.5	// 高さ
-	|| m_eyePosition.y > 5.0	// 高さ
+	if (toCameraPos.x < -3.5
+	|| toCameraPos.x > 3.5
+	|| toCameraPos.z < -4.5
+	|| toCameraPos.z > 4.5
+	|| toCameraPos.y < 0.5	// 高さ
+	|| toCameraPos.y > 5.0	// 高さ
 	)
 	{
 		// 進めない
-		m_eyePosition = last_eyePosition;
+		toCameraPos = last_eyePosition;
 	}
-	last_eyePosition = m_eyePosition;
+	last_eyePosition = toCameraPos;
 
 	// マウスホイールの入力でFOVを変更
 #ifdef _DEBUG
@@ -163,8 +212,10 @@ void CameraTest::update()
 	Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
 #endif
 
+	m_focusY = Math::Lerp(m_focusY, to_m_focusY, 0.1); // 回転もスムーズに
+
 	// カメラ
-	const Vec3 focusVector{ s, m_focusY, c };
+	Vec3 focusVector { s, m_focusY, c };
 
 	camera.setProjection(Graphics3D::GetRenderTargetSize(), m_verticalFOV, m_nearClip);
 

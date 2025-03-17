@@ -90,4 +90,16 @@ private:
 	//const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
 
 	bool isGlowEffect;
+
+	Vec3 toCameraPos;
+
+	Stopwatch stopwatch{ StartImmediately::Yes };
+
+	//Vec3 focusVector;
+	//Vec3 toFocusVector;
+
+	double to_m_focusY;
+	double s = 0;
+	double c = 0;
+
 };
