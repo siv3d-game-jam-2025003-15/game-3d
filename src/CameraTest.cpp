@@ -8,7 +8,7 @@ CameraTest::CameraTest(const InitData& init)
 //	renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
 //	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
-	camera = BasicCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
+	camera = BasicCamera3D{ renderTexture.size(), m_verticalFOV, Vec3{ 10, 10, -10 } };
 
 	// モデルに付随するテクスチャをアセット管理に登録
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
@@ -140,11 +140,6 @@ void CameraTest::update()
 		m_eyePosition.y -= scaledSpeed;
 	}
 
-	const Vec3 focusVector{ s, m_focusY, c };
-
-	camera.setProjection(Graphics3D::GetRenderTargetSize(), m_verticalFOV, m_nearClip);
-
-
 	//Print << m_eyePosition;
 
 	// コリジョン
@@ -161,11 +156,22 @@ void CameraTest::update()
 	}
 	last_eyePosition = m_eyePosition;
 
+	// マウスホイールの入力でFOVを変更
+#ifdef _DEBUG
+	m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
+	m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
+	Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
+#endif
 
+	// カメラ
+	const Vec3 focusVector{ s, m_focusY, c };
+
+	camera.setProjection(Graphics3D::GetRenderTargetSize(), m_verticalFOV, m_nearClip);
 
 	camera.setView(m_eyePosition, (m_eyePosition + focusVector), m_upDirection);
 
 	Graphics3D::SetCameraTransform(camera);
+
 
 
 

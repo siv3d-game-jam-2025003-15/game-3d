@@ -50,15 +50,12 @@ private:
 
 	Vec3 m_upDirection = Vec3{ 0, 1, 0 };
 
-	double DefaultVerticalFOV = 30_deg;
-
-	double DefaultNearClip = 0.2;
-
 	Size m_sceneSize = Scene::Size();
 
-	double m_verticalFOV = DefaultVerticalFOV;
+	// Ž‹–ìŠp
+	double m_verticalFOV = 55_deg;
 
-	double m_nearClip = DefaultNearClip;
+	double m_nearClip = 0.2;
 
 	// ŠJŽnŽž‚Ì–Ú‚ÌŠp“x
 	double m_focusY = 0;
@@ -85,13 +82,12 @@ private:
 
 	float bgmStopCount = 0.0f;
 
-	const PixelShader psBright = HLSL{ U"example/shader/hlsl/extract_bright_linear.hlsl", U"PS" }
-	| GLSL{ U"example/shader/glsl/extract_bright_linear.frag", {{U"PSConstants2D", 0}} };
+	//const PixelShader psBright = HLSL{ U"example/shader/hlsl/extract_bright_linear.hlsl", U"PS" }
+	//| GLSL{ U"example/shader/glsl/extract_bright_linear.frag", {{U"PSConstants2D", 0}} };
 
-	const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
-	const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
-	const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
+	//const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
+	//const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
+	//const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
 
 	bool isGlowEffect;
-
 };
