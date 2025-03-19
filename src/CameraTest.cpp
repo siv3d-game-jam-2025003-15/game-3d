@@ -85,8 +85,8 @@ void CameraTest::update()
 	const double to_s = (Math::Cos(m_phi));
 	const double to_c = (Math::Sin(m_phi));
 
-	s = Math::Lerp(s, to_s, 0.1); // 回転もスムーズに
-	c = Math::Lerp(c, to_c, 0.1); // 回転もスムーズに
+	s = Math::Lerp(s, to_s, smooth); // 回転もスムーズに
+	c = Math::Lerp(c, to_c, smooth); // 回転もスムーズに
 
 	//Vec3 oldCameraPos = { 0.0, 2.0, -5.0 };
 	//Quat oldRotation = Quat::Identity();
@@ -183,7 +183,7 @@ void CameraTest::update()
 
 	// ゆっくり移動
 	//m_eyePosition = m_eyePosition.lerp(toCameraPos, e);
-	m_eyePosition = m_eyePosition.lerp(toCameraPos, 0.1);
+	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth);
 
 	//Print << m_eyePosition;
 	//Print << fromCameraPos;
@@ -205,14 +205,21 @@ void CameraTest::update()
 	}
 	last_eyePosition = toCameraPos;
 
-	// マウスホイールの入力でFOVを変更
+
 #ifdef _DEBUG
-	m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
-	m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
-	Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
+	// マウスホイールの入力でFOVを変更
+	//m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
+	//m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
+	//Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
+
+	// マウスホイールで、スムーズの値を調整
+	smooth += Mouse::Wheel() * 0.01;
+	smooth = Clamp(smooth, 0.01, 1.0); // 範囲を制限
+	Print << U"スムーズの値：" << smooth;
+
 #endif
 
-	m_focusY = Math::Lerp(m_focusY, to_m_focusY, 0.1); // 回転もスムーズに
+	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth); // 回転もスムーズに
 
 	// カメラ
 	Vec3 focusVector { s, m_focusY, c };

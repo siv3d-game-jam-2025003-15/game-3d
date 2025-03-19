@@ -102,4 +102,6 @@ private:
 	double s = 0;
 	double c = 0;
 
+	// 動きをスムーズにする値
+	double smooth = 0.1f;
 };
