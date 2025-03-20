@@ -31,6 +31,20 @@ void CameraTest::update()
 {
 	ClearPrint();
 
+	// 指定したプレイヤーインデックスの XInput コントローラを取得
+	auto controller = XInput(playerIndex);
+
+	// それぞれデフォルト値を設定
+	controller.setLeftTriggerDeadZone();
+	controller.setRightTriggerDeadZone();
+	controller.setLeftThumbDeadZone();
+	controller.setRightThumbDeadZone();
+
+	Print << controller.leftThumbX;
+	Print << controller.leftThumbY;
+	Print << controller.rightThumbX;
+	Print << controller.rightThumbY;
+
 	Ray ray = getMouseRay();
 
 	//Print << ray;
@@ -66,6 +80,18 @@ void CameraTest::update()
 	{
 		m_phi += (60_deg * deltaTime);
 
+		// TODO 共通化したい
+		if (m_phi < 0_deg)
+		{
+			m_phi += 360_deg;
+		}
+	}
+
+	if (controller.rightThumbX < -0.1)
+	{
+		m_phi += (60_deg * deltaTime * -controller.rightThumbX);
+
+		// TODO 共通化したい
 		if (m_phi < 0_deg)
 		{
 			m_phi += 360_deg;
@@ -76,6 +102,18 @@ void CameraTest::update()
 	{
 		m_phi -= (60_deg * deltaTime);
 
+		// TODO 共通化したい
+		if (360_deg < m_phi)
+		{
+			m_phi -= 360_deg;
+		}
+	}
+
+	if (controller.rightThumbX > 0.1)
+	{
+		m_phi -= (60_deg * deltaTime * controller.rightThumbX);
+
+		// TODO 共通化したい
 		if (360_deg < m_phi)
 		{
 			m_phi -= 360_deg;
@@ -99,34 +137,53 @@ void CameraTest::update()
 		bool isWalk = false;
 		if (KeyW.pressed())
 		{
-			//m_eyePosition.x += xr;
-			//m_eyePosition.z += zr;
 			toCameraPos.x += xr;
 			toCameraPos.z += zr;
 			isWalk = true;
 		}
+		if (controller.leftThumbY > 0.1)
+		{
+			toCameraPos.x += (xr * controller.leftThumbY);
+			toCameraPos.z += (zr * controller.leftThumbY);
+			isWalk = true;
+		}
+
 		if (KeyS.pressed())
 		{
-			//m_eyePosition.x -= xr;
-			//m_eyePosition.z -= zr;
 			toCameraPos.x -= xr;
 			toCameraPos.z -= zr;
 			isWalk = true;
 		}
+		if (controller.leftThumbY < -0.1)
+		{
+			toCameraPos.x -= (xr * -controller.leftThumbY);
+			toCameraPos.z -= (zr * -controller.leftThumbY);
+			isWalk = true;
+		}
+
 		if (KeyA.pressed())
 		{
-			//m_eyePosition.x -= zr;
-			//m_eyePosition.z += xr;
 			toCameraPos.x -= zr;
 			toCameraPos.z += xr;
 			isWalk = true;
 		}
+		if (controller.leftThumbX < -0.1)
+		{
+			toCameraPos.x -= (zr * -controller.leftThumbX);
+			toCameraPos.z += (xr * -controller.leftThumbX);
+			isWalk = true;
+		}
+
 		if (KeyD.pressed())
 		{
-			//m_eyePosition.x += zr;
-			//m_eyePosition.z -= xr;
 			toCameraPos.x += zr;
 			toCameraPos.z -= xr;
+			isWalk = true;
+		}
+		if (controller.leftThumbX > 0.1)
+		{
+			toCameraPos.x += (zr * controller.leftThumbX);
+			toCameraPos.z -= (xr * controller.leftThumbX);
 			isWalk = true;
 		}
 		
@@ -156,14 +213,20 @@ void CameraTest::update()
 
 		if (KeyUp.pressed())
 		{
-			//m_focusY += yDelta;
 			to_m_focusY += yDelta;
+		}
+		if (controller.rightThumbY > 0.1)
+		{
+			to_m_focusY += (yDelta * controller.rightThumbY);
 		}
 
 		if (KeyDown.pressed())
 		{
-			//m_focusY -= yDelta;
 			to_m_focusY -= yDelta;
+		}
+		if (controller.rightThumbY < -0.1)
+		{
+			to_m_focusY -= (yDelta * -controller.rightThumbY);
 		}
 	}
 	/*

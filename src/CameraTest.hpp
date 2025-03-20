@@ -104,4 +104,7 @@ private:
 
 	// 動きをスムーズにする値
 	double smooth = 0.1f;
+
+	// プレイヤーインデックス (0 - 3)
+	size_t playerIndex = 0;
 };
