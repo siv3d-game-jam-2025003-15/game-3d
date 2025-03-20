@@ -115,4 +115,7 @@ private:
 	double lightY = 2.084;
 	double lightSize = 0.073;
 	double emission = 10.0;
+
+	double zoom = 0.0;
+	double to_zoom = 0.0;
 };

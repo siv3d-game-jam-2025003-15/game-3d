@@ -278,7 +278,6 @@ void CameraTest::update()
 	}
 	last_eyePosition = toCameraPos;
 
-
 #ifdef _DEBUG
 	// マウスホイールの入力でFOVを変更
 	//m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
@@ -289,7 +288,6 @@ void CameraTest::update()
 	smooth += Mouse::Wheel() * 0.01;
 	smooth = Clamp(smooth, 0.01, 1.0); // 範囲を制限
 	Print << U"スムーズの値：" << smooth;
-
 #endif
 
 	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth); // 回転もスムーズに
@@ -297,7 +295,11 @@ void CameraTest::update()
 	// カメラ
 	Vec3 focusVector { s, m_focusY, c };
 
-	camera.setProjection(Graphics3D::GetRenderTargetSize(), m_verticalFOV, m_nearClip);
+	camera.setProjection(
+		Graphics3D::GetRenderTargetSize(),
+		m_verticalFOV - zoom,
+		m_nearClip
+	);
 
 	camera.setView(m_eyePosition, (m_eyePosition + focusVector), m_upDirection);
 
@@ -340,6 +342,23 @@ void CameraTest::update()
 		}
 		*/
 	}
+
+	if (controller.rightTrigger > 0.1)
+	{
+		// Rトリガーでズーム
+		to_zoom = controller.rightTrigger * (Math::Pi / 180) * 25;
+	}
+	else if (KeyZ.pressed())
+	{
+		// Rトリガーでズーム
+		to_zoom = 1 * (Math::Pi / 180) * 25;
+	}
+	else
+	{
+		to_zoom = 0;
+	}
+	zoom = Math::Lerp(zoom, to_zoom, smooth); // ズームをスムーズに
+
 
 	// 鍵の描画
 	float keyX = 3.25;
