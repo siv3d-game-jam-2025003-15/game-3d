@@ -145,7 +145,7 @@ void CameraTest::update()
 		speed * ((KeyControl | KeyCommand).pressed() ? 20.0 : KeyShift.pressed() ? 5.0 : 1.0)
 		* deltaTime;
 
-	if (KeyLeft.pressed())
+	if (KeyLeft.pressed() && isFocusSmooth == false)
 	{
 		m_phi += (60_deg * deltaTime);
 
@@ -156,7 +156,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (controller.rightThumbX < -0.1)
+	if (controller.rightThumbX < -0.1 && isFocusSmooth == false)
 	{
 		m_phi += (60_deg * deltaTime * -controller.rightThumbX);
 
@@ -167,7 +167,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (KeyRight.pressed())
+	if (KeyRight.pressed() && isFocusSmooth == false)
 	{
 		m_phi -= (60_deg * deltaTime);
 
@@ -178,7 +178,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (controller.rightThumbX > 0.1)
+	if (controller.rightThumbX > 0.1 && isFocusSmooth == false)
 	{
 		m_phi -= (60_deg * deltaTime * controller.rightThumbX);
 
@@ -192,8 +192,8 @@ void CameraTest::update()
 	const double to_s = (Math::Cos(m_phi));
 	const double to_c = (Math::Sin(m_phi));
 
-	s = Math::Lerp(s, to_s, smooth); // 回転もスムーズに
-	c = Math::Lerp(c, to_c, smooth); // 回転もスムーズに
+	s = Math::Lerp(s, to_s, smooth / focusSmooth); // 回転もスムーズに
+	c = Math::Lerp(c, to_c, smooth / focusSmooth); // 回転もスムーズに
 
 	//Vec3 oldCameraPos = { 0.0, 2.0, -5.0 };
 	//Quat oldRotation = Quat::Identity();
@@ -204,52 +204,52 @@ void CameraTest::update()
 		const double zr = (scaledSpeed * c);
 
 		bool isWalk = false;
-		if (KeyW.pressed())
+		if (KeyW.pressed() && isFocusSmooth == false)
 		{
 			toCameraPos.x += xr;
 			toCameraPos.z += zr;
 			isWalk = true;
 		}
-		if (controller.leftThumbY > 0.1)
+		if (controller.leftThumbY > 0.1 && isFocusSmooth == false)
 		{
 			toCameraPos.x += (xr * controller.leftThumbY);
 			toCameraPos.z += (zr * controller.leftThumbY);
 			isWalk = true;
 		}
 
-		if (KeyS.pressed())
+		if (KeyS.pressed() && isFocusSmooth == false)
 		{
 			toCameraPos.x -= xr;
 			toCameraPos.z -= zr;
 			isWalk = true;
 		}
-		if (controller.leftThumbY < -0.1)
+		if (controller.leftThumbY < -0.1 && isFocusSmooth == false)
 		{
 			toCameraPos.x -= (xr * -controller.leftThumbY);
 			toCameraPos.z -= (zr * -controller.leftThumbY);
 			isWalk = true;
 		}
 
-		if (KeyA.pressed())
+		if (KeyA.pressed() && isFocusSmooth == false)
 		{
 			toCameraPos.x -= zr;
 			toCameraPos.z += xr;
 			isWalk = true;
 		}
-		if (controller.leftThumbX < -0.1)
+		if (controller.leftThumbX < -0.1 && isFocusSmooth == false)
 		{
 			toCameraPos.x -= (zr * -controller.leftThumbX);
 			toCameraPos.z += (xr * -controller.leftThumbX);
 			isWalk = true;
 		}
 
-		if (KeyD.pressed())
+		if (KeyD.pressed() && isFocusSmooth == false)
 		{
 			toCameraPos.x += zr;
 			toCameraPos.z -= xr;
 			isWalk = true;
 		}
-		if (controller.leftThumbX > 0.1)
+		if (controller.leftThumbX > 0.1 && isFocusSmooth == false)
 		{
 			toCameraPos.x += (zr * controller.leftThumbX);
 			toCameraPos.z -= (xr * controller.leftThumbX);
@@ -280,20 +280,20 @@ void CameraTest::update()
 	{
 		const double yDelta = deltaTime;
 
-		if (KeyUp.pressed())
+		if (KeyUp.pressed() && isFocusSmooth == false)
 		{
 			to_m_focusY += yDelta;
 		}
-		if (controller.rightThumbY > 0.1)
+		if (controller.rightThumbY > 0.1 && isFocusSmooth == false)
 		{
 			to_m_focusY += (yDelta * controller.rightThumbY);
 		}
 
-		if (KeyDown.pressed())
+		if (KeyDown.pressed() && isFocusSmooth == false)
 		{
 			to_m_focusY -= yDelta;
 		}
-		if (controller.rightThumbY < -0.1)
+		if (controller.rightThumbY < -0.1 && isFocusSmooth == false)
 		{
 			to_m_focusY -= (yDelta * -controller.rightThumbY);
 		}
@@ -325,7 +325,8 @@ void CameraTest::update()
 
 	// ゆっくり移動
 	//m_eyePosition = m_eyePosition.lerp(toCameraPos, e);
-	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth);
+	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
+
 
 	//Print << m_eyePosition;
 	//Print << fromCameraPos;
@@ -359,7 +360,7 @@ void CameraTest::update()
 	//Print << U"スムーズの値：" << smooth;
 #endif
 
-	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth); // 回転もスムーズに
+	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth / focusSmooth); // 回転もスムーズに
 
 	// カメラ
 	Vec3 focusVector { s, m_focusY, c };
@@ -412,12 +413,16 @@ void CameraTest::update()
 		*/
 	}
 
-	if (controller.rightTrigger > 0.1)
+	if (controller.rightTrigger > 0.1
+	 && isFocus == false
+	)
 	{
 		// Rトリガーでズーム
 		to_zoom = controller.rightTrigger * (Math::Pi / 180) * 25;
 	}
-	else if (KeyZ.pressed())
+	else if (KeyZ.pressed()
+	      && isFocus == false
+	)
 	{
 		// Rトリガーでズーム
 		to_zoom = 1 * (Math::Pi / 180) * 25;
@@ -426,7 +431,7 @@ void CameraTest::update()
 	{
 		to_zoom = 0;
 	}
-	zoom = Math::Lerp(zoom, to_zoom, smooth/ zoom_smooth); // ズームをスムーズに
+	zoom = Math::Lerp(zoom, to_zoom, smooth/ zoom_smooth / focusSmooth); // ズームをスムーズに
 
 
 	//Print << toCameraPos;
@@ -475,8 +480,75 @@ void CameraTest::update()
 	)
 	{
 		// オブジェクトが画面の中心にある
+#ifdef _DEBUG
 		Print << U"オブジェクトが画面の中心にある";
+#endif
+		// ズームしていたらフォーカスする
+		if (controller.rightTrigger > 0.5
+		 || KeyZ.pressed()
+		 || isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
+		)
+		{
+			// 前の位置を記憶
+			if (isFocus == false)
+			{
+				lastToCameraPos = toCameraPos;
+				last_to_m_focusY = to_m_focusY;
+				last_m_phi = m_phi;
+			}
+
+			// カメラの移動
+			toCameraPos = Vec3{ keyFocusX ,keyFocusY, keyFocusZ };
+
+			// カメラの向き
+			to_m_focusY = keyFocusCameraY;
+			m_phi = keyFocusPhi;
+
+			// フォーカスの速度を遅くする
+			focusSmooth = 5;
+
+			isFocus = true;
+		}
 	}
+
+	if (KeyBackspace.pressed()
+	 || controller.buttonB.pressed()
+	)
+	{
+		// フォーカスのキャンセル
+		if (isFocus)
+		{
+			toCameraPos = lastToCameraPos;
+			to_m_focusY = last_to_m_focusY;
+			m_phi = last_m_phi;
+
+			//focusSmooth = 1;	// 終わってから
+			isFocusSmooth = true;
+
+			isFocus = false;
+		}
+	}
+
+	if (isFocusSmooth)
+	{
+		double distance = toCameraPos.distanceFrom(m_eyePosition);
+
+	//	Print << U"差分：" << distance;
+
+		if (distance < 0.01)
+		{
+			focusSmooth = 1;
+			isFocusSmooth = false;
+		}
+	}
+
+
+
+
+
+	//Print << U"isFocus=" << isFocus;
+	//Print << U"toCameraPos=" << toCameraPos;
+	//Print << U"lastToCameraPos=" << lastToCameraPos;
 
 
 	

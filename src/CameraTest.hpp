@@ -137,4 +137,19 @@ private:
 	float keyX = 3.25;
 	float keyY = 0.6;
 	float keyZ = 3.3;
+
+	// 鍵をフォーカスする時の座標
+	float keyFocusX = keyX - 0.5;
+	float keyFocusY = keyY + 0.25;
+	float keyFocusZ = keyZ + 0.0;
+	float keyFocusCameraY = -0.5;
+	float keyFocusPhi = 0;
+
+	bool isFocus = false;
+	double focusSmooth = 1;
+	bool isFocusSmooth = false;
+
+	Vec3 lastToCameraPos = {0.0, 0.0, 0.0};
+	double last_to_m_focusY = 0;
+	double last_m_phi = 0;
 };
