@@ -228,6 +228,16 @@ void CameraTest::update()
 		{
 			to_m_focusY -= (yDelta * -controller.rightThumbY);
 		}
+
+		// カメラ上下の可動域
+		if (to_m_focusY < -focusY_max)
+		{
+			to_m_focusY = -focusY_max;
+		}
+		else if (to_m_focusY > focusY_max)
+		{
+			to_m_focusY = focusY_max;
+		}
 	}
 	/*
 	if (KeyE.pressed())

@@ -107,4 +107,7 @@ private:
 
 	// プレイヤーインデックス (0 - 3)
 	size_t playerIndex = 0;
+
+	// m_focusY
+	double focusY_max = 2.0;
 };
