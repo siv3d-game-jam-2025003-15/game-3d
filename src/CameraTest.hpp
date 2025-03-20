@@ -152,4 +152,12 @@ private:
 	Vec3 lastToCameraPos = {0.0, 0.0, 0.0};
 	double last_to_m_focusY = 0;
 	double last_m_phi = 0;
+
+	double GlobalAmbientColorR = 0.2;
+	double GlobalAmbientColorG = 0.2;
+	double GlobalAmbientColorB = 0.25;
+
+	double toGlobalAmbientColorR = GlobalAmbientColorR;
+	double toGlobalAmbientColorG = GlobalAmbientColorG;
+	double toGlobalAmbientColorB = GlobalAmbientColorB;
 };

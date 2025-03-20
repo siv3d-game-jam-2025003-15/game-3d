@@ -667,6 +667,32 @@ void CameraTest::update()
 		}
 	}
 
+	// 光源の設定
+	if (isGlowEffect)
+	{
+		// 点灯
+		toGlobalAmbientColorR = 0.2;
+		toGlobalAmbientColorG = 0.2;
+		toGlobalAmbientColorB = 0.25;
+	}
+	else
+	{
+		// 点灯していない
+		toGlobalAmbientColorR = 0.1;
+		toGlobalAmbientColorG = 0.1;
+		toGlobalAmbientColorB = 0.125;
+	}
+
+	GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, smooth);
+	GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, smooth);
+	GlobalAmbientColorB = Math::Lerp(GlobalAmbientColorB, toGlobalAmbientColorB, smooth);
+
+	Graphics3D::SetGlobalAmbientColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
+	Graphics3D::SetSunColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
+
+
+
+
 	if (KeyE.pressed()) { lightY += 0.0001; }
 	if (KeyX.pressed()) { lightY -= 0.0001; }
 	if (KeyR.pressed()) { lightSize += 0.0001; }
