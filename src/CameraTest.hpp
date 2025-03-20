@@ -1,7 +1,7 @@
-# pragma once
+ï»¿# pragma once
 # include "Common.hpp"
 
-// ƒJƒƒ‰‚ÌÀŒ±
+// ã‚«ãƒ¡ãƒ©ã®å®Ÿé¨“
 class CameraTest : public App::Scene
 {
 public:
@@ -29,7 +29,7 @@ private:
 //	MSRenderTexture renderTexture;
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 	
-	// ’n–Ê
+	// åœ°é¢
 	Texture groundTexture;
 	Mesh groundPlane;
 
@@ -41,40 +41,40 @@ private:
 
 	bool m_padPressed = false;
 
-	// ƒJƒƒ‰‚Ì‰ŠúˆÊ’u
+	// ã‚«ãƒ¡ãƒ©ã®åˆæœŸä½ç½®
 	Vec3 m_eyePosition = Vec3{ 0, 1.5, 4 };
 	Vec3 last_eyePosition = Vec3{ 0, 1.5, 4 };
 
-	// ƒJƒƒ‰‚ÌŒü‚«
+	// ã‚«ãƒ¡ãƒ©ã®å‘ã
 	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
 
 	Vec3 m_upDirection = Vec3{ 0, 1, 0 };
 
 	Size m_sceneSize = Scene::Size();
 
-	// ‹–ìŠp
+	// è¦–é‡è§’
 	double m_verticalFOV = 55_deg;
 
 	double m_nearClip = 0.2;
 
-	// ŠJn‚Ì–Ú‚ÌŠp“x
+	// é–‹å§‹æ™‚ã®ç›®ã®è§’åº¦
 	double m_focusY = 0;
 
 	double m_phi = std::atan2((m_focusPosition.z - m_eyePosition.z),
 		(m_focusPosition.x - m_eyePosition.x));
 
-	/// ƒ‚ƒfƒ‹”z’u
-	// ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İiƒ}ƒeƒŠƒAƒ‹QÆ‚ğ–³‹j
+	/// ãƒ¢ãƒ‡ãƒ«é…ç½®
+	// ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿ï¼ˆãƒãƒ†ãƒªã‚¢ãƒ«å‚ç…§ã‚’ç„¡è¦–ï¼‰
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
 
 //	const Texture floorTexture{ U"assets/models/Room/T_EV_Floor01_D.png", TextureDesc::Mipped };
 //	const Texture wallTexture{ U"assets/models/Room/T_EV_Wall01_D.png", TextureDesc::Mipped };
 
-	// ŠeƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u
+	// å„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®
 	const Vec3 roomPos{ 0, 0, 0 };
 
-	// ƒXƒP[ƒŠƒ“ƒO‚Ì”{—¦
+	// ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã®å€ç‡
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 
 	bool isKeyHave = false;
@@ -103,10 +103,10 @@ private:
 	double s = 0;
 	double c = 0;
 
-	// “®‚«‚ğƒXƒ€[ƒY‚É‚·‚é’l
+	// å‹•ãã‚’ã‚¹ãƒ ãƒ¼ã‚ºã«ã™ã‚‹å€¤
 	double smooth = 0.1f;
 
-	// ƒvƒŒƒCƒ„[ƒCƒ“ƒfƒbƒNƒX (0 - 3)
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ (0 - 3)
 	size_t playerIndex = 0;
 
 	// m_focusY
@@ -119,4 +119,22 @@ private:
 	double zoom = 0.0;
 	double to_zoom = 0.0;
 	double zoom_smooth = 5;
+
+	//bool isInFrustum(
+	//	Vec3 position,
+	//	Vec3 forward,
+	//	Vec3 camera_up,
+	//	float fov,
+	//	float aspectRatio,
+	//	float nearPlane,
+	//	float farPlane,
+	//	float x,
+	//	float y,
+	//	float z
+	//);
+
+	// éµã®åº§æ¨™
+	float keyX = 3.25;
+	float keyY = 0.6;
+	float keyZ = 3.3;
 };

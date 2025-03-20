@@ -1,5 +1,69 @@
 ﻿# include "CameraTest.hpp"
 
+// 視錐台判定関数
+/*
+bool CameraTest::isInFrustum(
+	Vec3 position,
+	Vec3 forward,
+	Vec3 camera_up,
+	float fov,
+	float aspectRatio,
+	float nearPlane,
+	float farPlane,
+	float x,
+	float y,
+	float z
+) {
+	Vec3 object = {x, y, z};
+
+	Print << U"position：" << position;
+	Print << U"object：" << object;
+	Print << U"forward：" << forward;
+	Print << U"camera_up：" << camera_up;
+
+
+	Vec3 right = forward.cross(camera_up).normalize();
+	Vec3 up = right.cross(forward).normalize();
+
+	float halfVSide = farPlane * Math::Tan(Math::ToRadians(fov) / 2.0f);
+	float halfHSide = halfVSide * aspectRatio;
+
+	Vec3 nearCenter = position + forward * nearPlane;
+	Vec3 farCenter = position + forward * farPlane;
+
+	Vec3 objDir = (position - object).normalize();
+
+	// 視野角内にあるか
+	float cosTheta = objDir.dot(forward);
+	float fovThreshold = Math::Cos(Math::ToRadians(fov) / 2.0f);
+
+	Print << U"objDir：" << objDir;
+	Print << U"cosTheta：" << cosTheta;
+	Print << U"fovThreshold：" << fovThreshold;
+	Print << U"forward：" << forward;
+	Print << U"fov：" << fov;
+	Print << U"Math::ToRadians(fov)：" << Math::ToRadians(fov);
+	Print << U"std::cos(Math::ToRadians(fov) / 2.0f)：" << Math::Cos(Math::ToRadians(fov) / 2.0f);
+
+	if (cosTheta > fovThreshold) {
+		return false;
+	}
+
+	// 近・遠クリップ面の間にあるか
+	float distance = position.distanceFrom(object);
+
+	Print << U"distance：" << distance;
+	Print << U"nearPlane：" << nearPlane;
+	Print << U"farPlane：" << farPlane;
+
+	if (distance < nearPlane || distance > farPlane) {
+		return false;
+	}
+
+	return true;
+}
+*/
+
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
 {
@@ -56,6 +120,11 @@ void CameraTest::update()
 	//Print << ray.origin.getX();	// 座標
 	//Print << ray.origin.getY();	// 座標
 	//Print << ray.origin.getZ();	// 座標
+
+	//Print << toCameraPos;
+	//Print << m_eyePosition;
+	//Print << m_focusY;
+	//Print << m_phi;
 
 	//double t = Min(stopwatch.sF(), 1.0);
 
@@ -280,14 +349,14 @@ void CameraTest::update()
 
 #ifdef _DEBUG
 	// マウスホイールの入力でFOVを変更
-	//m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
-	//m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
-	//Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
+	m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
+	m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
+	Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
 
 	// マウスホイールで、スムーズの値を調整
-	smooth += Mouse::Wheel() * 0.01;
-	smooth = Clamp(smooth, 0.01, 1.0); // 範囲を制限
-	Print << U"スムーズの値：" << smooth;
+	//smooth += Mouse::Wheel() * 0.01;
+	//smooth = Clamp(smooth, 0.01, 1.0); // 範囲を制限
+	//Print << U"スムーズの値：" << smooth;
 #endif
 
 	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth); // 回転もスムーズに
@@ -360,10 +429,60 @@ void CameraTest::update()
 	zoom = Math::Lerp(zoom, to_zoom, smooth/ zoom_smooth); // ズームをスムーズに
 
 
+	//Print << toCameraPos;
+	//Print << m_eyePosition;
+	//Print << U"m_focusY" << m_focusY;
+	//Print << U"m_phi" << m_phi;
+
+	//Vec3 direction_forward(
+	//	cos(m_phi) * cos(m_focusY), // X成分
+	//	sin(m_phi),              // Y成分
+	//	cos(m_phi) * sin(m_focusY)  // Z成分
+	//);
+
+	//Vec3 direction_up(
+	//	cos(m_phi) * cos(m_focusY), // X成分
+	//	sin(m_phi),              // Y成分
+	//	cos(m_phi) * sin(m_focusY)  // Z成分
+	//);
+
+	/*
+	bool bInFrustum = isInFrustum(
+		toCameraPos,
+		direction_forward,
+		direction_up,
+		m_verticalFOV - zoom,
+		1280 / 720,
+		0.1f,
+		2.0f,
+		keyX,
+		keyY,
+		keyZ
+	);
+	*/
+
+
+	// 対象のオブジェクトが画面の中心にあるかどうかの判定
+	Vec3 worldScreenPoint = camera.worldToScreenPoint(Vec3{keyX, keyY, keyZ});
+
+	//Print << U"worldScreenPoint=" << worldScreenPoint;
+
+	if (
+		worldScreenPoint.x >= (1280 / 2 - 100)
+	 && worldScreenPoint.x <= (1280 / 2 + 100)
+	 && worldScreenPoint.y >= (720 / 2 - 100)
+	 && worldScreenPoint.y <= (720 / 2 + 100)
+	)
+	{
+		// オブジェクトが画面の中心にある
+		Print << U"オブジェクトが画面の中心にある";
+	}
+
+
+	
+
+
 	// 鍵の描画
-	float keyX = 3.25;
-	float keyY = 0.6;
-	float keyZ = 3.3;
 	if (isKeyHave == false)
 	{
 		{
@@ -470,9 +589,9 @@ void CameraTest::update()
 	if (KeyT.pressed()) { emission += 1; }
 	if (KeyV.pressed()) { emission -= 1; }
 
-	Print << lightY;
-	Print << lightSize;
-	Print << emission;
+	//Print << lightY;
+	//Print << lightSize;
+	//Print << emission;
 
 	// ライト
 	if (isGlowEffect)
