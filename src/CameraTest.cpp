@@ -1,95 +1,18 @@
 ﻿# include "CameraTest.hpp"
 
-// 視錐台判定関数
-/*
-bool CameraTest::isInFrustum(
-	Vec3 position,
-	Vec3 forward,
-	Vec3 camera_up,
-	float fov,
-	float aspectRatio,
-	float nearPlane,
-	float farPlane,
-	float x,
-	float y,
-	float z
-) {
-	Vec3 object = {x, y, z};
-
-	Print << U"position：" << position;
-	Print << U"object：" << object;
-	Print << U"forward：" << forward;
-	Print << U"camera_up：" << camera_up;
-
-
-	Vec3 right = forward.cross(camera_up).normalize();
-	Vec3 up = right.cross(forward).normalize();
-
-	float halfVSide = farPlane * Math::Tan(Math::ToRadians(fov) / 2.0f);
-	float halfHSide = halfVSide * aspectRatio;
-
-	Vec3 nearCenter = position + forward * nearPlane;
-	Vec3 farCenter = position + forward * farPlane;
-
-	Vec3 objDir = (position - object).normalize();
-
-	// 視野角内にあるか
-	float cosTheta = objDir.dot(forward);
-	float fovThreshold = Math::Cos(Math::ToRadians(fov) / 2.0f);
-
-	Print << U"objDir：" << objDir;
-	Print << U"cosTheta：" << cosTheta;
-	Print << U"fovThreshold：" << fovThreshold;
-	Print << U"forward：" << forward;
-	Print << U"fov：" << fov;
-	Print << U"Math::ToRadians(fov)：" << Math::ToRadians(fov);
-	Print << U"std::cos(Math::ToRadians(fov) / 2.0f)：" << Math::Cos(Math::ToRadians(fov) / 2.0f);
-
-	if (cosTheta > fovThreshold) {
-		return false;
-	}
-
-	// 近・遠クリップ面の間にあるか
-	float distance = position.distanceFrom(object);
-
-	Print << U"distance：" << distance;
-	Print << U"nearPlane：" << nearPlane;
-	Print << U"farPlane：" << farPlane;
-
-	if (distance < nearPlane || distance > farPlane) {
-		return false;
-	}
-
-	return true;
-}
-*/
 
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
 {
 	backgroundColor = ColorF{ 0.05, 0.08, 0.1 }.removeSRGBCurve();
 
-//	renderTexture = MSRenderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
-
-//	camera = DebugCamera3D{ renderTexture.size(), 55_deg, Vec3{ 10, 10, -10 } };
 	camera = BasicCamera3D{ renderTexture.size(), m_verticalFOV, Vec3{ 10, 10, -10 } };
 
 	// モデルに付随するテクスチャをアセット管理に登録
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
-	// おまじない
-	// 牢屋のような薄暗い雰囲気の設定
-	//Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
-	//Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
-	//Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
-
 	AudioAsset(U"BGM").play();
-
-	//if ((not vs3D) || (not ps3D))
-	//{
-	//	throw Error(U"Failed to open GLSL");
-	//}
 }
 
 void CameraTest::update()
@@ -105,41 +28,9 @@ void CameraTest::update()
 	controller.setLeftThumbDeadZone();
 	controller.setRightThumbDeadZone();
 
-	//Print << controller.leftThumbX;
-	//Print << controller.leftThumbY;
-	//Print << controller.rightThumbX;
-	//Print << controller.rightThumbY;
-
 	Ray ray = getMouseRay();
 
-	//Print << ray;
-	//Print << ray.direction;	// 角度
-	//Print << ray.direction.getX();	// 角度
-	//Print << ray.direction.getY();	// 角度
-	//Print << ray.direction.getZ();	// 角度
-	//Print << ray.origin;	// 座標
-	//Print << ray.origin.getX();	// 座標
-	//Print << ray.origin.getY();	// 座標
-	//Print << ray.origin.getZ();	// 座標
-
-	//Print << toCameraPos;
-	//Print << m_eyePosition;
-	//Print << m_focusY;
-	//Print << m_phi;
-
-	//double t = Min(stopwatch.sF(), 1.0);
-
-	//Print << t;
-
-	// イージング関数を適用
-	//const double e = EaseInOutExpo(t);
-
-	//Print << e;
-
 	float speed = 2.0f;
-	//float speed = 2.0f * e;
-
-	//Print << U"speed：" << speed;
 
 	const double deltaTime = Scene::DeltaTime();
 	const double scaledSpeed =
@@ -195,10 +86,6 @@ void CameraTest::update()
 
 	s = Math::Lerp(s, to_s, smooth / focusSmooth); // 回転もスムーズに
 	c = Math::Lerp(c, to_c, smooth / focusSmooth); // 回転もスムーズに
-
-	//Vec3 oldCameraPos = { 0.0, 2.0, -5.0 };
-	//Quat oldRotation = Quat::Identity();
-	//Quat targetRotation = oldRotation;
 
 	{
 		const double xr = (scaledSpeed * s);
@@ -268,12 +155,6 @@ void CameraTest::update()
 				AudioAsset(U"足音45秒のループ").stop();
 			}
 
-			// スタート位置を現在の位置に
-			//fromCameraPos = m_eyePosition;
-
-			// ゴール位置をマウスカーソルの位置に
-			//toCameraPos = Cursor::Pos();
-
 			stopwatch.restart();
 		}
 	}
@@ -309,31 +190,9 @@ void CameraTest::update()
 			to_m_focusY = focusY_max;
 		}
 	}
-	/*
-	if (KeyE.pressed())
-	{
-		m_eyePosition.y += scaledSpeed;
-	}
-
-	if (KeyX.pressed())
-	{
-		m_eyePosition.y -= scaledSpeed;
-	}
-	*/
-
-	// 移動の割合 0.0～1.0
-	//const double t = Min(stopwatch.sF(), 1.0);
 
 	// ゆっくり移動
-	//m_eyePosition = m_eyePosition.lerp(toCameraPos, e);
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
-
-
-	//Print << m_eyePosition;
-	//Print << fromCameraPos;
-	//Print << toCameraPos;
-
-	//Print << m_eyePosition;
 
 	// コリジョン
 	if (toCameraPos.x < -3.5
@@ -399,48 +258,12 @@ void CameraTest::update()
 	zoom = Math::Lerp(zoom, to_zoom, smooth / zoom_smooth / focusSmooth * deltaTime * 60); // ズームをスムーズに
 
 
-	//Print << toCameraPos;
-	//Print << m_eyePosition;
-	//Print << U"m_focusY" << m_focusY;
-	//Print << U"m_phi" << m_phi;
-
-	//Vec3 direction_forward(
-	//	cos(m_phi) * cos(m_focusY), // X成分
-	//	sin(m_phi),              // Y成分
-	//	cos(m_phi) * sin(m_focusY)  // Z成分
-	//);
-
-	//Vec3 direction_up(
-	//	cos(m_phi) * cos(m_focusY), // X成分
-	//	sin(m_phi),              // Y成分
-	//	cos(m_phi) * sin(m_focusY)  // Z成分
-	//);
-
-	/*
-	bool bInFrustum = isInFrustum(
-		toCameraPos,
-		direction_forward,
-		direction_up,
-		m_verticalFOV - zoom,
-		1280 / 720,
-		0.1f,
-		2.0f,
-		keyX,
-		keyY,
-		keyZ
-	);
-	*/
-
 	Vec3 keyObjectPostion = Vec3{ keyX, keyY, keyZ };
 
 	// 対象のオブジェクトが画面の中心にあるかどうかの判定
 	Vec3 worldScreenPoint = camera.worldToScreenPoint(keyObjectPostion);
 
 	double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
-
-	//Print << U"Key distance=" << keyDistance;
-
-	//Print << U"worldScreenPoint=" << worldScreenPoint;
 
 	if (
 		worldScreenPoint.x >= (1280 / 2 - 100)
@@ -488,15 +311,18 @@ void CameraTest::update()
 				AudioAsset(U"GET").play();
 				AudioAsset(U"BGM").stop();
 			}
-
 		}
 	}
 
-	Vec3 doorObjectPostion = Vec3{ doorFocusX, doorFocusY, doorFocusZ };
+	Vec3 doorObjectPostion = Vec3{ doorX, doorY, doorZ };
 
 	worldScreenPoint = camera.worldToScreenPoint(doorObjectPostion);
 
 	double doorDistance = m_eyePosition.distanceFrom(doorObjectPostion);
+
+	//Print << U"doorObjectPostion=" << doorObjectPostion;
+	//Print << U"worldScreenPoint2=" << worldScreenPoint;
+	//Print << U"doorDistance=" << doorDistance;
 
 	if (
 		worldScreenPoint.x >= (1280 / 2 - 100)
@@ -554,6 +380,7 @@ void CameraTest::update()
 
 	}
 
+	//Print << U"isFocusSmooth" << isFocusSmooth;
 
 	if (KeyBackspace.pressed()
 	 || controller.buttonB.pressed()
@@ -586,15 +413,6 @@ void CameraTest::update()
 		}
 	}
 
-
-
-
-
-	//Print << U"isFocus=" << isFocus;
-	//Print << U"toCameraPos=" << toCameraPos;
-	//Print << U"lastToCameraPos=" << lastToCameraPos;
-
-
 	
 	if (isKeyHave == true
 	 && isClear == false
@@ -618,7 +436,7 @@ void CameraTest::update()
 			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
 #endif
 			// マウスの当たり判定
-			Box box = Box{ Vec3{-1.6, 1.0, -4.9}, 0.2 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+			Box box = Box{ Vec3{doorX, doorY, doorZ}, 0.2 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
 			if (box.intersects(ray))
 			{
@@ -638,7 +456,7 @@ void CameraTest::update()
 	}
 
 
-	// 点滅
+	// ライトの点滅
 	if (Random(0, 100) == 0)
 	{
 		glowEffectType++;
@@ -711,9 +529,9 @@ void CameraTest::update()
 	if (KeyT.pressed()) { emission += 0.1; }
 	if (KeyV.pressed()) { emission -= 0.1; }
 
-	Print << lightY;
-	Print << lightSize;
-	Print << emission;
+	//Print << lightY;
+	//Print << lightSize;
+	//Print << emission;
 #endif
 
 	// モデルを描画

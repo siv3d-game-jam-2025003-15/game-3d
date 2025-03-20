@@ -191,11 +191,16 @@ private:
 	double toGlobalAmbientColorG = GlobalAmbientColorG;
 	double toGlobalAmbientColorB = GlobalAmbientColorB;
 
+	// ドアの座標
+	float doorX = -1.6;
+	float doorY = 1.0;
+	float doorZ = -4.9;
+
 	// ドアをフォーカスする時の座標
 	float doorFocusX = -1.6 + 0.0;
 	float doorFocusY =  1.0 + 0.25;
 	float doorFocusZ = -4.9 + 0.5;
 	float doorFocusCameraY = -0.5;
-	float doorFocusPhi = -2;
+	float doorFocusPhi = -1.5;
 
 };

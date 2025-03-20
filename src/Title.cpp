@@ -94,7 +94,7 @@ void Title::draw() const
 		boldFont(U"↑↓←→：視点").drawAt(36, { 800, 450 }, ColorF{ 1, 1, 1, 1 });
 		boldFont(U"Z：ズーム").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
 		boldFont(U"BS：キャンセル").drawAt(36, { 800, 550 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"ENTER：鍵を取る").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"ENTER：アクション").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
 	}
 
 }
