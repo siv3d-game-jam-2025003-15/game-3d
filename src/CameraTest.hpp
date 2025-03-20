@@ -118,4 +118,5 @@ private:
 
 	double zoom = 0.0;
 	double to_zoom = 0.0;
+	double zoom_smooth = 5;
 };

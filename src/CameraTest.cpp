@@ -357,7 +357,7 @@ void CameraTest::update()
 	{
 		to_zoom = 0;
 	}
-	zoom = Math::Lerp(zoom, to_zoom, smooth/5); // ズームをスムーズに
+	zoom = Math::Lerp(zoom, to_zoom, smooth/ zoom_smooth); // ズームをスムーズに
 
 
 	// 鍵の描画
