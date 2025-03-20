@@ -466,9 +466,14 @@ void CameraTest::update()
 	);
 	*/
 
+	Vec3 keyObjectPostion = Vec3{ keyX, keyY, keyZ };
 
 	// 対象のオブジェクトが画面の中心にあるかどうかの判定
-	Vec3 worldScreenPoint = camera.worldToScreenPoint(Vec3{keyX, keyY, keyZ});
+	Vec3 worldScreenPoint = camera.worldToScreenPoint(keyObjectPostion);
+
+	double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
+
+	//Print << U"Key distance=" << keyDistance;
 
 	//Print << U"worldScreenPoint=" << worldScreenPoint;
 
@@ -477,6 +482,7 @@ void CameraTest::update()
 	 && worldScreenPoint.x <= (1280 / 2 + 100)
 	 && worldScreenPoint.y >= (720 / 2 - 100)
 	 && worldScreenPoint.y <= (720 / 2 + 100)
+	 && keyDistance < 3.5
 	)
 	{
 		// オブジェクトが画面の中心にある
