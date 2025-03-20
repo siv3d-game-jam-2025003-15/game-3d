@@ -508,6 +508,16 @@ void CameraTest::update()
 			focusSmooth = 5;
 
 			isFocus = true;
+
+			if (controller.buttonA.pressed()
+			 || KeyEnter.pressed()
+			)
+			{
+				isKeyHave = true;
+				AudioAsset(U"GET").play();
+				AudioAsset(U"BGM").stop();
+			}
+
 		}
 	}
 
@@ -572,6 +582,8 @@ void CameraTest::update()
 #ifndef _DEBUG
 		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
 #endif
+
+#ifdef _DEBUG
 		// マウスの当たり判定
 		Box box = Box{
 			Vec3{ keyX, keyY, keyZ }, 0.3
@@ -589,6 +601,7 @@ void CameraTest::update()
 				AudioAsset(U"BGM").stop();
 			}
 		}
+#endif
 	}
 
 	if (isKeyHave == true

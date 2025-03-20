@@ -91,8 +91,10 @@ void Title::draw() const
 		const Font& boldFont = FontAsset(U"Bold");
 		boldFont(U"操作説明").drawAt(36, { 800, 300 }, ColorF{ 1, 1, 1, 1 });
 		boldFont(U"AWSD：移動").drawAt(36, { 800, 400 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"↑↓←→：視点").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"左ｸﾘｯｸ：鍵").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"↑↓←→：視点").drawAt(36, { 800, 450 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"Z：ズーム").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"BS：キャンセル").drawAt(36, { 800, 550 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"ENTER：鍵を取る").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
 	}
 
 }
