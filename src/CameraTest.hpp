@@ -24,11 +24,12 @@ private:
 
 	Size SceneSize{ 256, 192 };
 
-	Model blacksmithModel{ U"" };
+//	Model blacksmithModel{ U"" };
 
 //	MSRenderTexture renderTexture;
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
-	
+//	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
+
 	// 地面
 	Texture groundTexture;
 	Mesh groundPlane;
@@ -82,24 +83,52 @@ private:
 
 	float bgmStopCount = 0.0f;
 
-	const PixelShader psBright = HLSL{ U"example/shader/hlsl/extract_bright_linear.hlsl", U"PS" }
-	| GLSL{ U"example/shader/glsl/extract_bright_linear.frag", {{U"PSConstants2D", 0}} };
+	const PixelShader psBright = HLSL{
+		U"example/shader/hlsl/extract_bright_linear.hlsl", 
+		U"PS" 
+	}
+	| GLSL{
+		U"example/shader/glsl/extract_bright_linear.frag",
+		{
+			{U"PSConstants2D", 0}
+		}
+	};
+
+	// 頂点シェーダ
+	const VertexShader vs3D = GLSL{
+		U"example/shader/glsl/default3d_forward.vert",
+		{
+			{ U"VSPerView", 1 }, 
+			{ U"VSPerObject", 2 },
+			{ U"VSPerMaterial", 3 }
+		}
+	};
+
+	// ピクセルシェーダ
+	const PixelShader ps3D = GLSL{
+		U"example/shader/glsl/PointLight.Frag",
+		{
+			{ U"PSPerFrame", 0 },
+			{ U"PSPerView", 1 },
+			{ U"PSPerMaterial", 3 }
+		}
+	};
 
 	const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
 	const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
 	const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
 
 	bool isGlowEffect = true;
-	bool isGlowEffect2 = true;
+	int glowEffectType = 0;
 
-	Vec3 toCameraPos;
+	Vec3 toCameraPos = m_eyePosition;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
 	//Vec3 focusVector;
 	//Vec3 toFocusVector;
 
-	double to_m_focusY;
+	double to_m_focusY = m_focusY;
 	double s = 0;
 	double c = 0;
 
@@ -114,11 +143,12 @@ private:
 
 	double lightY = 2.084;
 	double lightSize = 0.073;
-	double emission = 10.0;
+	double emission = 1.0;
+	double toEmission = 1.0;
 
 	double zoom = 0.0;
 	double to_zoom = 0.0;
-	double zoom_smooth = 5;
+	double zoom_smooth = 2;
 
 	//bool isInFrustum(
 	//	Vec3 position,
@@ -153,11 +183,19 @@ private:
 	double last_to_m_focusY = 0;
 	double last_m_phi = 0;
 
-	double GlobalAmbientColorR = 0.2;
-	double GlobalAmbientColorG = 0.2;
-	double GlobalAmbientColorB = 0.25;
+	double GlobalAmbientColorR = 0.4;
+	double GlobalAmbientColorG = 0.4;
+	double GlobalAmbientColorB = 0.5;
 
 	double toGlobalAmbientColorR = GlobalAmbientColorR;
 	double toGlobalAmbientColorG = GlobalAmbientColorG;
 	double toGlobalAmbientColorB = GlobalAmbientColorB;
+
+	// ドアをフォーカスする時の座標
+	float doorFocusX = -1.6 + 0.0;
+	float doorFocusY =  1.0 + 0.25;
+	float doorFocusZ = -4.9 + 0.5;
+	float doorFocusCameraY = -0.5;
+	float doorFocusPhi = -2;
+
 };

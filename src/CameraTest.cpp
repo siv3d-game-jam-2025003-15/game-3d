@@ -80,15 +80,16 @@ CameraTest::CameraTest(const InitData& init)
 
 	// おまじない
 	// 牢屋のような薄暗い雰囲気の設定
-	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
-	Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
-	Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
+	//Graphics3D::SetGlobalAmbientColor(ColorF{ 0.2, 0.2, 0.25 }); // ほぼ暗闇
+	//Graphics3D::SetSunColor(ColorF{ 0.2, 0.2, 0.25 }); // 光源を弱める
+	//Graphics3D::SetSunDirection(Vec3{ 0, -1, -0.5 }.normalized()); // 影を強調
 
 	AudioAsset(U"BGM").play();
 
-	toCameraPos = m_eyePosition;
-
-	to_m_focusY = m_focusY;
+	//if ((not vs3D) || (not ps3D))
+	//{
+	//	throw Error(U"Failed to open GLSL");
+	//}
 }
 
 void CameraTest::update()
@@ -377,61 +378,25 @@ void CameraTest::update()
 
 
 
-
-
-	// 背景の描画
-	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
-
-
-	// モデルを描画
-	{
-		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-		
-		model.draw();
-
-		/* オブジェクトを回転させる実験
-		const auto& materials = model.materials();
-
-		Mat4x4 mat = Mat4x4::Translate(0, 0, 0);
-
-		for (const auto& object : model.objects())
-		{
-			Mat4x4 m = Mat4x4::Identity();
-
-			// 扉を開く
-			if (object.name == U"FixRoom EV_Floor")
-			{
-				m *= Mat4x4::Rotate(Vec3{ 0,1,0 }, (Scene::Time() * -120_deg), Vec3{ 0, 0, 0 });
-			}
-
-			Print << object.name;
-
-			const Transformer3D transform{ (m * mat) };
-
-			object.draw(materials);
-		}
-		*/
-	}
-
 	if (controller.rightTrigger > 0.1
 	 && isFocus == false
 	)
 	{
 		// Rトリガーでズーム
-		to_zoom = controller.rightTrigger * (Math::Pi / 180) * 25;
+		to_zoom = controller.rightTrigger * (Math::Pi / 180) * 25 * deltaTime * 60;
 	}
 	else if (KeyZ.pressed()
 	      && isFocus == false
 	)
 	{
 		// Rトリガーでズーム
-		to_zoom = 1 * (Math::Pi / 180) * 25;
+		to_zoom = 1 * (Math::Pi / 180) * 25 * deltaTime * 60;
 	}
 	else
 	{
 		to_zoom = 0;
 	}
-	zoom = Math::Lerp(zoom, to_zoom, smooth/ zoom_smooth / focusSmooth); // ズームをスムーズに
+	zoom = Math::Lerp(zoom, to_zoom, smooth / zoom_smooth / focusSmooth * deltaTime * 60); // ズームをスムーズに
 
 
 	//Print << toCameraPos;
@@ -511,7 +476,7 @@ void CameraTest::update()
 			m_phi = keyFocusPhi;
 
 			// フォーカスの速度を遅くする
-			focusSmooth = 5;
+			focusSmooth = 2;
 
 			isFocus = true;
 
@@ -526,6 +491,69 @@ void CameraTest::update()
 
 		}
 	}
+
+	Vec3 doorObjectPostion = Vec3{ doorFocusX, doorFocusY, doorFocusZ };
+
+	worldScreenPoint = camera.worldToScreenPoint(doorObjectPostion);
+
+	double doorDistance = m_eyePosition.distanceFrom(doorObjectPostion);
+
+	if (
+		worldScreenPoint.x >= (1280 / 2 - 100)
+		&& worldScreenPoint.x <= (1280 / 2 + 100)
+		&& worldScreenPoint.y >= (720 / 2 - 100)
+		&& worldScreenPoint.y <= (720 / 2 + 100)
+		&& doorDistance < 3.5
+		)
+	{
+		// オブジェクトが画面の中心にある
+#ifdef _DEBUG
+		Print << U"オブジェクトが画面の中心にある";
+#endif
+
+		// ズームしていたらフォーカスする
+		if (controller.rightTrigger > 0.5
+			|| KeyZ.pressed()
+			|| isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
+			)
+		{
+			// 前の位置を記憶
+			if (isFocus == false)
+			{
+				lastToCameraPos = toCameraPos;
+				last_to_m_focusY = to_m_focusY;
+				last_m_phi = m_phi;
+			}
+
+			// カメラの移動
+			toCameraPos = Vec3{ doorFocusX ,doorFocusY, doorFocusZ };
+
+			// カメラの向き
+			to_m_focusY = doorFocusCameraY;
+			m_phi = doorFocusPhi;
+
+			// フォーカスの速度を遅くする
+			focusSmooth = 2;
+
+			isFocus = true;
+
+			if (isClear == false && isKeyHave == true)
+			{
+				if (controller.buttonA.pressed()
+					|| KeyEnter.pressed()
+					)
+				{
+					// クリア
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"牢屋の扉を開ける").play();
+					isClear = true;
+					changeScene(State::Title);
+				}
+			}
+		}
+
+	}
+
 
 	if (KeyBackspace.pressed()
 	 || controller.buttonB.pressed()
@@ -568,48 +596,6 @@ void CameraTest::update()
 
 
 	
-
-
-	// 鍵の描画
-	if (isKeyHave == false)
-	{
-		{
-			Mat4x4 mat = Mat4x4::Translate(keyX, keyY, keyZ);
-			Mat4x4 m = Mat4x4::Identity();
-			m *= Mat4x4::Rotate(
-				Vec3{ 1,1,1 },
-				45_deg,
-				Vec3{ keyX, keyY, keyZ }
-			);
-			const Transformer3D transform{ mat * m };
-			modelKey.draw();
-		}
-
-#ifndef _DEBUG
-		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-#endif
-
-#ifdef _DEBUG
-		// マウスの当たり判定
-		Box box = Box{
-			Vec3{ keyX, keyY, keyZ }, 0.3
-		}.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-		if (box.intersects(ray))
-		{
-			// マウスが当たっている
-			//Print << U"HIT";
-
-			if (MouseL.down())
-			{
-				isKeyHave = true;
-				AudioAsset(U"GET").play();
-				AudioAsset(U"BGM").stop();
-			}
-		}
-#endif
-	}
-
 	if (isKeyHave == true
 	 && isClear == false
 	)
@@ -653,33 +639,52 @@ void CameraTest::update()
 
 
 	// 点滅
-	int value2 = Random(0, 1000);
-	if (value2 == 0)
+	if (Random(0, 100) == 0)
 	{
-		isGlowEffect2 = isGlowEffect2 ? false : true;
+		glowEffectType++;
+		if (glowEffectType >= 12)
+		{
+			glowEffectType = 0;
+		}
 	}
-	if (isGlowEffect2)
+
+	if (glowEffectType == 9
+	 || glowEffectType == 11
+	)
+	{
+		// 点滅
+		if (Random(0, 5) == 0)
+		{
+			isGlowEffect = isGlowEffect ? false : true;
+		}
+	}
+	else if (glowEffectType == 10 )
+	{
+		// 暗闇
+		isGlowEffect = false;
+	}
+	else 
 	{
 		// 点灯
 		isGlowEffect = true;
 	}
+
+	if (isGlowEffect)
+	{
+		toEmission = 1.0;
+	}
 	else
 	{
-		// ランダムで点灯
-		int value = Random(0, 50);
-		if (value == 0)
-		{
-			isGlowEffect = isGlowEffect ? false : true;
-		}
+		toEmission = 0.0;
 	}
 
 	// 光源の設定
 	if (isGlowEffect)
 	{
 		// 点灯
-		toGlobalAmbientColorR = 0.2;
-		toGlobalAmbientColorG = 0.2;
-		toGlobalAmbientColorB = 0.25;
+		toGlobalAmbientColorR = 0.8;
+		toGlobalAmbientColorG = 0.8;
+		toGlobalAmbientColorB = 1.0;
 	}
 	else
 	{
@@ -698,26 +703,77 @@ void CameraTest::update()
 
 
 
-
+#ifdef _DEBUG
 	if (KeyE.pressed()) { lightY += 0.0001; }
 	if (KeyX.pressed()) { lightY -= 0.0001; }
 	if (KeyR.pressed()) { lightSize += 0.0001; }
 	if (KeyC.pressed()) { lightSize -= 0.0001; }
-	if (KeyT.pressed()) { emission += 1; }
-	if (KeyV.pressed()) { emission -= 1; }
+	if (KeyT.pressed()) { emission += 0.1; }
+	if (KeyV.pressed()) { emission -= 0.1; }
 
-	//Print << lightY;
-	//Print << lightSize;
-	//Print << emission;
+	Print << lightY;
+	Print << lightSize;
+	Print << emission;
+#endif
 
-	// ライト
-	if (isGlowEffect)
-	{ 
-		PhongMaterial phong;
-		phong.ambientColor = ColorF{ 1.0 };
-		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
-		Sphere{ {0, lightY, 0}, lightSize }.draw(phong);
+	// モデルを描画
+	//{
+	//	Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+
+	//	model.draw();
+	//}
+
+
+
+	// スポットライト
+	{
+		const ScopedCustomShader3D shader{ vs3D, ps3D };
+		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
+
+		// モデルを描画
+		{
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+
+			model.draw();
+		}
+
+		// 鍵の描画
+		if (isKeyHave == false)
+		{
+			{
+				Mat4x4 mat = Mat4x4::Translate(keyX, keyY, keyZ);
+				Mat4x4 m = Mat4x4::Identity();
+				m *= Mat4x4::Rotate(
+					Vec3{ 1,1,1 },
+					45_deg,
+					Vec3{ keyX, keyY, keyZ }
+				);
+				const Transformer3D transform{ mat * m };
+				modelKey.draw();
+			}
+
+#ifndef _DEBUG
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
+#endif
+			// マウスの当たり判定
+			Box box = Box{
+				Vec3{ keyX, keyY, keyZ }, 0.3
+			}.drawFrame(ColorF{ 1, 1, 1, 1 });
+
+			if (box.intersects(ray))
+			{
+				// マウスが当たっている
+				//Print << U"HIT";
+
+				if (MouseL.down())
+				{
+					isKeyHave = true;
+					AudioAsset(U"GET").play();
+					AudioAsset(U"BGM").stop();
+				}
+			}
+		}
+
 	}
 
 	// [RenderTexture を 2D シーンに描画]
@@ -727,46 +783,55 @@ void CameraTest::update()
 		Shader::LinearToScreen(renderTexture);
 	}
 
+	emission = Math::Lerp(emission, toEmission, smooth);
 
-	if (isGlowEffect)
-	{
-		// 高輝度部分を抽出
-		{
-			const ScopedCustomShader2D shader{ psBright };
-			const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
-			renderTexture.scaled(0.25).draw();
-		}
+	if (emission >= 0.2)
+	{ 
+		const ScopedCustomShader2D shader{ psBright };
+		const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
+		renderTexture.scaled(1).draw();
 
+		// ライト
+		PhongMaterial phong;
+		phong.ambientColor = ColorF{ 1.0 };
+		phong.diffuseColor = ColorF{ 0.0 };
+		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
+		Sphere{ {0, lightY, 0}, lightSize }.draw(phong);
+		
+		//const auto& materials = model.materials();
+		//for (const auto& object : model.objects())
+		//{
+		//	if (object.name == U"FixRoom EV_Light01")
+		//	{
+		//		object.draw(materials);
+		//	}
+		//	Print << object.name;
+		//}
+		
 		// 高輝度部分のぼかしテクスチャの生成
-		{
-			Shader::GaussianBlur(gaussianA4, gaussianB4, gaussianA4);
-			Shader::Downsample(gaussianA4, gaussianA8);
-			Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
-			Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
-			Shader::Downsample(gaussianA8, gaussianA16);
-			Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
-			Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
-			Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
-		}
-
+		//Shader::GaussianBlur(gaussianA4, gaussianB4, gaussianA4);
+		//Shader::Downsample(gaussianA4, gaussianA8);
+		//Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
+		//Shader::GaussianBlur(gaussianA8, gaussianB8, gaussianA8);
+		//Shader::Downsample(gaussianA8, gaussianA16);
+		//Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+		//Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+		//Shader::GaussianBlur(gaussianA16, gaussianB16, gaussianA16);
+		
 		// Glow エフェクト
-		{
-			const ScopedRenderStates2D blend{ BlendState::AdditiveRGB };
+		//const ScopedRenderStates2D blend{ BlendState::AdditiveRGB };
+		//{
+		//	const ScopedRenderTarget2D target{ gaussianA8 };
+		//	gaussianA16.scaled(2.0).draw(ColorF{ 3.0 });
+		//}
 
-			{
-				const ScopedRenderTarget2D target{ gaussianA8 };
-				gaussianA16.scaled(2.0).draw(ColorF{ 3.0 });
-			}
+		//{
+		//	const ScopedRenderTarget2D target{ gaussianA4 };
+		//	gaussianA8.scaled(2.0).draw(ColorF{ 1.0 });
+		//}
 
-			{
-				const ScopedRenderTarget2D target{ gaussianA4 };
-				gaussianA8.scaled(2.0).draw(ColorF{ 1.0 });
-			}
-
-			gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
-		}
+		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 	}
-
 }
 
 void CameraTest::draw() const
@@ -775,9 +840,4 @@ void CameraTest::draw() const
 	
 	// 現在のフレームレートを出力
 	//Print << Profiler::FPS() << U" FPS";
-
-
-
-
-
 }

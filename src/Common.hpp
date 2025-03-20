@@ -24,3 +24,6 @@ struct GameData
 };
 
 using App = SceneManager<State, GameData>;
+
+// Windows で Direct3D の代わりに OpenGL を使用するモードに切り替える
+SIV3D_SET(EngineOption::Renderer::OpenGL);
