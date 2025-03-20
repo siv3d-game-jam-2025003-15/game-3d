@@ -40,10 +40,10 @@ void CameraTest::update()
 	controller.setLeftThumbDeadZone();
 	controller.setRightThumbDeadZone();
 
-	Print << controller.leftThumbX;
-	Print << controller.leftThumbY;
-	Print << controller.rightThumbX;
-	Print << controller.rightThumbY;
+	//Print << controller.leftThumbX;
+	//Print << controller.leftThumbY;
+	//Print << controller.rightThumbX;
+	//Print << controller.rightThumbY;
 
 	Ray ray = getMouseRay();
 
@@ -424,12 +424,36 @@ void CameraTest::update()
 
 
 	// 点滅
-	/*
-	int value = Random(0, 50);
-	if ( value == 0 )
+	int value2 = Random(0, 1000);
+	if (value2 == 0)
 	{
-		isGlowEffect = isGlowEffect ? false : true;
+		isGlowEffect2 = isGlowEffect2 ? false : true;
 	}
+	if (isGlowEffect2)
+	{
+		// 点灯
+		isGlowEffect = true;
+	}
+	else
+	{
+		// ランダムで点灯
+		int value = Random(0, 50);
+		if (value == 0)
+		{
+			isGlowEffect = isGlowEffect ? false : true;
+		}
+	}
+
+	if (KeyE.pressed()) { lightY += 0.0001; }
+	if (KeyX.pressed()) { lightY -= 0.0001; }
+	if (KeyR.pressed()) { lightSize += 0.0001; }
+	if (KeyC.pressed()) { lightSize -= 0.0001; }
+	if (KeyT.pressed()) { emission += 1; }
+	if (KeyV.pressed()) { emission -= 1; }
+
+	Print << lightY;
+	Print << lightSize;
+	Print << emission;
 
 	// ライト
 	if (isGlowEffect)
@@ -437,10 +461,9 @@ void CameraTest::update()
 		PhongMaterial phong;
 		phong.ambientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (2);
-		Sphere{ {0, 4, 0}, 0.1 }.draw(phong);
+		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
+		Sphere{ {0, lightY, 0}, lightSize }.draw(phong);
 	}
-	*/
 
 	// [RenderTexture を 2D シーンに描画]
 	{
@@ -449,7 +472,7 @@ void CameraTest::update()
 		Shader::LinearToScreen(renderTexture);
 	}
 
-	/*
+
 	if (isGlowEffect)
 	{
 		// 高輝度部分を抽出
@@ -488,7 +511,6 @@ void CameraTest::update()
 			gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 		}
 	}
-	*/
 
 }
 
