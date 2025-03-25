@@ -92,9 +92,9 @@ void Title::draw() const
 		boldFont(U"操作説明").drawAt(36, { 800, 300 }, ColorF{ 1, 1, 1, 1 });
 		boldFont(U"AWSD：移動").drawAt(36, { 800, 400 }, ColorF{ 1, 1, 1, 1 });
 		boldFont(U"↑↓←→：視点").drawAt(36, { 800, 450 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"Z：ズーム").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"BS：キャンセル").drawAt(36, { 800, 550 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"ENTER：アクション").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"ドラッグ：視点").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"左クリック：アクション").drawAt(36, { 800, 550 }, ColorF{ 1, 1, 1, 1 });
+		boldFont(U"右クリック：キャンセル").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
 	}
 
 }

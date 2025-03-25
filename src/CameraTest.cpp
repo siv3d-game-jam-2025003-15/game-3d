@@ -13,11 +13,52 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
 	AudioAsset(U"BGM").play();
+
+	mousePosX = Cursor::PosF().x;
+	mousePosY = Cursor::PosF().y;
+	toMousePosX = mousePosX;
+	toMousePosY = mousePosY;
 }
 
 void CameraTest::update()
 {
 	ClearPrint();
+
+    Print << Profiler::FPS() << U" FPS";
+
+	if (Key1.down())
+	{
+		mouseDirectionX = 1;
+	}
+	if (Key2.down())
+	{
+		mouseDirectionX = -1;
+	}
+	if (Key3.down())
+	{
+		mouseDirectionY = 1;
+	}
+	if (Key4.down())
+	{
+		mouseDirectionY = -1;
+	}
+
+	if (mouseDirectionX == 1)
+	{
+		Print << U"[1][2]カメラ横回転：順";
+	}
+	else
+	{
+		Print << U"[1][2]カメラ横回転：逆";
+	}
+	if (mouseDirectionY == 1)
+	{
+		Print << U"[3][4]カメラ縦回転：順";
+	}
+	else
+	{
+		Print << U"[3][4]カメラ縦回転：逆";
+	}
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
@@ -37,6 +78,21 @@ void CameraTest::update()
 		speed * ((KeyControl | KeyCommand).pressed() ? 20.0 : KeyShift.pressed() ? 5.0 : 1.0)
 		* deltaTime;
 
+	toMousePosX = Cursor::PosF().x;
+	toMousePosY = Cursor::PosF().y;
+
+	float diffMousePosX = 0.0f;
+	float diffMousePosY = 0.0f;
+
+	if (MouseL.pressed())
+	{
+		diffMousePosX =  (toMousePosX - mousePosX) / 10 * mouseDirectionX;
+		diffMousePosY = -(toMousePosY - mousePosY) / 10 * mouseDirectionY;
+	}
+
+	mousePosX = toMousePosX;
+	mousePosY = toMousePosY;
+
 	if (KeyLeft.pressed() && isFocusSmooth == false)
 	{
 		m_phi += (60_deg * deltaTime);
@@ -51,6 +107,17 @@ void CameraTest::update()
 	if (controller.rightThumbX < -0.1 && isFocusSmooth == false)
 	{
 		m_phi += (60_deg * deltaTime * -controller.rightThumbX);
+
+		// TODO 共通化したい
+		if (m_phi < 0_deg)
+		{
+			m_phi += 360_deg;
+		}
+	}
+
+	if (diffMousePosX < -0.1 && isFocusSmooth == false)
+	{
+		m_phi += (60_deg * deltaTime * -diffMousePosX);
 
 		// TODO 共通化したい
 		if (m_phi < 0_deg)
@@ -76,6 +143,17 @@ void CameraTest::update()
 
 		// TODO 共通化したい
 		if (360_deg < m_phi)
+		{
+			m_phi -= 360_deg;
+		}
+	}
+
+	if (diffMousePosX > 0.1 && isFocusSmooth == false)
+	{
+		m_phi -= (60_deg * deltaTime * diffMousePosX);
+
+		// TODO 共通化したい
+		if (m_phi < 0_deg)
 		{
 			m_phi -= 360_deg;
 		}
@@ -166,18 +244,31 @@ void CameraTest::update()
 		{
 			to_m_focusY += yDelta;
 		}
+
 		if (controller.rightThumbY > 0.1 && isFocusSmooth == false)
 		{
 			to_m_focusY += (yDelta * controller.rightThumbY);
 		}
 
+		if (diffMousePosY > 0.1 && isFocusSmooth == false)
+		{
+			to_m_focusY += (yDelta * diffMousePosY);
+		}
+
+
 		if (KeyDown.pressed() && isFocusSmooth == false)
 		{
 			to_m_focusY -= yDelta;
 		}
+
 		if (controller.rightThumbY < -0.1 && isFocusSmooth == false)
 		{
 			to_m_focusY -= (yDelta * -controller.rightThumbY);
+		}
+
+		if (diffMousePosY < -0.1 && isFocusSmooth == false)
+		{
+			to_m_focusY -= (yDelta * -diffMousePosY);
 		}
 
 		// カメラ上下の可動域
@@ -210,9 +301,9 @@ void CameraTest::update()
 
 #ifdef _DEBUG
 	// マウスホイールの入力でFOVを変更
-	m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
-	m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
-	Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
+	//m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
+	//m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
+	//Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
 
 	// マウスホイールで、スムーズの値を調整
 	//smooth += Mouse::Wheel() * 0.01;
@@ -235,8 +326,6 @@ void CameraTest::update()
 
 	Graphics3D::SetCameraTransform(camera);
 
-
-
 	if (controller.rightTrigger > 0.1
 	 && isFocus == false
 	)
@@ -248,9 +337,16 @@ void CameraTest::update()
 	      && isFocus == false
 	)
 	{
-		// Rトリガーでズーム
+		// Zキーでズーム
 		to_zoom = 1 * (Math::Pi / 180) * 25 * deltaTime * 60;
 	}
+	//else if (MouseM.pressed()
+	//	&& isFocus == false
+	//	)
+	//{
+	//	// 中クリックでズーム
+	//	to_zoom = 1 * (Math::Pi / 180) * 25 * deltaTime * 60;
+	//}
 	else
 	{
 		to_zoom = 0;
@@ -265,24 +361,36 @@ void CameraTest::update()
 
 	double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
 
+	focusWait -= deltaTime;
+
+#ifdef _DEBUG
+	//Print << U"focusWait" << focusWait;
+#endif
+
 	if (
-		worldScreenPoint.x >= (1280 / 2 - 100)
-	 && worldScreenPoint.x <= (1280 / 2 + 100)
-	 && worldScreenPoint.y >= (720 / 2 - 100)
-	 && worldScreenPoint.y <= (720 / 2 + 100)
+		worldScreenPoint.x >= (1280 / 2 - 200)
+	 && worldScreenPoint.x <= (1280 / 2 + 200)
+	 && worldScreenPoint.y >= (720 / 2 - 200)
+	 && worldScreenPoint.y <= (720 / 2 + 200)
 	 && keyDistance < 3.5
+	 && isFocusSmooth == false
+	 && focusWait < 0.0f
 	)
 	{
 		// オブジェクトが画面の中心にある
 #ifdef _DEBUG
 		Print << U"オブジェクトが画面の中心にある";
 #endif
+		Print << U"左クリックで鍵を取る";
+		Print << U"右クリックでズーム解除";
+
+
 		// ズームしていたらフォーカスする
-		if (controller.rightTrigger > 0.5
-		 || KeyZ.pressed()
-		 || isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
-		)
-		{
+		//if (controller.rightTrigger > 0.5
+		// || KeyZ.pressed()
+		// || isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
+		//)
+		//{
 			// 前の位置を記憶
 			if (isFocus == false)
 			{
@@ -305,13 +413,15 @@ void CameraTest::update()
 
 			if (controller.buttonA.pressed()
 			 || KeyEnter.pressed()
+			 //|| MouseL.down()
+			 //|| MouseR.down()
 			)
 			{
 				isKeyHave = true;
 				AudioAsset(U"GET").play();
 				AudioAsset(U"BGM").stop();
 			}
-		}
+		//}
 	}
 
 	Vec3 doorObjectPostion = Vec3{ doorX, doorY, doorZ };
@@ -324,25 +434,31 @@ void CameraTest::update()
 	//Print << U"worldScreenPoint2=" << worldScreenPoint;
 	//Print << U"doorDistance=" << doorDistance;
 
+	// TODO 共通化する
 	if (
-		worldScreenPoint.x >= (1280 / 2 - 100)
-		&& worldScreenPoint.x <= (1280 / 2 + 100)
-		&& worldScreenPoint.y >= (720 / 2 - 100)
-		&& worldScreenPoint.y <= (720 / 2 + 100)
-		&& doorDistance < 3.5
-		)
+		worldScreenPoint.x >= (1280 / 2 - 200)
+		&& worldScreenPoint.x <= (1280 / 2 + 200)
+		&& worldScreenPoint.y >= (720 / 2 - 200)
+		&& worldScreenPoint.y <= (720 / 2 + 200)
+		&& doorDistance < 2.0
+		&& isFocusSmooth == false
+		&& focusWait < 0.0f
+	)
 	{
 		// オブジェクトが画面の中心にある
 #ifdef _DEBUG
 		Print << U"オブジェクトが画面の中心にある";
 #endif
+		Print << U"左クリックで扉を開ける";
+		Print << U"右クリックでズーム解除";
 
 		// ズームしていたらフォーカスする
-		if (controller.rightTrigger > 0.5
-			|| KeyZ.pressed()
-			|| isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
-			)
-		{
+		//if (
+		//	controller.rightTrigger > 0.5
+		//	|| KeyZ.pressed()
+		//	|| isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
+		//	)
+		//{
 			// 前の位置を記憶
 			if (isFocus == false)
 			{
@@ -366,7 +482,9 @@ void CameraTest::update()
 			if (isClear == false && isKeyHave == true)
 			{
 				if (controller.buttonA.pressed()
-					|| KeyEnter.pressed()
+				|| KeyEnter.pressed()
+				//|| MouseL.down()
+				//|| MouseR.down()
 					)
 				{
 					// クリア
@@ -376,7 +494,7 @@ void CameraTest::update()
 					changeScene(State::Title);
 				}
 			}
-		}
+		//}
 
 	}
 
@@ -384,6 +502,8 @@ void CameraTest::update()
 
 	if (KeyBackspace.pressed()
 	 || controller.buttonB.pressed()
+//	 || MouseL.down()
+	 || MouseR.down()
 	)
 	{
 		// フォーカスのキャンセル
@@ -397,6 +517,8 @@ void CameraTest::update()
 			isFocusSmooth = true;
 
 			isFocus = false;
+
+			focusWait = 5.0f;	// ５秒間フォーカスできない
 		}
 	}
 
@@ -412,49 +534,6 @@ void CameraTest::update()
 			isFocusSmooth = false;
 		}
 	}
-
-	
-	if (isKeyHave == true
-	 && isClear == false
-	)
-	{
-		// BGMの再開
-		if (bgmStopCount > 4.0f)
-		{
-			if (!AudioAsset(U"BGM").isPlaying())
-			{
-				AudioAsset(U"BGM").play();
-			}
-		}
-		else {
-			bgmStopCount += deltaTime;
-		}
-
-		// 扉に入れるようにする
-		{
-#ifndef _DEBUG
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-#endif
-			// マウスの当たり判定
-			Box box = Box{ Vec3{doorX, doorY, doorZ}, 0.2 }.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-			if (box.intersects(ray))
-			{
-				// マウスが当たっている
-				//Print << U"HIT";
-
-				if (MouseL.down())
-				{
-					// クリア
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"牢屋の扉を開ける").play();
-					isClear = true;
-					changeScene(State::Title);
-				}
-			}
-		}
-	}
-
 
 	// ライトの点滅
 	if (Random(0, 100) == 0)
@@ -555,7 +634,7 @@ void CameraTest::update()
 			model.draw();
 		}
 
-		// 鍵の描画
+		// 鍵の描画（シェーダーを適用するために、ここで描画しています）
 		if (isKeyHave == false)
 		{
 			{
@@ -573,24 +652,84 @@ void CameraTest::update()
 #ifndef _DEBUG
 			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
 #endif
-			// マウスの当たり判定
+			// マウスの当たり判定の描画
 			Box box = Box{
-				Vec3{ keyX, keyY, keyZ }, 0.3
+				Vec3{ keyX, keyY, keyZ }, 
+				0.3
 			}.drawFrame(ColorF{ 1, 1, 1, 1 });
 
-			if (box.intersects(ray))
+			// フォーカス中
+			if (isFocus)
 			{
-				// マウスが当たっている
-				//Print << U"HIT";
-
-				if (MouseL.down())
+				if (box.intersects(ray))
 				{
-					isKeyHave = true;
-					AudioAsset(U"GET").play();
-					AudioAsset(U"BGM").stop();
+					// マウスが当たっている
+					//Print << U"HIT";
+
+					if (
+					   MouseL.down()
+				//	|| MouseR.down()
+					)
+					{
+						isKeyHave = true;
+						AudioAsset(U"GET").play();
+						AudioAsset(U"BGM").stop();
+					}
 				}
 			}
 		}
+
+		// TODO 共通化する
+		if (isKeyHave == true
+		 && isClear == false
+		)
+		{
+			// BGMの再開
+			if (bgmStopCount > 4.0f)
+			{
+				if (!AudioAsset(U"BGM").isPlaying())
+				{
+					AudioAsset(U"BGM").play();
+				}
+			}
+			else {
+				bgmStopCount += deltaTime;
+			}
+
+			// 扉に入れるようにする
+			{
+#ifndef _DEBUG
+				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
+#endif
+				// マウスの当たり判定
+				Box box = Box{ 
+					Vec3{doorX,doorY,doorZ}, 
+					0.2
+				}.drawFrame(ColorF{ 1, 1, 1, 1 });
+
+				if (isFocus)
+				{
+					if (box.intersects(ray))
+					{
+						// マウスが当たっている
+						//Print << U"HIT";
+
+						if (
+							MouseL.down()
+							//	|| MouseR.down()
+							)
+						{
+							// クリア
+							AudioAsset(U"BGM").stop();
+							AudioAsset(U"牢屋の扉を開ける").play();
+							isClear = true;
+							changeScene(State::Title);
+						}
+					}
+				}
+			}
+		}
+
 
 	}
 

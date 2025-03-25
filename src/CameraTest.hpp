@@ -203,4 +203,13 @@ private:
 	float doorFocusCameraY = -0.5;
 	float doorFocusPhi = -1.5;
 
+	float mousePosX = 0.0f;
+	float mousePosY = 0.0f;
+	float toMousePosX = 0.0f;
+	float toMousePosY = 0.0f;
+
+	float focusWait = 0.0f;
+
+	int mouseDirectionX = 1;
+	int mouseDirectionY = 1;
 };
