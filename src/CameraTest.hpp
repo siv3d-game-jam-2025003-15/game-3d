@@ -19,16 +19,13 @@ public:
 
 private:
 
+	void debug();
+
 	BasicCamera3D camera;
-//	DebugCamera3D camera;
 
 	Size SceneSize{ 256, 192 };
 
-//	Model blacksmithModel{ U"" };
-
-//	MSRenderTexture renderTexture;
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
-//	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R8G8B8A8_Unorm_SRGB, HasDepth::Yes };
 
 	// 地面
 	Texture groundTexture;

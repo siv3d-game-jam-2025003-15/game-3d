@@ -4,27 +4,32 @@
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
 {
+	// 背景の色
 	backgroundColor = ColorF{ 0.05, 0.08, 0.1 }.removeSRGBCurve();
-
+	
+	// カメラ
 	camera = BasicCamera3D{ renderTexture.size(), m_verticalFOV, Vec3{ 10, 10, -10 } };
 
 	// モデルに付随するテクスチャをアセット管理に登録
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
+	// BGMの再生
 	AudioAsset(U"BGM").play();
 
+	// マウスの初期化
 	mousePosX = Cursor::PosF().x;
 	mousePosY = Cursor::PosF().y;
 	toMousePosX = mousePosX;
 	toMousePosY = mousePosY;
 }
 
-void CameraTest::update()
+void CameraTest::debug()
 {
+	// デバッグ表示のクリア
 	ClearPrint();
 
-    Print << Profiler::FPS() << U" FPS";
+	Print << Profiler::FPS() << U" FPS";
 
 	if (Key1.down())
 	{
@@ -59,6 +64,11 @@ void CameraTest::update()
 	{
 		Print << U"[3][4]カメラ縦回転：逆";
 	}
+}
+
+void CameraTest::update()
+{
+	debug();
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
