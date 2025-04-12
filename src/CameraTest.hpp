@@ -63,7 +63,8 @@ private:
 
 	/// モデル配置
 	// モデルの読み込み（マテリアル参照を無視）
-	const Model model{ U"assets/models/Room/EV_Room01.obj" };
+//	const Model model{ U"assets/models/Room/EV_Room01.obj" };
+	const Model model{ U"assets/models/Room/EV_Room02.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
 
 //	const Texture floorTexture{ U"assets/models/Room/T_EV_Floor01_D.png", TextureDesc::Mipped };
@@ -209,4 +210,7 @@ private:
 
 	int mouseDirectionX = 1;
 	int mouseDirectionY = 1;
+
+	// コリジョンの有効フラグ
+	bool bCollision = true;
 };
