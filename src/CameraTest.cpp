@@ -22,6 +22,9 @@ CameraTest::CameraTest(const InitData& init)
 	mousePosY = Cursor::PosF().y;
 	toMousePosX = mousePosX;
 	toMousePosY = mousePosY;
+
+
+	Stopwatch stopwatch{ StartImmediately::Yes };
 }
 
 void CameraTest::debug()
@@ -47,6 +50,16 @@ void CameraTest::debug()
 	{
 		mouseDirectionY = -1;
 	}
+	if (Key9.down())
+	{
+		// コリジョンを有効
+		bCollision = true;
+	}
+	if (Key0.down())
+	{
+		// コリジョンを無効
+		bCollision = false;
+	}
 
 	if (mouseDirectionX == 1)
 	{
@@ -63,6 +76,15 @@ void CameraTest::debug()
 	else
 	{
 		Print << U"[3][4]カメラ縦回転：逆";
+	}
+
+	if (bCollision)
+	{
+		Print << U"[9][0]コリジョン：有効";
+	}
+	else
+	{
+		Print << U"[9][0]コリジョン：無効";
 	}
 }
 
@@ -305,7 +327,10 @@ void CameraTest::update()
 	)
 	{
 		// 進めない
-		toCameraPos = last_eyePosition;
+		if(bCollision)
+		{
+			toCameraPos = last_eyePosition;
+		}
 	}
 	last_eyePosition = toCameraPos;
 
@@ -639,10 +664,35 @@ void CameraTest::update()
 
 		// モデルを描画
 		{
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+					Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+					model.draw();
+		}
 
+		/*
+		Mat4x4 mat = Mat4x4::Translate(1, 0, 1);
+		for (const auto& object : model.objects())
+		{
+			Mat4x4 m = Mat4x4::Identity();
+
+			Print << U"オブジェクト：" << object.name;
+
+			if (object.name == U"FixRoom EV_Partition01")
+			{
+				m *= Mat4x4::Rotate(
+					Vec3{ 0,0,-1 },
+					(Scene::Time() * -120_deg),
+					Vec3{ 0, 0, 0 }
+				);
+			}
+
+			const Transformer3D t{ (m * mat) };
+
+			//Model::Draw(object, materials);
 			model.draw();
 		}
+		*/
+		
+
 
 		// 鍵の描画（シェーダーを適用するために、ここで描画しています）
 		if (isKeyHave == false)
@@ -655,6 +705,7 @@ void CameraTest::update()
 					45_deg,
 					Vec3{ keyX, keyY, keyZ }
 				);
+
 				const Transformer3D transform{ mat * m };
 				modelKey.draw();
 			}
@@ -799,6 +850,18 @@ void CameraTest::update()
 
 		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 	}
+	
+
+	// 経過時間を取得
+	const double frameTime = stopwatch.sF();
+	if (frameTime < targetDeltaTime)
+	{
+		// 残り時間だけスリープ（精度を高めたいなら Sleep せずにループで待機する方法もある）
+		System::Sleep(targetDeltaTime - frameTime);
+	}
+
+	// タイマーをリセットして次のフレームへ
+	stopwatch.restart();
 }
 
 void CameraTest::draw() const
