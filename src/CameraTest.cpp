@@ -26,6 +26,7 @@ CameraTest::CameraTest(const InitData& init)
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
 	startTime = Scene::Time();
+
 }
 
 void CameraTest::debug()
@@ -318,21 +319,25 @@ void CameraTest::update()
 	// ゆっくり移動
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
-	// コリジョン
-	if (toCameraPos.x < -3.5
-	|| toCameraPos.x > 3.5
-	|| toCameraPos.z < -4.5
-	|| toCameraPos.z > 4.5
-	|| toCameraPos.y < 0.5	// 高さ
-	|| toCameraPos.y > 5.0	// 高さ
-	)
+	if (bCollision)
 	{
-		// 進めない
-		if(bCollision)
+		// コリジョンあり
+		if (toCameraPos.x < -3.5
+		|| toCameraPos.x > 3.5
+		|| toCameraPos.z < -4.5
+		|| toCameraPos.z > 4.5
+		)
 		{
 			toCameraPos = last_eyePosition;
 		}
 	}
+	else
+	{
+		// コリジョンなし
+	}
+
+
+
 	last_eyePosition = toCameraPos;
 
 #ifdef _DEBUG
@@ -791,10 +796,51 @@ void CameraTest::update()
 				}
 			}
 		}
+
+		{
+			// 線の始点と終点
+			const Vec3 start{ -3.5, 1, -4.5 };
+			const Vec3 end{ 3.5, 1, -4.5 };
+
+			const ColorF LineColor = ColorF{ 1, 1, 1, 1 }.removeSRGBCurve();
+
+			double collisionY = 1;
+
+			// コリジョンを描画
+			for (int i = 0; i < 1; i++)
+			{
+				Line3D{ Vec3{collisionList[i][0], collisionY, collisionList[i][1]}, Vec3{collisionList[i][2], collisionY, collisionList[i][1]} }.draw(LineColor);
+				Line3D{ Vec3{collisionList[i][2], collisionY, collisionList[i][1]}, Vec3{collisionList[i][2], collisionY, collisionList[i][3]} }.draw(LineColor);
+				Line3D{ Vec3{collisionList[i][2], collisionY, collisionList[i][3]}, Vec3{collisionList[i][0], collisionY, collisionList[i][3]} }.draw(LineColor);
+				Line3D{ Vec3{collisionList[i][0], collisionY, collisionList[i][3]}, Vec3{collisionList[i][0], collisionY, collisionList[i][1]} }.draw(LineColor);
+			}
+
+			// 盤上の線
+			//for (int32 i = -4; i <= 4; ++i)
+			//{
+			//	Line3D{ Vec3{ -4, 0.01, i }, Vec3{ 4, 0.01, i } }.draw(LineColor);
+			//	Line3D{ Vec3{ i, 0.01, -4 }, Vec3{ i, 0.01, 4 } }.draw(LineColor);
+			//}
+			//Line3D{ Vec3{ -4.1, 0.01, -4.1 }, Vec3{ 4.1, 0.01, -4.1 } }.draw(LineColor);
+			//Line3D{ Vec3{ -4.1, 0.01, 4.1 }, Vec3{ 4.1, 0.01, 4.1 } }.draw(LineColor);
+			//Line3D{ Vec3{ -4.1, 0.01, 4.1 }, Vec3{ -4.1, 0.01, -4.1 } }.draw(LineColor);
+			//Line3D{ Vec3{ 4.1, 0.01, 4.1 }, Vec3{ 4.1, 0.01, -4.1 } }.draw(LineColor);
+
+
+		}
 	}
+
+
+
 
 	// [RenderTexture を 2D シーンに描画]
 	{
+
+
+
+
+
+
 		Graphics3D::Flush();
 		renderTexture.resolve();
 		Shader::LinearToScreen(renderTexture);
@@ -865,7 +911,4 @@ void CameraTest::update()
 void CameraTest::draw() const
 {
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
-	
-	// 現在のフレームレートを出力
-	//Print << Profiler::FPS() << U" FPS";
 }

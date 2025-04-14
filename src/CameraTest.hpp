@@ -205,8 +205,14 @@ private:
 	bool bCollision = true;
 
 	// 目標フレームレート
-	const double targetFPS = 60.0;
-	const double frameTime = 1.0 / targetFPS; // 約 0.01666 秒
+	const double targetFPS = 120.0;
+	const double frameTime = 1.0 / targetFPS;
 
 	double startTime = 0.0;
+
+	// コリジョンリスト
+	double collisionList[1][4] = {
+	   { -3.5, -4.5, 3.5, 4.5 },
+	};
+
 };
