@@ -26,6 +26,13 @@ Ka 0.80 0.80 0.80
 Tf 1.00 1.00 1.00
 map_Kd T_EV_Door01_D.png
 Ni 1.00
+newmtl T_EV_Fence01SG
+illum 4
+Kd 0.80 0.80 0.80
+Ka 0.80 0.80 0.80
+Tf 1.00 1.00 1.00
+map_Kd T_EV_Fence01_D.png
+Ni 1.00
 newmtl T_EV_Floor01SG
 illum 4
 Kd 0.80 0.80 0.80
@@ -42,6 +49,7 @@ Ks 0.9 0.9 0.9  # 鏡面反射（強めに）
 Tf 0.2 0.2 0.2  # 透明度（少し曇りガラス風）
 Ni 1.52  # ガラスの屈折率
 map_Kd T_EV_Light01_D.png
+Ni 1.00
 newmtl T_EV_Partition01SG
 illum 4
 Kd 0.80 0.80 0.80

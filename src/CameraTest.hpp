@@ -63,12 +63,8 @@ private:
 
 	/// モデル配置
 	// モデルの読み込み（マテリアル参照を無視）
-//	const Model model{ U"assets/models/Room/EV_Room01.obj" };
-	const Model model{ U"assets/models/Room/EV_Room02.obj" };
+	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
-
-//	const Texture floorTexture{ U"assets/models/Room/T_EV_Floor01_D.png", TextureDesc::Mipped };
-//	const Texture wallTexture{ U"assets/models/Room/T_EV_Wall01_D.png", TextureDesc::Mipped };
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -213,4 +209,6 @@ private:
 
 	// コリジョンの有効フラグ
 	bool bCollision = true;
+	// 60FPS対応
+	const double targetDeltaTime = 1.0 / 60.0; // 約16.666ms
 };

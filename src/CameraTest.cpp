@@ -22,6 +22,9 @@ CameraTest::CameraTest(const InitData& init)
 	mousePosY = Cursor::PosF().y;
 	toMousePosX = mousePosX;
 	toMousePosY = mousePosY;
+
+
+	Stopwatch stopwatch{ StartImmediately::Yes };
 }
 
 void CameraTest::debug()
@@ -661,29 +664,8 @@ void CameraTest::update()
 
 		// モデルを描画
 		{
-		
-			//for (const auto& object : model.objects())
-			//{
-				//if (object.name == U"FixRoom EV_Bed01")
-				//{
-				//	Mat4x4 m = Mat4x4::Identity();
-				//	m *= Mat4x4::Rotate(
-				//		Vec3{ 0,0,-1 },
-				//		(Scene::Time() * -120_deg),
-				//		Vec3{ 0, 0, 0 }
-				//	);
-
-				//	Transformer3D t{
-				//		Mat4x4::RotateY(0_deg).scaled(roomScale).translated(Vec3{1,1,1})
-				//	};
-				//	model.draw();
-				//}
-				//else 
-				//{
 					Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 					model.draw();
-				//}
-			//}
 		}
 
 		/*
@@ -868,6 +850,18 @@ void CameraTest::update()
 
 		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 	}
+	
+
+	// 経過時間を取得
+	const double frameTime = stopwatch.sF();
+	if (frameTime < targetDeltaTime)
+	{
+		// 残り時間だけスリープ（精度を高めたいなら Sleep せずにループで待機する方法もある）
+		System::Sleep(targetDeltaTime - frameTime);
+	}
+
+	// タイマーをリセットして次のフレームへ
+	stopwatch.restart();
 }
 
 void CameraTest::draw() const
