@@ -23,8 +23,9 @@ CameraTest::CameraTest(const InitData& init)
 	toMousePosX = mousePosX;
 	toMousePosY = mousePosY;
 
-
 	Stopwatch stopwatch{ StartImmediately::Yes };
+
+	startTime = Scene::Time();
 }
 
 void CameraTest::debug()
@@ -790,8 +791,6 @@ void CameraTest::update()
 				}
 			}
 		}
-
-
 	}
 
 	// [RenderTexture を 2D シーンに描画]
@@ -852,16 +851,15 @@ void CameraTest::update()
 	}
 	
 
-	// 経過時間を取得
-	const double frameTime = stopwatch.sF();
-	if (frameTime < targetDeltaTime)
+	// 時間が余っていれば待機（過ぎていれば何もしない）
+	const double endTime = Scene::Time();
+	const double elapsed = endTime - startTime;
+	if (elapsed < frameTime)
 	{
-		// 残り時間だけスリープ（精度を高めたいなら Sleep せずにループで待機する方法もある）
-		System::Sleep(targetDeltaTime - frameTime);
+		const int32 sleepMS = static_cast<int32>((frameTime - elapsed) * 1000);
+		System::Sleep(sleepMS);
 	}
-
-	// タイマーをリセットして次のフレームへ
-	stopwatch.restart();
+	startTime = Scene::Time();
 }
 
 void CameraTest::draw() const

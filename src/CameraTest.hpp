@@ -6,21 +6,27 @@ class CameraTest : public App::Scene
 {
 public:
 
+	// コンストラクタ
 	CameraTest(const InitData& init);
 
+	// 処理
 	void update() override;
 
+	// 描画
 	void draw() const override;
 
+private:
+
+	// デバッグ表示
+	void debug();
+
+	// マウスポインタのRay
 	Ray getMouseRay() const
 	{
 		return camera.screenToRay(Cursor::PosF());
 	}
 
-private:
-
-	void debug();
-
+	// カメラ
 	BasicCamera3D camera;
 
 	Size SceneSize{ 256, 192 };
@@ -58,11 +64,12 @@ private:
 	// 開始時の目の角度
 	double m_focusY = 0;
 
-	double m_phi = std::atan2((m_focusPosition.z - m_eyePosition.z),
-		(m_focusPosition.x - m_eyePosition.x));
+	double m_phi = std::atan2(
+		(m_focusPosition.z - m_eyePosition.z),
+		(m_focusPosition.x - m_eyePosition.x)
+	);
 
-	/// モデル配置
-	// モデルの読み込み（マテリアル参照を無視）
+	// モデルの読み込み
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
 
@@ -144,19 +151,6 @@ private:
 	double to_zoom = 0.0;
 	double zoom_smooth = 2;
 
-	//bool isInFrustum(
-	//	Vec3 position,
-	//	Vec3 forward,
-	//	Vec3 camera_up,
-	//	float fov,
-	//	float aspectRatio,
-	//	float nearPlane,
-	//	float farPlane,
-	//	float x,
-	//	float y,
-	//	float z
-	//);
-
 	// 鍵の座標
 	float keyX = 3.25;
 	float keyY = 0.6;
@@ -209,6 +203,10 @@ private:
 
 	// コリジョンの有効フラグ
 	bool bCollision = true;
-	// 60FPS対応
-	const double targetDeltaTime = 1.0 / 60.0; // 約16.666ms
+
+	// 目標フレームレート
+	const double targetFPS = 60.0;
+	const double frameTime = 1.0 / targetFPS; // 約 0.01666 秒
+
+	double startTime = 0.0;
 };
