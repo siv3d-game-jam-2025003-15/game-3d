@@ -1,6 +1,6 @@
 ﻿# include "CameraTest.hpp"
 
-
+// コンストラクタ
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
 {
@@ -26,6 +26,7 @@ CameraTest::CameraTest(const InitData& init)
 	Stopwatch stopwatch{ StartImmediately::Yes };
 }
 
+// デバッグ機能
 void CameraTest::debug()
 {
 	// デバッグ表示のクリア
@@ -85,6 +86,45 @@ void CameraTest::debug()
 	{
 		Print << U"[9][0]コリジョン：無効";
 	}
+}
+
+
+
+// ベクトルの外積（2D）
+double CameraTest::cross(const Vec2& a, const Vec2& b)
+{
+	return a.x * b.y - a.y * b.x;
+}
+
+// 点Cが線分ABのどちら側にあるか
+double CameraTest::direction(const Vec2& a, const Vec2& b, const Vec2& c)
+{
+	return cross({ b.x - a.x, b.y - a.y }, { c.x - a.x, c.y - a.y });
+}
+
+// 線分同士が交差しているかを判定
+bool CameraTest::isIntersecting(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& d)
+{
+	double d1 = direction(a, b, c);
+	double d2 = direction(a, b, d);
+	double d3 = direction(c, d, a);
+	double d4 = direction(c, d, b);
+
+	return (d1 * d2 < 0) && (d3 * d4 < 0);
+}
+
+bool CameraTest::isCollision(const Vec2& a, const Vec2& b, double* collisionList)
+{
+	// 2Dの線分同士の交差判定
+	Vec2 A{ a.x, a.y }, B{ b.x, b.y };
+	for (int i = 0; i < 1; i++)	// TODO
+	{
+		if (isIntersecting(A, B, Vec2{ collisionList[0], collisionList[1] }, Vec2{ collisionList[2], collisionList[1] })) { return true; }
+		if (isIntersecting(A, B, Vec2{ collisionList[2], collisionList[1] }, Vec2{ collisionList[2], collisionList[3] })) { return true; }
+		if (isIntersecting(A, B, Vec2{ collisionList[2], collisionList[3] }, Vec2{ collisionList[0], collisionList[3] })) { return true; }
+		if (isIntersecting(A, B, Vec2{ collisionList[0], collisionList[3] }, Vec2{ collisionList[0], collisionList[1] })) { return true; }
+	}
+	return false;
 }
 
 void CameraTest::update()
@@ -316,18 +356,41 @@ void CameraTest::update()
 	// ゆっくり移動
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
+
+
+
+
+	// 移動を線とする
+	;
+	;	
+
+
+
 	// TODO 線分交差で判定する
 	if (bCollision)
 	{
-		// コリジョンあり
-		if (toCameraPos.x < -3.5
-		|| toCameraPos.x > 3.5
-		|| toCameraPos.z < -4.5
-		|| toCameraPos.z > 4.5
-		)
+		Vec2 A{ last_eyePosition.x, last_eyePosition.z }, B{ toCameraPos.x, toCameraPos.z };
+
+		for (int i = 0; i < 1; i++)	// TODO 1
 		{
-			toCameraPos = last_eyePosition;
+			Vec2 C{ collisionList[i][0], collisionList[i][1]}, D{collisionList[i][2], collisionList[i][3] };
+
+			if (isCollision(A, B, collisionList[i]))
+			{
+				// 交差している（ぶつかった）
+				toCameraPos = last_eyePosition;	// TODO このやり方だと引っかかる感じになる
+			}
 		}
+
+		// コリジョンあり
+		//if (toCameraPos.x < -3.5
+		//|| toCameraPos.x > 3.5
+		//|| toCameraPos.z < -4.5
+		//|| toCameraPos.z > 4.5
+		//)
+		//{
+		//	toCameraPos = last_eyePosition;
+		//}
 	}
 	else
 	{
@@ -668,8 +731,8 @@ void CameraTest::update()
 
 		// モデルを描画
 		{
-					Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-					model.draw();
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+			model.draw();
 		}
 
 		/*
@@ -797,9 +860,6 @@ void CameraTest::update()
 
 		{
 			// 線の始点と終点
-			const Vec3 start{ -3.5, 1, -4.5 };
-			const Vec3 end{ 3.5, 1, -4.5 };
-
 			const ColorF LineColor = ColorF{ 1, 1, 1, 1 }.removeSRGBCurve();
 
 			double collisionY = 1;
@@ -813,32 +873,51 @@ void CameraTest::update()
 				Line3D{ Vec3{collisionList[i][0], collisionY, collisionList[i][3]}, Vec3{collisionList[i][0], collisionY, collisionList[i][1]} }.draw(LineColor);
 			}
 
-			// 盤上の線
-			//for (int32 i = -4; i <= 4; ++i)
-			//{
-			//	Line3D{ Vec3{ -4, 0.01, i }, Vec3{ 4, 0.01, i } }.draw(LineColor);
-			//	Line3D{ Vec3{ i, 0.01, -4 }, Vec3{ i, 0.01, 4 } }.draw(LineColor);
-			//}
-			//Line3D{ Vec3{ -4.1, 0.01, -4.1 }, Vec3{ 4.1, 0.01, -4.1 } }.draw(LineColor);
-			//Line3D{ Vec3{ -4.1, 0.01, 4.1 }, Vec3{ 4.1, 0.01, 4.1 } }.draw(LineColor);
-			//Line3D{ Vec3{ -4.1, 0.01, 4.1 }, Vec3{ -4.1, 0.01, -4.1 } }.draw(LineColor);
-			//Line3D{ Vec3{ 4.1, 0.01, 4.1 }, Vec3{ 4.1, 0.01, -4.1 } }.draw(LineColor);
+			{
+				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+				for (const auto& object : model.objects())
+				{
+					//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
 
+					const std::array<Vec3, 8> c = object.boundingBox.getCorners();
+
+					//bool bHigh = true;
+					//for (int i = 0; i < 8; i++)
+					//{
+					//	if (c[i].y <= 2 && c[i].y >= 0)
+					//	{
+					//		bHigh = false;
+					//		break;
+					//	}
+					//}
+					//if (bHigh)
+					//{
+					//	continue;
+					//}
+
+					Line3D{ c[0], c[1] }.draw(LineColor);
+					Line3D{ c[1], c[3] }.draw(LineColor);
+					Line3D{ c[3], c[2] }.draw(LineColor);
+					Line3D{ c[2], c[0] }.draw(LineColor);
+
+					Line3D{ c[0], c[4] }.draw(LineColor);
+					Line3D{ c[1], c[5] }.draw(LineColor);
+					Line3D{ c[2], c[6] }.draw(LineColor);
+					Line3D{ c[3], c[7] }.draw(LineColor);
+
+					Line3D{ c[4], c[5] }.draw(LineColor);
+					Line3D{ c[5], c[7] }.draw(LineColor);
+					Line3D{ c[7], c[6] }.draw(LineColor);
+					Line3D{ c[6], c[4] }.draw(LineColor);
+
+				}
+			}
 
 		}
 	}
 
-
-
-
 	// [RenderTexture を 2D シーンに描画]
 	{
-
-
-
-
-
-
 		Graphics3D::Flush();
 		renderTexture.resolve();
 		Shader::LinearToScreen(renderTexture);

@@ -20,6 +20,16 @@ private:
 	// デバッグ表示
 	void debug();
 
+	//struct Vec2
+	//{
+	//	double x, y;
+	//};
+
+	double cross(const Vec2& a, const Vec2& b);
+	double direction(const Vec2& a, const Vec2& b, const Vec2& c);
+	bool isIntersecting(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& d);
+	bool isCollision(const Vec2& a, const Vec2& b, double* collisionList);
+
 	// マウスポインタのRay
 	Ray getMouseRay() const
 	{
