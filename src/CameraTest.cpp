@@ -24,9 +24,6 @@ CameraTest::CameraTest(const InitData& init)
 	toMousePosY = mousePosY;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
-
-	startTime = Scene::Time();
-
 }
 
 void CameraTest::debug()
@@ -319,6 +316,7 @@ void CameraTest::update()
 	// ゆっくり移動
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
+	// TODO 線分交差で判定する
 	if (bCollision)
 	{
 		// コリジョンあり
@@ -897,15 +895,16 @@ void CameraTest::update()
 	}
 	
 
-	// 時間が余っていれば待機（過ぎていれば何もしない）
-	const double endTime = Scene::Time();
-	const double elapsed = endTime - startTime;
-	if (elapsed < frameTime)
+	// 経過時間を取得
+	const double frameTime = stopwatch.sF();
+	if (frameTime < targetDeltaTime)
 	{
-		const int32 sleepMS = static_cast<int32>((frameTime - elapsed) * 1000);
-		System::Sleep(sleepMS);
+		// 残り時間だけスリープ（精度を高めたいなら Sleep せずにループで待機する方法もある）
+		System::Sleep(targetDeltaTime - frameTime);
 	}
-	startTime = Scene::Time();
+
+	// タイマーをリセットして次のフレームへ
+	stopwatch.restart();
 }
 
 void CameraTest::draw() const

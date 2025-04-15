@@ -204,11 +204,8 @@ private:
 	// コリジョンの有効フラグ
 	bool bCollision = true;
 
-	// 目標フレームレート
-	const double targetFPS = 120.0;
-	const double frameTime = 1.0 / targetFPS;
-
-	double startTime = 0.0;
+	// 60FPS対応
+	const double targetDeltaTime = 1.0 / 60.0; // 約16.666ms
 
 	// コリジョンリスト
 	double collisionList[1][4] = {
