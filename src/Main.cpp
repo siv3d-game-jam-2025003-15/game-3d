@@ -29,7 +29,6 @@ void Main()
 	manager.add<Ranking>(State::Ranking);
 	manager.add<CameraTest>(State::CameraTest);
     manager.add<ModelView>(State::ModelView);
-    manager.add<CameraTest>(State::CameraTest);
     manager.add<Result>(State::Result);
     manager.add<Stage>(State::Stage);
 

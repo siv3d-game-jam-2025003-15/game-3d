@@ -357,57 +357,16 @@ void CameraTest::update()
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
 
-
-
-
-	// 移動を線とする
-	;
-	;	
-
-
-
 	// 線分交差で判定する
 	if (bCollision)
 	{
 		Vec2 A{ last_eyePosition.x, last_eyePosition.z }, B{ toCameraPos.x, toCameraPos.z };
 
-		// テスト用
-		//for (int i = 0; i < 1; i++)	// TODO 1
-		//{
-		//	Vec2 C{ collisionList[i][0], collisionList[i][1]}, D{collisionList[i][2], collisionList[i][3] };
-
-		//	if (isCollision(A, B, collisionList[i]))
-		//	{
-		//		// 交差している（ぶつかった）
-		//		toCameraPos = last_eyePosition;	// TODO このやり方だと引っかかる感じになる
-		//	}
-		//}
-
 		// モデルデータと判定する
-		//Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 		for (const auto& object : model.objects())
 		{
-			//if (object.name.includes(U"Wall")) continue;
-
-			//Print << object.name;
-
 			const std::array<Vec3, 8> c = object.boundingBox.getCorners();
-			/*
-			Line3D{ c[0], c[1] }.draw(LineColor);
-			Line3D{ c[1], c[3] }.draw(LineColor);
-			Line3D{ c[3], c[2] }.draw(LineColor);
-			Line3D{ c[2], c[0] }.draw(LineColor);
 
-			Line3D{ c[0], c[4] }.draw(LineColor);
-			Line3D{ c[1], c[5] }.draw(LineColor);
-			Line3D{ c[2], c[6] }.draw(LineColor);
-			Line3D{ c[3], c[7] }.draw(LineColor);
-
-			Line3D{ c[4], c[5] }.draw(LineColor);
-			Line3D{ c[5], c[7] }.draw(LineColor);
-			Line3D{ c[7], c[6] }.draw(LineColor);
-			Line3D{ c[6], c[4] }.draw(LineColor);
-			*/
 			bool isCollision = false;
 			if (isIntersecting(A, B, Vec2{ c[0].x / 100, c[0].z / 100 }, Vec2{ c[1].x / 100,  c[1].z / 100 })) { isCollision = true; }
 			if (isIntersecting(A, B, Vec2{ c[1].x / 100, c[1].z / 100 }, Vec2{ c[3].x / 100,  c[3].z / 100 })) { isCollision = true; }
@@ -431,22 +390,7 @@ void CameraTest::update()
 				break;
 			}
 		}
-
-
-
-
-
 	}
-
-
-
-
-
-
-
-
-
-
 
 	last_eyePosition = toCameraPos;
 
@@ -907,80 +851,17 @@ void CameraTest::update()
 			}
 		}
 
+#ifdef _DEBUG
 		{
-			// 線の始点と終点
-			const ColorF LineColor = ColorF{ 1, 1, 1, 1 }.removeSRGBCurve();
-
-			double collisionY = 2;
-
-			// コリジョンを描画
-			//for (int i = 0; i < 1; i++)
-			//{
-			//	Line3D{ Vec3{collisionList[i][0], collisionY, collisionList[i][1]}, Vec3{collisionList[i][2], collisionY, collisionList[i][1]} }.draw(LineColor);
-			//	Line3D{ Vec3{collisionList[i][2], collisionY, collisionList[i][1]}, Vec3{collisionList[i][2], collisionY, collisionList[i][3]} }.draw(LineColor);
-			//	Line3D{ Vec3{collisionList[i][2], collisionY, collisionList[i][3]}, Vec3{collisionList[i][0], collisionY, collisionList[i][3]} }.draw(LineColor);
-			//	Line3D{ Vec3{collisionList[i][0], collisionY, collisionList[i][3]}, Vec3{collisionList[i][0], collisionY, collisionList[i][1]} }.draw(LineColor);
-			//}
-
+			// モデルのワイヤーフレーム表示
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+			for (const auto& object : model.objects())
 			{
-				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-				for (const auto& object : model.objects())
-				{
-					//if (!object.name.includes(U"Bed")) continue;
-
-					//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-					const std::array<Vec3, 8> c = object.boundingBox.getCorners();
-
-					//bool bHigh = true;
-					//for (int i = 0; i < 8; i++)
-					//{
-					//	if (c[i].y <= 2 && c[i].y >= 0)
-					//	{
-					//		bHigh = false;
-					//		break;
-					//	}
-					//}
-					//if (bHigh)
-					//{
-					//	continue;
-					//}
-
-					Line3D{ c[0], c[1] }.draw(LineColor);
-					Line3D{ c[1], c[3] }.draw(LineColor);
-					Line3D{ c[3], c[2] }.draw(LineColor);
-					Line3D{ c[2], c[0] }.draw(LineColor);
-
-					Line3D{ c[0], c[4] }.draw(LineColor);
-					Line3D{ c[1], c[5] }.draw(LineColor);
-					Line3D{ c[2], c[6] }.draw(LineColor);
-					Line3D{ c[3], c[7] }.draw(LineColor);
-
-					Line3D{ c[4], c[5] }.draw(LineColor);
-					Line3D{ c[5], c[7] }.draw(LineColor);
-					Line3D{ c[7], c[6] }.draw(LineColor);
-					Line3D{ c[6], c[4] }.draw(LineColor);
-
-					//Line3D{ Vec3{c[0].x, collisionY, c[0].z,}, Vec3{c[1].x, collisionY, c[1].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[1].x, collisionY, c[1].z,}, Vec3{c[3].x, collisionY, c[3].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[3].x, collisionY, c[3].z,}, Vec3{c[2].x, collisionY, c[2].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[2].x, collisionY, c[2].z,}, Vec3{c[0].x, collisionY, c[0].z} }.draw(LineColor);
-
-					//Line3D{ Vec3{c[0].x, collisionY, c[0].z,}, Vec3{c[4].x, collisionY, c[4].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[1].x, collisionY, c[1].z,}, Vec3{c[5].x, collisionY, c[5].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[2].x, collisionY, c[2].z,}, Vec3{c[6].x, collisionY, c[6].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[3].x, collisionY, c[3].z,}, Vec3{c[7].x, collisionY, c[7].z} }.draw(LineColor);
-
-					//Line3D{ Vec3{c[4].x, collisionY, c[4].z,}, Vec3{c[5].x, collisionY, c[5].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[5].x, collisionY, c[5].z,}, Vec3{c[7].x, collisionY, c[7].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[7].x, collisionY, c[7].z,}, Vec3{c[6].x, collisionY, c[6].z} }.draw(LineColor);
-					//Line3D{ Vec3{c[6].x, collisionY, c[6].z,}, Vec3{c[4].x, collisionY, c[4].z} }.draw(LineColor);
-
-
-				}
+				object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
 			}
-
 		}
+#endif
+
 	}
 
 	// [RenderTexture を 2D シーンに描画]
