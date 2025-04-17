@@ -360,33 +360,159 @@ void CameraTest::update()
 	// 線分交差で判定する
 	if (bCollision)
 	{
-		Vec2 A{ last_eyePosition.x, last_eyePosition.z }, B{ toCameraPos.x, toCameraPos.z };
+		Vec2 A{ 
+			last_eyePosition.x,
+			last_eyePosition.z
+		};
+
+		// 向かっている位置より少し前にコリジョンを持たせる TODO これじゃなくて、距離にしたい
+		Vec2 cameraNormal = Vec2(
+			toCameraPos.x - last_eyePosition.x,
+			toCameraPos.z - last_eyePosition.z
+		).normalized();
+
+		Vec2 B{
+			toCameraPos.x + cameraNormal.x / 2,
+			toCameraPos.z + cameraNormal.y / 2,
+		};
 
 		// モデルデータと判定する
+		bool checkCollision = false;
 		for (const auto& object : model.objects())
 		{
 			const std::array<Vec3, 8> c = object.boundingBox.getCorners();
 
-			bool isCollision = false;
-			if (isIntersecting(A, B, Vec2{ c[0].x / 100, c[0].z / 100 }, Vec2{ c[1].x / 100,  c[1].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[1].x / 100, c[1].z / 100 }, Vec2{ c[3].x / 100,  c[3].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[3].x / 100, c[3].z / 100 }, Vec2{ c[2].x / 100,  c[2].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[2].x / 100, c[2].z / 100 }, Vec2{ c[0].x / 100,  c[0].z / 100 })) { isCollision = true; }
-
-			if (isIntersecting(A, B, Vec2{ c[0].x / 100, c[0].z / 100 }, Vec2{ c[4].x / 100,  c[4].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[1].x / 100, c[1].z / 100 }, Vec2{ c[5].x / 100,  c[5].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[2].x / 100, c[2].z / 100 }, Vec2{ c[6].x / 100,  c[6].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[3].x / 100, c[3].z / 100 }, Vec2{ c[7].x / 100,  c[7].z / 100 })) { isCollision = true; }
-
-			if (isIntersecting(A, B, Vec2{ c[4].x / 100, c[4].z / 100 }, Vec2{ c[5].x / 100,  c[5].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[5].x / 100, c[5].z / 100 }, Vec2{ c[7].x / 100,  c[7].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[7].x / 100, c[7].z / 100 }, Vec2{ c[6].x / 100,  c[6].z / 100 })) { isCollision = true; }
-			if (isIntersecting(A, B, Vec2{ c[6].x / 100, c[6].z / 100 }, Vec2{ c[4].x / 100,  c[4].z / 100 })) { isCollision = true; }
-
-			if (isCollision)
+			for (int i = 0; i < 12; i++)
 			{
-				// 交差している（ぶつかった）
-				toCameraPos = last_eyePosition;	// TODO このやり方だと引っかかる感じになる
+				if (
+					isIntersecting (
+						A,
+						B,
+						Vec2{ c[collisionList[i][0]].x / 100, c[collisionList[i][0]].z / 100 },
+						Vec2{ c[collisionList[i][1]].x / 100, c[collisionList[i][1]].z / 100 }
+					)
+				)
+				{
+					// 交差している（ぶつかった）
+					checkCollision = true;
+
+					// プレイヤーの移動速度
+					Vec2 velocity = Vec2(
+						toCameraPos.x - last_eyePosition.x,
+						toCameraPos.z - last_eyePosition.z
+					);
+					double length = velocity.length();
+
+					Vec2 velocityNormal = Vec2(
+						toCameraPos.x - last_eyePosition.x,
+						toCameraPos.z - last_eyePosition.z
+					).normalized();
+
+					// 当たり判定の法線
+					Vec2 wallNormal = Vec2(
+						c[collisionList[i][0]].x - c[collisionList[i][1]].x,
+						c[collisionList[i][0]].z - c[collisionList[i][1]].z
+					).normalized();
+
+					// 壁の法線に対する接線方向を計算
+					//Vec2 tangent = Vec2(wallNormal.x, wallNormal.y); // 法線に直交するベクトル
+
+					// 今の速度を壁に沿ってスライド（内積で投影）
+					//float dot = (velocityNormal.dot(wallNormal));
+
+					// 壁の法線に対する接線方向を計算
+					Vec2 tangent = Vec2(wallNormal.y, -wallNormal.x); // 法線に直交するベクトル
+
+					// 今の速度を壁に沿ってスライド（内積で投影）
+					Vec2 resultVelocity = tangent * (velocityNormal.dot(tangent));
+
+					Vec2 resultVelocity2 = Vec2(
+						resultVelocity.y,
+						resultVelocity.x
+					);
+
+					float dot = (velocityNormal.dot(resultVelocity2));
+
+					//if (dot > 0)
+					//{
+					//	// 前に進む
+					//}
+					//else if (dot < 0)
+					//{
+					//	// 後ろに進む
+					//	// 進行方向を反転
+					//	resultVelocity2.x *= -1;
+					//	resultVelocity2.y *= -1;
+					//}
+
+					Print << U"dot " << dot;
+
+					// いったん前の状態に戻す
+					toCameraPos = last_eyePosition;
+
+					// 壁に沿ってスライド
+					toCameraPos.x += (resultVelocity2.x * length * dot);
+					toCameraPos.z += (resultVelocity2.y * length * dot);
+
+
+
+
+
+					// TODO ここから先、関数化する
+					
+					// 進んだ先にコリジョンがないかどうか
+					Vec2 AA{
+						last_eyePosition.x,
+						last_eyePosition.z
+					};
+
+					// 向かっている位置より少し前にコリジョンを持たせる TODO これじゃなくて、距離にしたい
+					Vec2 cameraNormal2 = Vec2(
+						toCameraPos.x - last_eyePosition.x,
+						toCameraPos.z - last_eyePosition.z
+					).normalized();
+
+					Vec2 BB{
+						toCameraPos.x + cameraNormal2.x / 2,
+						toCameraPos.z + cameraNormal2.y / 2,
+					};
+
+					for (const auto& object2 : model.objects())
+					{
+						const std::array<Vec3, 8> c2 = object2.boundingBox.getCorners();
+
+						for (int i2 = 0; i2 < 12; i2++)
+						{
+							if (
+								isIntersecting(
+									AA,
+									BB,
+									Vec2{ c2[collisionList[i2][0]].x / 100, c2[collisionList[i2][0]].z / 100 },
+									Vec2{ c2[collisionList[i2][1]].x / 100, c2[collisionList[i2][1]].z / 100 }
+								)
+							)
+							{
+								// 交差している（ぶつかった）失敗
+								checkCollision = false;
+								toCameraPos = last_eyePosition;
+								break;
+						
+							}
+						}
+						if (checkCollision == false)
+						{
+							// 進んだ先にコリジョンがある 失敗
+							break;
+						}
+					}
+
+
+					break;
+				}
+			}
+			if (checkCollision)
+			{
+				// 正しいコリジョン
 				break;
 			}
 		}
