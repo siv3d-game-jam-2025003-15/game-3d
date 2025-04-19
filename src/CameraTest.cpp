@@ -357,6 +357,25 @@ void CameraTest::update()
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
 
+	// コリジョンを無効にするエリア
+	Print << U"x=" << toCameraPos.x;
+	Print << U"z=" << toCameraPos.z;
+
+	if (
+		(-2.0 < toCameraPos.x && toCameraPos.x < -1.3 && 1.2 < toCameraPos.z && toCameraPos.z < 2.6)
+	 || (6.3 < toCameraPos.x && toCameraPos.x < 7.0 && 1.2 < toCameraPos.z && toCameraPos.z < 2.6)
+	 || (10 < toCameraPos.x && toCameraPos.x < 13 && -1.1 < toCameraPos.z && toCameraPos.z < -0.3)
+	 || (6.3 < toCameraPos.x && toCameraPos.x < 7.0 && -4.4 < toCameraPos.z && toCameraPos.z < -3.0)
+	)
+	{
+        // コリジョンを無効にするエリア
+		bCollision = false;
+	}
+	else 
+    {
+        bCollision = true;
+    }
+
 	// 線分交差で判定する
 	if (bCollision)
 	{

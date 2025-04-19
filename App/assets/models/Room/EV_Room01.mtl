@@ -1,3 +1,10 @@
+newmtl T_EV_BarrelSG
+illum 4
+Kd 0.80 0.80 0.80
+Ka 0.80 0.80 0.80
+Tf 1.00 1.00 1.00
+map_Kd T_EV_Barrel_D.png
+Ni 1.00
 newmtl T_EV_Bed01SG
 illum 4
 Kd 0.80 0.80 0.80
@@ -41,13 +48,10 @@ Tf 1.00 1.00 1.00
 map_Kd T_EV_Floor01_D.png
 Ni 1.00
 newmtl T_EV_Light01SG
-illum 7  # 鏡面反射 + 屈折 + 透過
-Ns 200.0  # 鏡面反射の強さ（光沢感を追加）
-Kd 0.9 0.9 0.9  # 拡散光（やや白め）
-Ka 0.2 0.2 0.2  # 環境光（暗めで影響を抑える）
-Ks 0.9 0.9 0.9  # 鏡面反射（強めに）
-Tf 0.2 0.2 0.2  # 透明度（少し曇りガラス風）
-Ni 1.52  # ガラスの屈折率
+illum 4
+Kd 0.80 0.80 0.80
+Ka 0.80 0.80 0.80
+Tf 1.00 1.00 1.00
 map_Kd T_EV_Light01_D.png
 Ni 1.00
 newmtl T_EV_Partition01SG
