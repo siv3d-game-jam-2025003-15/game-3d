@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35828.75 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game-3d", "game-3d\game-3d.vcxproj", "{E4DA48A1-AF11-4CA8-ABAD-3532A48A180D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4DA48A1-AF11-4CA8-ABAD-3532A48A180D}.Debug|x64.ActiveCfg = Debug|x64
+		{E4DA48A1-AF11-4CA8-ABAD-3532A48A180D}.Debug|x64.Build.0 = Debug|x64
+		{E4DA48A1-AF11-4CA8-ABAD-3532A48A180D}.Release|x64.ActiveCfg = Release|x64
+		{E4DA48A1-AF11-4CA8-ABAD-3532A48A180D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D16A15C2-28C4-4B1E-9ABC-EB21741E2E1C}
+	EndGlobalSection
+EndGlobal
