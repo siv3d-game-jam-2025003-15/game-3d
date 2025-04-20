@@ -213,6 +213,7 @@ private:
 
 	// コリジョンの有効フラグ
 	bool bCollision = true;
+	bool bCollisionDoor = true;
 
 	// 60FPS対応
 	const double targetDeltaTime = 1.0 / 60.0; // 約16.666ms

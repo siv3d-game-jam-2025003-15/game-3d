@@ -164,7 +164,9 @@ void CameraTest::update()
 	mousePosX = toMousePosX;
 	mousePosY = toMousePosY;
 
-	if (KeyLeft.pressed() && isFocusSmooth == false)
+	if (KeyLeft.pressed()
+//	&& isFocusSmooth == false
+	)
 	{
 		m_phi += (60_deg * deltaTime);
 
@@ -175,7 +177,9 @@ void CameraTest::update()
 		}
 	}
 
-	if (controller.rightThumbX < -0.1 && isFocusSmooth == false)
+	if (controller.rightThumbX < -0.1 
+//	&& isFocusSmooth == false
+	)
 	{
 		m_phi += (60_deg * deltaTime * -controller.rightThumbX);
 
@@ -186,7 +190,9 @@ void CameraTest::update()
 		}
 	}
 
-	if (diffMousePosX < -0.1 && isFocusSmooth == false)
+	if (diffMousePosX < -0.1 
+//	&& isFocusSmooth == false
+	)
 	{
 		m_phi += (60_deg * deltaTime * -diffMousePosX);
 
@@ -197,7 +203,9 @@ void CameraTest::update()
 		}
 	}
 
-	if (KeyRight.pressed() && isFocusSmooth == false)
+	if (KeyRight.pressed()
+//	&& isFocusSmooth == false
+	)
 	{
 		m_phi -= (60_deg * deltaTime);
 
@@ -208,7 +216,9 @@ void CameraTest::update()
 		}
 	}
 
-	if (controller.rightThumbX > 0.1 && isFocusSmooth == false)
+	if (controller.rightThumbX > 0.1
+//	&& isFocusSmooth == false
+	)
 	{
 		m_phi -= (60_deg * deltaTime * controller.rightThumbX);
 
@@ -219,7 +229,9 @@ void CameraTest::update()
 		}
 	}
 
-	if (diffMousePosX > 0.1 && isFocusSmooth == false)
+	if (diffMousePosX > 0.1 
+//	&& isFocusSmooth == false
+	)
 	{
 		m_phi -= (60_deg * deltaTime * diffMousePosX);
 
@@ -241,52 +253,68 @@ void CameraTest::update()
 		const double zr = (scaledSpeed * c);
 
 		bool isWalk = false;
-		if (KeyW.pressed() && isFocusSmooth == false)
+		if (KeyW.pressed()
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x += xr;
 			toCameraPos.z += zr;
 			isWalk = true;
 		}
-		if (controller.leftThumbY > 0.1 && isFocusSmooth == false)
+		if (controller.leftThumbY > 0.1
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x += (xr * controller.leftThumbY);
 			toCameraPos.z += (zr * controller.leftThumbY);
 			isWalk = true;
 		}
 
-		if (KeyS.pressed() && isFocusSmooth == false)
+		if (KeyS.pressed()
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x -= xr;
 			toCameraPos.z -= zr;
 			isWalk = true;
 		}
-		if (controller.leftThumbY < -0.1 && isFocusSmooth == false)
+		if (controller.leftThumbY < -0.1
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x -= (xr * -controller.leftThumbY);
 			toCameraPos.z -= (zr * -controller.leftThumbY);
 			isWalk = true;
 		}
 
-		if (KeyA.pressed() && isFocusSmooth == false)
+		if (KeyA.pressed() 
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x -= zr;
 			toCameraPos.z += xr;
 			isWalk = true;
 		}
-		if (controller.leftThumbX < -0.1 && isFocusSmooth == false)
+		if (controller.leftThumbX < -0.1
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x -= (zr * -controller.leftThumbX);
 			toCameraPos.z += (xr * -controller.leftThumbX);
 			isWalk = true;
 		}
 
-		if (KeyD.pressed() && isFocusSmooth == false)
+		if (KeyD.pressed() 
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x += zr;
 			toCameraPos.z -= xr;
 			isWalk = true;
 		}
-		if (controller.leftThumbX > 0.1 && isFocusSmooth == false)
+		if (controller.leftThumbX > 0.1
+	//	&& isFocusSmooth == false
+		)
 		{
 			toCameraPos.x += (zr * controller.leftThumbX);
 			toCameraPos.z -= (xr * controller.leftThumbX);
@@ -311,33 +339,45 @@ void CameraTest::update()
 	{
 		const double yDelta = deltaTime;
 
-		if (KeyUp.pressed() && isFocusSmooth == false)
+		if (KeyUp.pressed()
+	//	&& isFocusSmooth == false
+		)
 		{
 			to_m_focusY += yDelta;
 		}
 
-		if (controller.rightThumbY > 0.1 && isFocusSmooth == false)
+		if (controller.rightThumbY > 0.1 
+	//	&& isFocusSmooth == false
+		)
 		{
 			to_m_focusY += (yDelta * controller.rightThumbY);
 		}
 
-		if (diffMousePosY > 0.1 && isFocusSmooth == false)
+		if (diffMousePosY > 0.1 
+	//	&& isFocusSmooth == false
+		)
 		{
 			to_m_focusY += (yDelta * diffMousePosY);
 		}
 
 
-		if (KeyDown.pressed() && isFocusSmooth == false)
+		if (KeyDown.pressed() 
+	//	&& isFocusSmooth == false
+		)
 		{
 			to_m_focusY -= yDelta;
 		}
 
-		if (controller.rightThumbY < -0.1 && isFocusSmooth == false)
+		if (controller.rightThumbY < -0.1
+	//	&& isFocusSmooth == false
+		)
 		{
 			to_m_focusY -= (yDelta * -controller.rightThumbY);
 		}
 
-		if (diffMousePosY < -0.1 && isFocusSmooth == false)
+		if (diffMousePosY < -0.1
+	//	&& isFocusSmooth == false
+		)
 		{
 			to_m_focusY -= (yDelta * -diffMousePosY);
 		}
@@ -369,15 +409,15 @@ void CameraTest::update()
 	)
 	{
         // コリジョンを無効にするエリア
-		bCollision = false;
+		bCollisionDoor = false;
 	}
 	else 
     {
-        bCollision = true;
+		bCollisionDoor = true;
     }
 
 	// 線分交差で判定する
-	if (bCollision)
+	if (bCollision && bCollisionDoor)
 	{
 		Vec2 A{ 
 			last_eyePosition.x,
@@ -566,6 +606,7 @@ void CameraTest::update()
 
 	Graphics3D::SetCameraTransform(camera);
 
+    /* ズームはいったんクローズ
 	if (controller.rightTrigger > 0.1
 	 && isFocus == false
 	)
@@ -580,18 +621,12 @@ void CameraTest::update()
 		// Zキーでズーム
 		to_zoom = 1 * (Math::Pi / 180) * 25 * deltaTime * 60;
 	}
-	//else if (MouseM.pressed()
-	//	&& isFocus == false
-	//	)
-	//{
-	//	// 中クリックでズーム
-	//	to_zoom = 1 * (Math::Pi / 180) * 25 * deltaTime * 60;
-	//}
 	else
 	{
 		to_zoom = 0;
 	}
 	zoom = Math::Lerp(zoom, to_zoom, smooth / zoom_smooth / focusSmooth * deltaTime * 60); // ズームをスムーズに
+	*/
 
 
 	Vec3 keyObjectPostion = Vec3{ keyX, keyY, keyZ };
@@ -613,8 +648,8 @@ void CameraTest::update()
 	 && worldScreenPoint.y >= (720 / 2 - 200)
 	 && worldScreenPoint.y <= (720 / 2 + 200)
 	 && keyDistance < 3.5
-	 && isFocusSmooth == false
-	 && focusWait < 0.0f
+//	 && isFocusSmooth == false
+//	 && focusWait < 0.0f
 	)
 	{
 		// オブジェクトが画面の中心にある
@@ -622,7 +657,8 @@ void CameraTest::update()
 		Print << U"オブジェクトが画面の中心にある";
 #endif
 		Print << U"左クリックで鍵を取る";
-		Print << U"右クリックでズーム解除";
+		Print << U"エンターキーで鍵を取る";
+		//	Print << U"右クリックでズーム解除";
 
 
 		// ズームしていたらフォーカスする
@@ -631,6 +667,8 @@ void CameraTest::update()
 		// || isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
 		//)
 		//{
+		
+        /* ズームの処理はバグっているので、いったんコメントアウト
 			// 前の位置を記憶
 			if (isFocus == false)
 			{
@@ -648,8 +686,9 @@ void CameraTest::update()
 
 			// フォーカスの速度を遅くする
 			focusSmooth = 2;
-
+		*/
 			isFocus = true;
+
 
 			if (controller.buttonA.pressed()
 			 || KeyEnter.pressed()
@@ -662,7 +701,27 @@ void CameraTest::update()
 				AudioAsset(U"BGM").stop();
 			}
 		//}
+
 	}
+
+	// 止まっているBGMを再度鳴らす TODO 汎用的な仕組みではないので、修正する
+	if (isKeyHave == true
+	&& isClear == false
+	)
+	{
+		// BGMの再開
+		if (bgmStopCount > 4.0f)
+		{
+			if (!AudioAsset(U"BGM").isPlaying())
+			{
+				AudioAsset(U"BGM").play();
+			}
+		}
+		else {
+			bgmStopCount += deltaTime;
+		}
+	}
+
 
 	Vec3 doorObjectPostion = Vec3{ doorX, doorY, doorZ };
 
@@ -675,6 +734,7 @@ void CameraTest::update()
 	//Print << U"doorDistance=" << doorDistance;
 
 	// TODO 共通化する
+	/* 扉のフォーカスはいったんクローズ
 	if (
 		worldScreenPoint.x >= (1280 / 2 - 200)
 		&& worldScreenPoint.x <= (1280 / 2 + 200)
@@ -737,9 +797,11 @@ void CameraTest::update()
 		//}
 
 	}
+	*/
 
 	//Print << U"isFocusSmooth" << isFocusSmooth;
 
+    /* フォーカスのキャンセルをいったんクローズ
 	if (KeyBackspace.pressed()
 	 || controller.buttonB.pressed()
 //	 || MouseL.down()
@@ -761,7 +823,9 @@ void CameraTest::update()
 			focusWait = 5.0f;	// ５秒間フォーカスできない
 		}
 	}
+	*/
 
+	/* いったんクローズ
 	if (isFocusSmooth)
 	{
 		double distance = toCameraPos.distanceFrom(m_eyePosition);
@@ -774,6 +838,7 @@ void CameraTest::update()
 			isFocusSmooth = false;
 		}
 	}
+	*/
 
 	// ライトの点滅
 	if (Random(0, 100) == 0)
@@ -946,6 +1011,7 @@ void CameraTest::update()
 		}
 
 		// TODO 共通化する
+		/* 扉の処理はいったんクローズ
 		if (isKeyHave == true
 		 && isClear == false
 		)
@@ -995,6 +1061,7 @@ void CameraTest::update()
 				}
 			}
 		}
+		*/
 
 #ifdef _DEBUG
 		{
