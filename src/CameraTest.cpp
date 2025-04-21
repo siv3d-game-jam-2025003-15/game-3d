@@ -50,6 +50,26 @@ void CameraTest::debug()
 	{
 		mouseDirectionY = -1;
 	}
+	if (Key5.down())
+	{
+		// コリジョンワイヤーフレーム
+		bDebugViewFrame = true;
+	}
+	if (Key6.down())
+	{
+		// コリジョン塗りつぶし
+		bDebugViewFrame = false;
+	}
+	if (Key7.down())
+	{
+		// コリジョンを表示
+		bDebugViewCollision = true;
+	}
+	if (Key8.down())
+	{
+		// コリジョンを非表示
+		bDebugViewCollision = false;
+	}
 	if (Key9.down())
 	{
 		// コリジョンを有効
@@ -59,6 +79,26 @@ void CameraTest::debug()
 	{
 		// コリジョンを無効
 		bCollision = false;
+	}
+	if (KeyZ.down())
+	{
+		// モデルを表示
+		bDebugviewModel = true;
+	}
+	if (KeyX.down())
+	{
+		// モデルを非表示
+		bDebugviewModel = false;
+	}
+	if (KeyC.down())
+	{
+		// ライトの点滅あり
+		bDebugFlashingLight = true;
+	}
+	if (KeyV.down())
+	{
+		// ライトの点滅なし
+		bDebugFlashingLight = false;
 	}
 
 	if (mouseDirectionX == 1)
@@ -77,6 +117,24 @@ void CameraTest::debug()
 	{
 		Print << U"[3][4]カメラ縦回転：逆";
 	}
+	
+	if (bDebugViewFrame)
+	{
+		Print << U"[5][6]コリジョン：ワイヤーフレーム";
+	}
+	else
+	{
+		Print << U"[5][6]コリジョン：塗りつぶし";
+	}
+
+	if (bDebugViewCollision)
+	{
+		Print << U"[7][8]コリジョン表示：表示";
+	}
+	else
+	{
+		Print << U"[7][8]コリジョン表示：非表示";
+	}
 
 	if (bCollision)
 	{
@@ -86,6 +144,26 @@ void CameraTest::debug()
 	{
 		Print << U"[9][0]コリジョン：無効";
 	}
+
+	if (bDebugviewModel)
+	{
+		Print << U"[Z][X]モデル：表示";
+	}
+	else
+	{
+		Print << U"[Z][X]モデル：非表示";
+	}
+
+	if (bDebugFlashingLight)
+	{
+		Print << U"[C][V]ライトの点滅：あり";
+	}
+	else
+	{
+		Print << U"[C][V]ライトの点滅：なし";
+	}
+
+	Print << U"[R][F]上下移動";
 }
 
 
@@ -320,7 +398,16 @@ void CameraTest::update()
 			toCameraPos.z -= (xr * controller.leftThumbX);
 			isWalk = true;
 		}
-		
+
+		if (KeyR.pressed())
+		{
+			toCameraPos.y += scaledSpeed;
+		}
+		if (KeyF.pressed())
+		{
+			toCameraPos.y -= scaledSpeed;
+		}
+
 		if (isWalk)
 		{
 			if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
@@ -880,6 +967,12 @@ void CameraTest::update()
 		toEmission = 0.0;
 	}
 
+	if (!bDebugFlashingLight)
+	{
+		// 点滅しない場合は常に点灯
+		isGlowEffect = true;
+	}
+
 	// 光源の設定
 	if (isGlowEffect)
 	{
@@ -933,6 +1026,7 @@ void CameraTest::update()
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
 		// モデルを描画
+		if (bDebugviewModel)
 		{
 			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 			model.draw();
@@ -1063,16 +1157,26 @@ void CameraTest::update()
 		}
 		*/
 
-#ifdef _DEBUG
+
+		if (bDebugViewCollision)
 		{
 			// モデルのワイヤーフレーム表示
 			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 			for (const auto& object : model.objects())
 			{
-				object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
+				if (bDebugViewFrame)
+				{
+					// ワイヤーフレーム
+					object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
+				}
+				else
+				{
+					// 塗りつぶし
+					object.boundingBox.draw(ColorF{ 1, 1, 1, 1 });
+				}
 			}
 		}
-#endif
+
 
 	}
 

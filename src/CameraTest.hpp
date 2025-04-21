@@ -236,4 +236,8 @@ private:
 	   { 6, 4 },
 	};
 
+	bool bDebugViewFrame = true;
+    bool bDebugViewCollision = true;
+	bool bDebugviewModel = true;
+	bool bDebugFlashingLight = true;
 };
