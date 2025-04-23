@@ -205,6 +205,94 @@ bool CameraTest::isCollision(const Vec2& a, const Vec2& b, double* collisionList
 	return false;
 }
 
+struct Vec3_ {
+	double x, y, z;
+
+	Vec3_ operator-(const Vec3_& v) const { return { x - v.x, y - v.y, z - v.z }; }
+	Vec3_ operator+(const Vec3_& v) const { return { x + v.x, y + v.y, z + v.z }; }
+	Vec3_ operator*(double s) const { return { x * s, y * s, z * s }; }
+
+	static Vec3_ cross(const Vec3_& a, const Vec3_& b) {
+		return {
+			a.y * b.z - a.z * b.y,
+			a.z * b.x - a.x * b.z,
+			a.x * b.y - a.y * b.x
+		};
+	}
+
+	static double dot(const Vec3_& a, const Vec3_& b) {
+		return a.x * b.x + a.y * b.y + a.z * b.z;
+	}
+};
+
+// レイ（三角形との交差を調べる）
+struct Ray_ {
+	Vec3_ origin;
+	Vec3_ direction;
+};
+
+// 交差点の情報
+struct HitResult {
+	double t;       // レイのパラメータ（距離）
+	double u, v;    // バリセントリック座標
+	Vec3_ point;    // 交差点
+};
+
+// 三角形（頂点3つ）
+using Triangle_ = std::array<Vec3_, 3>;
+
+struct Segment {
+	Vec3_ start;
+	Vec3_ end;
+};
+
+bool IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitResult& outResult) {
+	const double EPSILON = 1e-8f;
+
+	Vec3_ dir = segment.end - segment.start;  // 線分の方向ベクトル
+	Vec3_ v0 = tri[0];
+	Vec3_ v1 = tri[1];
+	Vec3_ v2 = tri[2];
+
+	Vec3_ edge1 = v1 - v0;
+	Vec3_ edge2 = v2 - v0;
+
+	Vec3_ h = Vec3_::cross(dir, edge2);
+	double a = Vec3_::dot(edge1, h);
+
+	if (a > -EPSILON && a < EPSILON) {
+		return false; // 平行
+	}
+
+	double f = 1.0f / a;
+	Vec3_ s = segment.start - v0;
+	double u = f * Vec3_::dot(s, h);
+
+	if (u < 0.0f || u > 1.0f) {
+		return false;
+	}
+
+	Vec3_ q = Vec3_::cross(s, edge1);
+	double v = f * Vec3_::dot(dir, q);
+
+	if (v < 0.0f || u + v > 1.0f) {
+		return false;
+	}
+
+	double t = f * Vec3_::dot(edge2, q);
+
+	// 線分の範囲内か？（0 <= t <= 1）
+	if (t >= 0.0f && t <= 1.0f) {
+		outResult.t = t;
+		outResult.u = u;
+		outResult.v = v;
+		outResult.point = segment.start + dir * t;
+		return true;
+	}
+
+	return false;
+}
+
 void CameraTest::update()
 {
 	debug();
@@ -220,7 +308,7 @@ void CameraTest::update()
 
 	Ray ray = getMouseRay();
 
-	float speed = 2.0f;
+	double speed = 2.0f;
 
 	const double deltaTime = Scene::DeltaTime();
 	const double scaledSpeed =
@@ -230,8 +318,8 @@ void CameraTest::update()
 	toMousePosX = Cursor::PosF().x;
 	toMousePosY = Cursor::PosF().y;
 
-	float diffMousePosX = 0.0f;
-	float diffMousePosY = 0.0f;
+	double diffMousePosX = 0.0f;
+	double diffMousePosY = 0.0f;
 
 	if (MouseL.pressed())
 	{
@@ -506,6 +594,7 @@ void CameraTest::update()
 	// 線分交差で判定する
 	if (bCollision && bCollisionDoor)
 	{
+		/*
 		Vec2 A{ 
 			last_eyePosition.x,
 			last_eyePosition.z
@@ -521,26 +610,105 @@ void CameraTest::update()
 			toCameraPos.x + cameraNormal.x / 2,
 			toCameraPos.z + cameraNormal.y / 2,
 		};
+		*/
+
+		Vec3 A{
+			last_eyePosition.x,
+			last_eyePosition.y,
+			last_eyePosition.z
+		};
+
+		Vec3 cameraNormal = Vec3(
+			toCameraPos.x - last_eyePosition.x,
+			toCameraPos.y - last_eyePosition.y,
+			toCameraPos.z - last_eyePosition.z
+		).normalized();
+
+		// 向かっている位置より少し前にコリジョンを持たせる
+		// TODO これじゃなくて、距離にしたい
+		Vec3 B{
+			toCameraPos.x + cameraNormal.x / 2,
+			toCameraPos.y + cameraNormal.y / 2,
+			toCameraPos.z + cameraNormal.z / 2,
+		};
+
+		Segment segment = {
+			{
+				last_eyePosition.x,
+				//last_eyePosition.y,
+				0.1,
+				last_eyePosition.z
+			}
+			, 
+			{
+				toCameraPos.x + cameraNormal.x / 2,
+				//toCameraPos.y,
+				0.1,
+				toCameraPos.z + cameraNormal.z / 2,
+			}
+		};
+
+		const ColorF LineColor = ColorF{ 0.3, 0.2, 0.0 }.removeSRGBCurve();
+
+		Line3D{ Vec3{ last_eyePosition.x, last_eyePosition.y, last_eyePosition.z }, Vec3{ toCameraPos.x, toCameraPos.y, toCameraPos.z } }.draw(LineColor);
 
 		// モデルデータと判定する
 		bool checkCollision = false;
 		for (const auto& object : model.objects())
 		{
-			const std::array<Vec3, 8> c = object.boundingBox.getCorners();
+			const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
 
 			for (int i = 0; i < 12; i++)
 			{
+				/*
 				if (
 					isIntersecting (
 						A,
 						B,
-						Vec2{ c[collisionList[i][0]].x / 100, c[collisionList[i][0]].z / 100 },
-						Vec2{ c[collisionList[i][1]].x / 100, c[collisionList[i][1]].z / 100 }
+						Vec2{ cube[collisionList[i][0]].x / 100, cube[collisionList[i][0]].z / 100 },
+						Vec2{ cube[collisionList[i][1]].x / 100, cube[collisionList[i][1]].z / 100 }
 					)
 				)
+				*/
+
+
+				Triangle_ tri = {
+					Vec3_{cube[collisionTriangle[i][0]].x / 100, cube[collisionTriangle[i][0]].y / 100, cube[collisionTriangle[i][0]].z / 100},
+					Vec3_{cube[collisionTriangle[i][1]].x / 100, cube[collisionTriangle[i][1]].y / 100, cube[collisionTriangle[i][1]].z / 100},
+					Vec3_{cube[collisionTriangle[i][2]].x / 100, cube[collisionTriangle[i][2]].y / 100, cube[collisionTriangle[i][2]].z / 100}
+				};
+
+				//Print << U"camera_x=" << toCameraPos.x << U" camera_y=" << toCameraPos.y << U" camera_z=" << toCameraPos.z;
+				//Print
+				//	<< U" ray_x=" << toCameraPos.x - last_eyePosition.x
+				//	<< U" ray_y=" << toCameraPos.y - last_eyePosition.y 
+				//	<< U" ray_z=" << toCameraPos.z - last_eyePosition.z;
+				//Print << U"cube_x=" << cube[collisionTriangle[i][0]].x / 100 << U" cube_y=" << cube[collisionTriangle[i][0]].y / 100 << U" cube_z=" << cube[collisionTriangle[i][0]].z / 100;
+				//Print << U"cube_x=" << cube[collisionTriangle[i][1]].x / 100 << U" cube_y=" << cube[collisionTriangle[i][1]].y / 100 << U" cube_z=" << cube[collisionTriangle[i][1]].z / 100;
+				//Print << U"cube_x=" << cube[collisionTriangle[i][2]].x / 100 << U" cube_y=" << cube[collisionTriangle[i][2]].y / 100 << U" cube_z=" << cube[collisionTriangle[i][2]].z / 100;
+
+				// デバッグ
+				//checkCollision = true;
+
+				//Segment segment = { {0, 0, 0}, {0, 0, 5} };
+
+				HitResult hit;
+				if (IntersectSegmentTriangle(segment, tri, hit))
 				{
+					Print << U"交差しました！ t=" << hit.t << U" x=" << hit.point.x << U" y=" << hit.point.y << U" z=" << hit.point.z;
+
+
 					// 交差している（ぶつかった）
 					checkCollision = true;
+
+					// いったん止める
+					toCameraPos = last_eyePosition;
+
+					break;
+
+
+
+
 
 					// プレイヤーの移動速度
 					Vec2 velocity = Vec2(
@@ -556,15 +724,15 @@ void CameraTest::update()
 
 					// 当たり判定の法線
 					Vec2 wallNormal = Vec2(
-						c[collisionList[i][0]].x - c[collisionList[i][1]].x,
-						c[collisionList[i][0]].z - c[collisionList[i][1]].z
+						cube[collisionList[i][0]].x - cube[collisionList[i][1]].x,
+						cube[collisionList[i][0]].z - cube[collisionList[i][1]].z
 					).normalized();
 
 					// 壁の法線に対する接線方向を計算
 					//Vec2 tangent = Vec2(wallNormal.x, wallNormal.y); // 法線に直交するベクトル
 
 					// 今の速度を壁に沿ってスライド（内積で投影）
-					//float dot = (velocityNormal.dot(wallNormal));
+					//double dot = (velocityNormal.dot(wallNormal));
 
 					// 壁の法線に対する接線方向を計算
 					Vec2 tangent = Vec2(wallNormal.y, -wallNormal.x); // 法線に直交するベクトル
@@ -577,7 +745,7 @@ void CameraTest::update()
 						resultVelocity.x
 					);
 
-					float dot = (velocityNormal.dot(resultVelocity2));
+					double dot = (velocityNormal.dot(resultVelocity2));
 
 					//if (dot > 0)
 					//{
@@ -601,9 +769,6 @@ void CameraTest::update()
 					toCameraPos.z += (resultVelocity2.y * length * dot);
 
 
-
-
-
 					// TODO ここから先、関数化する
 					
 					// 進んだ先にコリジョンがないかどうか
@@ -625,7 +790,7 @@ void CameraTest::update()
 
 					for (const auto& object2 : model.objects())
 					{
-						const std::array<Vec3, 8> c2 = object2.boundingBox.getCorners();
+						const std::array<Vec3, 8> cube2 = object2.boundingBox.getCorners();
 
 						for (int i2 = 0; i2 < 12; i2++)
 						{
@@ -633,8 +798,8 @@ void CameraTest::update()
 								isIntersecting(
 									AA,
 									BB,
-									Vec2{ c2[collisionList[i2][0]].x / 100, c2[collisionList[i2][0]].z / 100 },
-									Vec2{ c2[collisionList[i2][1]].x / 100, c2[collisionList[i2][1]].z / 100 }
+									Vec2{ cube2[collisionList[i2][0]].x / 100, cube2[collisionList[i2][0]].z / 100 },
+									Vec2{ cube2[collisionList[i2][1]].x / 100, cube2[collisionList[i2][1]].z / 100 }
 								)
 							)
 							{
@@ -1167,7 +1332,77 @@ void CameraTest::update()
 				if (bDebugViewFrame)
 				{
 					// ワイヤーフレーム
-					object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
+					//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
+
+					// 三角形
+					const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
+
+					ColorF color{ 1, 1, 1, 1 };
+
+					for (int i = 0; i < 12; i++)
+					{
+						Line3D{ cube[collisionTriangle[i][0]], cube[collisionTriangle[i][1]] }.draw(color);
+						Line3D{ cube[collisionTriangle[i][1]], cube[collisionTriangle[i][2]] }.draw(color);
+						Line3D{ cube[collisionTriangle[i][2]], cube[collisionTriangle[i][0]] }.draw(color);
+					}
+
+					//break;
+
+					/*
+					//
+					Line3D{ cube[0], cube[1] }.draw(color);
+					Line3D{ cube[1], cube[2] }.draw(color);
+					Line3D{ cube[2], cube[0] }.draw(color);
+
+					Line3D{ cube[1], cube[2] }.draw(color);
+					Line3D{ cube[2], cube[3] }.draw(color);
+					Line3D{ cube[3], cube[1] }.draw(color);
+
+					//
+					Line3D{ cube[0], cube[2] }.draw(color);
+					Line3D{ cube[2], cube[4] }.draw(color);
+					Line3D{ cube[4], cube[0] }.draw(color);
+
+					Line3D{ cube[2], cube[4] }.draw(color);
+					Line3D{ cube[4], cube[6] }.draw(color);
+					Line3D{ cube[6], cube[2] }.draw(color);
+
+					//
+					Line3D{ cube[2], cube[3] }.draw(color);
+					Line3D{ cube[3], cube[6] }.draw(color);
+					Line3D{ cube[6], cube[2] }.draw(color);
+
+					Line3D{ cube[3], cube[6] }.draw(color);
+					Line3D{ cube[6], cube[7] }.draw(color);
+					Line3D{ cube[7], cube[3] }.draw(color);
+
+					//
+					Line3D{ cube[1], cube[3] }.draw(color);
+					Line3D{ cube[3], cube[5] }.draw(color);
+					Line3D{ cube[5], cube[1] }.draw(color);
+
+					Line3D{ cube[3], cube[5] }.draw(color);
+					Line3D{ cube[5], cube[7] }.draw(color);
+					Line3D{ cube[7], cube[3] }.draw(color);
+
+					//
+					Line3D{ cube[1], cube[3] }.draw(color);
+					Line3D{ cube[3], cube[5] }.draw(color);
+					Line3D{ cube[5], cube[1] }.draw(color);
+
+					Line3D{ cube[3], cube[5] }.draw(color);
+					Line3D{ cube[5], cube[7] }.draw(color);
+					Line3D{ cube[7], cube[3] }.draw(color);
+
+					//
+					Line3D{ cube[4], cube[5] }.draw(color);
+					Line3D{ cube[5], cube[6] }.draw(color);
+					Line3D{ cube[6], cube[4] }.draw(color);
+
+					Line3D{ cube[5], cube[6] }.draw(color);
+					Line3D{ cube[6], cube[7] }.draw(color);
+					Line3D{ cube[7], cube[5] }.draw(color);
+					*/
 				}
 				else
 				{

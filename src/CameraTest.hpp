@@ -92,7 +92,7 @@ private:
 	bool isKeyHave = false;
 	bool isClear = false;
 
-	float bgmStopCount = 0.0f;
+	double bgmStopCount = 0.0f;
 
 	const PixelShader psBright = HLSL{
 		U"example/shader/hlsl/extract_bright_linear.hlsl", 
@@ -162,16 +162,16 @@ private:
 	double zoom_smooth = 2;
 
 	// 鍵の座標
-	float keyX = 3.25;
-	float keyY = 0.6;
-	float keyZ = 3.3;
+	double keyX = 3.25;
+	double keyY = 0.6;
+	double keyZ = 3.3;
 
 	// 鍵をフォーカスする時の座標
-	float keyFocusX = keyX - 0.5;
-	float keyFocusY = keyY + 0.25;
-	float keyFocusZ = keyZ + 0.0;
-	float keyFocusCameraY = -0.5;
-	float keyFocusPhi = 0;
+	double keyFocusX = keyX - 0.5;
+	double keyFocusY = keyY + 0.25;
+	double keyFocusZ = keyZ + 0.0;
+	double keyFocusCameraY = -0.5;
+	double keyFocusPhi = 0;
 
 	bool isFocus = false;
 	double focusSmooth = 1;
@@ -190,23 +190,23 @@ private:
 	double toGlobalAmbientColorB = GlobalAmbientColorB;
 
 	// ドアの座標
-	float doorX = -1.6;
-	float doorY = 1.0;
-	float doorZ = -4.9;
+	double doorX = -1.6;
+	double doorY = 1.0;
+	double doorZ = -4.9;
 
 	// ドアをフォーカスする時の座標
-	float doorFocusX = -1.6 + 0.0;
-	float doorFocusY =  1.0 + 0.25;
-	float doorFocusZ = -4.9 + 0.5;
-	float doorFocusCameraY = -0.5;
-	float doorFocusPhi = -1.5;
+	double doorFocusX = -1.6 + 0.0;
+	double doorFocusY =  1.0 + 0.25;
+	double doorFocusZ = -4.9 + 0.5;
+	double doorFocusCameraY = -0.5;
+	double doorFocusPhi = -1.5;
 
-	float mousePosX = 0.0f;
-	float mousePosY = 0.0f;
-	float toMousePosX = 0.0f;
-	float toMousePosY = 0.0f;
+	double mousePosX = 0.0f;
+	double mousePosY = 0.0f;
+	double toMousePosX = 0.0f;
+	double toMousePosY = 0.0f;
 
-	float focusWait = 0.0f;
+	double focusWait = 0.0f;
 
 	int mouseDirectionX = 1;
 	int mouseDirectionY = 1;
@@ -234,6 +234,27 @@ private:
 	   { 5, 7 },
 	   { 7, 6 },
 	   { 6, 4 },
+	};
+
+	// コリジョンリスト
+	double collisionTriangle[12][3] = {
+	   { 0, 1, 2 },
+	   { 1, 2, 3 },
+
+	   { 0, 2, 4 },
+	   { 2, 4, 6 },
+
+	   { 2, 3, 6 },
+	   { 3, 6, 7 },
+
+	   { 1, 3, 5 },
+	   { 3, 5, 7 },
+
+	   { 1, 3, 5 },
+	   { 3, 5, 7 },
+
+	   { 4, 5, 6 },
+	   { 5, 6, 7 },
 	};
 
 	bool bDebugViewFrame = true;
