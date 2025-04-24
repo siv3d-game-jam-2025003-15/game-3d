@@ -261,4 +261,16 @@ private:
     bool bDebugViewCollision = true;
 	bool bDebugviewModel = true;
 	bool bDebugFlashingLight = true;
+
+
+	double collisionNone[4][4] =
+	{
+		{ -2.2, -1.1, 1.2, 2.6},	// x_min, x_max, z_min, z_max
+		{ 6.1, 7.2, 1.2, 2.6},
+		{ 10, 12, -1.5, -0.3},
+		{ 6.3, 7.0, -4.4, -3.0},
+	};
+
+	// 自分自身のコリジョンの半径
+	double myRadius = 0.3;
 };

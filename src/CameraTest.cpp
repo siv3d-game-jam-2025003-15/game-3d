@@ -223,6 +223,10 @@ struct Vec3_ {
 	static double dot(const Vec3_& a, const Vec3_& b) {
 		return a.x * b.x + a.y * b.y + a.z * b.z;
 	}
+
+	double dot(const Vec3_& rhs) const { return x * rhs.x + y * rhs.y + z * rhs.z; }
+
+	double lengthSq() const { return x * x + y * y + z * z; }
 };
 
 // レイ（三角形との交差を調べる）
@@ -291,6 +295,61 @@ bool IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitR
 	}
 
 	return false;
+}
+
+// 最近点を三角形上に求める（Möllerのアルゴリズム系）
+Vec3_ ClosestPointOnTriangle(const Vec3_& p, const Vec3_& a, const Vec3_& b, const Vec3_& c)
+{
+	Vec3_ ab = b - a;
+	Vec3_ ac = c - a;
+	Vec3_ ap = p - a;
+
+	double d1 = ab.dot(ap);
+	double d2 = ac.dot(ap);
+	if (d1 <= 0 && d2 <= 0) return a;
+
+	Vec3_ bp = p - b;
+	double d3 = ab.dot(bp);
+	double d4 = ac.dot(bp);
+	if (d3 >= 0 && d4 <= d3) return b;
+
+	double vc = d1 * d4 - d3 * d2;
+	if (vc <= 0 && d1 >= 0 && d3 <= 0) {
+		double v = d1 / (d1 - d3);
+		return a + ab * v;
+	}
+
+	Vec3_ cp = p - c;
+	double d5 = ab.dot(cp);
+	double d6 = ac.dot(cp);
+	if (d6 >= 0 && d5 <= d6) return c;
+
+	double vb = d5 * d2 - d1 * d6;
+	if (vb <= 0 && d2 >= 0 && d6 <= 0) {
+		double w = d2 / (d2 - d6);
+		return a + ac * w;
+	}
+
+	double va = d3 * d6 - d5 * d4;
+	if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) {
+		double w = (d4 - d3) / ((d4 - d3) + (d5 - d6));
+		return b + (c - b) * w;
+	}
+
+	// 内部領域
+	double denom = 1.0f / (va + vb + vc);
+	double v = vb * denom;
+	double w = vc * denom;
+	return a + ab * v + ac * w;
+}
+
+// 球と三角形の交差判定
+bool IsSphereIntersectingTriangle(const Vec3_& sphereCenter, double radius,
+	const Vec3_& a, const Vec3_& b, const Vec3_& c)
+{
+	Vec3_ closest = ClosestPointOnTriangle(sphereCenter, a, b, c);
+	Vec3_ diff = closest - sphereCenter;
+	return diff.lengthSq() <= radius * radius;
 }
 
 void CameraTest::update()
@@ -576,20 +635,29 @@ void CameraTest::update()
 	Print << U"x=" << toCameraPos.x;
 	Print << U"z=" << toCameraPos.z;
 
-	if (
-		(-2.0 < toCameraPos.x && toCameraPos.x < -1.3 && 1.2 < toCameraPos.z && toCameraPos.z < 2.6)
-	 || (6.3 < toCameraPos.x && toCameraPos.x < 7.0 && 1.2 < toCameraPos.z && toCameraPos.z < 2.6)
-	 || (10 < toCameraPos.x && toCameraPos.x < 13 && -1.1 < toCameraPos.z && toCameraPos.z < -0.3)
-	 || (6.3 < toCameraPos.x && toCameraPos.x < 7.0 && -4.4 < toCameraPos.z && toCameraPos.z < -3.0)
-	)
+	for (int i = 0; i < 4; i++)
 	{
-        // コリジョンを無効にするエリア
-		bCollisionDoor = false;
+		if ( collisionNone[i][0] < toCameraPos.x
+		  && toCameraPos.x < collisionNone[i][1]
+		  && collisionNone[i][2] < toCameraPos.z
+		  && toCameraPos.z < collisionNone[i][3]
+		)
+		{
+			// コリジョンを無効にするエリア
+			bCollisionDoor = false;
+			break;
+		}
+		else
+		{
+			bCollisionDoor = true;
+		}
 	}
-	else 
-    {
-		bCollisionDoor = true;
-    }
+
+	Vec3_ myPosition = {
+		toCameraPos.x,
+		myRadius+0.1,
+		toCameraPos.z
+	};
 
 	// 線分交差で判定する
 	if (bCollision && bCollisionDoor)
@@ -693,9 +761,16 @@ void CameraTest::update()
 				//Segment segment = { {0, 0, 0}, {0, 0, 5} };
 
 				HitResult hit;
-				if (IntersectSegmentTriangle(segment, tri, hit))
+				//if (IntersectSegmentTriangle(segment, tri, hit))
+
+				Vec3_ triA = { cube[collisionTriangle[i][0]].x / 100, cube[collisionTriangle[i][0]].y / 100, cube[collisionTriangle[i][0]].z / 100 };
+				Vec3_ triB = { cube[collisionTriangle[i][1]].x / 100, cube[collisionTriangle[i][1]].y / 100, cube[collisionTriangle[i][1]].z / 100 };
+				Vec3_ triC = { cube[collisionTriangle[i][2]].x / 100, cube[collisionTriangle[i][2]].y / 100, cube[collisionTriangle[i][2]].z / 100 };
+
+				if (IsSphereIntersectingTriangle(myPosition, myRadius, triA, triB, triC))
 				{
-					Print << U"交差しました！ t=" << hit.t << U" x=" << hit.point.x << U" y=" << hit.point.y << U" z=" << hit.point.z;
+					//Print << U"交差しました！ t=" << hit.t << U" x=" << hit.point.x << U" y=" << hit.point.y << U" z=" << hit.point.z;
+					Print << U"交差しました！";
 
 
 					// 交差している（ぶつかった）
@@ -1326,90 +1401,129 @@ void CameraTest::update()
 		if (bDebugViewCollision)
 		{
 			// モデルのワイヤーフレーム表示
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-			for (const auto& object : model.objects())
 			{
-				if (bDebugViewFrame)
+				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+				for (const auto& object : model.objects())
 				{
-					// ワイヤーフレーム
-					//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-					// 三角形
-					const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
-
-					ColorF color{ 1, 1, 1, 1 };
-
-					for (int i = 0; i < 12; i++)
+					if (bDebugViewFrame)
 					{
-						Line3D{ cube[collisionTriangle[i][0]], cube[collisionTriangle[i][1]] }.draw(color);
-						Line3D{ cube[collisionTriangle[i][1]], cube[collisionTriangle[i][2]] }.draw(color);
-						Line3D{ cube[collisionTriangle[i][2]], cube[collisionTriangle[i][0]] }.draw(color);
+						// ワイヤーフレーム
+						//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
+
+						// 三角形
+						const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
+
+						ColorF color{ 1, 1, 1, 1 };
+
+						for (int i = 0; i < 12; i++)
+						{
+							Line3D{ cube[collisionTriangle[i][0]], cube[collisionTriangle[i][1]] }.draw(color);
+							Line3D{ cube[collisionTriangle[i][1]], cube[collisionTriangle[i][2]] }.draw(color);
+							Line3D{ cube[collisionTriangle[i][2]], cube[collisionTriangle[i][0]] }.draw(color);
+						}
+
+						//break;
+
+						/*
+						//
+						Line3D{ cube[0], cube[1] }.draw(color);
+						Line3D{ cube[1], cube[2] }.draw(color);
+						Line3D{ cube[2], cube[0] }.draw(color);
+
+						Line3D{ cube[1], cube[2] }.draw(color);
+						Line3D{ cube[2], cube[3] }.draw(color);
+						Line3D{ cube[3], cube[1] }.draw(color);
+
+						//
+						Line3D{ cube[0], cube[2] }.draw(color);
+						Line3D{ cube[2], cube[4] }.draw(color);
+						Line3D{ cube[4], cube[0] }.draw(color);
+
+						Line3D{ cube[2], cube[4] }.draw(color);
+						Line3D{ cube[4], cube[6] }.draw(color);
+						Line3D{ cube[6], cube[2] }.draw(color);
+
+						//
+						Line3D{ cube[2], cube[3] }.draw(color);
+						Line3D{ cube[3], cube[6] }.draw(color);
+						Line3D{ cube[6], cube[2] }.draw(color);
+
+						Line3D{ cube[3], cube[6] }.draw(color);
+						Line3D{ cube[6], cube[7] }.draw(color);
+						Line3D{ cube[7], cube[3] }.draw(color);
+
+						//
+						Line3D{ cube[1], cube[3] }.draw(color);
+						Line3D{ cube[3], cube[5] }.draw(color);
+						Line3D{ cube[5], cube[1] }.draw(color);
+
+						Line3D{ cube[3], cube[5] }.draw(color);
+						Line3D{ cube[5], cube[7] }.draw(color);
+						Line3D{ cube[7], cube[3] }.draw(color);
+
+						//
+						Line3D{ cube[1], cube[3] }.draw(color);
+						Line3D{ cube[3], cube[5] }.draw(color);
+						Line3D{ cube[5], cube[1] }.draw(color);
+
+						Line3D{ cube[3], cube[5] }.draw(color);
+						Line3D{ cube[5], cube[7] }.draw(color);
+						Line3D{ cube[7], cube[3] }.draw(color);
+
+						//
+						Line3D{ cube[4], cube[5] }.draw(color);
+						Line3D{ cube[5], cube[6] }.draw(color);
+						Line3D{ cube[6], cube[4] }.draw(color);
+
+						Line3D{ cube[5], cube[6] }.draw(color);
+						Line3D{ cube[6], cube[7] }.draw(color);
+						Line3D{ cube[7], cube[5] }.draw(color);
+						*/
 					}
-
-					//break;
-
-					/*
-					//
-					Line3D{ cube[0], cube[1] }.draw(color);
-					Line3D{ cube[1], cube[2] }.draw(color);
-					Line3D{ cube[2], cube[0] }.draw(color);
-
-					Line3D{ cube[1], cube[2] }.draw(color);
-					Line3D{ cube[2], cube[3] }.draw(color);
-					Line3D{ cube[3], cube[1] }.draw(color);
-
-					//
-					Line3D{ cube[0], cube[2] }.draw(color);
-					Line3D{ cube[2], cube[4] }.draw(color);
-					Line3D{ cube[4], cube[0] }.draw(color);
-
-					Line3D{ cube[2], cube[4] }.draw(color);
-					Line3D{ cube[4], cube[6] }.draw(color);
-					Line3D{ cube[6], cube[2] }.draw(color);
-
-					//
-					Line3D{ cube[2], cube[3] }.draw(color);
-					Line3D{ cube[3], cube[6] }.draw(color);
-					Line3D{ cube[6], cube[2] }.draw(color);
-
-					Line3D{ cube[3], cube[6] }.draw(color);
-					Line3D{ cube[6], cube[7] }.draw(color);
-					Line3D{ cube[7], cube[3] }.draw(color);
-
-					//
-					Line3D{ cube[1], cube[3] }.draw(color);
-					Line3D{ cube[3], cube[5] }.draw(color);
-					Line3D{ cube[5], cube[1] }.draw(color);
-
-					Line3D{ cube[3], cube[5] }.draw(color);
-					Line3D{ cube[5], cube[7] }.draw(color);
-					Line3D{ cube[7], cube[3] }.draw(color);
-
-					//
-					Line3D{ cube[1], cube[3] }.draw(color);
-					Line3D{ cube[3], cube[5] }.draw(color);
-					Line3D{ cube[5], cube[1] }.draw(color);
-
-					Line3D{ cube[3], cube[5] }.draw(color);
-					Line3D{ cube[5], cube[7] }.draw(color);
-					Line3D{ cube[7], cube[3] }.draw(color);
-
-					//
-					Line3D{ cube[4], cube[5] }.draw(color);
-					Line3D{ cube[5], cube[6] }.draw(color);
-					Line3D{ cube[6], cube[4] }.draw(color);
-
-					Line3D{ cube[5], cube[6] }.draw(color);
-					Line3D{ cube[6], cube[7] }.draw(color);
-					Line3D{ cube[7], cube[5] }.draw(color);
-					*/
-				}
-				else
-				{
-					// 塗りつぶし
-					object.boundingBox.draw(ColorF{ 1, 1, 1, 1 });
+					else
+					{
+						// 塗りつぶし
+						object.boundingBox.draw(ColorF{ 1, 1, 1, 1 });
+					}
 				}
 			}
+
+			// 自分のコリジョン（たぶん見えない）
+			/*
+			Sphere{
+				myPosition.x,
+				myRadius+0.1,
+				myPosition.z,
+				myRadius
+			}.draw(ColorF{ 0.4, 0.8, 0.6 }.removeSRGBCurve());
+			*/
+
+			// コリジョンなし
+			for (int i = 0; i < 4; i++)
+			{
+				ColorF color{ 0.0, 0.0, 1, 1 };
+
+				// 縦
+				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][3]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
+
+				// 下
+				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 0, collisionNone[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][3]}, Vec3{collisionNone[i][1], 0, collisionNone[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][0], 0, collisionNone[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 0, collisionNone[i][3]} }.draw(color);
+
+				// 上
+				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionNone[i][1], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
+
+			}
+
+
 		}
 
 
