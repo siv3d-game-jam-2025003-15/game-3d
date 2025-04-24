@@ -79,7 +79,7 @@ void main()
 	vec3 lightColor		= g_sunColor;
 
 	//PointLight Pos
-	vec3 pointLightPos = vec3(0.0, 0.0, 0.0);
+	vec3 pointLightPos = vec3(15.0, 0.0, 0.0);
 
     //vec3 lightDirection	= g_sunDirection;
 	vec3 lightDirection	= normalize(pointLightPos - WorldPosition);
