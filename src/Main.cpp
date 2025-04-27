@@ -21,7 +21,7 @@ void Main()
     AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
     AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
     AudioAsset::Register(U"GET", U"assets/sound/bgm/GET.wav");
-    AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3");
+    AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3", Loop::Yes);
 
     App manager;
 	manager.add<Title>(State::Title);
