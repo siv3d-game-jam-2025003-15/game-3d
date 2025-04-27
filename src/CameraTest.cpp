@@ -44,152 +44,114 @@ void CameraTest::debug()
 
 	if (Key1.down())
 	{
-		mouseDirectionX = 1;
+		mouseDirectionX == 1 ? mouseDirectionX = -1 : mouseDirectionX = 1;
 	}
 	if (Key2.down())
 	{
-		mouseDirectionX = -1;
+		mouseDirectionY == 1 ? mouseDirectionY = -1 : mouseDirectionY = 1;
 	}
 	if (Key3.down())
 	{
-		mouseDirectionY = 1;
+		// コリジョンワイヤーフレーム
+		bDebugViewFrame == true ? bDebugViewFrame = false : bDebugViewFrame = true;
 	}
 	if (Key4.down())
 	{
-		mouseDirectionY = -1;
+		// コリジョンを表示
+		bDebugViewCollision == true ? bDebugViewCollision = false : bDebugViewCollision = true;
 	}
 	if (Key5.down())
 	{
-		// コリジョンワイヤーフレーム
-		bDebugViewFrame = true;
+		// コリジョンを有効
+		bCollision == true ? bCollision = false : bCollision = true;
 	}
 	if (Key6.down())
 	{
-		// コリジョン塗りつぶし
-		bDebugViewFrame = false;
+		// モデルを表示
+		bDebugviewModel == true ? bDebugviewModel = false : bDebugviewModel = true;
 	}
 	if (Key7.down())
 	{
-		// コリジョンを表示
-		bDebugViewCollision = true;
+		// ライトの点滅あり
+		bDebugFlashingLight == true ? bDebugFlashingLight = false : bDebugFlashingLight = true;
 	}
 	if (Key8.down())
 	{
-		// コリジョンを非表示
-		bDebugViewCollision = false;
-	}
-	if (Key9.down())
-	{
-		// コリジョンを有効
-		bCollision = true;
-	}
-	if (Key0.down())
-	{
-		// コリジョンを無効
-		bCollision = false;
-	}
-	if (KeyZ.down())
-	{
-		// モデルを表示
-		bDebugviewModel = true;
-	}
-	if (KeyX.down())
-	{
-		// モデルを非表示
-		bDebugviewModel = false;
-	}
-	if (KeyC.down())
-	{
-		// ライトの点滅あり
-		bDebugFlashingLight = true;
-	}
-	if (KeyV.down())
-	{
-		// ライトの点滅なし
-		bDebugFlashingLight = false;
-	}
-	if (KeyB.down())
-	{
 		// シェーダーあり
-		bDebugShader = true;
-	}
-	if (KeyN.down())
-	{
-		// シェーダーなし
-		bDebugShader = false;
+		bDebugShader == true ? bDebugShader = false : bDebugShader = true;
 	}
 
 	if (mouseDirectionX == 1)
 	{
-		Print << U"[1][2]カメラ横回転：順";
+		Print << U"[1]カメラ横回転：順";
 	}
 	else
 	{
-		Print << U"[1][2]カメラ横回転：逆";
+		Print << U"[1]カメラ横回転：逆";
 	}
+
 	if (mouseDirectionY == 1)
 	{
-		Print << U"[3][4]カメラ縦回転：順";
+		Print << U"[2]カメラ縦回転：順";
 	}
 	else
 	{
-		Print << U"[3][4]カメラ縦回転：逆";
+		Print << U"[2]カメラ縦回転：逆";
 	}
 	
 	if (bDebugViewFrame)
 	{
-		Print << U"[5][6]コリジョン：ワイヤーフレーム";
+		Print << U"[3]コリジョン：ワイヤーフレーム";
 	}
 	else
 	{
-		Print << U"[5][6]コリジョン：塗りつぶし";
+		Print << U"[3]コリジョン：塗りつぶし";
 	}
 
 	if (bDebugViewCollision)
 	{
-		Print << U"[7][8]コリジョン表示：表示";
+		Print << U"[4]コリジョン表示：表示";
 	}
 	else
 	{
-		Print << U"[7][8]コリジョン表示：非表示";
+		Print << U"[4]コリジョン表示：非表示";
 	}
 
 	if (bCollision)
 	{
-		Print << U"[9][0]コリジョン：有効";
+		Print << U"[5]コリジョン：有効";
 	}
 	else
 	{
-		Print << U"[9][0]コリジョン：無効";
+		Print << U"[5]コリジョン：無効";
 	}
 
 	if (bDebugviewModel)
 	{
-		Print << U"[Z][X]モデル：表示";
+		Print << U"[6]モデル：表示";
 	}
 	else
 	{
-		Print << U"[Z][X]モデル：非表示";
+		Print << U"[6]モデル：非表示";
 	}
 
 	if (bDebugFlashingLight)
 	{
-		Print << U"[C][V]ライトの点滅：あり";
+		Print << U"[7]ライトの点滅：あり";
 	}
 	else
 	{
-		Print << U"[C][V]ライトの点滅：なし";
+		Print << U"[7]ライトの点滅：なし";
 	}
 
 	if (bDebugShader)
 	{
-		Print << U"[B][N]シェーダー：あり";
+		Print << U"[8]シェーダー：あり";
 	}
 	else
 	{
-		Print << U"[B][N]シェーダー：なし";
+		Print << U"[8]シェーダー：なし";
 	}
-	
 
 	Print << U"[R][F]上下移動";
 }
