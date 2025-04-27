@@ -24,6 +24,9 @@ CameraTest::CameraTest(const InitData& init)
 	toMousePosY = mousePosY;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
+
+	// 最初にカーソルを中央に
+	Cursor::SetPos(center.x, center.y);
 }
 
 // デバッグ機能
@@ -374,20 +377,36 @@ void CameraTest::update()
 		speed * ((KeyControl | KeyCommand).pressed() ? 20.0 : KeyShift.pressed() ? 5.0 : 1.0)
 		* deltaTime;
 
-	toMousePosX = Cursor::PosF().x;
-	toMousePosY = Cursor::PosF().y;
+	// 現在のマウス座標
+	Vec2 currentCursorPos = Cursor::PosF();
+
+	// 中心からの差分を取る
+	Vec2 delta = currentCursorPos - center;
+
+	// 仮想座標に加算
+	virtualCursorPos += delta;
+
+	// マウスの座標を取得
+	//toMousePosX = Cursor::PosF().x;
+	//toMousePosY = Cursor::PosF().y;
+	toMousePosX = virtualCursorPos.x;
+	toMousePosY = virtualCursorPos.y;
 
 	double diffMousePosX = 0.0f;
 	double diffMousePosY = 0.0f;
 
-	if (MouseL.pressed())
-	{
+	// マウスドラッグ中
+	//if (MouseL.pressed())
+	//{
 		diffMousePosX =  (toMousePosX - mousePosX) / 10 * mouseDirectionX;
 		diffMousePosY = -(toMousePosY - mousePosY) / 10 * mouseDirectionY;
-	}
+	//}
 
 	mousePosX = toMousePosX;
 	mousePosY = toMousePosY;
+
+	// 毎フレーム、カーソルを強制的に中央に戻す
+	Cursor::SetPos(center.x, center.y);
 
 	if (KeyLeft.pressed()
 //	&& isFocusSmooth == false
@@ -905,18 +924,6 @@ void CameraTest::update()
 	}
 
 	last_eyePosition = toCameraPos;
-
-#ifdef _DEBUG
-	// マウスホイールの入力でFOVを変更
-	//m_verticalFOV += Mouse::Wheel() * ( Math::Pi / 180);
-	//m_verticalFOV = Clamp(m_verticalFOV, 1_deg, 180_deg); // FOVの範囲を制限
-	//Print << U"カメラの視野角：" << m_verticalFOV / (Math::Pi / 180);
-
-	// マウスホイールで、スムーズの値を調整
-	//smooth += Mouse::Wheel() * 0.01;
-	//smooth = Clamp(smooth, 0.01, 1.0); // 範囲を制限
-	//Print << U"スムーズの値：" << smooth;
-#endif
 
 	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth / focusSmooth); // 回転もスムーズに
 
