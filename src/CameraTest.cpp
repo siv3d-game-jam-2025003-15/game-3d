@@ -378,37 +378,52 @@ void CameraTest::update()
 		speed * ((KeyControl | KeyCommand).pressed() ? 20.0 : KeyShift.pressed() ? 5.0 : 1.0)
 		* deltaTime;
 
-	// 現在のマウス座標
-	Vec2 currentCursorPos = Cursor::PosF();
-
-	// 中心からの差分を取る
-	Vec2 delta = currentCursorPos - center;
-
-	// 仮想座標に加算
-	virtualCursorPos += delta;
-
 	// マウスの座標を取得
-	//toMousePosX = Cursor::PosF().x;
-	//toMousePosY = Cursor::PosF().y;
-	toMousePosX = virtualCursorPos.x;
-	toMousePosY = virtualCursorPos.y;
-
 	double diffMousePosX = 0.0f;
 	double diffMousePosY = 0.0f;
 
-	// マウスドラッグ中
-	//if (MouseL.pressed())
-	//{
-		diffMousePosX =  (toMousePosX - mousePosX) / 10 * mouseDirectionX;
+	if (!bInventory)
+	{
+		// 現在のマウス座標
+		Vec2 currentCursorPos = Cursor::PosF();
+
+		// 中心からの差分を取る
+		Vec2 delta = currentCursorPos - center;
+
+		// 仮想座標に加算
+		virtualCursorPos += delta;
+
+		//toMousePosX = Cursor::PosF().x;
+		//toMousePosY = Cursor::PosF().y;
+		toMousePosX = virtualCursorPos.x;
+		toMousePosY = virtualCursorPos.y;
+
+		// マウスドラッグ中
+		//if (MouseL.pressed())
+		//{
+		diffMousePosX = (toMousePosX - mousePosX) / 10 * mouseDirectionX;
 		diffMousePosY = -(toMousePosY - mousePosY) / 10 * mouseDirectionY;
-	//}
+		//}
 
-	mousePosX = toMousePosX;
-	mousePosY = toMousePosY;
+		mousePosX = toMousePosX;
+		mousePosY = toMousePosY;
 
-	// 毎フレーム、カーソルを強制的に中央に戻す
-	Cursor::SetPos(center.x, center.y);
+		// 毎フレーム、カーソルを強制的に中央に戻す
+		Cursor::SetPos(center.x, center.y);
+	}
 
+	// インベントリの表示・非表示
+	if (KeyI.down())
+	{
+		// ライトの点滅なし
+		bInventory = bInventory ? false : true;
+
+		// 毎フレーム、カーソルを強制的に中央に戻す
+		Cursor::SetPos(center.x, center.y);
+	}
+
+
+	// プレイヤーの移動
 	if (KeyLeft.pressed()
 //	&& isFocusSmooth == false
 	)
@@ -1599,8 +1614,13 @@ void CameraTest::update()
 
 		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 	}
-	
 
+	// UI
+	if (bInventory)
+	{
+		inventoryTexture.draw(center.x - 512 / 2, center.y - 512 / 2);
+	}
+	
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
 	if (frameTime < targetDeltaTime)
