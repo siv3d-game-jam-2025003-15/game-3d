@@ -12,6 +12,7 @@ CameraTest::CameraTest(const InitData& init)
 
 	// モデルに付随するテクスチャをアセット管理に登録
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
 	// BGMの再生
@@ -107,6 +108,16 @@ void CameraTest::debug()
 		// ライトの点滅なし
 		bDebugFlashingLight = false;
 	}
+	if (KeyB.down())
+	{
+		// シェーダーあり
+		bDebugShader = true;
+	}
+	if (KeyN.down())
+	{
+		// シェーダーなし
+		bDebugShader = false;
+	}
 
 	if (mouseDirectionX == 1)
 	{
@@ -169,6 +180,16 @@ void CameraTest::debug()
 	{
 		Print << U"[C][V]ライトの点滅：なし";
 	}
+
+	if (bDebugShader)
+	{
+		Print << U"[B][N]シェーダー：あり";
+	}
+	else
+	{
+		Print << U"[B][N]シェーダー：なし";
+	}
+	
 
 	Print << U"[R][F]上下移動";
 }
@@ -1293,15 +1314,46 @@ void CameraTest::update()
 
 	// スポットライト
 	{
-		const ScopedCustomShader3D shader{ vs3D, ps3D };
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
-		// モデルを描画
-		if (bDebugviewModel)
+		if (bDebugShader)
 		{
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-			model.draw();
+			const ScopedCustomShader3D shader(vs3D, ps3D);
+			
+			// モデルを描画
+			if (bDebugviewModel)
+			{
+				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+				model.draw();
+			}
+
+			// ドア
+			{
+				Transformer3D t{
+					Mat4x4::RotateY(0_deg).scaled(roomScale).translated(doorPos)
+				};
+				modelDoor.draw();
+			}
 		}
+		else
+		{
+			// モデルを描画
+			if (bDebugviewModel)
+			{
+				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+				model.draw();
+			}
+
+			// ドア
+			{
+				Transformer3D t{ 
+					Mat4x4::RotateY(0_deg).scaled(roomScale).translated(doorPos)
+				};
+				modelDoor.draw();
+			}
+		}
+
+
 
 		/*
 		Mat4x4 mat = Mat4x4::Translate(1, 0, 1);
@@ -1326,7 +1378,6 @@ void CameraTest::update()
 			model.draw();
 		}
 		*/
-		
 
 
 		// 鍵の描画（シェーダーを適用するために、ここで描画しています）

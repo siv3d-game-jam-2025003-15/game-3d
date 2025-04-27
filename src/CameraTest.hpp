@@ -81,10 +81,14 @@ private:
 
 	// モデルの読み込み
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
+	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
+
+	// ドアの位置
+	const Vec3 doorPos{ -1.6, 0, 2 };
 
 	// スケーリングの倍率
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
@@ -261,6 +265,7 @@ private:
     bool bDebugViewCollision = true;
 	bool bDebugviewModel = true;
 	bool bDebugFlashingLight = true;
+	bool bDebugShader = true;
 
 
 	double collisionNone[4][4] =
