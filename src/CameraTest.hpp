@@ -56,8 +56,8 @@ private:
 	bool m_padPressed = false;
 
 	// カメラの初期位置
-	Vec3 m_eyePosition = Vec3{ 0, 1.5, 4 };
-	Vec3 last_eyePosition = Vec3{ 0, 1.5, 4 };
+	Vec3 m_eyePosition = Vec3{ 0, 1.5, 10 };
+	Vec3 last_eyePosition = Vec3{ 0, 1.5, 10 };
 
 	// カメラの向き
 	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
