@@ -273,4 +273,10 @@ private:
 
 	// 自分自身のコリジョンの半径
 	double myRadius = 0.3;
+
+	// ウィンドウの中心座標
+	const Vec2 center = Scene::Center();
+
+	// 仮想マウス座標
+	Vec2 virtualCursorPos = Vec2{ 0, 0 };
 };
