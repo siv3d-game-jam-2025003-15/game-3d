@@ -281,7 +281,7 @@ private:
 	Vec2 virtualCursorPos = Vec2{ 0, 0 };
 
 	// BGM
-	AudioAsset bgm = AudioAsset(U"BGM");
+//	AudioAsset bgm = AudioAsset(U"BGM");
 
 	// インベントリ
 	const Texture inventoryTexture{ U"assets/sprites/inventory.png" };

@@ -15,8 +15,9 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
 	// BGMの再生
-	bgm.setLoop(true);	// ループ
-	bgm.play();	// 再生
+//	bgm.setLoop(true);	// ループ
+//	bgm.play();	// 再生
+	AudioAsset(U"BGM").play();
 
 	// 最初にカーソルを中央に
 	Cursor::SetPos(center.x, center.y);
@@ -1050,8 +1051,8 @@ void CameraTest::update()
 			{
 				isKeyHave = true;
 				AudioAsset(U"GET").play();
-			//	AudioAsset(U"BGM").stop();
-				bgm.stop();
+				AudioAsset(U"BGM").stop();
+			//	bgm.stop();
 			}
 		//}
 
@@ -1065,14 +1066,14 @@ void CameraTest::update()
 		// BGMの再開
 		if (bgmStopCount > 4.0f)
 		{
-			//if (!AudioAsset(U"BGM").isPlaying())
-			//{
-			//	AudioAsset(U"BGM").play();
-			//}
-			if (!bgm.isPlaying())
+			if (!AudioAsset(U"BGM").isPlaying())
 			{
-				bgm.play();
+				AudioAsset(U"BGM").play();
 			}
+			//if (!bgm.isPlaying())
+			//{
+			//	bgm.play();
+			//}
 		}
 		else {
 			bgmStopCount += deltaTime;
@@ -1368,8 +1369,8 @@ void CameraTest::update()
 					{
 						isKeyHave = true;
 						AudioAsset(U"GET").play();
-					//	AudioAsset(U"BGM").stop();	
-						bgm.stop();
+						AudioAsset(U"BGM").stop();	
+					//	bgm.stop();
 					}
 				}
 			}
