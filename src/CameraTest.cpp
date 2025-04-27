@@ -18,16 +18,18 @@ CameraTest::CameraTest(const InitData& init)
 	bgm.setLoop(true);	// ループ
 	bgm.play();	// 再生
 
+	// 最初にカーソルを中央に
+	Cursor::SetPos(center.x, center.y);
+
 	// マウスの初期化
 	mousePosX = Cursor::PosF().x;
 	mousePosY = Cursor::PosF().y;
 	toMousePosX = mousePosX;
 	toMousePosY = mousePosY;
+	virtualCursorPos.x = center.x;
+	virtualCursorPos.y = center.y;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
-
-	// 最初にカーソルを中央に
-	Cursor::SetPos(center.x, center.y);
 }
 
 // デバッグ機能
