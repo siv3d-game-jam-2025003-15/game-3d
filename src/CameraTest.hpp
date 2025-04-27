@@ -282,4 +282,11 @@ private:
 
 	// BGM
 	AudioAsset bgm = AudioAsset(U"BGM");
+
+	// インベントリ
+	const Texture inventoryTexture{ U"assets/sprites/inventory.png" };
+
+	// インベントリの表示
+	bool bInventory = false;
+
 };
