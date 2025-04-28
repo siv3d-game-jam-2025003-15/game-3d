@@ -202,6 +202,7 @@ bool CameraTest::isCollision(const Vec2& a, const Vec2& b, double* collisionList
 	return false;
 }
 
+// 3D空間上の線分と三角形が交差しているかどうかを判定する関数
 bool CameraTest::IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitResult& outResult) {
 	const double EPSILON = 1e-8f;
 
@@ -384,84 +385,33 @@ void CameraTest::update()
 	// プレイヤーの移動
 	if (KeyLeft.pressed())
 	{
-		//m_phi += (60_deg * deltaTime);
-		// 
-		// TODO 共通化したい
-		//if (m_phi < 0_deg)
-		//{
-		//	m_phi += 360_deg;
-		//}
-
 		phiController.rotate(60_deg, deltaTime, 1.0);
 	}
 
 	if (controller.rightThumbX < -0.1)
 	{
-		//m_phi += (60_deg * deltaTime * -controller.rightThumbX);
-
-		//// TODO 共通化したい
-		//if (m_phi < 0_deg)
-		//{
-		//	m_phi += 360_deg;
-		//}
-
 		phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
 	}
 
 	if (diffMousePosX < -0.1)
 	{
-		//m_phi += (60_deg * deltaTime * -diffMousePosX);
-
-		//// TODO 共通化したい
-		//if (m_phi < 0_deg)
-		//{
-		//	m_phi += 360_deg;
-		//}
-
 		phiController.rotate(60_deg, deltaTime, -diffMousePosX);
 	}
 
 	if (KeyRight.pressed())
 	{
-		//m_phi -= (60_deg * deltaTime);
-
-		//// TODO 共通化したい
-		//if (360_deg < m_phi)
-		//{
-		//	m_phi -= 360_deg;
-		//}
-
 		phiController.rotate(-60_deg, deltaTime, 1.0);
 	}
 
 	if (controller.rightThumbX > 0.1)
 	{
-		//m_phi -= (60_deg * deltaTime * controller.rightThumbX);
-
-		//// TODO 共通化したい
-		//if (360_deg < m_phi)
-		//{
-		//	m_phi -= 360_deg;
-		//}
-
 		phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
 	}
 
 	if (diffMousePosX > 0.1)
 	{
-		//m_phi -= (60_deg * deltaTime * diffMousePosX);
-
-		//// TODO 共通化したい
-		//if (m_phi < 0_deg)
-		//{
-		//	m_phi -= 360_deg;
-		//}
-
 		phiController.rotate(-60_deg, deltaTime, diffMousePosX);
 	}
-
-	//const double to_s = (Math::Cos(m_phi));
-	//const double to_c = (Math::Sin(m_phi));
 
 	const double to_s = (Math::Cos(phiController.getPhi()));
 	const double to_c = (Math::Sin(phiController.getPhi()));

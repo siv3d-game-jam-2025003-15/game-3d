@@ -81,8 +81,10 @@ private:
 	// 2Dの線分同士の交差判定
 	bool isCollision(const Vec2& a, const Vec2& b, double* collisionList);
 
+	// 3D空間上の線分と三角形が交差しているかどうかを判定する関数
 	bool IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitResult& outResult);
 
+	// 最近点を三角形上に求める（Möllerのアルゴリズム系）
 	Vec3_ ClosestPointOnTriangle(const Vec3_& p, const Vec3_& a, const Vec3_& b, const Vec3_& c);
 
 	// 球と三角形の交差判定
@@ -105,7 +107,7 @@ private:
 
 	ColorF backgroundColor;
 
-	Audio audio;
+//	Audio audio;
 
 	double m_fastMove = 1.0;
 
@@ -133,10 +135,6 @@ private:
 	double m_focusY = 0;
 
 	// カメラの角度
-	//double m_phi = std::atan2(
-	//	(m_focusPosition.z - m_eyePosition.z),
-	//	(m_focusPosition.x - m_eyePosition.x)
-	//);
 	PhiController phiController = PhiController(m_eyePosition, m_focusPosition);
 
 	// モデルの読み込み
@@ -199,9 +197,6 @@ private:
 	Vec3 toCameraPos = m_eyePosition;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
-
-	//Vec3 focusVector;
-	//Vec3 toFocusVector;
 
 	double to_m_focusY = m_focusY;
 	double s = 0;
@@ -344,9 +339,6 @@ private:
 
 	// 仮想マウス座標
 	Vec2 virtualCursorPos = Vec2{ 0, 0 };
-
-	// BGM
-//	AudioAsset bgm = AudioAsset(U"BGM");
 
 	// インベントリ
 	const Texture inventoryTexture{ U"assets/sprites/inventory.png" };
