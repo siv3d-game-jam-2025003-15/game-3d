@@ -1631,12 +1631,6 @@ void CameraTest::update()
 		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 	}
 
-	// UI
-	if (bInventory)
-	{
-		inventoryTexture.draw(center.x - 512 / 2, center.y - 512 / 2);
-	}
-	
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
 	if (frameTime < targetDeltaTime)
@@ -1651,5 +1645,20 @@ void CameraTest::update()
 
 void CameraTest::draw() const
 {
+	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
+
+	// UI
+	if (bInventory)
+	{
+		inventoryTexture.draw(center.x - 512 / 2, center.y - 512 / 2);
+	}
+
+	// セリフ表示（仮）
+	const Font& boldFont = FontAsset(U"Bold");
+	boldFont(U"０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ").drawAt(
+		36, 
+		{ center.x, 700 },
+		ColorF{ 1, 1, 1, 1 }
+	);
 }
