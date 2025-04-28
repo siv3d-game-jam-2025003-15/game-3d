@@ -1,5 +1,5 @@
 ﻿# pragma once
-# include <Siv3D.hpp>
+#include <Siv3D.hpp>
 
 // シーンのステート
 enum class State

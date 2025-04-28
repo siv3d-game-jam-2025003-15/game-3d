@@ -1,7 +1,8 @@
 ﻿# pragma once
-# include "Common.hpp"
+#include "Common.hpp"
+#include "PhiController.hpp"
 
-struct Vec3_ {
+struct Vec3_ {	// TODO Vec3を継承してみる
 	double x, y, z;
 
 	Vec3_ operator-(const Vec3_& v) const { return { x - v.x, y - v.y, z - v.z }; }
@@ -26,7 +27,7 @@ struct Vec3_ {
 };
 
 // レイ（三角形との交差を調べる）
-struct Ray_ {
+struct Ray_ {	// TODO Rayを継承してみる
 	Vec3_ origin;
 	Vec3_ direction;
 };
@@ -91,6 +92,9 @@ private:
 	// カメラ
 	BasicCamera3D camera;
 
+	// カメラスピード
+	const double cameraSpeed = 2.0f;
+
 	Size SceneSize{ 256, 192 };
 
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
@@ -107,11 +111,13 @@ private:
 
 	bool m_padPressed = false;
 
-	// カメラの初期位置
+	// カメラの視点
 	Vec3 m_eyePosition = Vec3{ 0, 1.5, 10 };
+
+	// カメラの視点（1フレーム前）
 	Vec3 last_eyePosition = Vec3{ 0, 1.5, 10 };
 
-	// カメラの向き
+	// カメラの注視点（カメラが「いま見ている」場所のこと）
 	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
 
 	Vec3 m_upDirection = Vec3{ 0, 1, 0 };
@@ -126,10 +132,12 @@ private:
 	// 開始時の目の角度
 	double m_focusY = 0;
 
-	double m_phi = std::atan2(
-		(m_focusPosition.z - m_eyePosition.z),
-		(m_focusPosition.x - m_eyePosition.x)
-	);
+	// カメラの角度
+	//double m_phi = std::atan2(
+	//	(m_focusPosition.z - m_eyePosition.z),
+	//	(m_focusPosition.x - m_eyePosition.x)
+	//);
+	PhiController phiController = PhiController(m_eyePosition, m_focusPosition);
 
 	// モデルの読み込み
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };

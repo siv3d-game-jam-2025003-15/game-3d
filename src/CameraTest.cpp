@@ -1,4 +1,4 @@
-﻿# include "CameraTest.hpp"
+﻿#include "CameraTest.hpp"
 
 // コンストラクタ
 CameraTest::CameraTest(const InitData& init)
@@ -155,6 +155,8 @@ void CameraTest::debug()
 
 	Print << U"x=" << toCameraPos.x;
 	Print << U"z=" << toCameraPos.z;
+
+	Print << U"phiController.getPhi()=" << phiController.getPhi();
 }
 
 // マウスポインタのRay
@@ -337,8 +339,11 @@ void CameraTest::update()
 	double diffMousePosX = 0.0f;
 	double diffMousePosY = 0.0f;
 
+	// インベントリを表示しているかどうか
 	if (!bInventory)
 	{
+		// インベントリを表示していない（通常時）
+
 		// 現在のマウス座標
 		Vec2 currentCursorPos = Cursor::PosF();
 
@@ -360,86 +365,106 @@ void CameraTest::update()
 		// 毎フレーム、カーソルを強制的に中央に戻す
 		Cursor::SetPos(center.x, center.y);
 	}
+	else
+	{
+		// インベントリを表示している
+
+	}
 
 	// インベントリの表示・非表示
 	if (KeyI.down())
 	{
-		// ライトの点滅なし
+		// インベントリフラグの切り替え
 		bInventory = bInventory ? false : true;
 
-		// 毎フレーム、カーソルを強制的に中央に戻す
+		// いったんカーソルを強制的に中央に戻す
 		Cursor::SetPos(center.x, center.y);
 	}
 
 	// プレイヤーの移動
 	if (KeyLeft.pressed())
 	{
-		m_phi += (60_deg * deltaTime);
-
+		//m_phi += (60_deg * deltaTime);
+		// 
 		// TODO 共通化したい
-		if (m_phi < 0_deg)
-		{
-			m_phi += 360_deg;
-		}
+		//if (m_phi < 0_deg)
+		//{
+		//	m_phi += 360_deg;
+		//}
+
+		phiController.rotate(60_deg, deltaTime, 1.0);
 	}
 
 	if (controller.rightThumbX < -0.1)
 	{
-		m_phi += (60_deg * deltaTime * -controller.rightThumbX);
+		//m_phi += (60_deg * deltaTime * -controller.rightThumbX);
 
-		// TODO 共通化したい
-		if (m_phi < 0_deg)
-		{
-			m_phi += 360_deg;
-		}
+		//// TODO 共通化したい
+		//if (m_phi < 0_deg)
+		//{
+		//	m_phi += 360_deg;
+		//}
+
+		phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
 	}
 
 	if (diffMousePosX < -0.1)
 	{
-		m_phi += (60_deg * deltaTime * -diffMousePosX);
+		//m_phi += (60_deg * deltaTime * -diffMousePosX);
 
-		// TODO 共通化したい
-		if (m_phi < 0_deg)
-		{
-			m_phi += 360_deg;
-		}
+		//// TODO 共通化したい
+		//if (m_phi < 0_deg)
+		//{
+		//	m_phi += 360_deg;
+		//}
+
+		phiController.rotate(60_deg, deltaTime, -diffMousePosX);
 	}
 
 	if (KeyRight.pressed())
 	{
-		m_phi -= (60_deg * deltaTime);
+		//m_phi -= (60_deg * deltaTime);
 
-		// TODO 共通化したい
-		if (360_deg < m_phi)
-		{
-			m_phi -= 360_deg;
-		}
+		//// TODO 共通化したい
+		//if (360_deg < m_phi)
+		//{
+		//	m_phi -= 360_deg;
+		//}
+
+		phiController.rotate(-60_deg, deltaTime, 1.0);
 	}
 
 	if (controller.rightThumbX > 0.1)
 	{
-		m_phi -= (60_deg * deltaTime * controller.rightThumbX);
+		//m_phi -= (60_deg * deltaTime * controller.rightThumbX);
 
-		// TODO 共通化したい
-		if (360_deg < m_phi)
-		{
-			m_phi -= 360_deg;
-		}
+		//// TODO 共通化したい
+		//if (360_deg < m_phi)
+		//{
+		//	m_phi -= 360_deg;
+		//}
+
+		phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
 	}
 
 	if (diffMousePosX > 0.1)
 	{
-		m_phi -= (60_deg * deltaTime * diffMousePosX);
+		//m_phi -= (60_deg * deltaTime * diffMousePosX);
 
-		// TODO 共通化したい
-		if (m_phi < 0_deg)
-		{
-			m_phi -= 360_deg;
-		}
+		//// TODO 共通化したい
+		//if (m_phi < 0_deg)
+		//{
+		//	m_phi -= 360_deg;
+		//}
+
+		phiController.rotate(-60_deg, deltaTime, diffMousePosX);
 	}
 
-	const double to_s = (Math::Cos(m_phi));
-	const double to_c = (Math::Sin(m_phi));
+	//const double to_s = (Math::Cos(m_phi));
+	//const double to_c = (Math::Sin(m_phi));
+
+	const double to_s = (Math::Cos(phiController.getPhi()));
+	const double to_c = (Math::Sin(phiController.getPhi()));
 
 	s = Math::Lerp(s, to_s, smooth / focusSmooth); // 回転もスムーズに
 	c = Math::Lerp(c, to_c, smooth / focusSmooth); // 回転もスムーズに
