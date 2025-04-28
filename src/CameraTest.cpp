@@ -16,8 +16,6 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 
 	// BGMの再生
-//	bgm.setLoop(true);	// ループ
-//	bgm.play();	// 再生
 	AudioAsset(U"BGM").play();
 
 	// 最初にカーソルを中央に
@@ -154,9 +152,16 @@ void CameraTest::debug()
 	}
 
 	Print << U"[R][F]上下移動";
+
+	Print << U"x=" << toCameraPos.x;
+	Print << U"z=" << toCameraPos.z;
 }
 
-
+// マウスポインタのRay
+Ray CameraTest::getMouseRay() const
+{
+	return camera.screenToRay(Cursor::PosF());
+}
 
 // ベクトルの外積（2D）
 double CameraTest::cross(const Vec2& a, const Vec2& b)
@@ -181,9 +186,9 @@ bool CameraTest::isIntersecting(const Vec2& a, const Vec2& b, const Vec2& c, con
 	return (d1 * d2 < 0) && (d3 * d4 < 0);
 }
 
+// 2Dの線分同士の交差判定
 bool CameraTest::isCollision(const Vec2& a, const Vec2& b, double* collisionList)
 {
-	// 2Dの線分同士の交差判定
 	Vec2 A{ a.x, a.y }, B{ b.x, b.y };
 	for (int i = 0; i < 1; i++)	// TODO
 	{
@@ -195,52 +200,7 @@ bool CameraTest::isCollision(const Vec2& a, const Vec2& b, double* collisionList
 	return false;
 }
 
-struct Vec3_ {
-	double x, y, z;
-
-	Vec3_ operator-(const Vec3_& v) const { return { x - v.x, y - v.y, z - v.z }; }
-	Vec3_ operator+(const Vec3_& v) const { return { x + v.x, y + v.y, z + v.z }; }
-	Vec3_ operator*(double s) const { return { x * s, y * s, z * s }; }
-
-	static Vec3_ cross(const Vec3_& a, const Vec3_& b) {
-		return {
-			a.y * b.z - a.z * b.y,
-			a.z * b.x - a.x * b.z,
-			a.x * b.y - a.y * b.x
-		};
-	}
-
-	static double dot(const Vec3_& a, const Vec3_& b) {
-		return a.x * b.x + a.y * b.y + a.z * b.z;
-	}
-
-	double dot(const Vec3_& rhs) const { return x * rhs.x + y * rhs.y + z * rhs.z; }
-
-	double lengthSq() const { return x * x + y * y + z * z; }
-};
-
-// レイ（三角形との交差を調べる）
-struct Ray_ {
-	Vec3_ origin;
-	Vec3_ direction;
-};
-
-// 交差点の情報
-struct HitResult {
-	double t;       // レイのパラメータ（距離）
-	double u, v;    // バリセントリック座標
-	Vec3_ point;    // 交差点
-};
-
-// 三角形（頂点3つ）
-using Triangle_ = std::array<Vec3_, 3>;
-
-struct Segment {
-	Vec3_ start;
-	Vec3_ end;
-};
-
-bool IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitResult& outResult) {
+bool CameraTest::IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitResult& outResult) {
 	const double EPSILON = 1e-8f;
 
 	Vec3_ dir = segment.end - segment.start;  // 線分の方向ベクトル
@@ -288,7 +248,7 @@ bool IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitR
 }
 
 // 最近点を三角形上に求める（Möllerのアルゴリズム系）
-Vec3_ ClosestPointOnTriangle(const Vec3_& p, const Vec3_& a, const Vec3_& b, const Vec3_& c)
+Vec3_ CameraTest::ClosestPointOnTriangle(const Vec3_& p, const Vec3_& a, const Vec3_& b, const Vec3_& c)
 {
 	Vec3_ ab = b - a;
 	Vec3_ ac = c - a;
@@ -334,7 +294,7 @@ Vec3_ ClosestPointOnTriangle(const Vec3_& p, const Vec3_& a, const Vec3_& b, con
 }
 
 // 球と三角形の交差判定
-bool IsSphereIntersectingTriangle(const Vec3_& sphereCenter, double radius,
+bool CameraTest::IsSphereIntersectingTriangle(const Vec3_& sphereCenter, double radius,
 	const Vec3_& a, const Vec3_& b, const Vec3_& c)
 {
 	Vec3_ closest = ClosestPointOnTriangle(sphereCenter, a, b, c);
@@ -344,25 +304,34 @@ bool IsSphereIntersectingTriangle(const Vec3_& sphereCenter, double radius,
 
 void CameraTest::update()
 {
+	const double deltaTime = Scene::DeltaTime();
+
+	// デバッグ表示
 	debug();
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
-
-	// それぞれデフォルト値を設定
 	controller.setLeftTriggerDeadZone();
 	controller.setRightTriggerDeadZone();
 	controller.setLeftThumbDeadZone();
 	controller.setRightThumbDeadZone();
 
+	// マウスのRayを取得
 	Ray ray = getMouseRay();
 
-	double speed = 2.0f;
-
-	const double deltaTime = Scene::DeltaTime();
-	const double scaledSpeed =
-		speed * ((KeyControl | KeyCommand).pressed() ? 20.0 : KeyShift.pressed() ? 5.0 : 1.0)
-		* deltaTime;
+	// 移動速度
+	double addSpeed = 1.0;
+	if ((KeyControl | KeyCommand).pressed())
+	{
+		// コントロールキーを押しているときの速度
+		addSpeed = 20.0;
+	}
+	else if (KeyShift.pressed())
+	{
+		// シフトキーを押しているときの速度
+		addSpeed = 5.0;
+	}
+	const double scaledSpeed = cameraSpeed * addSpeed * deltaTime;
 
 	// マウスの座標を取得
 	double diffMousePosX = 0.0f;
@@ -379,17 +348,11 @@ void CameraTest::update()
 		// 仮想座標に加算
 		virtualCursorPos += delta;
 
-		//toMousePosX = Cursor::PosF().x;
-		//toMousePosY = Cursor::PosF().y;
 		toMousePosX = virtualCursorPos.x;
 		toMousePosY = virtualCursorPos.y;
 
-		// マウスドラッグ中
-		//if (MouseL.pressed())
-		//{
 		diffMousePosX = (toMousePosX - mousePosX) / 10 * mouseDirectionX;
 		diffMousePosY = -(toMousePosY - mousePosY) / 10 * mouseDirectionY;
-		//}
 
 		mousePosX = toMousePosX;
 		mousePosY = toMousePosY;
@@ -408,11 +371,8 @@ void CameraTest::update()
 		Cursor::SetPos(center.x, center.y);
 	}
 
-
 	// プレイヤーの移動
-	if (KeyLeft.pressed()
-//	&& isFocusSmooth == false
-	)
+	if (KeyLeft.pressed())
 	{
 		m_phi += (60_deg * deltaTime);
 
@@ -423,9 +383,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (controller.rightThumbX < -0.1 
-//	&& isFocusSmooth == false
-	)
+	if (controller.rightThumbX < -0.1)
 	{
 		m_phi += (60_deg * deltaTime * -controller.rightThumbX);
 
@@ -436,9 +394,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (diffMousePosX < -0.1 
-//	&& isFocusSmooth == false
-	)
+	if (diffMousePosX < -0.1)
 	{
 		m_phi += (60_deg * deltaTime * -diffMousePosX);
 
@@ -449,9 +405,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (KeyRight.pressed()
-//	&& isFocusSmooth == false
-	)
+	if (KeyRight.pressed())
 	{
 		m_phi -= (60_deg * deltaTime);
 
@@ -462,9 +416,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (controller.rightThumbX > 0.1
-//	&& isFocusSmooth == false
-	)
+	if (controller.rightThumbX > 0.1)
 	{
 		m_phi -= (60_deg * deltaTime * controller.rightThumbX);
 
@@ -475,9 +427,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (diffMousePosX > 0.1 
-//	&& isFocusSmooth == false
-	)
+	if (diffMousePosX > 0.1)
 	{
 		m_phi -= (60_deg * deltaTime * diffMousePosX);
 
@@ -499,68 +449,52 @@ void CameraTest::update()
 		const double zr = (scaledSpeed * c);
 
 		bool isWalk = false;
-		if (KeyW.pressed()
-	//	&& isFocusSmooth == false
-		)
+		if (KeyW.pressed())
 		{
 			toCameraPos.x += xr;
 			toCameraPos.z += zr;
 			isWalk = true;
 		}
-		if (controller.leftThumbY > 0.1
-	//	&& isFocusSmooth == false
-		)
+		if (controller.leftThumbY > 0.1)
 		{
 			toCameraPos.x += (xr * controller.leftThumbY);
 			toCameraPos.z += (zr * controller.leftThumbY);
 			isWalk = true;
 		}
 
-		if (KeyS.pressed()
-	//	&& isFocusSmooth == false
-		)
+		if (KeyS.pressed())
 		{
 			toCameraPos.x -= xr;
 			toCameraPos.z -= zr;
 			isWalk = true;
 		}
-		if (controller.leftThumbY < -0.1
-	//	&& isFocusSmooth == false
-		)
+		if (controller.leftThumbY < -0.1)
 		{
 			toCameraPos.x -= (xr * -controller.leftThumbY);
 			toCameraPos.z -= (zr * -controller.leftThumbY);
 			isWalk = true;
 		}
 
-		if (KeyA.pressed() 
-	//	&& isFocusSmooth == false
-		)
+		if (KeyA.pressed())
 		{
 			toCameraPos.x -= zr;
 			toCameraPos.z += xr;
 			isWalk = true;
 		}
-		if (controller.leftThumbX < -0.1
-	//	&& isFocusSmooth == false
-		)
+		if (controller.leftThumbX < -0.1)
 		{
 			toCameraPos.x -= (zr * -controller.leftThumbX);
 			toCameraPos.z += (xr * -controller.leftThumbX);
 			isWalk = true;
 		}
 
-		if (KeyD.pressed() 
-	//	&& isFocusSmooth == false
-		)
+		if (KeyD.pressed())
 		{
 			toCameraPos.x += zr;
 			toCameraPos.z -= xr;
 			isWalk = true;
 		}
-		if (controller.leftThumbX > 0.1
-	//	&& isFocusSmooth == false
-		)
+		if (controller.leftThumbX > 0.1)
 		{
 			toCameraPos.x += (zr * controller.leftThumbX);
 			toCameraPos.z -= (xr * controller.leftThumbX);
@@ -594,45 +528,33 @@ void CameraTest::update()
 	{
 		const double yDelta = deltaTime;
 
-		if (KeyUp.pressed()
-	//	&& isFocusSmooth == false
-		)
+		if (KeyUp.pressed())
 		{
 			to_m_focusY += yDelta;
 		}
 
-		if (controller.rightThumbY > 0.1 
-	//	&& isFocusSmooth == false
-		)
+		if (controller.rightThumbY > 0.1)
 		{
 			to_m_focusY += (yDelta * controller.rightThumbY);
 		}
 
-		if (diffMousePosY > 0.1 
-	//	&& isFocusSmooth == false
-		)
+		if (diffMousePosY > 0.1)
 		{
 			to_m_focusY += (yDelta * diffMousePosY);
 		}
 
 
-		if (KeyDown.pressed() 
-	//	&& isFocusSmooth == false
-		)
+		if (KeyDown.pressed())
 		{
 			to_m_focusY -= yDelta;
 		}
 
-		if (controller.rightThumbY < -0.1
-	//	&& isFocusSmooth == false
-		)
+		if (controller.rightThumbY < -0.1)
 		{
 			to_m_focusY -= (yDelta * -controller.rightThumbY);
 		}
 
-		if (diffMousePosY < -0.1
-	//	&& isFocusSmooth == false
-		)
+		if (diffMousePosY < -0.1)
 		{
 			to_m_focusY -= (yDelta * -diffMousePosY);
 		}
@@ -651,11 +573,7 @@ void CameraTest::update()
 	// ゆっくり移動
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
-
 	// コリジョンを無効にするエリア
-	Print << U"x=" << toCameraPos.x;
-	Print << U"z=" << toCameraPos.z;
-
 	for (int i = 0; i < 4; i++)
 	{
 		if ( collisionNone[i][0] < toCameraPos.x
@@ -683,24 +601,6 @@ void CameraTest::update()
 	// 線分交差で判定する
 	if (bCollision && bCollisionDoor)
 	{
-		/*
-		Vec2 A{ 
-			last_eyePosition.x,
-			last_eyePosition.z
-		};
-
-		// 向かっている位置より少し前にコリジョンを持たせる TODO これじゃなくて、距離にしたい
-		Vec2 cameraNormal = Vec2(
-			toCameraPos.x - last_eyePosition.x,
-			toCameraPos.z - last_eyePosition.z
-		).normalized();
-
-		Vec2 B{
-			toCameraPos.x + cameraNormal.x / 2,
-			toCameraPos.z + cameraNormal.y / 2,
-		};
-		*/
-
 		Vec3 A{
 			last_eyePosition.x,
 			last_eyePosition.y,
@@ -714,7 +614,6 @@ void CameraTest::update()
 		).normalized();
 
 		// 向かっている位置より少し前にコリジョンを持たせる
-		// TODO これじゃなくて、距離にしたい
 		Vec3 B{
 			toCameraPos.x + cameraNormal.x / 2,
 			toCameraPos.y + cameraNormal.y / 2,
@@ -724,14 +623,12 @@ void CameraTest::update()
 		Segment segment = {
 			{
 				last_eyePosition.x,
-				//last_eyePosition.y,
 				0.1,
 				last_eyePosition.z
 			}
 			, 
 			{
 				toCameraPos.x + cameraNormal.x / 2,
-				//toCameraPos.y,
 				0.1,
 				toCameraPos.z + cameraNormal.z / 2,
 			}
@@ -749,40 +646,13 @@ void CameraTest::update()
 
 			for (int i = 0; i < 12; i++)
 			{
-				/*
-				if (
-					isIntersecting (
-						A,
-						B,
-						Vec2{ cube[collisionList[i][0]].x / 100, cube[collisionList[i][0]].z / 100 },
-						Vec2{ cube[collisionList[i][1]].x / 100, cube[collisionList[i][1]].z / 100 }
-					)
-				)
-				*/
-
-
 				Triangle_ tri = {
 					Vec3_{cube[collisionTriangle[i][0]].x / 100, cube[collisionTriangle[i][0]].y / 100, cube[collisionTriangle[i][0]].z / 100},
 					Vec3_{cube[collisionTriangle[i][1]].x / 100, cube[collisionTriangle[i][1]].y / 100, cube[collisionTriangle[i][1]].z / 100},
 					Vec3_{cube[collisionTriangle[i][2]].x / 100, cube[collisionTriangle[i][2]].y / 100, cube[collisionTriangle[i][2]].z / 100}
 				};
 
-				//Print << U"camera_x=" << toCameraPos.x << U" camera_y=" << toCameraPos.y << U" camera_z=" << toCameraPos.z;
-				//Print
-				//	<< U" ray_x=" << toCameraPos.x - last_eyePosition.x
-				//	<< U" ray_y=" << toCameraPos.y - last_eyePosition.y 
-				//	<< U" ray_z=" << toCameraPos.z - last_eyePosition.z;
-				//Print << U"cube_x=" << cube[collisionTriangle[i][0]].x / 100 << U" cube_y=" << cube[collisionTriangle[i][0]].y / 100 << U" cube_z=" << cube[collisionTriangle[i][0]].z / 100;
-				//Print << U"cube_x=" << cube[collisionTriangle[i][1]].x / 100 << U" cube_y=" << cube[collisionTriangle[i][1]].y / 100 << U" cube_z=" << cube[collisionTriangle[i][1]].z / 100;
-				//Print << U"cube_x=" << cube[collisionTriangle[i][2]].x / 100 << U" cube_y=" << cube[collisionTriangle[i][2]].y / 100 << U" cube_z=" << cube[collisionTriangle[i][2]].z / 100;
-
-				// デバッグ
-				//checkCollision = true;
-
-				//Segment segment = { {0, 0, 0}, {0, 0, 5} };
-
 				HitResult hit;
-				//if (IntersectSegmentTriangle(segment, tri, hit))
 
 				Vec3_ triA = { cube[collisionTriangle[i][0]].x / 100, cube[collisionTriangle[i][0]].y / 100, cube[collisionTriangle[i][0]].z / 100 };
 				Vec3_ triB = { cube[collisionTriangle[i][1]].x / 100, cube[collisionTriangle[i][1]].y / 100, cube[collisionTriangle[i][1]].z / 100 };
@@ -790,9 +660,7 @@ void CameraTest::update()
 
 				if (IsSphereIntersectingTriangle(myPosition, myRadius, triA, triB, triC))
 				{
-					//Print << U"交差しました！ t=" << hit.t << U" x=" << hit.point.x << U" y=" << hit.point.y << U" z=" << hit.point.z;
 					Print << U"交差しました！";
-
 
 					// 交差している（ぶつかった）
 					checkCollision = true;
@@ -942,29 +810,6 @@ void CameraTest::update()
 
 	Graphics3D::SetCameraTransform(camera);
 
-    /* ズームはいったんクローズ
-	if (controller.rightTrigger > 0.1
-	 && isFocus == false
-	)
-	{
-		// Rトリガーでズーム
-		to_zoom = controller.rightTrigger * (Math::Pi / 180) * 25 * deltaTime * 60;
-	}
-	else if (KeyZ.pressed()
-	      && isFocus == false
-	)
-	{
-		// Zキーでズーム
-		to_zoom = 1 * (Math::Pi / 180) * 25 * deltaTime * 60;
-	}
-	else
-	{
-		to_zoom = 0;
-	}
-	zoom = Math::Lerp(zoom, to_zoom, smooth / zoom_smooth / focusSmooth * deltaTime * 60); // ズームをスムーズに
-	*/
-
-
 	Vec3 keyObjectPostion = Vec3{ keyX, keyY, keyZ };
 
 	// 対象のオブジェクトが画面の中心にあるかどうかの判定
@@ -973,10 +818,6 @@ void CameraTest::update()
 	double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
 
 	focusWait -= deltaTime;
-
-#ifdef _DEBUG
-	//Print << U"focusWait" << focusWait;
-#endif
 
 	if (
 		worldScreenPoint.x >= (1280 / 2 - 200)
@@ -1250,30 +1091,6 @@ void CameraTest::update()
 	Graphics3D::SetGlobalAmbientColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
 	Graphics3D::SetSunColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
 
-
-
-#ifdef _DEBUG
-	if (KeyE.pressed()) { lightY += 0.0001; }
-	if (KeyX.pressed()) { lightY -= 0.0001; }
-	if (KeyR.pressed()) { lightSize += 0.0001; }
-	if (KeyC.pressed()) { lightSize -= 0.0001; }
-	if (KeyT.pressed()) { emission += 0.1; }
-	if (KeyV.pressed()) { emission -= 0.1; }
-
-	//Print << lightY;
-	//Print << lightSize;
-	//Print << emission;
-#endif
-
-	// モデルを描画
-	//{
-	//	Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-
-	//	model.draw();
-	//}
-
-
-
 	// スポットライト
 	{
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
@@ -1314,33 +1131,6 @@ void CameraTest::update()
 				modelDoor.draw();
 			}
 		}
-
-
-
-		/*
-		Mat4x4 mat = Mat4x4::Translate(1, 0, 1);
-		for (const auto& object : model.objects())
-		{
-			Mat4x4 m = Mat4x4::Identity();
-
-			Print << U"オブジェクト：" << object.name;
-
-			if (object.name == U"FixRoom EV_Partition01")
-			{
-				m *= Mat4x4::Rotate(
-					Vec3{ 0,0,-1 },
-					(Scene::Time() * -120_deg),
-					Vec3{ 0, 0, 0 }
-				);
-			}
-
-			const Transformer3D t{ (m * mat) };
-
-			//Model::Draw(object, materials);
-			model.draw();
-		}
-		*/
-
 
 		// 鍵の描画（シェーダーを適用するために、ここで描画しています）
 		if (isKeyHave == false)
@@ -1389,60 +1179,6 @@ void CameraTest::update()
 			}
 		}
 
-		// TODO 共通化する
-		/* 扉の処理はいったんクローズ
-		if (isKeyHave == true
-		 && isClear == false
-		)
-		{
-			// BGMの再開
-			if (bgmStopCount > 4.0f)
-			{
-				if (!AudioAsset(U"BGM").isPlaying())
-				{
-					AudioAsset(U"BGM").play();
-				}
-			}
-			else {
-				bgmStopCount += deltaTime;
-			}
-
-			// 扉に入れるようにする
-			{
-#ifndef _DEBUG
-				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-#endif
-				// マウスの当たり判定
-				Box box = Box{ 
-					Vec3{doorX,doorY,doorZ}, 
-					0.2
-				}.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-				if (isFocus)
-				{
-					if (box.intersects(ray))
-					{
-						// マウスが当たっている
-						//Print << U"HIT";
-
-						if (
-							MouseL.down()
-							//	|| MouseR.down()
-							)
-						{
-							// クリア
-							AudioAsset(U"BGM").stop();
-							AudioAsset(U"牢屋の扉を開ける").play();
-							isClear = true;
-							changeScene(State::Title);
-						}
-					}
-				}
-			}
-		}
-		*/
-
-
 		if (bDebugViewCollision)
 		{
 			// モデルのワイヤーフレーム表示
@@ -1466,64 +1202,6 @@ void CameraTest::update()
 							Line3D{ cube[collisionTriangle[i][1]], cube[collisionTriangle[i][2]] }.draw(color);
 							Line3D{ cube[collisionTriangle[i][2]], cube[collisionTriangle[i][0]] }.draw(color);
 						}
-
-						//break;
-
-						/*
-						//
-						Line3D{ cube[0], cube[1] }.draw(color);
-						Line3D{ cube[1], cube[2] }.draw(color);
-						Line3D{ cube[2], cube[0] }.draw(color);
-
-						Line3D{ cube[1], cube[2] }.draw(color);
-						Line3D{ cube[2], cube[3] }.draw(color);
-						Line3D{ cube[3], cube[1] }.draw(color);
-
-						//
-						Line3D{ cube[0], cube[2] }.draw(color);
-						Line3D{ cube[2], cube[4] }.draw(color);
-						Line3D{ cube[4], cube[0] }.draw(color);
-
-						Line3D{ cube[2], cube[4] }.draw(color);
-						Line3D{ cube[4], cube[6] }.draw(color);
-						Line3D{ cube[6], cube[2] }.draw(color);
-
-						//
-						Line3D{ cube[2], cube[3] }.draw(color);
-						Line3D{ cube[3], cube[6] }.draw(color);
-						Line3D{ cube[6], cube[2] }.draw(color);
-
-						Line3D{ cube[3], cube[6] }.draw(color);
-						Line3D{ cube[6], cube[7] }.draw(color);
-						Line3D{ cube[7], cube[3] }.draw(color);
-
-						//
-						Line3D{ cube[1], cube[3] }.draw(color);
-						Line3D{ cube[3], cube[5] }.draw(color);
-						Line3D{ cube[5], cube[1] }.draw(color);
-
-						Line3D{ cube[3], cube[5] }.draw(color);
-						Line3D{ cube[5], cube[7] }.draw(color);
-						Line3D{ cube[7], cube[3] }.draw(color);
-
-						//
-						Line3D{ cube[1], cube[3] }.draw(color);
-						Line3D{ cube[3], cube[5] }.draw(color);
-						Line3D{ cube[5], cube[1] }.draw(color);
-
-						Line3D{ cube[3], cube[5] }.draw(color);
-						Line3D{ cube[5], cube[7] }.draw(color);
-						Line3D{ cube[7], cube[3] }.draw(color);
-
-						//
-						Line3D{ cube[4], cube[5] }.draw(color);
-						Line3D{ cube[5], cube[6] }.draw(color);
-						Line3D{ cube[6], cube[4] }.draw(color);
-
-						Line3D{ cube[5], cube[6] }.draw(color);
-						Line3D{ cube[6], cube[7] }.draw(color);
-						Line3D{ cube[7], cube[5] }.draw(color);
-						*/
 					}
 					else
 					{
@@ -1532,16 +1210,6 @@ void CameraTest::update()
 					}
 				}
 			}
-
-			// 自分のコリジョン（たぶん見えない）
-			/*
-			Sphere{
-				myPosition.x,
-				myRadius+0.1,
-				myPosition.z,
-				myRadius
-			}.draw(ColorF{ 0.4, 0.8, 0.6 }.removeSRGBCurve());
-			*/
 
 			// コリジョンなし
 			for (int i = 0; i < 4; i++)
@@ -1565,13 +1233,8 @@ void CameraTest::update()
 				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
 				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
 				Line3D{ Vec3{collisionNone[i][1], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
-
 			}
-
-
 		}
-
-
 	}
 
 	// [RenderTexture を 2D シーンに描画]
