@@ -107,17 +107,15 @@ private:
 
 	ColorF backgroundColor;
 
-//	Audio audio;
-
 	double m_fastMove = 1.0;
 
 	bool m_padPressed = false;
 
 	// カメラの視点
-	Vec3 m_eyePosition = Vec3{ 0, 1.5, 10 };
+	Vec3 m_eyePosition = Vec3{ 2.5, 1.5, 10 };
 
 	// カメラの視点（1フレーム前）
-	Vec3 last_eyePosition = Vec3{ 0, 1.5, 10 };
+	Vec3 last_eyePosition = Vec3{ 2.5, 1.5, 10 };
 
 	// カメラの注視点（カメラが「いま見ている」場所のこと）
 	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
@@ -211,7 +209,9 @@ private:
 	// m_focusY
 	double focusY_max = 2.0;
 
+	// ライトの設定
 	double lightY = 2.084;
+	double lightZ = 7;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;

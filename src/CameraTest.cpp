@@ -78,6 +78,14 @@ void CameraTest::debug()
 		// シェーダーあり
 		bDebugShader == true ? bDebugShader = false : bDebugShader = true;
 	}
+	if (Key9.pressed())
+	{
+		lightZ += 0.1;
+	}
+	if (Key0.pressed())
+	{
+		lightZ -= 0.1;
+	}
 
 	if (mouseDirectionX == 1)
 	{
@@ -157,6 +165,8 @@ void CameraTest::debug()
 	Print << U"z=" << toCameraPos.z;
 
 	Print << U"phiController.getPhi()=" << phiController.getPhi();
+
+	Print << U"lightZ=" << lightZ;
 }
 
 // マウスポインタのRay
@@ -1232,7 +1242,7 @@ void CameraTest::update()
 		phong.ambientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
 		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
-		Sphere{ {0, lightY, 0}, lightSize }.draw(phong);
+		Sphere{ {0, lightY, lightZ}, lightSize }.draw(phong);
 		
 		//const auto& materials = model.materials();
 		//for (const auto& object : model.objects())
@@ -1294,7 +1304,7 @@ void CameraTest::draw() const
 
 	// セリフ表示（仮）
 	const Font& boldFont = FontAsset(U"Bold");
-	boldFont(U"０１２３４５６７８９ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ").drawAt(
+	boldFont(U"腹が減った。まずは食事をしなければ…。").drawAt(
 		36, 
 		{ center.x, 700 },
 		ColorF{ 1, 1, 1, 1 }
