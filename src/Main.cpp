@@ -10,7 +10,7 @@
 void Main()
 {
     // ウインドウとシーンを 1280x720 にリサイズする
-    Window::Resize(1280, 720);
+    Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
     
     
 	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");

@@ -120,6 +120,7 @@
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\ModelView.cpp" />
+    <ClCompile Include="..\src\ObjectController.cpp" />
     <ClCompile Include="..\src\PhiController.cpp" />
     <ClCompile Include="..\src\Ranking.cpp" />
     <ClCompile Include="..\src\Result.cpp" />
@@ -338,6 +339,7 @@
     <ClInclude Include="..\src\Common.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
     <ClInclude Include="..\src\ModelView.hpp" />
+    <ClInclude Include="..\src\ObjectController.hpp" />
     <ClInclude Include="..\src\PhiController.hpp" />
     <ClInclude Include="..\src\Ranking.hpp" />
     <ClInclude Include="..\src\Result.hpp" />

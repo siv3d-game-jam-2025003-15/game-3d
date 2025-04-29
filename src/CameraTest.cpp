@@ -14,6 +14,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -29,12 +30,11 @@ CameraTest::CameraTest(const InitData& init)
 	virtualCursorPos.x = center.x;
 	virtualCursorPos.y = center.y;
 
-	Stopwatch stopwatch{ StartImmediately::Yes };
-
 #ifdef _DEBUG
 	bDebugViewCollision = true;
 #endif
 
+	Stopwatch stopwatch{ StartImmediately::Yes };
 }
 
 // デバッグ機能
@@ -85,11 +85,11 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		lightZ += 0.1;
+		breadY += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		lightZ -= 0.1;
+		breadY -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -174,6 +174,10 @@ void CameraTest::debug()
 	Print << U"phiController.getPhi()=" << phiController.getPhi();
 
 	Print << U"lightZ=" << lightZ;
+
+	Print << U"breadX=" << breadX;
+	Print << U"breadY=" << breadY;
+	Print << U"breadZ=" << breadZ;
 
 #endif
 }
@@ -804,77 +808,53 @@ void CameraTest::update()
 
 	Graphics3D::SetCameraTransform(camera);
 
-	Vec3 keyObjectPostion = Vec3{ keyX, keyY, keyZ };
+
+	// 対象物の座標
+	//Vec3 keyObjectPosition = Vec3{ keyX, keyY, keyZ };
 
 	// 対象のオブジェクトが画面の中心にあるかどうかの判定
-	Vec3 worldScreenPoint = camera.worldToScreenPoint(keyObjectPostion);
+	//Vec3 worldScreenPoint = camera.worldToScreenPoint(keyObjectPostion);
 
-	double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
+	// 対象オブジェクトとの距離
+	//double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
 
-	focusWait -= deltaTime;
-
-	if (
-		worldScreenPoint.x >= (1280 / 2 - 200)
-	 && worldScreenPoint.x <= (1280 / 2 + 200)
-	 && worldScreenPoint.y >= (720 / 2 - 200)
-	 && worldScreenPoint.y <= (720 / 2 + 200)
-	 && keyDistance < 3.5
-//	 && isFocusSmooth == false
-//	 && focusWait < 0.0f
-	)
-	{
-		// オブジェクトが画面の中心にある
-#ifdef _DEBUG
-		Print << U"オブジェクトが画面の中心にある";
-#endif
-		Print << U"左クリックで鍵を取る";
-		Print << U"エンターキーで鍵を取る";
-		//	Print << U"右クリックでズーム解除";
+	// 毎フレーム更新
+//	focusWait -= deltaTime;
 
 
-		// ズームしていたらフォーカスする
-		//if (controller.rightTrigger > 0.5
-		// || KeyZ.pressed()
-		// || isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
-		//)
-		//{
-		
-        /* ズームの処理はバグっているので、いったんコメントアウト
-			// 前の位置を記憶
-			if (isFocus == false)
-			{
-				lastToCameraPos = toCameraPos;
-				last_to_m_focusY = to_m_focusY;
-				last_m_phi = m_phi;
-			}
 
-			// カメラの移動
-			toCameraPos = Vec3{ keyFocusX ,keyFocusY, keyFocusZ };
-
-			// カメラの向き
-			to_m_focusY = keyFocusCameraY;
-			m_phi = keyFocusPhi;
-
-			// フォーカスの速度を遅くする
-			focusSmooth = 2;
-		*/
-			isFocus = true;
+	// オブジェクトを取ることができるか
+	isBreadHave = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray);
+	isKeyHave = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray);
 
 
-			if (controller.buttonA.pressed()
-			 || KeyEnter.pressed()
-			 //|| MouseL.down()
-			 //|| MouseR.down()
-			)
-			{
-				isKeyHave = true;
-				AudioAsset(U"GET").play();
-				AudioAsset(U"BGM").stop();
-			//	bgm.stop();
-			}
-		//}
 
-	}
+//	if (
+//		worldScreenPoint.x >= (1280 / 2 - 200)
+//	 && worldScreenPoint.x <= (1280 / 2 + 200)
+//	 && worldScreenPoint.y >= (720 / 2 - 200)
+//	 && worldScreenPoint.y <= (720 / 2 + 200)
+//	 && keyDistance < 3.5
+//	)
+//	{
+//		// オブジェクトが画面の中心にある
+//#ifdef _DEBUG
+//		Print << U"オブジェクトが画面の中心にある";
+//#endif
+//		Print << U"左クリックで取る";
+//		Print << U"エンターキーで取る";
+//
+//		isFocus = true;
+//
+//		if (controller.buttonA.pressed()
+//			|| KeyEnter.pressed()
+//		)
+//		{
+//			isKeyHave = true;
+//			AudioAsset(U"GET").play();
+//			AudioAsset(U"BGM").stop();
+//		}
+//	}
 
 	// 止まっているBGMを再度鳴らす TODO 汎用的な仕組みではないので、修正する
 	if (isKeyHave == true
@@ -888,10 +868,6 @@ void CameraTest::update()
 			{
 				AudioAsset(U"BGM").play();
 			}
-			//if (!bgm.isPlaying())
-			//{
-			//	bgm.play();
-			//}
 		}
 		else {
 			bgmStopCount += deltaTime;
@@ -899,11 +875,11 @@ void CameraTest::update()
 	}
 
 
-	Vec3 doorObjectPostion = Vec3{ doorX, doorY, doorZ };
+	//Vec3 doorObjectPostion = Vec3{ doorX, doorY, doorZ };
 
-	worldScreenPoint = camera.worldToScreenPoint(doorObjectPostion);
+	//worldScreenPoint = camera.worldToScreenPoint(doorObjectPostion);
 
-	double doorDistance = m_eyePosition.distanceFrom(doorObjectPostion);
+	//double doorDistance = m_eyePosition.distanceFrom(doorObjectPostion);
 
 	//Print << U"doorObjectPostion=" << doorObjectPostion;
 	//Print << U"worldScreenPoint2=" << worldScreenPoint;
@@ -1092,20 +1068,12 @@ void CameraTest::update()
 		if (bDebugShader)
 		{
 			const ScopedCustomShader3D shader(vs3D, ps3D);
-			
+
 			// モデルを描画
 			if (bDebugviewModel)
 			{
 				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 				model.draw();
-			}
-
-			// ドア
-			{
-				Transformer3D t{
-					Mat4x4::RotateY(0_deg).scaled(roomScale).translated(doorPos)
-				};
-				modelDoor.draw();
 			}
 		}
 		else
@@ -1116,63 +1084,52 @@ void CameraTest::update()
 				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 				model.draw();
 			}
-
-			// ドア
-			{
-				Transformer3D t{ 
-					Mat4x4::RotateY(0_deg).scaled(roomScale).translated(doorPos)
-				};
-				modelDoor.draw();
-			}
 		}
 
-		// 鍵の描画（シェーダーを適用するために、ここで描画しています）
+		// ドア
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(roomScale).translated(doorPos)
+			};
+			modelDoor.draw();
+		}
+
+		// パンの描画
+		if (isBreadHave == false)
+		{
+			{
+				Transformer3D t{
+					Mat4x4::RotateY(0_deg).scaled(1.0).translated(Vec3{breadX, breadY, breadZ})
+				};
+
+				modelBread.draw();
+			}
+
+			// マウスの当たり判定の描画
+//#ifndef _DEBUG
+//			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
+//#endif
+//			Box box = Box{ Vec3{ breadX, breadY, breadZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+		}
+
+		// 鍵の描画
 		if (isKeyHave == false)
 		{
 			{
-				Mat4x4 mat = Mat4x4::Translate(keyX, keyY, keyZ);
-				Mat4x4 m = Mat4x4::Identity();
-				m *= Mat4x4::Rotate(
-					Vec3{ 1,1,1 },
-					45_deg,
-					Vec3{ keyX, keyY, keyZ }
-				);
-
-				const Transformer3D transform{ mat * m };
+				Transformer3D t{
+					Mat4x4::RotateZ(0_deg).scaled(1.0).translated(Vec3{keyX, keyY, keyZ})
+				};
 				modelKey.draw();
 			}
 
-#ifndef _DEBUG
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-#endif
 			// マウスの当たり判定の描画
-			Box box = Box{
-				Vec3{ keyX, keyY, keyZ }, 
-				0.3
-			}.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-			// フォーカス中
-			if (isFocus)
-			{
-				if (box.intersects(ray))
-				{
-					// マウスが当たっている
-					//Print << U"HIT";
-
-					if (
-					   MouseL.down()
-				//	|| MouseR.down()
-					)
-					{
-						isKeyHave = true;
-						AudioAsset(U"GET").play();
-						AudioAsset(U"BGM").stop();	
-					//	bgm.stop();
-					}
-				}
-			}
+//#ifndef _DEBUG
+//			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
+//#endif
+//			Box box = Box{ Vec3{ keyX, keyY, keyZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 		}
 
+		// デバッグ表示
 		if (bDebugViewCollision)
 		{
 			// モデルのワイヤーフレーム表示

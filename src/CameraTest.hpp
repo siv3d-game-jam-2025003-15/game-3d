@@ -1,6 +1,7 @@
 ﻿# pragma once
 #include "Common.hpp"
 #include "PhiController.hpp"
+#include "ObjectController.hpp"
 
 struct Vec3_ {	// TODO Vec3を継承してみる
 	double x, y, z;
@@ -139,6 +140,7 @@ private:
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
+	const Model modelBread{ U"assets/models/Bread/bread.obj" };
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -150,6 +152,7 @@ private:
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 
 	bool isKeyHave = false;
+	bool isBreadHave = false;
 	bool isClear = false;
 
 	double bgmStopCount = 0.0f;
@@ -221,9 +224,14 @@ private:
 	double zoom_smooth = 2;
 
 	// 鍵の座標
-	double keyX = 3.25;
-	double keyY = 0.6;
-	double keyZ = 3.3;
+	double keyX = 0;
+	double keyY = 0.75;
+	double keyZ = 8;
+
+	// パンの座標
+	double breadX = 0;
+	double breadY = 0.75;
+	double breadZ = 7;
 
 	// 鍵をフォーカスする時の座標
 	double keyFocusX = keyX - 0.5;
@@ -265,7 +273,7 @@ private:
 	double toMousePosX = 0.0f;
 	double toMousePosY = 0.0f;
 
-	double focusWait = 0.0f;
+//	double focusWait = 0.0f;
 
 	int mouseDirectionX = 1;
 	int mouseDirectionY = 1;
@@ -345,5 +353,9 @@ private:
 
 	// インベントリの表示
 	bool bInventory = false;
+
+	// オブジェクトを取るクラス
+	ObjectController breadController;
+	ObjectController keyController;
 
 };

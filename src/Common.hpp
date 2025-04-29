@@ -27,3 +27,7 @@ using App = SceneManager<State, GameData>;
 
 // Windows で Direct3D の代わりに OpenGL を使用するモードに切り替える
 SIV3D_SET(EngineOption::Renderer::OpenGL);
+
+// ウィンドウサイズ
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGHT = 720;
