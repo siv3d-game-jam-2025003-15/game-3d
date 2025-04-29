@@ -317,7 +317,7 @@ private:
 	};
 
 	bool bDebugViewFrame = true;
-    bool bDebugViewCollision = true;
+    bool bDebugViewCollision = false;
 	bool bDebugviewModel = true;
 	bool bDebugFlashingLight = true;
 	bool bDebugShader = true;

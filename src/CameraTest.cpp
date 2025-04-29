@@ -30,6 +30,11 @@ CameraTest::CameraTest(const InitData& init)
 	virtualCursorPos.y = center.y;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
+
+#ifdef _DEBUG
+	bDebugViewCollision = true;
+#endif
+
 }
 
 // デバッグ機能
@@ -161,12 +166,16 @@ void CameraTest::debug()
 
 	Print << U"[R][F]上下移動";
 
+#ifdef _DEBUG
+
 	Print << U"x=" << toCameraPos.x;
 	Print << U"z=" << toCameraPos.z;
 
 	Print << U"phiController.getPhi()=" << phiController.getPhi();
 
 	Print << U"lightZ=" << lightZ;
+
+#endif
 }
 
 // マウスポインタのRay
