@@ -369,8 +369,12 @@ private:
 	// 仮想マウス座標
 	Vec2 virtualCursorPos = Vec2{ 0, 0 };
 
-	// インベントリ
-	const Texture inventoryTexture{ U"assets/sprites/inventory.png" };
+	// スプライト
+	const Texture inventorySprite{ U"assets/sprites/inventory.png" };
+	const Texture breadSprite{ U"assets/sprites/bread_mini.png" };
+	const Texture memoSprite{ U"assets/sprites/memo_mini.png" };
+	const Texture memoBigSprite{ U"assets/sprites/memo_big.png" };
+	const Texture keySprite{ U"assets/sprites/key_mini.png" };
 
 	// インベントリの表示
 	bool bInventory = false;
@@ -378,5 +382,8 @@ private:
 	// オブジェクトを取るクラス
 	ObjectController breadController;
 	ObjectController keyController;
+
+	int tmpItemX = 0;
+	int tmpItemY = 0;
 
 };

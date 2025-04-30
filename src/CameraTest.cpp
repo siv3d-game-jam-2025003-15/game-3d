@@ -93,11 +93,11 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		debugDrawerY += 0.001;
+		tmpItemY += 1;
 	}
 	if (Key0.pressed())
 	{
-		debugDrawerY -= 0.001;
+		tmpItemY -= 1;
 	}
 
 	if (mouseDirectionX == 1)
@@ -189,6 +189,8 @@ void CameraTest::debug()
 	
 	Print << U"debugDrawerY=" << debugDrawerY;
 
+	Print << U"tmpItemX=" << tmpItemX;
+	Print << U"tmpItemY=" << tmpItemY;
 #endif
 }
 
@@ -1333,7 +1335,34 @@ void CameraTest::draw() const
 	// UI
 	if (bInventory)
 	{
-		inventoryTexture.draw(center.x - 512 / 2, center.y - 512 / 2);
+		// インベントリ
+		int itemX = center.x - 512 / 2;
+		int itemY = center.y - 512 / 2;
+		inventorySprite.draw(itemX, itemY);
+
+		// アイテム
+		for (int i = 0; i < 15; i++)
+		{
+			int itemIndex = i;
+			int itemMiniX = center.x - 60 / 2 + (itemIndex % 4 * 80) - 224;
+			int itemMiniY = center.y - 60 / 2 + (itemIndex / 4 * 80) - 110;
+
+			// TODO アイテムIDで管理する
+			breadSprite.draw(itemMiniX, itemMiniY);
+		//	memoSprite.draw(itemMiniX, itemMiniY);
+		//	keySprite.draw(itemMiniX, itemMiniY);
+		}
+
+		// 現在選択中のアイテム
+		{
+			int itemBigX = center.x - 160 / 2 + 164;
+			int itemBigY = center.y - 160 / 2 - 53;
+
+			// TODO アイテムIDで管理する
+			memoBigSprite.draw(itemBigX, itemBigY);
+		}
+		
+
 	}
 
 	// セリフ表示（仮）
