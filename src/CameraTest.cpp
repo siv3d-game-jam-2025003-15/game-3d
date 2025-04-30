@@ -94,11 +94,19 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		itemIndex += 1;
+		drawerX += 0.1;
 	}
 	if (Key0.pressed())
 	{
-		itemIndex -= 1;
+		drawerX -= 0.1;
+	}
+	if (KeyO.pressed())
+	{
+		drawerZ += 0.1;
+	}
+	if (KeyP.pressed())
+	{
+		drawerZ -= 0.1;
 	}
 
 	if (mouseDirectionX == 1)
@@ -177,23 +185,26 @@ void CameraTest::debug()
 
 #ifdef _DEBUG
 
-	Print << U"x=" << toCameraPos.x;
-	Print << U"z=" << toCameraPos.z;
+	Print << U"CameraX=" << toCameraPos.x;
+	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"phiController.getPhi()=" << phiController.getPhi();
+	//Print << U"phiController.getPhi()=" << phiController.getPhi();
 
-	Print << U"lightZ=" << lightZ;
+	//Print << U"lightZ=" << lightZ;
 
-	Print << U"breadX=" << breadX;
-	Print << U"breadY=" << breadY;
-	Print << U"breadZ=" << breadZ;
-	
-	Print << U"debugDrawerY=" << debugDrawerY;
+	//Print << U"breadX=" << breadX;
+	//Print << U"breadY=" << breadY;
+	//Print << U"breadZ=" << breadZ;
+	//
+	//Print << U"debugDrawerY=" << debugDrawerY;
 
-	Print << U"tmpItemX=" << tmpItemX;
-	Print << U"tmpItemY=" << tmpItemY;
+	//Print << U"tmpItemX=" << tmpItemX;
+	//Print << U"tmpItemY=" << tmpItemY;
 
-	Print << U"itemIndex=" << itemIndex;
+	//Print << U"itemIndex=" << itemIndex;
+
+	Print << U"drawerX=" << drawerX;
+	Print << U"drawerZ=" << drawerZ;
 
 #endif
 }

@@ -261,9 +261,9 @@ private:
 	double pokerZ = 6;
 
 	// 引き出し
-	double drawerX = 0;
+	double drawerX = 16.3;
 	double drawerY = 0;
-	double drawerZ = 5;
+	double drawerZ = 1.6;
 	double debugDrawerY = 0;
 
 
