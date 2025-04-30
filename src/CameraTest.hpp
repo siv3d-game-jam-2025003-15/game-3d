@@ -142,6 +142,13 @@ private:
 	const Model modelKey{ U"assets/models/Key/key.obj" };
 	const Model modelBread{ U"assets/models/Bread/bread.obj" };
 	const Model modelPoker{ U"assets/models/Poker/Gimmick_Poker01.obj" };
+	const Model modelDrawerChain{ U"assets/models/Drawer/Gimmick_Drawer01_Chain.obj" };
+	const Model modelDrawerEye{ U"assets/models/Drawer/Gimmick_Drawer01_Eye.obj" };
+	const Model modelDrawerFeather{ U"assets/models/Drawer/Gimmick_Drawer01_Feather.obj" };
+	const Model modelDrawerFlower{ U"assets/models/Drawer/Gimmick_Drawer01_Flower.obj" };
+	const Model modelDrawerNon{ U"assets/models/Drawer/Gimmick_Drawer01_Non.obj" };
+	const Model modelDrawerSnake{ U"assets/models/Drawer/Gimmick_Drawer01_Snake.obj" };
+	const Model modelShelf{ U"assets/models/Drawer/Gimmick_Shelf01.obj" };
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -239,6 +246,13 @@ private:
 	double pokerX = 0;
 	double pokerY = 0.75;
 	double pokerZ = 6;
+
+	// 引き出し
+	double drawerX = 0;
+	double drawerY = 0;
+	double drawerZ = 5;
+	double debugDrawerY = 0;
+
 
 	// 鍵をフォーカスする時の座標
 	double keyFocusX = keyX - 0.5;

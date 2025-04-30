@@ -16,6 +16,13 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -86,11 +93,11 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		breadY += 0.01;
+		debugDrawerY += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		breadY -= 0.01;
+		debugDrawerY -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -179,6 +186,8 @@ void CameraTest::debug()
 	Print << U"breadX=" << breadX;
 	Print << U"breadY=" << breadY;
 	Print << U"breadZ=" << breadZ;
+	
+	Print << U"debugDrawerY=" << debugDrawerY;
 
 #endif
 }
@@ -1098,54 +1107,94 @@ void CameraTest::update()
 		// パンの描画
 		if (bBreadHave == false)
 		{
-			{
-				Transformer3D t{
-					Mat4x4::RotateY(0_deg).scaled(1.0).translated(Vec3{breadX, breadY, breadZ})
-				};
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(1.0).translated(Vec3{breadX, breadY, breadZ})
+			};
 
-				modelBread.draw();
-			}
-
-			// マウスの当たり判定の描画
-//#ifndef _DEBUG
-//			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-//#endif
-//			Box box = Box{ Vec3{ breadX, breadY, breadZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+			modelBread.draw();
 		}
 
 		// 鍵の描画
 		if (bKeyHave == false)
 		{
-			{
-				Transformer3D t{
-					Mat4x4::RotateZ(0_deg).scaled(1.0).translated(Vec3{keyX, keyY, keyZ})
-				};
-				modelKey.draw();
-			}
-
-			// マウスの当たり判定の描画
-//#ifndef _DEBUG
-//			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-//#endif
-//			Box box = Box{ Vec3{ keyX, keyY, keyZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+			Transformer3D t{
+				Mat4x4::RotateZ(0_deg).scaled(1.0).translated(Vec3{keyX, keyY, keyZ})
+			};
+			modelKey.draw();
 		}
 
 		// 火かき棒の描画
 		if (bPokerHave == false)
 		{
-			{
-				Transformer3D t{
-					Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{pokerX, pokerY, pokerZ})
-				};
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{pokerX, pokerY, pokerZ})
+			};
 
-				modelPoker.draw();
-			}
+			modelPoker.draw();
+		}
 
-			// マウスの当たり判定の描画
-//#ifndef _DEBUG
-//			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
-//#endif
-//			Box box = Box{ Vec3{ breadX, breadY, breadZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+		// 引き出し（１段目）
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*5, drawerZ})
+			};
+
+			modelDrawerNon.draw();
+		}
+
+		// 引き出し（２段目）
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*4, drawerZ})
+			};
+
+			modelDrawerFlower.draw();
+		}
+
+		// 引き出し（３段目）
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*3, drawerZ})
+			};
+
+			modelDrawerChain.draw();
+		}
+
+		// 引き出し（４段目）
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*2, drawerZ})
+			};
+
+			modelDrawerFeather.draw();
+
+		}
+
+		// 引き出し（５段目）
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06+0.16, drawerZ})
+			};
+
+			modelDrawerSnake.draw();
+		}
+
+		// 引き出し（６段目）
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY+ 0.06, drawerZ})
+			};
+
+			modelDrawerEye.draw();
+		}
+
+		// 引き出し
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY, drawerZ})
+			};
+
+			modelShelf.draw();
 		}
 
 		// デバッグ表示
