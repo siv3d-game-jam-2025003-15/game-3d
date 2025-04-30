@@ -9,11 +9,12 @@ private:
 public:
 	ObjectController();
 
-	bool update(
+	std::tuple<bool, bool> update(
 		const Vec3& objPos,
 		const BasicCamera3D& camera,
 		const Vec3& eyePos,
-		Ray ray
+		Ray ray,
+		Vec3& MarkPosition
 	);
 
 };

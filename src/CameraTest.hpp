@@ -138,10 +138,20 @@ private:
 
 	// モデルの読み込み
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
+
+	// ドア
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
+
+	// 鍵
 	const Model modelKey{ U"assets/models/Key/key.obj" };
+	
+	// パン
 	const Model modelBread{ U"assets/models/Bread/bread.obj" };
+
+	// 火かき棒
 	const Model modelPoker{ U"assets/models/Poker/Gimmick_Poker01.obj" };
+
+	// 引き出し
 	const Model modelDrawerChain{ U"assets/models/Drawer/Gimmick_Drawer01_Chain.obj" };
 	const Model modelDrawerEye{ U"assets/models/Drawer/Gimmick_Drawer01_Eye.obj" };
 	const Model modelDrawerFeather{ U"assets/models/Drawer/Gimmick_Drawer01_Feather.obj" };
@@ -149,6 +159,9 @@ private:
 	const Model modelDrawerNon{ U"assets/models/Drawer/Gimmick_Drawer01_Non.obj" };
 	const Model modelDrawerSnake{ U"assets/models/Drawer/Gimmick_Drawer01_Snake.obj" };
 	const Model modelShelf{ U"assets/models/Drawer/Gimmick_Shelf01.obj" };
+	
+	// ビックリマーク
+	const Model modelExclamationMark{ U"assets/models/ExclamationMark/ExclamationMark.obj" };
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -388,4 +401,6 @@ private:
 
 	// 選択中のアイテム番号
 	int itemIndex = 0;
+
+	Vec3 MarkPosition{ 0.0, 0.0, 0.0 };
 };

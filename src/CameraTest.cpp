@@ -23,6 +23,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -893,8 +894,23 @@ void CameraTest::update()
 
 
 	// オブジェクトを取ることができるか
-	bBreadHave = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray);
-	bKeyHave = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray);
+	bool bLockon = false;
+	{
+		auto [a, b] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition);
+		bBreadHave = a;
+		if (b)
+		{
+			bLockon = b;
+		}
+	}
+	{
+		auto [a, b] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition);
+		bKeyHave = a;
+		if (b)
+		{
+			bLockon = b;
+		}
+	}
 
 
 
@@ -1254,6 +1270,17 @@ void CameraTest::update()
 			};
 
 			modelShelf.draw();
+		}
+
+		// ビックリマーク
+		if(bLockon)
+		{
+			MarkPosition.y += 0.2;
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
+			};
+
+			modelExclamationMark.draw();
 		}
 
 		// デバッグ表示

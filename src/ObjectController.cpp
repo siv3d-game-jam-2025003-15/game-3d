@@ -5,16 +5,19 @@ ObjectController::ObjectController()
 	m_isHave = false;
 }
 
-bool ObjectController::update(
+std::tuple<bool, bool> ObjectController::update(
 	const Vec3& objPos,
 	const BasicCamera3D& camera,
 	const Vec3& eyePos,
-	Ray ray
+	Ray ray,
+	Vec3& MarkPosition
 )
 {
+	bool isLockon = false;
+
 	if (m_isHave)
 	{
-		return m_isHave;
+		return { m_isHave,isLockon };
 	}
 
 	Vec3 screenPos = camera.worldToScreenPoint(objPos);
@@ -32,6 +35,10 @@ bool ObjectController::update(
 		Print << U"左クリックで取る";
 		Print << U"エンターキーで取る";
 
+		isLockon = true;
+
+		MarkPosition = objPos;
+
 		// マウスの当たり判定の描画
 		Box box = Box{ objPos, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
@@ -45,5 +52,5 @@ bool ObjectController::update(
 		}
 	}
 
-	return m_isHave;
+	return { m_isHave, isLockon };
 }
