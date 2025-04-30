@@ -92,21 +92,21 @@ void CameraTest::debug()
 		// シェーダーあり
 		bDebugShader == true ? bDebugShader = false : bDebugShader = true;
 	}
-	if (Key9.pressed())
+	if (Key9.down())
 	{
-		drawerX += 0.1;
+		TextID += 1;
 	}
-	if (Key0.pressed())
+	if (Key0.down())
 	{
-		drawerX -= 0.1;
+		TextID -= 1;
 	}
 	if (KeyO.pressed())
 	{
-		drawerZ += 0.1;
+
 	}
 	if (KeyP.pressed())
 	{
-		drawerZ -= 0.1;
+
 	}
 
 	if (mouseDirectionX == 1)
@@ -203,9 +203,11 @@ void CameraTest::debug()
 
 	//Print << U"itemIndex=" << itemIndex;
 
-	Print << U"drawerX=" << drawerX;
-	Print << U"drawerZ=" << drawerZ;
+	//Print << U"drawerX=" << drawerX;
+	//Print << U"drawerZ=" << drawerZ;
 
+	Print << U"TextID=" << TextID;
+	
 #endif
 }
 
@@ -1470,11 +1472,41 @@ void CameraTest::draw() const
 		
 	}
 
-	// セリフ表示（仮）
-	const Font& boldFont = FontAsset(U"Bold");
-	boldFont(U"腹が減った。まずは食事をしなければ…。").drawAt(
-		36, 
-		{ center.x, 700 },
-		ColorF{ 1, 1, 1, 1 }
-	);
+	std::vector<String> Text =
+	{
+		// シナリオ系
+		U"腹が減った。まずは食事をしなければ…。",
+		U"パンの中に手記が入っていた。",
+		U"ベッド脇の壁を調べてみよう。",
+		U"この鍵は錆びて使えないな…。",
+		U"この針金で錆びた鍵の形を模すことはできるだろうか…。",
+		U"扉をこの針金で開けてみよう。",
+		U"暖炉がある。",
+		U"水槽がある。",
+		U"羊皮紙の汚れを落としたい。",
+		U"この引き出しは何だろう。",
+
+		// アイテム系
+		U"黒ずんだ硬いパン。日にちの感覚も失いかけた者が、最後に噛みしめたのか。",
+		U"長い間放置されていたのか、すっかり錆びついている。力を加えると折れてしまいそうだ。",
+		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",
+		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",
+		U"文字がはっきりと見える。何かの順番を示しているようだ。",
+		U"無地の羊皮紙。触るとわずかにざらつきがある。",
+		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",
+		U"鉄製の長い棒。炉の中をかき混ぜたり、熱いものを引き寄せたりするのに使えそうだ。",
+	};
+
+	Print << U"size=" << Text.size();
+
+	if (0 <= TextID && TextID < Text.size())
+	{
+		// セリフ表示（仮）
+		const Font& boldFont = FontAsset(U"Bold");
+		boldFont(Text[TextID]).drawAt(
+			28,
+			{ center.x, 700 },
+			ColorF{ 1, 1, 1, 1 }
+		);
+	}
 }

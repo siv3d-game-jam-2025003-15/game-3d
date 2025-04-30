@@ -403,4 +403,6 @@ private:
 	int itemIndex = 0;
 
 	Vec3 MarkPosition{ 0.0, 0.0, 0.0 };
+
+	int TextID = 0;
 };
