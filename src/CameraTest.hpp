@@ -386,4 +386,6 @@ private:
 	int tmpItemX = 0;
 	int tmpItemY = 0;
 
+	// 選択中のアイテム番号
+	int itemIndex = 0;
 };

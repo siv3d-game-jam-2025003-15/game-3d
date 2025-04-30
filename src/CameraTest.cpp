@@ -93,11 +93,11 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		tmpItemY += 1;
+		itemIndex += 1;
 	}
 	if (Key0.pressed())
 	{
-		tmpItemY -= 1;
+		itemIndex -= 1;
 	}
 
 	if (mouseDirectionX == 1)
@@ -191,6 +191,9 @@ void CameraTest::debug()
 
 	Print << U"tmpItemX=" << tmpItemX;
 	Print << U"tmpItemY=" << tmpItemY;
+
+	Print << U"itemIndex=" << itemIndex;
+
 #endif
 }
 
@@ -400,10 +403,217 @@ void CameraTest::update()
 
 		// 毎フレーム、カーソルを強制的に中央に戻す
 		Cursor::SetPos(center.x, center.y);
+
+
+
+		// プレイヤーの移動
+		if (KeyLeft.pressed())
+		{
+			phiController.rotate(60_deg, deltaTime, 1.0);
+		}
+
+		if (controller.rightThumbX < -0.1)
+		{
+			phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
+		}
+
+		if (diffMousePosX < -0.1)
+		{
+			phiController.rotate(60_deg, deltaTime, -diffMousePosX);
+		}
+
+		if (KeyRight.pressed())
+		{
+			phiController.rotate(-60_deg, deltaTime, 1.0);
+		}
+
+		if (controller.rightThumbX > 0.1)
+		{
+			phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
+		}
+
+		if (diffMousePosX > 0.1)
+		{
+			phiController.rotate(-60_deg, deltaTime, diffMousePosX);
+		}
+
+		{
+			const double xr = (scaledSpeed * s);
+			const double zr = (scaledSpeed * c);
+
+			bool isWalk = false;
+			if (KeyW.pressed())
+			{
+				toCameraPos.x += xr;
+				toCameraPos.z += zr;
+				isWalk = true;
+			}
+			if (controller.leftThumbY > 0.1)
+			{
+				toCameraPos.x += (xr * controller.leftThumbY);
+				toCameraPos.z += (zr * controller.leftThumbY);
+				isWalk = true;
+			}
+
+			if (KeyS.pressed())
+			{
+				toCameraPos.x -= xr;
+				toCameraPos.z -= zr;
+				isWalk = true;
+			}
+			if (controller.leftThumbY < -0.1)
+			{
+				toCameraPos.x -= (xr * -controller.leftThumbY);
+				toCameraPos.z -= (zr * -controller.leftThumbY);
+				isWalk = true;
+			}
+
+			if (KeyA.pressed())
+			{
+				toCameraPos.x -= zr;
+				toCameraPos.z += xr;
+				isWalk = true;
+			}
+			if (controller.leftThumbX < -0.1)
+			{
+				toCameraPos.x -= (zr * -controller.leftThumbX);
+				toCameraPos.z += (xr * -controller.leftThumbX);
+				isWalk = true;
+			}
+
+			if (KeyD.pressed())
+			{
+				toCameraPos.x += zr;
+				toCameraPos.z -= xr;
+				isWalk = true;
+			}
+			if (controller.leftThumbX > 0.1)
+			{
+				toCameraPos.x += (zr * controller.leftThumbX);
+				toCameraPos.z -= (xr * controller.leftThumbX);
+				isWalk = true;
+			}
+
+			if (KeyR.pressed())
+			{
+				toCameraPos.y += scaledSpeed;
+			}
+			if (KeyF.pressed())
+			{
+				toCameraPos.y -= scaledSpeed;
+			}
+
+			if (isWalk)
+			{
+				if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
+					AudioAsset(U"足音45秒のループ").play();
+				}
+			}
+			else {
+				if (AudioAsset(U"足音45秒のループ").isPlaying()) {
+					AudioAsset(U"足音45秒のループ").stop();
+				}
+
+				stopwatch.restart();
+			}
+		}
+
+		{
+			const double yDelta = deltaTime;
+
+			if (KeyUp.pressed())
+			{
+				to_m_focusY += yDelta;
+			}
+
+			if (controller.rightThumbY > 0.1)
+			{
+				to_m_focusY += (yDelta * controller.rightThumbY);
+			}
+
+			if (diffMousePosY > 0.1)
+			{
+				to_m_focusY += (yDelta * diffMousePosY);
+			}
+
+
+			if (KeyDown.pressed())
+			{
+				to_m_focusY -= yDelta;
+			}
+
+			if (controller.rightThumbY < -0.1)
+			{
+				to_m_focusY -= (yDelta * -controller.rightThumbY);
+			}
+
+			if (diffMousePosY < -0.1)
+			{
+				to_m_focusY -= (yDelta * -diffMousePosY);
+			}
+
+			// カメラ上下の可動域
+			if (to_m_focusY < -focusY_max)
+			{
+				to_m_focusY = -focusY_max;
+			}
+			else if (to_m_focusY > focusY_max)
+			{
+				to_m_focusY = focusY_max;
+			}
+		}
+
 	}
 	else
 	{
 		// インベントリを表示している
+
+		if (KeyUp.down())
+		{
+			itemIndex -= 4;
+
+			// TODO いい感じに移動させるため
+			if (itemIndex < 0)
+			{
+				itemIndex += 16;
+				if (itemIndex == 15)
+				{
+					itemIndex = 11;
+				}
+			}
+		}
+
+		if (KeyDown.down())
+		{
+			itemIndex += 4;
+
+			// TODO いい感じに移動させるため
+			if (itemIndex >= 15)
+			{
+				itemIndex += 12;
+				itemIndex %= 4;
+			}
+		}
+
+		if (KeyLeft.down())
+		{
+			itemIndex -= 1;
+			if (itemIndex < 0)
+			{
+				itemIndex += 15;
+			}
+		}
+
+		if (KeyRight.down())
+		{
+			itemIndex += 1;
+			if (itemIndex >= 15)
+			{
+				itemIndex -= 15;
+			}
+		}
+
+
 
 	}
 
@@ -417,36 +627,7 @@ void CameraTest::update()
 		Cursor::SetPos(center.x, center.y);
 	}
 
-	// プレイヤーの移動
-	if (KeyLeft.pressed())
-	{
-		phiController.rotate(60_deg, deltaTime, 1.0);
-	}
 
-	if (controller.rightThumbX < -0.1)
-	{
-		phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
-	}
-
-	if (diffMousePosX < -0.1)
-	{
-		phiController.rotate(60_deg, deltaTime, -diffMousePosX);
-	}
-
-	if (KeyRight.pressed())
-	{
-		phiController.rotate(-60_deg, deltaTime, 1.0);
-	}
-
-	if (controller.rightThumbX > 0.1)
-	{
-		phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
-	}
-
-	if (diffMousePosX > 0.1)
-	{
-		phiController.rotate(-60_deg, deltaTime, diffMousePosX);
-	}
 
 	const double to_s = (Math::Cos(phiController.getPhi()));
 	const double to_c = (Math::Sin(phiController.getPhi()));
@@ -454,131 +635,7 @@ void CameraTest::update()
 	s = Math::Lerp(s, to_s, smooth / focusSmooth); // 回転もスムーズに
 	c = Math::Lerp(c, to_c, smooth / focusSmooth); // 回転もスムーズに
 
-	{
-		const double xr = (scaledSpeed * s);
-		const double zr = (scaledSpeed * c);
 
-		bool isWalk = false;
-		if (KeyW.pressed())
-		{
-			toCameraPos.x += xr;
-			toCameraPos.z += zr;
-			isWalk = true;
-		}
-		if (controller.leftThumbY > 0.1)
-		{
-			toCameraPos.x += (xr * controller.leftThumbY);
-			toCameraPos.z += (zr * controller.leftThumbY);
-			isWalk = true;
-		}
-
-		if (KeyS.pressed())
-		{
-			toCameraPos.x -= xr;
-			toCameraPos.z -= zr;
-			isWalk = true;
-		}
-		if (controller.leftThumbY < -0.1)
-		{
-			toCameraPos.x -= (xr * -controller.leftThumbY);
-			toCameraPos.z -= (zr * -controller.leftThumbY);
-			isWalk = true;
-		}
-
-		if (KeyA.pressed())
-		{
-			toCameraPos.x -= zr;
-			toCameraPos.z += xr;
-			isWalk = true;
-		}
-		if (controller.leftThumbX < -0.1)
-		{
-			toCameraPos.x -= (zr * -controller.leftThumbX);
-			toCameraPos.z += (xr * -controller.leftThumbX);
-			isWalk = true;
-		}
-
-		if (KeyD.pressed())
-		{
-			toCameraPos.x += zr;
-			toCameraPos.z -= xr;
-			isWalk = true;
-		}
-		if (controller.leftThumbX > 0.1)
-		{
-			toCameraPos.x += (zr * controller.leftThumbX);
-			toCameraPos.z -= (xr * controller.leftThumbX);
-			isWalk = true;
-		}
-
-		if (KeyR.pressed())
-		{
-			toCameraPos.y += scaledSpeed;
-		}
-		if (KeyF.pressed())
-		{
-			toCameraPos.y -= scaledSpeed;
-		}
-
-		if (isWalk)
-		{
-			if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
-				AudioAsset(U"足音45秒のループ").play();
-			}
-		}
-		else {
-			if (AudioAsset(U"足音45秒のループ").isPlaying()) {
-				AudioAsset(U"足音45秒のループ").stop();
-			}
-
-			stopwatch.restart();
-		}
-	}
-
-	{
-		const double yDelta = deltaTime;
-
-		if (KeyUp.pressed())
-		{
-			to_m_focusY += yDelta;
-		}
-
-		if (controller.rightThumbY > 0.1)
-		{
-			to_m_focusY += (yDelta * controller.rightThumbY);
-		}
-
-		if (diffMousePosY > 0.1)
-		{
-			to_m_focusY += (yDelta * diffMousePosY);
-		}
-
-
-		if (KeyDown.pressed())
-		{
-			to_m_focusY -= yDelta;
-		}
-
-		if (controller.rightThumbY < -0.1)
-		{
-			to_m_focusY -= (yDelta * -controller.rightThumbY);
-		}
-
-		if (diffMousePosY < -0.1)
-		{
-			to_m_focusY -= (yDelta * -diffMousePosY);
-		}
-
-		// カメラ上下の可動域
-		if (to_m_focusY < -focusY_max)
-		{
-			to_m_focusY = -focusY_max;
-		}
-		else if (to_m_focusY > focusY_max)
-		{
-			to_m_focusY = focusY_max;
-		}
-	}
 
 	// ゆっくり移動
 	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
@@ -1343,9 +1400,8 @@ void CameraTest::draw() const
 		// アイテム
 		for (int i = 0; i < 15; i++)
 		{
-			int itemIndex = i;
-			int itemMiniX = center.x - 60 / 2 + (itemIndex % 4 * 80) - 224;
-			int itemMiniY = center.y - 60 / 2 + (itemIndex / 4 * 80) - 110;
+			int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
+			int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
 
 			// TODO アイテムIDで管理する
 			breadSprite.draw(itemMiniX, itemMiniY);
@@ -1361,8 +1417,19 @@ void CameraTest::draw() const
 			// TODO アイテムIDで管理する
 			memoBigSprite.draw(itemBigX, itemBigY);
 		}
-		
 
+		// アイテムの選択
+		int itemMiniX = center.x - 60 / 2 + (itemIndex % 4 * 80) - 224;
+		int itemMiniY = center.y - 60 / 2 + (itemIndex / 4 * 80) - 110;
+
+		Rect rect(itemMiniX, itemMiniY, 60, 60);
+
+		// 枠線
+		rect.drawFrame(
+			2,		// 枠線の太さ
+			Palette::Skyblue	// 空色で描画
+		);
+		
 	}
 
 	// セリフ表示（仮）
