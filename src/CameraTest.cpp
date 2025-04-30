@@ -15,6 +15,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -824,8 +825,8 @@ void CameraTest::update()
 
 
 	// オブジェクトを取ることができるか
-	isBreadHave = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray);
-	isKeyHave = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray);
+	bBreadHave = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray);
+	bKeyHave = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray);
 
 
 
@@ -857,8 +858,8 @@ void CameraTest::update()
 //	}
 
 	// 止まっているBGMを再度鳴らす TODO 汎用的な仕組みではないので、修正する
-	if (isKeyHave == true
-	&& isClear == false
+	if (bKeyHave == true
+	&& bClear == false
 	)
 	{
 		// BGMの再開
@@ -1095,7 +1096,7 @@ void CameraTest::update()
 		}
 
 		// パンの描画
-		if (isBreadHave == false)
+		if (bBreadHave == false)
 		{
 			{
 				Transformer3D t{
@@ -1113,7 +1114,7 @@ void CameraTest::update()
 		}
 
 		// 鍵の描画
-		if (isKeyHave == false)
+		if (bKeyHave == false)
 		{
 			{
 				Transformer3D t{
@@ -1127,6 +1128,24 @@ void CameraTest::update()
 //			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
 //#endif
 //			Box box = Box{ Vec3{ keyX, keyY, keyZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+		}
+
+		// 火かき棒の描画
+		if (bPokerHave == false)
+		{
+			{
+				Transformer3D t{
+					Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{pokerX, pokerY, pokerZ})
+				};
+
+				modelPoker.draw();
+			}
+
+			// マウスの当たり判定の描画
+//#ifndef _DEBUG
+//			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(0).translated({100,100,100}) };	// 見えない位置へ
+//#endif
+//			Box box = Box{ Vec3{ breadX, breadY, breadZ }, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 		}
 
 		// デバッグ表示

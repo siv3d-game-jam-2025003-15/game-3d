@@ -141,6 +141,7 @@ private:
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
 	const Model modelKey{ U"assets/models/Key/key.obj" };
 	const Model modelBread{ U"assets/models/Bread/bread.obj" };
+	const Model modelPoker{ U"assets/models/Poker/Gimmick_Poker01.obj" };
 
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -151,9 +152,10 @@ private:
 	// スケーリングの倍率
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 
-	bool isKeyHave = false;
-	bool isBreadHave = false;
-	bool isClear = false;
+	bool bKeyHave = false;
+	bool bBreadHave = false;
+	bool bPokerHave = false;
+	bool bClear = false;
 
 	double bgmStopCount = 0.0f;
 
@@ -232,6 +234,11 @@ private:
 	double breadX = 0;
 	double breadY = 0.75;
 	double breadZ = 7;
+
+	// 火かき棒の座標
+	double pokerX = 0;
+	double pokerY = 0.75;
+	double pokerZ = 6;
 
 	// 鍵をフォーカスする時の座標
 	double keyFocusX = keyX - 0.5;
