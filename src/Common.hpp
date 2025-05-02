@@ -29,5 +29,9 @@ using App = SceneManager<State, GameData>;
 SIV3D_SET(EngineOption::Renderer::OpenGL);
 
 // ウィンドウサイズ
+// TODO オプションで変えられるようにする
+// TODO 変えてもズレないようにする（UIスケーリング対応）
+//const int WINDOW_WIDTH = 800;
+//const int WINDOW_HEIGHT = 600;
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;

@@ -9,9 +9,15 @@
 
 void Main()
 {
-    // ウインドウとシーンを 1280x720 にリサイズする
+	// マウスでサイズ変更可能にする
+	Window::SetStyle(WindowStyle::Sizable);
+
+	// シーンサイズ：ゲーム中はキープしておく（変更するとズレてしまうため）
+	Scene::SetResizeMode(ResizeMode::Keep);
+
+    // ウインドウとシーンをリサイズする
     Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    
+	Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
     
 	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
 	FontAsset(U"TitleFont").setBufferThickness(4);
