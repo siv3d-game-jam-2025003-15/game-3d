@@ -143,8 +143,9 @@ private:
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
 
 	// 鍵
-	const Model modelKey{ U"assets/models/Key/key.obj" };
-	
+//	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
+	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
+
 	// パン
 	const Model modelBread{ U"assets/models/Bread/bread.obj" };
 

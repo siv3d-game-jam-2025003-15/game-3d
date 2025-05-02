@@ -1206,7 +1206,7 @@ void CameraTest::update()
 		if (bKeyHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateZ(0_deg).scaled(1.0).translated(Vec3{keyX, keyY, keyZ})
+				Mat4x4::RotateZ(0_deg).scaled(0.01).translated(Vec3{keyX, keyY, keyZ})
 			};
 			modelKey.draw();
 		}
