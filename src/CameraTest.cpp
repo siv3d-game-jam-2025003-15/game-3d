@@ -378,6 +378,8 @@ void CameraTest::drawMiniItem(
 		keyMiniSprite.draw(x, y);
 		break;
 	case 3:
+		// 火かき棒
+		pokerMiniSprite.draw(x, y);
 		break;
 	case 4:
 		break;
@@ -394,7 +396,6 @@ void CameraTest::drawMiniItem(
 	case 10:
 		break;
 	}
-
 }
 
 void CameraTest::drawBigItem(
@@ -418,6 +419,8 @@ void CameraTest::drawBigItem(
 		keyBigSprite.draw(x, y);
 		break;
 	case 3:
+		// 火かき棒
+		pokerBigSprite.draw(x, y);
 		break;
 	case 4:
 		break;
@@ -434,10 +437,7 @@ void CameraTest::drawBigItem(
 	case 10:
 		break;
 	}
-
 }
-
-
 
 void CameraTest::update()
 {
@@ -473,6 +473,9 @@ void CameraTest::update()
 	// マウスの座標を取得
 	double diffMousePosX = 0.0f;
 	double diffMousePosY = 0.0f;
+
+	// アイテムのロックオンフラグ
+	bool bLockon = false;
 
 	// インベントリを表示しているかどうか
 	if (!bInventory)
@@ -661,6 +664,58 @@ void CameraTest::update()
 				to_m_focusY = focusY_max;
 			}
 		}
+
+		// オブジェクトを取ることができるか
+		if (!bLockon)
+		{
+			auto [a, b] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition);
+			if (a == true && bBreadHave == false)
+			{
+				// アイテムを取った
+				items << 0;
+				bBreadHave = a;
+			}
+
+			if (b)
+			{
+				bLockon = b;
+			}
+		}
+
+		{
+			// アイテム１は手記
+		}
+
+		if (!bLockon)
+		{
+			auto [a, b] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition);
+			if (a == true && bKeyHave == false)
+			{
+				// アイテムを取った
+				items << 2;
+				bKeyHave = a;
+			}
+			if (b)
+			{
+				bLockon = b;
+			}
+		}
+
+		if (!bLockon)
+		{
+			auto [a, b] = pokerController.update(Vec3{ pokerX, pokerY, pokerZ }, camera, m_eyePosition, ray, MarkPosition);
+			if (a == true && bPokerHave == false)
+			{
+				// アイテムを取った
+				items << 3;
+				bPokerHave = a;
+			}
+			if (b)
+			{
+				bLockon = b;
+			}
+		}
+
 
 	}
 	else
@@ -988,40 +1043,6 @@ void CameraTest::update()
 //	focusWait -= deltaTime;
 
 
-
-	// オブジェクトを取ることができるか
-	bool bLockon = false;
-
-	if (!bLockon)
-	{
-		auto [a, b] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition);
-		if (a == true && bBreadHave == false)
-		{
-			// アイテムを取った
-			items << 0;
-			bBreadHave = a;
-		}
-
-		if (b)
-		{
-			bLockon = b;
-		}
-	}
-	
-	if(!bLockon)
-	{
-		auto [a, b] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition);
-		if (a == true && bKeyHave == false)
-		{
-			// アイテムを取った
-			items << 1;
-			bKeyHave = a;
-		}
-		if (b)
-		{
-			bLockon = b;
-		}
-	}
 
 
 

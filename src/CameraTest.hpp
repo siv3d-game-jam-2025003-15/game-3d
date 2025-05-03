@@ -433,6 +433,8 @@ private:
 	const Texture memoBigSprite{ U"assets/sprites/memo_big.png" };
 	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
 	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
+	const Texture pokerMiniSprite{ U"assets/sprites/poker_mini.png" };
+	const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
 
 	// インベントリの表示
 	bool bInventory = false;
@@ -440,6 +442,7 @@ private:
 	// オブジェクトを取るクラス
 	ObjectController breadController;
 	ObjectController keyController;
+	ObjectController pokerController;
 
 	int tmpItemX = 0;
 	int tmpItemY = 0;
