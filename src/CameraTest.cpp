@@ -397,6 +397,9 @@ void CameraTest::update()
 	{
 		// インベントリを表示していない（通常時）
 
+		// マウスカーソルを非表示
+		Cursor::RequestStyle(CursorStyle::Hidden);
+
 		// 現在のマウス座標
 		Vec2 currentCursorPos = Cursor::PosF();
 
