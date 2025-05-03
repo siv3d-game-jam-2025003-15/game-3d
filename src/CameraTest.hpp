@@ -71,26 +71,68 @@ private:
 	Ray getMouseRay() const;
 
 	// ベクトルの外積（2D）
-	double cross(const Vec2& a, const Vec2& b);
+	double cross(
+		const Vec2& a,
+		const Vec2& b
+	);
 
 	// 点Cが線分ABのどちら側にあるか
-	double direction(const Vec2& a, const Vec2& b, const Vec2& c);
+	double direction(
+		const Vec2& a,
+		const Vec2& b,
+		const Vec2& c
+	);
 	
 	// 線分同士が交差しているかを判定
-	bool isIntersecting(const Vec2& a, const Vec2& b, const Vec2& c, const Vec2& d);
+	bool isIntersecting(
+		const Vec2& a,
+		const Vec2& b,
+		const Vec2& c,
+		const Vec2& d
+	);
 	
 	// 2Dの線分同士の交差判定
-	bool isCollision(const Vec2& a, const Vec2& b, double* collisionList);
+	bool isCollision(
+		const Vec2& a,
+		const Vec2& b,
+		double* collisionList
+	);
 
 	// 3D空間上の線分と三角形が交差しているかどうかを判定する関数
-	bool IntersectSegmentTriangle(const Segment& segment, const Triangle_& tri, HitResult& outResult);
+	bool IntersectSegmentTriangle(
+		const Segment& segment,
+		const Triangle_& tri,
+		HitResult& outResult
+	);
 
 	// 最近点を三角形上に求める（Möllerのアルゴリズム系）
-	Vec3_ ClosestPointOnTriangle(const Vec3_& p, const Vec3_& a, const Vec3_& b, const Vec3_& c);
+	Vec3_ ClosestPointOnTriangle(
+		const Vec3_& p,
+		const Vec3_& a,
+		const Vec3_& b,
+		const Vec3_& c
+	);
 
 	// 球と三角形の交差判定
-	bool IsSphereIntersectingTriangle(const Vec3_& sphereCenter, double radius,
-		const Vec3_& a, const Vec3_& b, const Vec3_& c);
+	bool IsSphereIntersectingTriangle(
+		const Vec3_& sphereCenter,
+		double radius,
+		const Vec3_& a,
+		const Vec3_& b, 
+		const Vec3_& c
+	);
+
+	void drawMiniItem(
+		int itemId,
+		int x,
+		int y
+	) const;
+
+	void drawBigItem(
+		int itemId,
+		int x,
+		int y
+	) const;
 
 	// カメラ
 	BasicCamera3D camera;
@@ -385,10 +427,12 @@ private:
 
 	// スプライト
 	const Texture inventorySprite{ U"assets/sprites/inventory.png" };
-	const Texture breadSprite{ U"assets/sprites/bread_mini.png" };
-	const Texture memoSprite{ U"assets/sprites/memo_mini.png" };
+	const Texture breadMiniSprite{ U"assets/sprites/bread_mini.png" };
+	const Texture breadBigSprite{ U"assets/sprites/bread_big.png" };
+	const Texture memoMiniSprite{ U"assets/sprites/memo_mini.png" };
 	const Texture memoBigSprite{ U"assets/sprites/memo_big.png" };
-	const Texture keySprite{ U"assets/sprites/key_mini.png" };
+	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
+	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
 
 	// インベントリの表示
 	bool bInventory = false;
@@ -406,4 +450,6 @@ private:
 	Vec3 MarkPosition{ 0.0, 0.0, 0.0 };
 
 	int TextID = 0;
+
+	Array<int> items;
 };

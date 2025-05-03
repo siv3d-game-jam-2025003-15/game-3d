@@ -357,6 +357,88 @@ bool CameraTest::IsSphereIntersectingTriangle(const Vec3_& sphereCenter, double 
 	return diff.lengthSq() <= radius * radius;
 }
 
+void CameraTest::drawMiniItem(
+	int itemId,
+	int x,
+	int y
+) const
+{
+	switch (itemId)
+	{
+	case 0:
+		// パン
+		breadMiniSprite.draw(x, y);
+		break;
+	case 1:
+		// 手記
+		memoMiniSprite.draw(x, y);
+		break;
+	case 2:
+		// 鍵
+		keyMiniSprite.draw(x, y);
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	case 8:
+		break;
+	case 9:
+		break;
+	case 10:
+		break;
+	}
+
+}
+
+void CameraTest::drawBigItem(
+	int itemId,
+	int x,
+	int y
+) const
+{
+	switch (itemId)
+	{
+	case 0:
+		// パン
+		breadBigSprite.draw(x, y);
+		break;
+	case 1:
+		// 手記
+		memoBigSprite.draw(x, y);
+		break;
+	case 2:
+		// 鍵
+		keyBigSprite.draw(x, y);
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	case 5:
+		break;
+	case 6:
+		break;
+	case 7:
+		break;
+	case 8:
+		break;
+	case 9:
+		break;
+	case 10:
+		break;
+	}
+
+}
+
+
+
 void CameraTest::update()
 {
 	const double deltaTime = Scene::DeltaTime();
@@ -913,7 +995,13 @@ void CameraTest::update()
 	if (!bLockon)
 	{
 		auto [a, b] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition);
-		bBreadHave = a;
+		if (a == true && bBreadHave == false)
+		{
+			// アイテムを取った
+			items << 0;
+			bBreadHave = a;
+		}
+
 		if (b)
 		{
 			bLockon = b;
@@ -923,7 +1011,12 @@ void CameraTest::update()
 	if(!bLockon)
 	{
 		auto [a, b] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition);
-		bKeyHave = a;
+		if (a == true && bKeyHave == false)
+		{
+			// アイテムを取った
+			items << 1;
+			bKeyHave = a;
+		}
 		if (b)
 		{
 			bLockon = b;
@@ -1442,20 +1535,16 @@ void CameraTest::draw() const
 		int itemY = center.y - 512 / 2;
 		inventorySprite.draw(itemX, itemY);
 
+		int selectItem = -1;
+
 		// アイテム
-		for (int i = 0; i < 15; i++)	// TODO 数
+		for (int i = 0; i < items.size(); i++)
 		{
 			int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
 			int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
 
 			// TODO アイテムIDで管理する
-			breadSprite.draw(itemMiniX, itemMiniY);
-		//	memoSprite.draw(itemMiniX, itemMiniY);
-		//	keySprite.draw(itemMiniX, itemMiniY);
-
-			// アイテムの選択
-		//	itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
-		//	itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
+			drawMiniItem(items[i], itemMiniX, itemMiniY);
 
 			Rect rect(itemMiniX, itemMiniY, 60, 60);
 
@@ -1466,6 +1555,8 @@ void CameraTest::draw() const
 					2,		// 枠線の太さ
 					Palette::Skyblue	// 空色で描画
 				);
+
+				selectItem = i;
 			}
 			else
 			{
@@ -1479,17 +1570,19 @@ void CameraTest::draw() const
 		}
 
 		// 現在選択中のアイテム
+		if (selectItem >= 0)
 		{
 			int itemBigX = center.x - 160 / 2 + 164;
 			int itemBigY = center.y - 160 / 2 - 53;
 
 			// TODO アイテムIDで管理する
-			memoBigSprite.draw(itemBigX, itemBigY);
+		//	memoBigSprite.draw(itemBigX, itemBigY);
+			drawBigItem(items[selectItem], itemBigX, itemBigY);
 		}
 		
 	}
 
-	std::vector<String> Text =
+	Array<String> Text =
 	{
 		// シナリオ系
 		U"腹が減った。まずは食事をしなければ…。",
@@ -1514,7 +1607,7 @@ void CameraTest::draw() const
 		U"鉄製の長い棒。炉の中をかき混ぜたり、熱いものを引き寄せたりするのに使えそうだ。",
 	};
 
-	Print << U"size=" << Text.size();
+//	Print << U"size=" << Text.size();
 
 	if (0 <= TextID && TextID < Text.size())
 	{
