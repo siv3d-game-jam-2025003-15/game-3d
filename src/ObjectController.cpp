@@ -30,20 +30,23 @@ std::tuple<bool, bool> ObjectController::update(
 		&& distance < 3.5)
 	{
 #ifdef _DEBUG
-		Print << U"ƒIƒuƒWƒFƒNƒg‚ª‰æ–Ê‚Ì’†S‚É‚ ‚é";
+		Print << U"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç”»é¢ã®ä¸­å¿ƒã«ã‚ã‚‹";
 #endif
-		Print << U"¶ƒNƒŠƒbƒN‚ÅŽæ‚é";
-		Print << U"ƒGƒ“ƒ^[ƒL[‚ÅŽæ‚é";
+		Print << U"å·¦ã‚¯ãƒªãƒƒã‚¯ã§å–ã‚‹";
+		Print << U"ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã§å–ã‚‹";
 
 		isLockon = true;
 
 		MarkPosition = objPos;
 
-		// ƒ}ƒEƒX‚Ì“–‚½‚è”»’è‚Ì•`‰æ
+		// ãƒžã‚¦ã‚¹ã®å½“ãŸã‚Šåˆ¤å®šã®æç”»
 		Box box = Box{ objPos, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
 		if (KeyEnter.pressed()
-		|| (box.intersects(ray) && MouseL.down())
+		|| (
+		//	box.intersects(ray) &&	// Rayã§å–ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹ã®ã‚’ã‚„ã‚ã¦ã¿ã‚‹
+			MouseL.down()
+			)
 		)
 		{
 			m_isHave = true;

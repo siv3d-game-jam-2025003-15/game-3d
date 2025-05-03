@@ -911,6 +911,8 @@ void CameraTest::update()
 
 	// オブジェクトを取ることができるか
 	bool bLockon = false;
+
+	if (!bLockon)
 	{
 		auto [a, b] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition);
 		bBreadHave = a;
@@ -919,6 +921,8 @@ void CameraTest::update()
 			bLockon = b;
 		}
 	}
+	
+	if(!bLockon)
 	{
 		auto [a, b] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition);
 		bKeyHave = a;
