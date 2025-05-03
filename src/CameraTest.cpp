@@ -589,7 +589,6 @@ void CameraTest::update()
 		{
 			itemIndex -= 4;
 
-			// TODO いい感じに移動させるため
 			if (itemIndex < 0)
 			{
 				itemIndex += 16;
@@ -604,7 +603,6 @@ void CameraTest::update()
 		{
 			itemIndex += 4;
 
-			// TODO いい感じに移動させるため
 			if (itemIndex >= 15)
 			{
 				itemIndex += 12;
@@ -1445,7 +1443,7 @@ void CameraTest::draw() const
 		inventorySprite.draw(itemX, itemY);
 
 		// アイテム
-		for (int i = 0; i < 15; i++)
+		for (int i = 0; i < 15; i++)	// TODO 数
 		{
 			int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
 			int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
@@ -1454,6 +1452,30 @@ void CameraTest::draw() const
 			breadSprite.draw(itemMiniX, itemMiniY);
 		//	memoSprite.draw(itemMiniX, itemMiniY);
 		//	keySprite.draw(itemMiniX, itemMiniY);
+
+			// アイテムの選択
+		//	itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
+		//	itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
+
+			Rect rect(itemMiniX, itemMiniY, 60, 60);
+
+			if (rect.mouseOver())
+			{
+				// 枠線
+				rect.drawFrame(
+					2,		// 枠線の太さ
+					Palette::Skyblue	// 空色で描画
+				);
+			}
+			else
+			{
+				// 枠線
+				rect.drawFrame(
+					1,				// 枠線の太さ
+					Palette::Black	// 黒で描画
+				);
+			}
+
 		}
 
 		// 現在選択中のアイテム
@@ -1464,18 +1486,6 @@ void CameraTest::draw() const
 			// TODO アイテムIDで管理する
 			memoBigSprite.draw(itemBigX, itemBigY);
 		}
-
-		// アイテムの選択
-		int itemMiniX = center.x - 60 / 2 + (itemIndex % 4 * 80) - 224;
-		int itemMiniY = center.y - 60 / 2 + (itemIndex / 4 * 80) - 110;
-
-		Rect rect(itemMiniX, itemMiniY, 60, 60);
-
-		// 枠線
-		rect.drawFrame(
-			2,		// 枠線の太さ
-			Palette::Skyblue	// 空色で描画
-		);
 		
 	}
 
