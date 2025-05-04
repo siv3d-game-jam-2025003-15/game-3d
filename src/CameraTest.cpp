@@ -94,17 +94,17 @@ void CameraTest::debug()
 	}
 	if (Key9.down())
 	{
-		TextID += 1;
+		//doorPos.x += 0.01;
 	}
 	if (Key0.down())
 	{
-		TextID -= 1;
+		//doorPos.x -= 0.01;
 	}
-	if (KeyO.pressed())
+	if (KeyU.down())
 	{
-
+		toDoorRotY += 90_deg;
 	}
-	if (KeyP.pressed())
+	if (KeyI.down())
 	{
 
 	}
@@ -207,6 +207,11 @@ void CameraTest::debug()
 	//Print << U"drawerZ=" << drawerZ;
 
 	Print << U"TextID=" << TextID;
+	Print << U"doorPos=" << doorPos;
+	Print << U"doorRot=" << doorRot;
+	Print << U"bDoorOpen=" << bDoorOpen;
+	Print << U"toDoorRotY=" << toDoorRotY;
+	Print << U"bgmStopCount=" << bgmStopCount;
 	
 #endif
 }
@@ -668,18 +673,19 @@ void CameraTest::update()
 		// オブジェクトを取ることができるか
 		if (!bLockon)
 		{
-			auto [a, b] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition);
+			auto [a, b, c] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition, 0);
 			if (a == true && bBreadHave == false)
 			{
 				// アイテムを取った
 				items << 0;
 				bBreadHave = a;
+				bgmStopCount = c;
 			}
-
 			if (b)
 			{
 				bLockon = b;
 			}
+
 		}
 
 		{
@@ -688,12 +694,13 @@ void CameraTest::update()
 
 		if (!bLockon)
 		{
-			auto [a, b] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition);
+			auto [a, b, c] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition, 0);
 			if (a == true && bKeyHave == false)
 			{
 				// アイテムを取った
 				items << 2;
 				bKeyHave = a;
+				bgmStopCount = c;
 			}
 			if (b)
 			{
@@ -703,12 +710,13 @@ void CameraTest::update()
 
 		if (!bLockon)
 		{
-			auto [a, b] = pokerController.update(Vec3{ pokerX, pokerY, pokerZ }, camera, m_eyePosition, ray, MarkPosition);
+			auto [a, b, c] = pokerController.update(Vec3{ pokerX, pokerY, pokerZ }, camera, m_eyePosition, ray, MarkPosition, 0);
 			if (a == true && bPokerHave == false)
 			{
 				// アイテムを取った
 				items << 3;
 				bPokerHave = a;
+				bgmStopCount = c;
 			}
 			if (b)
 			{
@@ -716,7 +724,27 @@ void CameraTest::update()
 			}
 		}
 
+		if (!bLockon && bKeyHave)
+		{
+			// 座標の調整
+			Vec3 temp = doorPos;
+			temp.x += 0.70;
+			temp.y += 1.2;
+			temp.z += 0.2;
 
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1);
+			if (a == true && bDoorOpen == false)
+			{
+				// ドアを開いた
+				bDoorOpen = true;
+				toDoorRotY = 270_deg;
+				bgmStopCount = c;
+			}
+			if (b)
+			{
+				bLockon = b;
+			}
+		}
 	}
 	else
 	{
@@ -795,6 +823,14 @@ void CameraTest::update()
 	// コリジョンを無効にするエリア
 	for (int i = 0; i < 4; i++)
 	{
+		if (i == 0)
+		{
+			if (bDoorOpen == false)
+			{
+				continue;
+			}
+		}
+
 		if ( collisionNone[i][0] < toCameraPos.x
 		  && toCameraPos.x < collisionNone[i][1]
 		  && collisionNone[i][2] < toCameraPos.z
@@ -1073,13 +1109,22 @@ void CameraTest::update()
 //		}
 //	}
 
+
+	// ドアの回転
+//	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth);
+	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth/10);	// ドアはゆっくり開ける
+
+
+
+
+
 	// 止まっているBGMを再度鳴らす TODO 汎用的な仕組みではないので、修正する
-	if (bKeyHave == true
-	&& bClear == false
-	)
+	//if (bKeyHave == true
+	//&& bClear == false
+	//)
 	{
 		// BGMの再開
-		if (bgmStopCount > 4.0f)
+		if (bgmStopCount < 0.0f)
 		{
 			if (!AudioAsset(U"BGM").isPlaying())
 			{
@@ -1087,7 +1132,7 @@ void CameraTest::update()
 			}
 		}
 		else {
-			bgmStopCount += deltaTime;
+			bgmStopCount -= deltaTime;
 		}
 	}
 
@@ -1306,7 +1351,7 @@ void CameraTest::update()
 		// ドア
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(roomScale).translated(doorPos)
+				Mat4x4::RotateY(doorRot.y).scaled(roomScale).translated(doorPos)
 			};
 			modelDoor.draw();
 		}
@@ -1451,6 +1496,14 @@ void CameraTest::update()
 			// コリジョンなし
 			for (int i = 0; i < 4; i++)
 			{
+				if (i == 0)
+				{
+					if (bDoorOpen == false)
+					{
+						continue;
+					}
+				}
+
 				ColorF color{ 0.0, 0.0, 1, 1 };
 
 				// 縦

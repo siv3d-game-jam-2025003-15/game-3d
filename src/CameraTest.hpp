@@ -182,7 +182,8 @@ private:
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 
 	// ドア
-	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
+//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
+	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
 
 	// 鍵
 //	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
@@ -210,7 +211,12 @@ private:
 	const Vec3 roomPos{ 0, 0, 0 };
 
 	// ドアの位置
-	const Vec3 doorPos{ -1.6, 0, 2 };
+	Vec3 doorPos{ -2.3, 0, 2 };
+
+	// ドアの回転
+	Vec3 doorRot{ 0, 180_deg, 0 };
+	double toDoorRotY = doorRot.y;
+	bool bDoorOpen = false;
 
 	// スケーリングの倍率
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
@@ -334,9 +340,7 @@ private:
 	double toGlobalAmbientColorB = GlobalAmbientColorB;
 
 	// ドアの座標
-	double doorX = -1.6;
-	double doorY = 1.0;
-	double doorZ = -4.9;
+//	Vec3 doorPos { -1.6, 1.0,-4.9 };
 
 	// ドアをフォーカスする時の座標
 	double doorFocusX = -1.6 + 0.0;
@@ -443,6 +447,7 @@ private:
 	ObjectController breadController;
 	ObjectController keyController;
 	ObjectController pokerController;
+	ObjectController doorController;
 
 	int tmpItemX = 0;
 	int tmpItemY = 0;

@@ -5,19 +5,21 @@ ObjectController::ObjectController()
 	m_isHave = false;
 }
 
-std::tuple<bool, bool> ObjectController::update(
+std::tuple<bool, bool, int> ObjectController::update(
 	const Vec3& objPos,
 	const BasicCamera3D& camera,
 	const Vec3& eyePos,
 	Ray ray,
-	Vec3& MarkPosition
+	Vec3& MarkPosition,
+	int bgmNo
 )
 {
 	bool isLockon = false;
+	int bgmStopCount = 4.0;
 
 	if (m_isHave)
 	{
-		return { m_isHave,isLockon };
+		return { m_isHave,isLockon, bgmStopCount };
 	}
 
 	Vec3 screenPos = camera.worldToScreenPoint(objPos);
@@ -50,10 +52,20 @@ std::tuple<bool, bool> ObjectController::update(
 		)
 		{
 			m_isHave = true;
-			AudioAsset(U"GET").play();
+			switch (bgmNo)
+			{
+			case 0:
+				AudioAsset(U"GET").play();
+				bgmStopCount = 4.00;
+				break;
+			case 1:
+				AudioAsset(U"˜S‰®‚Ì”à‚ðŠJ‚¯‚é").play();
+				bgmStopCount = 3.0;
+				break;
+			}
 			AudioAsset(U"BGM").stop();
 		}
 	}
 
-	return { m_isHave, isLockon };
+	return { m_isHave, isLockon, bgmStopCount };
 }
