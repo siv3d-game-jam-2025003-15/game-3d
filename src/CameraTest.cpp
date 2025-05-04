@@ -477,6 +477,9 @@ void CameraTest::update()
 	// デバッグ表示
 	debug();
 
+	// TODO シナリオの進捗によってメッセージを変える
+	message = 0;
+
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
 	controller.setLeftTriggerDeadZone();
@@ -709,7 +712,9 @@ void CameraTest::update()
 			}
 			if (b)
 			{
+				// 見ている
 				bLockon = b;
+				message = 50;
 			}
 
 		}
@@ -730,7 +735,9 @@ void CameraTest::update()
 			}
 			if (b)
 			{
+				// 見ている
 				bLockon = b;
+				message = 52;
 			}
 		}
 
@@ -746,11 +753,13 @@ void CameraTest::update()
 			}
 			if (b)
 			{
+				// 見ている
 				bLockon = b;
+				message = 53;
 			}
 		}
 
-		if (!bLockon && bKeyHave)
+		if (!bLockon)
 		{
 			// 座標の調整
 			Vec3 temp = doorPos;
@@ -759,7 +768,7 @@ void CameraTest::update()
 			temp.z += 0.2;
 
 			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1);
-			if (a == true && bDoorOpen == false)
+			if (a == true && bDoorOpen == false && bKeyHave)
 			{
 				// ドアを開いた
 				bDoorOpen = true;
@@ -768,7 +777,9 @@ void CameraTest::update()
 			}
 			if (b)
 			{
+				// 見ている
 				bLockon = b;
+				message = 10;	// TODO 持ち物によってセリフを返る
 			}
 		}
 
@@ -784,7 +795,9 @@ void CameraTest::update()
 			}
 			if (b)
 			{
+				// 見ている
 				bLockon = b;
+				message = 54;
 			}
 		}
 
@@ -1775,6 +1788,65 @@ void CameraTest::update()
 	}
 #endif
 
+	// UI
+	if (bInventory)
+	{
+		// インベントリ
+		int itemX = center.x - 512 / 2;
+		int itemY = center.y - 512 / 2;
+		inventorySprite.scaled(0.5).draw(itemX, itemY);
+
+		int selectItem = -1;
+
+		// アイテム
+		for (int i = 0; i < items.size(); i++)
+		{
+			//	int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
+			//	int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
+			int itemMiniX = center.x - 60 / 2 + (i % 4 * 82) - 194;
+			int itemMiniY = center.y - 60 / 2 + (i / 4 * 82) - 104;
+
+			drawMiniItem(items[i], itemMiniX, itemMiniY);
+
+			Rect rect(itemMiniX, itemMiniY, 60, 60);
+
+			if (rect.mouseOver())
+			{
+				// 枠線
+				rect.drawFrame(
+					2,		// 枠線の太さ
+					Palette::Skyblue	// 空色で描画
+				);
+
+				selectItem = i;
+
+				// コメント
+				message = 50 + items[i];
+			}
+			else
+			{
+				// 枠線
+				rect.drawFrame(
+					1,				// 枠線の太さ
+					Palette::Black	// 黒で描画
+				);
+			}
+
+		}
+
+		//現在選択中のアイテム
+		if (selectItem >= 0)
+		{
+			//	int itemBigX = center.x - 160 / 2 + 164;
+			//	int itemBigY = center.y - 160 / 2 - 53;
+			int itemBigX = center.x - 160 / 2 + 176;
+			int itemBigY = center.y - 160 / 2 - 57;
+
+			drawBigItem(items[selectItem], itemBigX, itemBigY);
+		}
+
+	}
+
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
 	if (frameTime < targetDeltaTime)
@@ -1792,94 +1864,81 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
-	// UI
-	if (bInventory)
-	{
-		// インベントリ
-		int itemX = center.x - 512 / 2;
-		int itemY = center.y - 512 / 2;
-		inventorySprite.scaled(0.5).draw(itemX, itemY);
-
-		int selectItem = -1;
-
-		// アイテム
-		for (int i = 0; i < items.size(); i++)
-		{
-		//	int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
-		//	int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
-			int itemMiniX = center.x - 60 / 2 + (i % 4 * 82) - 194;
-			int itemMiniY = center.y - 60 / 2 + (i / 4 * 82) - 104;
-
-			drawMiniItem(items[i], itemMiniX, itemMiniY);
-
-			Rect rect(itemMiniX, itemMiniY, 60, 60);
-
-			if (rect.mouseOver())
-			{
-				// 枠線
-				rect.drawFrame(
-					2,		// 枠線の太さ
-					Palette::Skyblue	// 空色で描画
-				);
-
-				selectItem = i;
-			}
-			else
-			{
-				// 枠線
-				rect.drawFrame(
-					1,				// 枠線の太さ
-					Palette::Black	// 黒で描画
-				);
-			}
-
-		}
-
-		 //現在選択中のアイテム
-		if (selectItem >= 0)
-		{
-		//	int itemBigX = center.x - 160 / 2 + 164;
-		//	int itemBigY = center.y - 160 / 2 - 53;
-			int itemBigX = center.x - 160 / 2 + 176;
-			int itemBigY = center.y - 160 / 2 - 57;
-
-			drawBigItem(items[selectItem], itemBigX, itemBigY);
-		}
-		
-	}
-
 	Array<String> Text =
 	{
 		// シナリオ系
-		U"腹が減った。まずは食事をしなければ…。",
-		U"パンの中に手記が入っていた。",
-		U"ベッド脇の壁を調べてみよう。",
-		U"この鍵は錆びて使えないな…。",
-		U"この針金で錆びた鍵の形を模すことはできるだろうか…。",
-		U"扉をこの針金で開けてみよう。",
-		U"暖炉がある。",
-		U"水槽がある。",
-		U"羊皮紙の汚れを落としたい。",
-		U"この引き出しは何だろう。",
+		U"腹が減った。まずは食事をしなければ…。",	// 0
+		U"パンの中に手記が入っていた。",	// 1
+		U"ベッド脇の壁を調べてみよう。",	// 2
+		U"この鍵は錆びて使えないな…。",	// 3
+		U"この針金で錆びた鍵の形を模すことはできるだろうか…。",	// 4
+		U"扉をこの針金で開けてみよう。",	// 5
+		U"暖炉がある。",	// 6
+		U"水槽がある。",	// 7
+		U"羊皮紙の汚れを落としたい。",	// 8
+		U"この引き出しは何だろう。",	// 9
+		U"扉だ。鍵がかかっていて、開かない。",	// 10
+		U"（予備）",	// 11
+		U"（予備）",	// 12
+		U"（予備）",	// 13
+		U"（予備）",	// 14
+		U"（予備）",	// 15
+		U"（予備）",	// 16
+		U"（予備）",	// 17
+		U"（予備）",	// 18
+		U"（予備）",	// 19
+		U"（予備）",	// 20
+		U"（予備）",	// 21
+		U"（予備）",	// 22
+		U"（予備）",	// 23
+		U"（予備）",	// 24
+		U"（予備）",	// 25
+		U"（予備）",	// 26
+		U"（予備）",	// 27
+		U"（予備）",	// 28
+		U"（予備）",	// 29
+		U"（予備）",	// 30
+		U"（予備）",	// 31
+		U"（予備）",	// 32
+		U"（予備）",	// 33
+		U"（予備）",	// 34
+		U"（予備）",	// 35
+		U"（予備）",	// 36
+		U"（予備）",	// 37
+		U"（予備）",	// 38
+		U"（予備）",	// 39
+		U"（予備）",	// 40
+		U"（予備）",	// 41
+		U"（予備）",	// 42
+		U"（予備）",	// 43
+		U"（予備）",	// 44
+		U"（予備）",	// 45
+		U"（予備）",	// 46
+		U"（予備）",	// 47
+		U"（予備）",	// 48
+		U"（予備）",	// 49
 
 		// アイテム系
-		U"黒ずんだ硬いパン。日にちの感覚も失いかけた者が、最後に噛みしめたのか。",
-		U"長い間放置されていたのか、すっかり錆びついている。力を加えると折れてしまいそうだ。",
-		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",
-		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",
-		U"文字がはっきりと見える。何かの順番を示しているようだ。",
-		U"無地の羊皮紙。触るとわずかにざらつきがある。",
-		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",
-		U"鉄製の長い棒。炉の中をかき混ぜたり、熱いものを引き寄せたりするのに使えそうだ。",
+		U"黒ずんだ硬いパン。日にちの感覚も失いかけた者が、最後に噛みしめたのか。",	// 50 パン
+		U"誰かが書いた手記だ。読んでみようか…。",	// 51 手記
+		U"長い間放置されていたのか、すっかり錆びついている。力を加えると折れてしまいそうだ。",	// 52 鍵
+		U"鉄製の長い棒。炉の中をかき混ぜたり、熱いものを引き寄せたりするのに使えそうだ。",	// 53 火かき棒
+		U"無地の羊皮紙。触るとわずかにざらつきがある。",	// 54 羊皮紙
+
+		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 
+		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
+		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 
+		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 
+
 	};
 
 //	Print << U"size=" << Text.size();
 
-	if (0 <= TextID && TextID < Text.size())
+	if (0 <= message && message < Text.size())
 	{
 		// セリフ表示（仮）
 		const Font& boldFont = FontAsset(U"Bold");
-		boldFont(Text[TextID]).drawAt(
+		boldFont(Text[message]).drawAt(
 			28,
 			{ center.x, 700 },
 			ColorF{ 1, 1, 1, 1 }

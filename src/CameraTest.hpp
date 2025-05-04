@@ -478,9 +478,10 @@ private:
 
 	Vec3 MarkPosition{ 0.0, 0.0, 0.0 };
 
-	int TextID = 0;
-
 	Array<int> items;
+
+	// メッセージ番号
+	int message = 0;
 
 	int lightArea = 0;
 	int lastLightArea = 0;
