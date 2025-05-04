@@ -41,6 +41,11 @@ CameraTest::CameraTest(const InitData& init)
 
 #ifdef _DEBUG
 	bDebugViewCollision = true;
+
+	lightPos.x = 16.03;
+	lightPos.y = 2.60;
+	lightPos.z = -0.92;
+
 #endif
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
@@ -82,32 +87,41 @@ void CameraTest::debug()
 		// モデルを表示
 		bDebugviewModel == true ? bDebugviewModel = false : bDebugviewModel = true;
 	}
-	if (Key7.down())
-	{
-		// ライトの点滅あり
-		bDebugFlashingLight == true ? bDebugFlashingLight = false : bDebugFlashingLight = true;
-	}
+	//if (Key7.down())
+	//{
+	//	// ライトの点滅あり
+	//	bDebugFlashingLight == true ? bDebugFlashingLight = false : bDebugFlashingLight = true;
+	//}
 	if (Key8.down())
 	{
 		// シェーダーあり
 		bDebugShader == true ? bDebugShader = false : bDebugShader = true;
 	}
-	if (Key9.down())
+	if (Key9.pressed())
 	{
-		//doorPos.x += 0.01;
+		lightPos.x += 0.01;
 	}
-	if (Key0.down())
+	if (Key0.pressed())
 	{
-		//doorPos.x -= 0.01;
+		lightPos.x -= 0.01;
 	}
-	if (KeyU.down())
+	if (KeyU.pressed())
 	{
-		toDoorRotY += 90_deg;
+		lightPos.z += 0.01;
 	}
-	if (KeyI.down())
+	if (KeyO.pressed())
 	{
+		lightPos.z -= 0.01;
+	}
+	if (KeyT.pressed())
+	{
+		lightPos.y += 0.01;
+	}
+	if (KeyY.pressed())
+	{
+		lightPos.y -= 0.01;
+	}
 
-	}
 
 	if (mouseDirectionX == 1)
 	{
@@ -163,14 +177,14 @@ void CameraTest::debug()
 		Print << U"[6]モデル：非表示";
 	}
 
-	if (bDebugFlashingLight)
-	{
-		Print << U"[7]ライトの点滅：あり";
-	}
-	else
-	{
-		Print << U"[7]ライトの点滅：なし";
-	}
+	//if (bDebugFlashingLight)
+	//{
+	//	Print << U"[7]ライトの点滅：あり";
+	//}
+	//else
+	//{
+	//	Print << U"[7]ライトの点滅：なし";
+	//}
 
 	if (bDebugShader)
 	{
@@ -190,7 +204,11 @@ void CameraTest::debug()
 
 	//Print << U"phiController.getPhi()=" << phiController.getPhi();
 
-	//Print << U"lightZ=" << lightZ;
+	Print << U"lightPos=" << lightPos;
+	Print << U"lightArea=" << lightArea;
+	Print << U"lastLightArea=" << lastLightArea;
+	Print << U"lightTime=" << lightTime;
+	Print << U"lightSmooth=" << lightSmooth;
 
 	//Print << U"breadX=" << breadX;
 	//Print << U"breadY=" << breadY;
@@ -206,12 +224,12 @@ void CameraTest::debug()
 	//Print << U"drawerX=" << drawerX;
 	//Print << U"drawerZ=" << drawerZ;
 
-	Print << U"TextID=" << TextID;
-	Print << U"doorPos=" << doorPos;
-	Print << U"doorRot=" << doorRot;
-	Print << U"bDoorOpen=" << bDoorOpen;
-	Print << U"toDoorRotY=" << toDoorRotY;
-	Print << U"bgmStopCount=" << bgmStopCount;
+	//Print << U"TextID=" << TextID;
+	//Print << U"doorPos=" << doorPos;
+	//Print << U"doorRot=" << doorRot;
+	//Print << U"bDoorOpen=" << bDoorOpen;
+	//Print << U"toDoorRotY=" << toDoorRotY;
+	//Print << U"bgmStopCount=" << bgmStopCount;
 	
 #endif
 }
@@ -847,6 +865,27 @@ void CameraTest::update()
 		}
 	}
 
+	// ライトエリア
+	for (int i = 0; i < 4; i++)
+	{
+		if (collisionLight[i][0] < toCameraPos.x
+			&& toCameraPos.x < collisionLight[i][1]
+			&& collisionLight[i][2] < toCameraPos.z
+			&& toCameraPos.z < collisionLight[i][3]
+			)
+		{
+			// エリアの変更
+			if (lightArea == lastLightArea)
+			{
+			//	lightTime = 2;
+				lightTime = 1;
+			//	lightTime = 0.5;
+			}
+			lightArea = i;
+			break;
+		}
+	}
+
 	Vec3_ myPosition = {
 		toCameraPos.x,
 		myRadius+0.1,
@@ -1254,71 +1293,154 @@ void CameraTest::update()
 	}
 	*/
 
-	// ライトの点滅
-	if (Random(0, 100) == 0)
+	if (lightArea != lastLightArea)
 	{
-		glowEffectType++;
-		if (glowEffectType >= 12)
-		{
-			glowEffectType = 0;
-		}
-	}
+		// ライトの位置が変わった
+	//	isGlowEffect = false;
 
-	if (glowEffectType == 9
-	 || glowEffectType == 11
-	)
-	{
-		// 点滅
-		if (Random(0, 5) == 0)
-		{
-			isGlowEffect = isGlowEffect ? false : true;
-		}
-	}
-	else if (glowEffectType == 10 )
-	{
-		// 暗闇
-		isGlowEffect = false;
-	}
-	else 
-	{
-		// 点灯
-		isGlowEffect = true;
-	}
+	//	lightSmooth = 0.05f;
 
-	if (isGlowEffect)
-	{
-		toEmission = 1.0;
-	}
-	else
-	{
-		toEmission = 0.0;
-	}
+		// 点滅の状態にする
+		//glowEffectType == 9;
 
-	if (!bDebugFlashingLight)
-	{
-		// 点滅しない場合は常に点灯
-		isGlowEffect = true;
-	}
+	//	isGlowEffect = false;
 
-	// 光源の設定
-	if (isGlowEffect)
-	{
-		// 点灯
-		toGlobalAmbientColorR = 0.8;
-		toGlobalAmbientColorG = 0.8;
-		toGlobalAmbientColorB = 1.0;
-	}
-	else
-	{
-		// 点灯していない
+	//	lightSmooth = 0.1;
+
 		toGlobalAmbientColorR = 0.1;
 		toGlobalAmbientColorG = 0.1;
 		toGlobalAmbientColorB = 0.125;
+
+		lightTime -= deltaTime;
+
+		if (lightTime < 0)
+		{
+			lastLightArea = lightArea;
+		//	lightTime2 = 2;
+
+			// 点滅の状態を調整
+			//glowEffectType = 0;
+
+			isGlowEffect = true;
+
+			//// 点灯していない
+			//toGlobalAmbientColorR = 0;
+			//toGlobalAmbientColorG = 0;
+			//toGlobalAmbientColorB = 0;
+
+			//GlobalAmbientColorR = 0.0;
+			//GlobalAmbientColorG = 0.0;
+			//GlobalAmbientColorB = 0.0;
+
+		//	lightSmooth = 0.05;
+		}
+	}
+	else
+	{
+		// ライト位置
+		switch (lightArea)
+		{
+		case 0:
+			lightPos.x = 0;
+			lightPos.y = 2.084;
+			lightPos.z = 7;
+			break;
+		case 1:
+			lightPos.x = 4.26;
+			lightPos.y = 2.60;
+			lightPos.z = -0.93;
+			break;
+		case 2:
+			lightPos.x = 16.05;
+			lightPos.y = 2.60;
+			lightPos.z = -0.92;
+			break;
+		case 3:
+			lightPos.x = 16.05;
+			lightPos.y = 2.60;
+			lightPos.z = -4.27;
+			break;
+		}
+
+		//if (lightTime2 < 0)
+		//{
+		//	lightSmooth = 0.1f;
+		//}
+		//else
+		//{
+		//	lightTime2 -= deltaTime;
+		//}
+
+		// ライトの点滅
+		//if (Random(0, 100) == 0)
+		//{
+		//	glowEffectType++;
+		//	if (glowEffectType >= 12)
+		//	{
+		//		glowEffectType = 0;
+		//	}
+		//}
+
+		//if (glowEffectType == 9
+		//	|| glowEffectType == 11
+		//	)
+		//{
+		//	// 点滅
+		//	if (Random(0, 5) == 0)
+		//	{
+		//		isGlowEffect = isGlowEffect ? false : true;
+		//	}
+		//}
+		//else if (glowEffectType == 10)
+		//{
+		//	// 暗闇
+		//	isGlowEffect = false;
+		//}
+		//else
+		//{
+		//	// 点灯
+		//	isGlowEffect = true;
+		//}
+
+		// エミッシブ
+		//if (isGlowEffect)
+		//{
+		//	toEmission = 1.0;
+		//}
+		//else
+		//{
+		//	toEmission = 0.0;
+		//}
+
+		//if (!bDebugFlashingLight)
+		//{
+		//	// 点滅しない場合は常に点灯
+		//	isGlowEffect = true;
+		//}
+
+
+		// 光源の設定
+		if (isGlowEffect)
+		{
+			// 点灯
+			toGlobalAmbientColorR = 0.8;
+			toGlobalAmbientColorG = 0.8;
+			toGlobalAmbientColorB = 1.0;
+		}
+		else
+		{
+			// 点灯していない
+			toGlobalAmbientColorR = 0.1;
+			toGlobalAmbientColorG = 0.1;
+			toGlobalAmbientColorB = 0.125;
+		}
 	}
 
-	GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, smooth);
-	GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, smooth);
-	GlobalAmbientColorB = Math::Lerp(GlobalAmbientColorB, toGlobalAmbientColorB, smooth);
+
+
+	GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, lightSmooth);
+	GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, lightSmooth);
+	GlobalAmbientColorB = Math::Lerp(GlobalAmbientColorB, toGlobalAmbientColorB, lightSmooth);
 
 	Graphics3D::SetGlobalAmbientColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
 	Graphics3D::SetSunColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
@@ -1331,7 +1453,7 @@ void CameraTest::update()
 		{
 			ConstantBuffer<Light> cb;
 
-			cb->g_pointLightPos = Vec3{ 0.0, 0.0, 7.0 };
+			cb->g_pointLightPos = lightPos;
 
 			Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
 
@@ -1530,6 +1652,32 @@ void CameraTest::update()
 				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
 				Line3D{ Vec3{collisionNone[i][1], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
 			}
+
+			// ライトの判定
+			for (int i = 0; i < 4; i++)
+			{
+
+				ColorF color{ 1.0, 1.0, 0.0, 1 };
+
+				// 縦
+				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][2]}, Vec3{collisionLight[i][0], 3, collisionLight[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][1], 0, collisionLight[i][2]}, Vec3{collisionLight[i][1], 3, collisionLight[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][3]}, Vec3{collisionLight[i][0], 3, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][1], 0, collisionLight[i][3]}, Vec3{collisionLight[i][1], 3, collisionLight[i][3]} }.draw(color);
+
+				// 下
+				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][2]}, Vec3{collisionLight[i][1], 0, collisionLight[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][3]}, Vec3{collisionLight[i][1], 0, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][2]}, Vec3{collisionLight[i][0], 0, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][1], 0, collisionLight[i][2]}, Vec3{collisionLight[i][1], 0, collisionLight[i][3]} }.draw(color);
+
+				// 上
+				Line3D{ Vec3{collisionLight[i][0], 3, collisionLight[i][2]}, Vec3{collisionLight[i][1], 3, collisionLight[i][2]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][0], 3, collisionLight[i][3]}, Vec3{collisionLight[i][1], 3, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][0], 3, collisionLight[i][2]}, Vec3{collisionLight[i][0], 3, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{collisionLight[i][1], 3, collisionLight[i][2]}, Vec3{collisionLight[i][1], 3, collisionLight[i][3]} }.draw(color);
+			}
+
 		}
 	}
 
@@ -1540,6 +1688,8 @@ void CameraTest::update()
 		Shader::LinearToScreen(renderTexture);
 	}
 
+	// ライトの表示
+#if _DEBUG
 	emission = Math::Lerp(emission, toEmission, smooth);
 
 	if (emission >= 0.2)
@@ -1548,13 +1698,12 @@ void CameraTest::update()
 		const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
 		renderTexture.scaled(1).draw();
 
-		// ライト
 		PhongMaterial phong;
 		phong.ambientColor = ColorF{ 1.0 };
 		phong.diffuseColor = ColorF{ 0.0 };
 		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
-		Sphere{ {0, lightY, lightZ}, lightSize }.draw(phong);
-		
+		Sphere{ lightPos, lightSize }.draw(phong);
+
 		//const auto& materials = model.materials();
 		//for (const auto& object : model.objects())
 		//{
@@ -1589,6 +1738,7 @@ void CameraTest::update()
 
 		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
 	}
+#endif
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();

@@ -283,6 +283,7 @@ private:
 
 	// 動きをスムーズにする値
 	double smooth = 0.1f;
+	double lightSmooth = 0.025f;
 
 	// プレイヤーインデックス (0 - 3)
 	size_t playerIndex = 0;
@@ -291,8 +292,9 @@ private:
 	double focusY_max = 2.0;
 
 	// ライトの設定
-	double lightY = 2.084;
-	double lightZ = 7;
+	Vec3 lightPos;
+	//double lightY = 2.084;
+	//double lightZ = 7;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;
@@ -427,6 +429,14 @@ private:
 		{ 6.3, 7.0, -4.4, -3.0},
 	};
 
+	double collisionLight[4][4] =
+	{
+		{ -3, 3, 3, 11},	// x_min, x_max, z_min, z_max
+		{ -2.6, 11, -3, 1},
+		{ 12, 19, -2,  1},
+		{ 12, 19, -6, -3},
+	};
+
 	// 自分自身のコリジョンの半径
 	double myRadius = 0.3;
 
@@ -467,4 +477,10 @@ private:
 	int TextID = 0;
 
 	Array<int> items;
+
+	int lightArea = 0;
+	int lastLightArea = 0;
+	double lightTime = 0;
+	//double lightTime2 = 0;
+
 };
