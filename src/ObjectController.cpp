@@ -11,7 +11,8 @@ std::tuple<bool, bool, int> ObjectController::update(
 	const Vec3& eyePos,
 	Ray ray,
 	Vec3& MarkPosition,
-	int bgmNo
+	int bgmNo,
+	bool bHave	// Žæ‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©
 )
 {
 	bool isLockon = false;
@@ -44,10 +45,11 @@ std::tuple<bool, bool, int> ObjectController::update(
 		// ƒ}ƒEƒX‚Ì“–‚½‚è”»’è‚Ì•`‰æ
 		Box box = Box{ objPos, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
-		if (KeyEnter.pressed()
+		if (KeyEnter.pressed() && bHave
 		|| (
 		//	box.intersects(ray) &&	// Ray‚ÅŽæ‚ê‚é‚æ‚¤‚É‚·‚é‚Ì‚ð‚â‚ß‚Ä‚Ý‚é
 			MouseL.down()
+			&& bHave
 			)
 		)
 		{

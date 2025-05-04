@@ -115,19 +115,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		//itemMessageX += 1;
+		bedPos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		//itemMessageX -= 1;
+		bedPos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		itemMessageY += 1;
+		bedPos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		itemMessageY -= 1;
+		bedPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -239,9 +239,9 @@ void CameraTest::debug()
 	//Print << U"bgmStopCount=" << bgmStopCount;
 
 //	Print << U"itemMessageX=" << itemMessageX;
-	Print << U"itemMessageY=" << itemMessageY;
+//	Print << U"itemMessageY=" << itemMessageY;
+	Print << U"bedPos=" << bedPos;
 
-	
 #endif
 }
 
@@ -709,7 +709,7 @@ void CameraTest::update()
 		// オブジェクトを取ることができるか
 		if (!bLockon)
 		{
-			auto [a, b, c] = breadController.update(breadPos, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = breadController.update(breadPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true && bBreadHave == false)
 			{
 				// アイテムを取った
@@ -730,9 +730,10 @@ void CameraTest::update()
 			// アイテム１は手記
 		}
 
+		// 古びた鍵
 		if (!bLockon)
 		{
-			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true && bKeyHave == false)
 			{
 				// アイテムを取った
@@ -748,9 +749,10 @@ void CameraTest::update()
 			}
 		}
 
+		// 火かき棒
 		if (!bLockon)
 		{
-			auto [a, b, c] = pokerController.update(pokerPos, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = pokerController.update(pokerPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true && bPokerHave == false)
 			{
 				// アイテムを取った
@@ -766,6 +768,7 @@ void CameraTest::update()
 			}
 		}
 
+		// ドア
 		if (!bLockon)
 		{
 			// 座標の調整
@@ -774,7 +777,7 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z += 0.2;
 
-			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1);
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1, bKeyHave);
 			if (a == true && bDoorOpen == false && bKeyHave)
 			{
 				// ドアを開いた
@@ -790,9 +793,10 @@ void CameraTest::update()
 			}
 		}
 
+		// 羊皮紙
 		if (!bLockon)
 		{
-			auto [a, b, c] = parchmentController.update(parchmentPos, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = parchmentController.update(parchmentPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true && bParchmentHave == false)
 			{
 				// アイテムを取った
@@ -805,6 +809,18 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 54;
+			}
+		}
+
+		// 自分のベッド
+		if (!bLockon)
+		{
+			auto [a, b, c] = bedController.update(bedPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 11;
 			}
 		}
 
@@ -1888,7 +1904,7 @@ void CameraTest::draw() const
 		U"羊皮紙の汚れを落としたい。",	// 8
 		U"この引き出しは何だろう。",	// 9
 		U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
-		U"（予備）",	// 11
+		U"これは自分のベッドだ。",	// 11
 		U"（予備）",	// 12
 		U"（予備）",	// 13
 		U"（予備）",	// 14

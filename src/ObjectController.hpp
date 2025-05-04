@@ -15,7 +15,8 @@ public:
 		const Vec3& eyePos,
 		Ray ray,
 		Vec3& MarkPosition,
-		int bgmNo
+		int bgmNo,
+		bool bHave
 	);
 
 };
