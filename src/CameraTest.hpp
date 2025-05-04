@@ -418,7 +418,7 @@ private:
     bool bDebugViewCollision = false;
 	bool bDebugviewModel = true;
 	bool bDebugFlashingLight = true;
-	bool bDebugShader = true;
+//	bool bDebugShader = true;
 
 
 	double collisionNone[4][4] =

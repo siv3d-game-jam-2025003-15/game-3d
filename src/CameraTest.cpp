@@ -108,11 +108,11 @@ void CameraTest::debug()
 	//	// ライトの点滅あり
 	//	bDebugFlashingLight == true ? bDebugFlashingLight = false : bDebugFlashingLight = true;
 	//}
-	if (Key8.down())
-	{
-		// シェーダーあり
-		bDebugShader == true ? bDebugShader = false : bDebugShader = true;
-	}
+	//if (Key8.down())
+	//{
+	//	// シェーダーあり
+	//	bDebugShader == true ? bDebugShader = false : bDebugShader = true;
+	//}
 	if (Key9.pressed())
 	{
 		//itemMessageX += 1;
@@ -193,14 +193,14 @@ void CameraTest::debug()
 	//	Print << U"[7]ライトの点滅：なし";
 	//}
 
-	if (bDebugShader)
-	{
-		Print << U"[8]シェーダー：あり";
-	}
-	else
-	{
-		Print << U"[8]シェーダー：なし";
-	}
+	//if (bDebugShader)
+	//{
+	//	Print << U"[8]シェーダー：あり";
+	//}
+	//else
+	//{
+	//	Print << U"[8]シェーダー：なし";
+	//}
 
 	Print << U"[R][F]上下移動";
 
@@ -1494,32 +1494,32 @@ void CameraTest::update()
 	{
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
-		if (bDebugShader)
+		//if (bDebugShader)
+		//{
+		ConstantBuffer<Light> cb;
+
+		cb->g_pointLightPos = lightPos;
+
+		Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
+
+		const ScopedCustomShader3D shader(vs3D, ps3D);
+
+		// モデルを描画
+		if (bDebugviewModel)
 		{
-			ConstantBuffer<Light> cb;
-
-			cb->g_pointLightPos = lightPos;
-
-			Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
-
-			const ScopedCustomShader3D shader(vs3D, ps3D);
-
-			// モデルを描画
-			if (bDebugviewModel)
-			{
-				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-				model.draw();
-			}
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+			model.draw();
 		}
-		else
-		{
-			// モデルを描画
-			if (bDebugviewModel)
-			{
-				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-				model.draw();
-			}
-		}
+		//}
+		//else
+		//{
+		//	// モデルを描画
+		//	if (bDebugviewModel)
+		//	{
+		//		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+		//		model.draw();
+		//	}
+		//}
 
 		// ドア
 		{
