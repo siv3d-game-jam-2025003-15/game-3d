@@ -213,6 +213,11 @@ private:
 	// ビックリマーク
 	const Model modelExclamationMark{ U"assets/models/ExclamationMark/ExclamationMark.obj" };
 
+	// 羊皮紙
+	const Model modelParchment{ U"assets/models/Parchment/Gimmick_Parchment01.obj" };
+
+	
+
 	// 各オブジェクトの位置
 	const Vec3 roomPos{ 0, 0, 0 };
 
@@ -230,6 +235,7 @@ private:
 	bool bKeyHave = false;
 	bool bBreadHave = false;
 	bool bPokerHave = false;
+	bool bParchmentHave = false;
 	bool bClear = false;
 
 	double bgmStopCount = 0.0f;
@@ -304,33 +310,27 @@ private:
 	double zoom_smooth = 2;
 
 	// 鍵の座標
-	double keyX = 0;
-	double keyY = 0.75;
-	double keyZ = 8;
+	Vec3 keyPos = { 0, 0.75, 8 };
 
 	// パンの座標
-	double breadX = 0;
-	double breadY = 0.75;
-	double breadZ = 7;
+	Vec3 breadPos = { 0, 0.75, 7 };
 
 	// 火かき棒の座標
-	double pokerX = 0;
-	double pokerY = 0.75;
-	double pokerZ = 6;
+	Vec3 pokerPos = { 0, 0.75, 6 };
 
 	// 引き出し
-	double drawerX = 16.3;
-	double drawerY = 0;
-	double drawerZ = 1.6;
+	Vec3 drawerPos = { 16.3, 0, 1.6 };
 	double debugDrawerY = 0;
 
+	// 羊皮紙
+	Vec3 parchmentPos = { 0, 0.75, 6.5 };
 
 	// 鍵をフォーカスする時の座標
-	double keyFocusX = keyX - 0.5;
-	double keyFocusY = keyY + 0.25;
-	double keyFocusZ = keyZ + 0.0;
-	double keyFocusCameraY = -0.5;
-	double keyFocusPhi = 0;
+	//double keyFocusX = keyPos.x - 0.5;
+	//double keyFocusY = keyPos.y+ 0.25;
+	//double keyFocusZ = keyPos.z + 0.0;
+	//double keyFocusCameraY = -0.5;
+	//sdouble keyFocusPhi = 0;
 
 	bool isFocus = false;
 	double focusSmooth = 1;
@@ -456,6 +456,9 @@ private:
 	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
 	const Texture pokerMiniSprite{ U"assets/sprites/poker_mini.png" };
 	const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
+	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
+	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
+
 
 	// インベントリの表示
 	bool bInventory = false;
@@ -465,6 +468,7 @@ private:
 	ObjectController keyController;
 	ObjectController pokerController;
 	ObjectController doorController;
+	ObjectController parchmentController;
 
 	int tmpItemX = 0;
 	int tmpItemY = 0;

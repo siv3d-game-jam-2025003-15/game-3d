@@ -24,7 +24,8 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
-
+	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
+	
 	// BGMの再生
 	AudioAsset(U"BGM").play();
 
@@ -54,6 +55,9 @@ CameraTest::CameraTest(const InitData& init)
 	//items << 0;
 	//items << 0;
 	//items << 0;
+
+//	tmpItemX = 164;
+//	tmpItemY = 53;
 
 #endif
 
@@ -405,6 +409,8 @@ void CameraTest::drawMiniItem(
 		pokerMiniSprite.draw(x, y);
 		break;
 	case 4:
+		// 羊皮紙
+		parchmentMiniSprite.draw(x, y);
 		break;
 	case 5:
 		break;
@@ -446,6 +452,8 @@ void CameraTest::drawBigItem(
 		pokerBigSprite.draw(x, y);
 		break;
 	case 4:
+		// 羊皮紙
+		parchmentBigSprite.draw(x, y);
 		break;
 	case 5:
 		break;
@@ -691,7 +699,7 @@ void CameraTest::update()
 		// オブジェクトを取ることができるか
 		if (!bLockon)
 		{
-			auto [a, b, c] = breadController.update(Vec3{ breadX, breadY, breadZ }, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = breadController.update(breadPos, camera, m_eyePosition, ray, MarkPosition, 0);
 			if (a == true && bBreadHave == false)
 			{
 				// アイテムを取った
@@ -712,7 +720,7 @@ void CameraTest::update()
 
 		if (!bLockon)
 		{
-			auto [a, b, c] = keyController.update(Vec3{ keyX, keyY, keyZ }, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, MarkPosition, 0);
 			if (a == true && bKeyHave == false)
 			{
 				// アイテムを取った
@@ -728,7 +736,7 @@ void CameraTest::update()
 
 		if (!bLockon)
 		{
-			auto [a, b, c] = pokerController.update(Vec3{ pokerX, pokerY, pokerZ }, camera, m_eyePosition, ray, MarkPosition, 0);
+			auto [a, b, c] = pokerController.update(pokerPos, camera, m_eyePosition, ray, MarkPosition, 0);
 			if (a == true && bPokerHave == false)
 			{
 				// アイテムを取った
@@ -763,6 +771,23 @@ void CameraTest::update()
 				bLockon = b;
 			}
 		}
+
+		if (!bLockon)
+		{
+			auto [a, b, c] = parchmentController.update(parchmentPos, camera, m_eyePosition, ray, MarkPosition, 0);
+			if (a == true && bParchmentHave == false)
+			{
+				// アイテムを取った
+				items << 4;
+				bParchmentHave = a;
+				bgmStopCount = c;
+			}
+			if (b)
+			{
+				bLockon = b;
+			}
+		}
+
 	}
 	else
 	{
@@ -1488,7 +1513,7 @@ void CameraTest::update()
 		if (bBreadHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(1.0).translated(Vec3{breadX, breadY, breadZ})
+				Mat4x4::RotateY(0_deg).scaled(1.0).translated(breadPos)
 			};
 
 			modelBread.draw();
@@ -1498,7 +1523,7 @@ void CameraTest::update()
 		if (bKeyHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateZ(0_deg).scaled(0.01).translated(Vec3{keyX, keyY, keyZ})
+				Mat4x4::RotateZ(0_deg).scaled(0.01).translated(keyPos)
 			};
 			modelKey.draw();
 		}
@@ -1507,7 +1532,7 @@ void CameraTest::update()
 		if (bPokerHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{pokerX, pokerY, pokerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(pokerPos)
 			};
 
 			modelPoker.draw();
@@ -1516,7 +1541,7 @@ void CameraTest::update()
 		// 引き出し（１段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*5, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*5, drawerPos.z})
 			};
 
 			modelDrawerNon.draw();
@@ -1525,7 +1550,7 @@ void CameraTest::update()
 		// 引き出し（２段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*4, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*4, drawerPos.z})
 			};
 
 			modelDrawerFlower.draw();
@@ -1534,7 +1559,7 @@ void CameraTest::update()
 		// 引き出し（３段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*3, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*3, drawerPos.z})
 			};
 
 			modelDrawerChain.draw();
@@ -1543,7 +1568,7 @@ void CameraTest::update()
 		// 引き出し（４段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06 + 0.16*2, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*2, drawerPos.z})
 			};
 
 			modelDrawerFeather.draw();
@@ -1553,7 +1578,7 @@ void CameraTest::update()
 		// 引き出し（５段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY + 0.06+0.16, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06+0.16, drawerPos.z})
 			};
 
 			modelDrawerSnake.draw();
@@ -1562,7 +1587,7 @@ void CameraTest::update()
 		// 引き出し（６段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY+ 0.06, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y+ 0.06, drawerPos.z})
 			};
 
 			modelDrawerEye.draw();
@@ -1571,7 +1596,7 @@ void CameraTest::update()
 		// 引き出し
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerX, drawerY, drawerZ})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerPos)
 			};
 
 			modelShelf.draw();
@@ -1586,6 +1611,16 @@ void CameraTest::update()
 			};
 
 			modelExclamationMark.draw();
+		}
+
+		// 羊皮紙の描画
+		if (bParchmentHave == false)
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(parchmentPos)
+			};
+
+			modelParchment.draw();
 		}
 
 		// デバッグ表示
@@ -1775,7 +1810,6 @@ void CameraTest::draw() const
 			int itemMiniX = center.x - 60 / 2 + (i % 4 * 82) - 194;
 			int itemMiniY = center.y - 60 / 2 + (i / 4 * 82) - 104;
 
-			// TODO アイテムIDで管理する
 			drawMiniItem(items[i], itemMiniX, itemMiniY);
 
 			Rect rect(itemMiniX, itemMiniY, 60, 60);
@@ -1801,14 +1835,14 @@ void CameraTest::draw() const
 
 		}
 
-		// 現在選択中のアイテム
+		 //現在選択中のアイテム
 		if (selectItem >= 0)
 		{
-			int itemBigX = center.x - 160 / 2 + 164;
-			int itemBigY = center.y - 160 / 2 - 53;
+		//	int itemBigX = center.x - 160 / 2 + 164;
+		//	int itemBigY = center.y - 160 / 2 - 53;
+			int itemBigX = center.x - 160 / 2 + 176;
+			int itemBigY = center.y - 160 / 2 - 57;
 
-			// TODO アイテムIDで管理する
-		//	memoBigSprite.draw(itemBigX, itemBigY);
 			drawBigItem(items[selectItem], itemBigX, itemBigY);
 		}
 		
