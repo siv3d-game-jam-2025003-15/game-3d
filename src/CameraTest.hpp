@@ -447,7 +447,7 @@ private:
 	Vec2 virtualCursorPos = Vec2{ 0, 0 };
 
 	// スプライト
-	const Texture inventorySprite{ U"assets/sprites/inventory.png" };
+	const Texture inventorySprite{ U"assets/sprites/BG_Inventory01.png" };
 	const Texture breadMiniSprite{ U"assets/sprites/bread_mini.png" };
 	const Texture breadBigSprite{ U"assets/sprites/bread_big.png" };
 	const Texture memoMiniSprite{ U"assets/sprites/memo_mini.png" };

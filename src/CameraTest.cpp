@@ -42,9 +42,18 @@ CameraTest::CameraTest(const InitData& init)
 #ifdef _DEBUG
 	bDebugViewCollision = true;
 
-	lightPos.x = 16.03;
-	lightPos.y = 2.60;
-	lightPos.z = -0.92;
+	//lightPos.x = 16.03;
+	//lightPos.y = 2.60;
+	//lightPos.z = -0.92;
+
+	//items << 0;
+	//items << 0;
+	//items << 0;
+	//items << 0;
+	//items << 0;
+	//items << 0;
+	//items << 0;
+	//items << 0;
 
 #endif
 
@@ -99,29 +108,20 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		lightPos.x += 0.01;
+		tmpItemX += 1;
 	}
 	if (Key0.pressed())
 	{
-		lightPos.x -= 0.01;
-	}
-	if (KeyU.pressed())
-	{
-		lightPos.z += 0.01;
+		tmpItemX -= 1;
 	}
 	if (KeyO.pressed())
 	{
-		lightPos.z -= 0.01;
+		tmpItemY += 1;
 	}
-	if (KeyT.pressed())
+	if (KeyP.pressed())
 	{
-		lightPos.y += 0.01;
+		tmpItemY -= 1;
 	}
-	if (KeyY.pressed())
-	{
-		lightPos.y -= 0.01;
-	}
-
 
 	if (mouseDirectionX == 1)
 	{
@@ -216,8 +216,8 @@ void CameraTest::debug()
 	//
 	//Print << U"debugDrawerY=" << debugDrawerY;
 
-	//Print << U"tmpItemX=" << tmpItemX;
-	//Print << U"tmpItemY=" << tmpItemY;
+	Print << U"tmpItemX=" << tmpItemX;
+	Print << U"tmpItemY=" << tmpItemY;
 
 	//Print << U"itemIndex=" << itemIndex;
 
@@ -1763,15 +1763,17 @@ void CameraTest::draw() const
 		// インベントリ
 		int itemX = center.x - 512 / 2;
 		int itemY = center.y - 512 / 2;
-		inventorySprite.draw(itemX, itemY);
+		inventorySprite.scaled(0.5).draw(itemX, itemY);
 
 		int selectItem = -1;
 
 		// アイテム
 		for (int i = 0; i < items.size(); i++)
 		{
-			int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
-			int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
+		//	int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
+		//	int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
+			int itemMiniX = center.x - 60 / 2 + (i % 4 * 82) - 194;
+			int itemMiniY = center.y - 60 / 2 + (i / 4 * 82) - 104;
 
 			// TODO アイテムIDで管理する
 			drawMiniItem(items[i], itemMiniX, itemMiniY);
