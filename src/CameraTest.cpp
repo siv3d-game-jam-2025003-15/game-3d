@@ -115,19 +115,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		bedPos.x += 0.01;
+		toiletPos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		bedPos.x -= 0.01;
+		toiletPos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		bedPos.z += 0.01;
+		toiletPos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		bedPos.z -= 0.01;
+		toiletPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -211,11 +211,11 @@ void CameraTest::debug()
 
 	//Print << U"phiController.getPhi()=" << phiController.getPhi();
 
-	Print << U"lightPos=" << lightPos;
-	Print << U"lightArea=" << lightArea;
-	Print << U"lastLightArea=" << lastLightArea;
-	Print << U"lightTime=" << lightTime;
-	Print << U"lightSmooth=" << lightSmooth;
+	//Print << U"lightPos=" << lightPos;
+	//Print << U"lightArea=" << lightArea;
+	//Print << U"lastLightArea=" << lastLightArea;
+	//Print << U"lightTime=" << lightTime;
+	//Print << U"lightSmooth=" << lightSmooth;
 
 	//Print << U"breadX=" << breadX;
 	//Print << U"breadY=" << breadY;
@@ -240,7 +240,7 @@ void CameraTest::debug()
 
 //	Print << U"itemMessageX=" << itemMessageX;
 //	Print << U"itemMessageY=" << itemMessageY;
-	Print << U"bedPos=" << bedPos;
+	Print << U"toiletPos=" << toiletPos;
 
 #endif
 }
@@ -821,6 +821,18 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 11;
+			}
+		}
+
+		// トイレ
+		if (!bLockon)
+		{
+			auto [a, b, c] = bedController.update(toiletPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 12;
 			}
 		}
 
@@ -1905,7 +1917,7 @@ void CameraTest::draw() const
 		U"この引き出しは何だろう。",	// 9
 		U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
 		U"これは自分のベッドだ。",	// 11
-		U"（予備）",	// 12
+		U"これはトイレだ。…臭い。",	// 12
 		U"（予備）",	// 13
 		U"（予備）",	// 14
 		U"（予備）",	// 15

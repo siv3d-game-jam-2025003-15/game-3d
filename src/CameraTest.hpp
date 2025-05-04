@@ -328,6 +328,18 @@ private:
 	// ベッド
 	Vec3 bedPos = { 2.87, 0.5, 11.3 };
 
+	// トイレ
+	Vec3 toiletPos = { -3.4, 0.5, 3.1 };
+
+	// オブジェクトクラス
+	ObjectController breadController;
+	ObjectController keyController;
+	ObjectController pokerController;
+	ObjectController doorController;
+	ObjectController parchmentController;
+	ObjectController bedController;
+	ObjectController toiletController;
+
 
 	// 鍵をフォーカスする時の座標
 	//double keyFocusX = keyPos.x - 0.5;
@@ -466,14 +478,6 @@ private:
 
 	// インベントリの表示
 	bool bInventory = false;
-
-	// オブジェクトクラス
-	ObjectController breadController;
-	ObjectController keyController;
-	ObjectController pokerController;
-	ObjectController doorController;
-	ObjectController parchmentController;
-	ObjectController bedController;
 
 	int tmpItemX = 0;
 	int tmpItemY = 0;
