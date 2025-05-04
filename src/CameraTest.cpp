@@ -59,6 +59,9 @@ CameraTest::CameraTest(const InitData& init)
 //	tmpItemX = 164;
 //	tmpItemY = 53;
 
+	//itemMessageX = 400;
+	//itemMessageY = 400;
+
 #endif
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
@@ -112,19 +115,19 @@ void CameraTest::debug()
 	}
 	if (Key9.pressed())
 	{
-		tmpItemX += 1;
+		//itemMessageX += 1;
 	}
 	if (Key0.pressed())
 	{
-		tmpItemX -= 1;
+		//itemMessageX -= 1;
 	}
 	if (KeyO.pressed())
 	{
-		tmpItemY += 1;
+		itemMessageY += 1;
 	}
 	if (KeyP.pressed())
 	{
-		tmpItemY -= 1;
+		itemMessageY -= 1;
 	}
 
 	if (mouseDirectionX == 1)
@@ -220,8 +223,8 @@ void CameraTest::debug()
 	//
 	//Print << U"debugDrawerY=" << debugDrawerY;
 
-	Print << U"tmpItemX=" << tmpItemX;
-	Print << U"tmpItemY=" << tmpItemY;
+	//Print << U"tmpItemX=" << tmpItemX;
+	//Print << U"tmpItemY=" << tmpItemY;
 
 	//Print << U"itemIndex=" << itemIndex;
 
@@ -234,6 +237,10 @@ void CameraTest::debug()
 	//Print << U"bDoorOpen=" << bDoorOpen;
 	//Print << U"toDoorRotY=" << toDoorRotY;
 	//Print << U"bgmStopCount=" << bgmStopCount;
+
+//	Print << U"itemMessageX=" << itemMessageX;
+	Print << U"itemMessageY=" << itemMessageY;
+
 	
 #endif
 }
@@ -1798,6 +1805,9 @@ void CameraTest::update()
 
 		int selectItem = -1;
 
+		// 初期化
+		itemMessage = -1;
+
 		// アイテム
 		for (int i = 0; i < items.size(); i++)
 		{
@@ -1821,7 +1831,7 @@ void CameraTest::update()
 				selectItem = i;
 
 				// コメント
-				message = 50 + items[i];
+				itemMessage = items[i];
 			}
 			else
 			{
@@ -1877,7 +1887,7 @@ void CameraTest::draw() const
 		U"水槽がある。",	// 7
 		U"羊皮紙の汚れを落としたい。",	// 8
 		U"この引き出しは何だろう。",	// 9
-		U"扉だ。鍵がかかっていて、開かない。",	// 10
+		U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
 		U"（予備）",	// 11
 		U"（予備）",	// 12
 		U"（予備）",	// 13
@@ -1919,11 +1929,11 @@ void CameraTest::draw() const
 		U"（予備）",	// 49
 
 		// アイテム系
-		U"黒ずんだ硬いパン。日にちの感覚も失いかけた者が、最後に噛みしめたのか。",	// 50 パン
-		U"誰かが書いた手記だ。読んでみようか…。",	// 51 手記
-		U"長い間放置されていたのか、すっかり錆びついている。力を加えると折れてしまいそうだ。",	// 52 鍵
-		U"鉄製の長い棒。炉の中をかき混ぜたり、熱いものを引き寄せたりするのに使えそうだ。",	// 53 火かき棒
-		U"無地の羊皮紙。触るとわずかにざらつきがある。",	// 54 羊皮紙
+		U"黒ずんだ硬いパンがある。これは食べられそうだ。",	// 50 パン
+		U"",	// 51 手記
+		U"鍵だ！",	// 52 鍵
+		U"何の棒だろう。",	// 53 火かき棒
+		U"紙？",	// 54 羊皮紙
 
 		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 
 		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
@@ -1944,4 +1954,36 @@ void CameraTest::draw() const
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
+
+	Array<String> itemText =
+	{
+		// アイテム系
+		U"黒ずんだ硬いパン。　　　　\n日にちの感覚も失いかけた者が、　\n最後に噛みしめたのか。",	// 0 パン
+		U"誰かが書いた手記だ。　　　\n読んでみようか…。　　　　　　　\n",	// 1 手記
+		U"長い間放置されていたのか、\nすっかり錆びついている。　　　　\n力を加えると折れてしまいそうだ。",	// 2 鍵
+		U"鉄製の長い棒。　　　　　　\n炉の中をかき混ぜたり、熱いものを\n引き寄せたりするのに使えそうだ。",	// 3 火かき棒
+		U"無地の羊皮紙。　　　　　　\n触るとわずかにざらつきがある。　\n",	// 4 羊皮紙
+
+		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 
+		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
+		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 
+		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 
+
+	};
+
+	if (
+		bInventory
+		&& 0 <= itemMessage
+		&& itemMessage < itemText.size()
+	)
+	{
+		// セリフ表示（仮）
+		const Font& boldFont = FontAsset(U"Bold");
+		boldFont(itemText[itemMessage]).drawAt(
+			28,
+			{ center.x, itemMessageY },
+			ColorF{ 1, 1, 1, 1 }
+		);
+	}
+
 }

@@ -482,10 +482,14 @@ private:
 
 	// メッセージ番号
 	int message = 0;
+	int itemMessage = -1;
 
 	int lightArea = 0;
 	int lastLightArea = 0;
 	double lightTime = 0;
 	//double lightTime2 = 0;
+
+//	int itemMessageX = 400;
+	int itemMessageY = 546;
 
 };
