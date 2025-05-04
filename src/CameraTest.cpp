@@ -1329,6 +1329,12 @@ void CameraTest::update()
 
 		if (bDebugShader)
 		{
+			ConstantBuffer<Light> cb;
+
+			cb->g_pointLightPos = Vec3{ 0.0, 0.0, 7.0 };
+
+			Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
+
 			const ScopedCustomShader3D shader(vs3D, ps3D);
 
 			// モデルを描画

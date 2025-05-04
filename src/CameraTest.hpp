@@ -3,6 +3,12 @@
 #include "PhiController.hpp"
 #include "ObjectController.hpp"
 
+struct Light
+{
+	Float3 g_pointLightPos;
+	float _padding;
+};
+
 struct Vec3_ {	// TODO Vec3を継承してみる
 	double x, y, z;
 
@@ -255,9 +261,10 @@ private:
 		{
 			{ U"PSPerFrame", 0 },
 			{ U"PSPerView", 1 },
+			{ U"PSPointLightPos", 2 },
 			{ U"PSPerMaterial", 3 }
 		}
-	};
+	};	
 
 	const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
 	const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };

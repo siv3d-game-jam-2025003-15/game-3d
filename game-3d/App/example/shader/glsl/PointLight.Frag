@@ -17,7 +17,7 @@ layout(location = 1) in vec2 UV;
 layout(location = 2) in vec3 Normal;
 
 //
-//	PSOutput
+//	PSOutputg_pointLightPos
 //
 layout(location = 0) out vec4 FragColor;
 
@@ -34,6 +34,11 @@ layout(std140) uniform PSPerFrame // slot 0
 layout(std140) uniform PSPerView // slot 1
 {
 	vec3 g_eyePosition;
+};
+
+layout(std140) uniform PSPointLightPos // slot 2
+{
+	vec3 g_pointLightPos;
 };
 
 layout(std140) uniform PSPerMaterial // slot 3
@@ -79,10 +84,11 @@ void main()
 	vec3 lightColor		= g_sunColor;
 
 	//PointLight Pos
-	vec3 pointLightPos = vec3(0.0, 0.0, 7.0);
+	//vec3 pointLightPos = vec3(0.0, 0.0, 7.0);
+	//g_pointLightPos = pointLightPos;
 
     //vec3 lightDirection	= g_sunDirection;
-	vec3 lightDirection	= normalize(pointLightPos - WorldPosition);
+	vec3 lightDirection	= normalize(g_pointLightPos - WorldPosition);
 
 	vec3 n = normalize(Normal);
 	vec3 l = lightDirection;
@@ -97,7 +103,7 @@ void main()
 	vec3 h = normalize(v + lightDirection);
 	vec3 specularReflection = CalculateSpecularReflection(n, h, g_shininess, dot(n, l), lightColor, g_specularColor);
 
-	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(pointLightPos - WorldPosition), 2.0));
+	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), 2.0));
 
 	FragColor = vec4(diffuseReflection*attenuation + specularReflection*attenuation + g_emissionColor, diffuseColor.a);
 }

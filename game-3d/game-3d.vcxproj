@@ -302,6 +302,7 @@
     <None Include="App\example\shader\glsl\homography.vert" />
     <None Include="App\example\shader\glsl\multi_texture_blend.frag" />
     <None Include="App\example\shader\glsl\multi_texture_mask.frag" />
+    <None Include="App\example\shader\glsl\PointLight.Frag" />
     <None Include="App\example\shader\glsl\poisson_disk.frag" />
     <None Include="App\example\shader\glsl\posterize.frag" />
     <None Include="App\example\shader\glsl\rgb_shift.frag" />
