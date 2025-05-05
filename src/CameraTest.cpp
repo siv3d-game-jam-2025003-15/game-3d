@@ -95,19 +95,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		oldBedPos.x += 0.01;
+		debugItemNameX += 1;
 	}
 	if (Key0.pressed())
 	{
-		oldBedPos.x -= 0.01;
+		debugItemNameX -= 1;
 	}
 	if (KeyO.pressed())
 	{
-		oldBedPos.z += 0.01;
+		debugItemNameY += 1;
 	}
 	if (KeyP.pressed())
 	{
-		oldBedPos.z -= 0.01;
+		debugItemNameY -= 1;
 	}
 
 	if (mouseDirectionX == 1)
@@ -189,7 +189,8 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"oldBedPos=" << oldBedPos;
+	Print << U"debugItemNameX=" << debugItemNameX;
+	Print << U"debugItemNameY=" << debugItemNameY;
 
 #endif
 }
@@ -1661,7 +1662,7 @@ void CameraTest::update()
 		if (selectItem >= 0)
 		{
 			int itemBigX = center.x - 160 / 2 + 176;
-			int itemBigY = center.y - 160 / 2 - 57;
+			int itemBigY = center.y - 160 / 2 - 25;
 
 			drawBigItem(items[selectItem], itemBigX, itemBigY);
 		}
@@ -1774,11 +1775,10 @@ void CameraTest::draw() const
 		U"長い間放置されていたのか、\nすっかり錆びついている。　　　　\n力を加えると折れてしまいそうだ。",	// 2 鍵
 		U"鉄製の長い棒。　　　　　　\n炉の中をかき混ぜたり、熱いものを\n引き寄せたりするのに使えそうだ。",	// 3 火かき棒
 		U"無地の羊皮紙。　　　　　　\n触るとわずかにざらつきがある。　\n",	// 4 羊皮紙
-
-		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 
-		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
-		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 
-		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 
+		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 5 針金
+		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 6 汚れた布
+		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 7 布
+		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 8 炙った羊皮紙
 
 	};
 
@@ -1796,5 +1796,37 @@ void CameraTest::draw() const
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
+
+	// インベントリ用のテキスト（アイテム名）
+	Array<String> itemNameText =
+	{
+		// アイテム系
+		U"パン",	// 0 
+		U"手記",	// 1 
+		U"錆びた鍵",	// 2 
+		U"火かき棒",	// 3 
+		U"羊皮紙",	// 4 
+		U"針金",	// 5 
+		U"汚れた布",	// 6
+		U"布",	// 7
+		U"炙った羊皮紙",	// 8
+
+	};
+
+	if (
+		bInventory
+		&& 0 <= itemMessage
+		&& itemMessage < itemText.size()
+		)
+	{
+		// セリフ表示（仮）
+		const Font& boldFont = FontAsset(U"Bold");
+		boldFont(itemNameText[itemMessage]).drawAt(
+			28,
+			{ 805, 236 },
+			ColorF{ 1, 1, 1, 1 }
+		);
+	}
+
 
 }

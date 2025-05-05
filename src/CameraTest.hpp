@@ -474,4 +474,7 @@ private:
 	int lastLightArea = 0;
 	double lightTime = 0;
 
+	int debugItemNameX = 805;
+	int debugItemNameY = 236;
+
 };
