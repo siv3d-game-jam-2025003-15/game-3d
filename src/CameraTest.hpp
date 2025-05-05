@@ -297,15 +297,9 @@ private:
 
 	// ライトの設定
 	Vec3 lightPos;
-	//double lightY = 2.084;
-	//double lightZ = 7;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;
-
-	//double zoom = 0.0;
-	//double to_zoom = 0.0;
-	//double zoom_smooth = 2;
 
 	// 鍵の座標
 	Vec3 keyPos = { 0, 0.75, 8 };
@@ -350,10 +344,6 @@ private:
 	ObjectController toiletController;
 	ObjectController shelfController;
 	
-	//Vec3 lastToCameraPos = {0.0, 0.0, 0.0};
-	//double last_to_m_focusY = 0;
-	//double last_m_phi = 0;
-
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
 	double GlobalAmbientColorB = 0.5;
@@ -362,22 +352,10 @@ private:
 	double toGlobalAmbientColorG = GlobalAmbientColorG;
 	double toGlobalAmbientColorB = GlobalAmbientColorB;
 
-	// ドアの座標
-//	Vec3 doorPos { -1.6, 1.0,-4.9 };
-
-	// ドアをフォーカスする時の座標
-	//double doorFocusX = -1.6 + 0.0;
-	//double doorFocusY =  1.0 + 0.25;
-	//double doorFocusZ = -4.9 + 0.5;
-	//double doorFocusCameraY = -0.5;
-	//double doorFocusPhi = -1.5;
-
 	double mousePosX = 0.0f;
 	double mousePosY = 0.0f;
 	double toMousePosX = 0.0f;
 	double toMousePosY = 0.0f;
-
-//	double focusWait = 0.0f;
 
 	int mouseDirectionX = 1;
 	int mouseDirectionY = 1;
@@ -450,7 +428,7 @@ private:
 		{ -3, 3, 3, 11},	// x_min, x_max, z_min, z_max
 		{ -2.6, 11, -3, 1},
 		{ 12, 19, -2,  1},
-		{ 12, 19, -6, -3},
+		{ 13, 19, -6, -3},
 	};
 
 	// 自分自身のコリジョンの半径
@@ -477,9 +455,6 @@ private:
 
 	// インベントリの表示
 	bool bInventory = false;
-
-	//int tmpItemX = 0;
-	//int tmpItemY = 0;
 
 	// 選択中のアイテム番号
 	int itemIndex = 0;
