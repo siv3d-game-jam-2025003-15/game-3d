@@ -95,19 +95,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		debugItemNameX += 1;
+		wallPos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		debugItemNameX -= 1;
+		wallPos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		debugItemNameY += 1;
+		wallPos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		debugItemNameY -= 1;
+		wallPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -189,8 +189,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"debugItemNameX=" << debugItemNameX;
-	Print << U"debugItemNameY=" << debugItemNameY;
+	Print << U"wallPos=" << wallPos;
 
 #endif
 }
@@ -681,7 +680,7 @@ void CameraTest::update()
 		}
 
 		// 古びた鍵
-		if (!bLockon)
+		if (!bLockon && bWall)
 		{
 			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true && bKeyHave == false)
@@ -690,6 +689,7 @@ void CameraTest::update()
 				items << 2;
 				bKeyHave = a;
 				bgmStopCount = c;
+				scenario = 3;
 			}
 			if (b)
 			{
@@ -843,6 +843,24 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 13;
+			}
+		}
+
+		// 壁
+		if (!bLockon && !bWall && scenario == 2)
+		{
+			auto [a, b, c] = parchmentController.update(wallPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			if (a == true && bParchmentHave == false)
+			{
+				// 鍵が現れる
+				bWall = true;
+				bgmStopCount = c;
+			}
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 16;
 			}
 		}
 
@@ -1356,7 +1374,7 @@ void CameraTest::update()
 		}
 
 		// 鍵の描画
-		if (bKeyHave == false)
+		if (bKeyHave == false && bWall)
 		{
 			Transformer3D t{
 				Mat4x4::RotateZ(0_deg).scaled(0.01).translated(keyPos)
@@ -1679,6 +1697,10 @@ void CameraTest::update()
 			if (bMemo)
 			{
 				bMemo = false;
+				if (scenario == 1)
+				{
+					scenario = 2;
+				}
 			}
 			else if (items.size() <= selectItem)
 			{
@@ -1727,74 +1749,6 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
-	// 画面下のテキスト
-	Array<String> Text =
-	{
-		// シナリオ系
-		U"腹が減った。まずは食事をしなければ…。",	// 0
-		U"パンの中に手記が入っていた。",	// 1
-		U"ベッド脇の壁を調べてみよう。",	// 2
-		U"この鍵は錆びて使えないな…。",	// 3
-		U"この針金で錆びた鍵の形を模すことはできるだろうか…。",	// 4
-		U"扉をこの針金で開けてみよう。",	// 5
-		U"暖炉がある。",	// 6
-		U"水槽がある。",	// 7
-		U"羊皮紙の汚れを落としたい。",	// 8
-		U"この引き出しは何だろう。",	// 9
-		U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
-		U"これは自分のベッドだ。",	// 11
-		U"これはトイレだ。…臭い。",	// 12
-		U"これは棚だ。今は何も入っていない。",	// 13
-		U"これは他人のベッドだ。",	// 14
-		U"これは古いベッドだ。今は使われていない。",	// 15
-		U"（予備）",	// 16
-		U"（予備）",	// 17
-		U"（予備）",	// 18
-		U"（予備）",	// 19
-		U"（予備）",	// 20
-		U"（予備）",	// 21
-		U"（予備）",	// 22
-		U"（予備）",	// 23
-		U"（予備）",	// 24
-		U"（予備）",	// 25
-		U"（予備）",	// 26
-		U"（予備）",	// 27
-		U"（予備）",	// 28
-		U"（予備）",	// 29
-		U"（予備）",	// 30
-		U"（予備）",	// 31
-		U"（予備）",	// 32
-		U"（予備）",	// 33
-		U"（予備）",	// 34
-		U"（予備）",	// 35
-		U"（予備）",	// 36
-		U"（予備）",	// 37
-		U"（予備）",	// 38
-		U"（予備）",	// 39
-		U"（予備）",	// 40
-		U"（予備）",	// 41
-		U"（予備）",	// 42
-		U"（予備）",	// 43
-		U"（予備）",	// 44
-		U"（予備）",	// 45
-		U"（予備）",	// 46
-		U"（予備）",	// 47
-		U"（予備）",	// 48
-		U"（予備）",	// 49
-
-		// アイテム系
-		U"黒ずんだ硬いパンがある。これは食べられそうだ。",	// 50 パン
-		U"",	// 51 手記
-		U"鍵だ！",	// 52 鍵
-		U"何の棒だろう。",	// 53 火かき棒
-		U"紙？",	// 54 羊皮紙
-
-		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 
-		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
-		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 
-		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 
-
-	};
 
 	if (0 <= message && message < Text.size())
 	{
@@ -1807,21 +1761,7 @@ void CameraTest::draw() const
 		);
 	}
 
-	// インベントリ用のテキスト
-	Array<String> itemText =
-	{
-		// アイテム系
-		U"黒ずんだ硬いパン。　　　　\n日にちの感覚も失いかけた者が、　\n最後に噛みしめたのか。",	// 0 パン
-		U"誰かが書いた手記だ。　　　\n読んでみようか…。　　　　　　　\n",	// 1 手記
-		U"長い間放置されていたのか、\nすっかり錆びついている。　　　　\n力を加えると折れてしまいそうだ。",	// 2 鍵
-		U"鉄製の長い棒。　　　　　　\n炉の中をかき混ぜたり、熱いものを\n引き寄せたりするのに使えそうだ。",	// 3 火かき棒
-		U"無地の羊皮紙。　　　　　　\n触るとわずかにざらつきがある。　\n",	// 4 羊皮紙
-		U"ただの針金だが、適度に柔らかく曲げやすい。何かの形を真似ることができるかもしれない。",	// 5 針金
-		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 6 汚れた布
-		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 7 布
-		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 8 炙った羊皮紙
 
-	};
 
 	if (
 		bInventory
@@ -1838,21 +1778,6 @@ void CameraTest::draw() const
 		);
 	}
 
-	// インベントリ用のテキスト（アイテム名）
-	Array<String> itemNameText =
-	{
-		// アイテム系
-		U"パン",	// 0 
-		U"手記",	// 1 
-		U"錆びた鍵",	// 2 
-		U"火かき棒",	// 3 
-		U"羊皮紙",	// 4 
-		U"針金",	// 5 
-		U"汚れた布",	// 6
-		U"布",	// 7
-		U"炙った羊皮紙",	// 8
-
-	};
 
 	if (
 		bInventory
