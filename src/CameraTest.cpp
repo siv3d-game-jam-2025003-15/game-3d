@@ -1632,6 +1632,12 @@ void CameraTest::update()
 
 			drawMiniItem(items[i], itemMiniX, itemMiniY);
 
+			if (bMemo)
+			{
+				// 選択できないようにする
+				continue;
+			}
+
 			Rect rect(itemMiniX, itemMiniY, 60, 60);
 
 			if (rect.mouseOver())
@@ -1670,7 +1676,15 @@ void CameraTest::update()
 		if (MouseL.down())
 		{
 			// アイテムを使う
-			if (items[selectItem] == 0)
+			if (bMemo)
+			{
+				bMemo = false;
+			}
+			else if (items.size() <= selectItem)
+			{
+				// 処理しない
+			}
+			else if (items[selectItem] == 0)
 			{
 				// パンを食べる
 				//items.remove_at(selectItem);
@@ -1686,6 +1700,11 @@ void CameraTest::update()
 				AudioAsset(U"BGM").stop();
 				AudioAsset(U"GET").play();
 				bgmStopCount = 4.00;
+			}
+			else if (items[selectItem] == 1)
+			{
+				// 手記を使った
+				bMemo = true;
 			}
 		}
 
@@ -1846,6 +1865,35 @@ void CameraTest::draw() const
 		boldFont(itemNameText[itemMessage]).drawAt(
 			28,
 			{ 805, 236 },
+			ColorF{ 1, 1, 1, 1 }
+		);
+	}
+
+	if (bInventory && bMemo)
+	{
+		// 半透明の黒い画像
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
+
+		String memoText = U"【囚人の手記】\n";
+		memoText += U"看守が巡回中に、腰の鍵を落とした\n";
+		memoText += U"奇跡だ。…いや、呪いかもしれない\n";
+		memoText += U"やつは気づかずに通り過ぎた。俺は急いで拾い、音を立てぬように隠した\n";
+		memoText += U"\n";
+		memoText += U"隠すには、見えぬ場所がよかった\n";
+		memoText += U"見えるけど、見ようとしなければ通り過ぎてしまうような…そんな場所\n";
+		memoText += U"いつも眠りに落ちるとき、顔を向ける方角。\n";
+		memoText += U"眠っている間、壁の向こうでこいつも眠っている——\n";
+		memoText += U"\n";
+		memoText += U"お前がこれを見つけたなら、まだ希望はある\n";
+		memoText += U"見つけてくれ、この“目に見えぬ出口”を\n";
+		memoText += U"\n";
+		memoText += U"……俺には、もう時間がなかった。";
+		
+		// セリフ表示（仮）
+		const Font& boldFont = FontAsset(U"Bold");
+		boldFont(memoText).drawAt(
+			28,
+			{ center.x, center.y },
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}

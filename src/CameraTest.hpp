@@ -480,4 +480,7 @@ private:
 	// シナリオ番号
 	int scenario = 0;
 
+	// 手記を読んでいる
+	bool bMemo = false;
+
 };
