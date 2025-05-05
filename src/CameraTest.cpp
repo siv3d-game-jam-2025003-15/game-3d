@@ -115,19 +115,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		toiletPos.x += 0.01;
+		oldBedPos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		toiletPos.x -= 0.01;
+		oldBedPos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		toiletPos.z += 0.01;
+		oldBedPos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		toiletPos.z -= 0.01;
+		oldBedPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -209,38 +209,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	//Print << U"phiController.getPhi()=" << phiController.getPhi();
-
-	//Print << U"lightPos=" << lightPos;
-	//Print << U"lightArea=" << lightArea;
-	//Print << U"lastLightArea=" << lastLightArea;
-	//Print << U"lightTime=" << lightTime;
-	//Print << U"lightSmooth=" << lightSmooth;
-
-	//Print << U"breadX=" << breadX;
-	//Print << U"breadY=" << breadY;
-	//Print << U"breadZ=" << breadZ;
-	//
-	//Print << U"debugDrawerY=" << debugDrawerY;
-
-	//Print << U"tmpItemX=" << tmpItemX;
-	//Print << U"tmpItemY=" << tmpItemY;
-
-	//Print << U"itemIndex=" << itemIndex;
-
-	//Print << U"drawerX=" << drawerX;
-	//Print << U"drawerZ=" << drawerZ;
-
-	//Print << U"TextID=" << TextID;
-	//Print << U"doorPos=" << doorPos;
-	//Print << U"doorRot=" << doorRot;
-	//Print << U"bDoorOpen=" << bDoorOpen;
-	//Print << U"toDoorRotY=" << toDoorRotY;
-	//Print << U"bgmStopCount=" << bgmStopCount;
-
-//	Print << U"itemMessageX=" << itemMessageX;
-//	Print << U"itemMessageY=" << itemMessageY;
-	Print << U"toiletPos=" << toiletPos;
+	Print << U"oldBedPos=" << oldBedPos;
 
 #endif
 }
@@ -824,15 +793,75 @@ void CameraTest::update()
 			}
 		}
 
+		// 他人のベッド2
+		if (!bLockon)
+		{
+			auto [a, b, c] = bed2Controller.update(bed2Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 14;
+			}
+		}
+
+		// 他人のベッド3
+		if (!bLockon)
+		{
+			auto [a, b, c] = bed3Controller.update(bed3Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 14;
+			}
+		}
+
+		// 他人のベッド4
+		if (!bLockon)
+		{
+			auto [a, b, c] = bed4Controller.update(bed4Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 14;
+			}
+		}
+
+		// 古いベッド
+		if (!bLockon)
+		{
+			auto [a, b, c] = oldBedController.update(oldBedPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 15;
+			}
+		}
+
 		// トイレ
 		if (!bLockon)
 		{
-			auto [a, b, c] = bedController.update(toiletPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = toiletController.update(toiletPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
 				message = 12;
+			}
+		}
+
+		// 棚
+		if (!bLockon)
+		{
+			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 13;
 			}
 		}
 
@@ -1918,9 +1947,9 @@ void CameraTest::draw() const
 		U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
 		U"これは自分のベッドだ。",	// 11
 		U"これはトイレだ。…臭い。",	// 12
-		U"（予備）",	// 13
-		U"（予備）",	// 14
-		U"（予備）",	// 15
+		U"これは棚だ。今は何も入っていない。",	// 13
+		U"これは他人のベッドだ。",	// 14
+		U"これは古いベッドだ。今は使われていない。",	// 15
 		U"（予備）",	// 16
 		U"（予備）",	// 17
 		U"（予備）",	// 18

@@ -327,9 +327,16 @@ private:
 
 	// ベッド
 	Vec3 bedPos = { 2.87, 0.5, 11.3 };
+	Vec3 bed2Pos = { 2.87, 0.5, 8.3 };
+	Vec3 bed3Pos = { -2.87, 0.5, 11.3 };
+	Vec3 bed4Pos = { -2.87, 0.5, 8.3 };
+	Vec3 oldBedPos = { 2.87, 0.5, 5.15 };
 
 	// トイレ
 	Vec3 toiletPos = { -3.4, 0.5, 3.1 };
+
+	// 棚
+	Vec3 shelfPos = { 0, 0.5, 11.7 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
@@ -338,8 +345,13 @@ private:
 	ObjectController doorController;
 	ObjectController parchmentController;
 	ObjectController bedController;
+	ObjectController bed2Controller;
+	ObjectController bed3Controller;
+	ObjectController bed4Controller;
+	ObjectController oldBedController;
 	ObjectController toiletController;
-
+	ObjectController shelfController;
+	
 
 	// 鍵をフォーカスする時の座標
 	//double keyFocusX = keyPos.x - 0.5;
