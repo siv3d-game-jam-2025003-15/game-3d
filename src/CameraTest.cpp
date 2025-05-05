@@ -369,6 +369,8 @@ void CameraTest::drawMiniItem(
 		parchmentMiniSprite.draw(x, y);
 		break;
 	case 5:
+		// 針金
+		wireMiniSprite.draw(x, y);
 		break;
 	case 6:
 		break;
@@ -377,6 +379,8 @@ void CameraTest::drawMiniItem(
 	case 8:
 		break;
 	case 9:
+		// 針金の鍵
+		wireKeyMiniSprite.draw(x, y);
 		break;
 	case 10:
 		break;
@@ -412,6 +416,8 @@ void CameraTest::drawBigItem(
 		parchmentBigSprite.draw(x, y);
 		break;
 	case 5:
+		// 針金
+		wireBigSprite.draw(x, y);
 		break;
 	case 6:
 		break;
@@ -420,6 +426,8 @@ void CameraTest::drawBigItem(
 	case 8:
 		break;
 	case 9:
+		// 針金の鍵
+		wireKeyBigSprite.draw(x, y);
 		break;
 	case 10:
 		break;
@@ -665,6 +673,8 @@ void CameraTest::update()
 				items << 0;
 				bBreadHave = a;
 				bgmStopCount = c;
+
+				scenario = 19;
 			}
 			if (b)
 			{
@@ -727,19 +737,28 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z += 0.2;
 
-			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1, bKeyHave);
-			if (a == true && bDoorOpen == false && bKeyHave)
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1, bWireKey);
+			if (a == true && bDoorOpen == false && bWireKey)
 			{
 				// ドアを開いた
 				bDoorOpen = true;
 				toDoorRotY = 270_deg;
 				bgmStopCount = c;
+
+				scenario = 6;
 			}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
-				message = 10;	// TODO 持ち物によってセリフを返る
+				if (bWireKey)
+				{
+					message = 20;
+				}
+				else
+				{
+					message = 10;
+				}
 			}
 		}
 
@@ -837,12 +856,29 @@ void CameraTest::update()
 		// 棚
 		if (!bLockon)
 		{
-			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, MarkPosition, 0, bKeyHave);
+			if (a == true && bWire == false)
+			{
+				// 針金が取れる
+				items << 5;
+				bWire = true;
+				bgmStopCount = c;
+				scenario = 4;
+			}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
-				message = 13;
+				if (bKeyHave)
+				{
+					// 鍵を持っている
+					message = 17;
+				}
+				else
+				{
+					// 鍵を持っていない
+					message = 13;
+				}
 			}
 		}
 
@@ -919,6 +955,9 @@ void CameraTest::update()
 
 		// いったんカーソルを強制的に中央に戻す
 		Cursor::SetPos(center.x, center.y);
+
+		// 手記のフラグはオフにする
+		bMemo = false;
 	}
 
 	// コリジョンを無効にするエリア
@@ -1208,7 +1247,7 @@ void CameraTest::update()
 	// 止まっているBGMを再度鳴らす
 	{
 		// BGMの再開
-		if (bgmStopCount < 0.0f)
+		if (bgmStopCount <= 0.0f)
 		{
 			if (!AudioAsset(U"BGM").isPlaying())
 			{
@@ -1217,6 +1256,12 @@ void CameraTest::update()
 		}
 		else {
 			bgmStopCount -= deltaTime;
+
+			// 演出
+			if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
+			{
+				bgmStopCount = 1.0;
+			}
 		}
 	}
 
@@ -1696,11 +1741,8 @@ void CameraTest::update()
 			// アイテムを使う
 			if (bMemo)
 			{
+				// 手記のメモを閉じる
 				bMemo = false;
-				if (scenario == 1)
-				{
-					scenario = 2;
-				}
 			}
 			else if (items.size() <= selectItem)
 			{
@@ -1727,6 +1769,27 @@ void CameraTest::update()
 			{
 				// 手記を使った
 				bMemo = true;
+
+				if (scenario == 1)
+				{
+					scenario = 2;
+				}
+			}
+			else if (items[selectItem] == 5)
+			{
+				if (bKeyHave)
+				{
+					// 鍵を持っている状態で針金を使う
+					items[selectItem] = 9;
+					bWireKey = true;
+
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
+
+					scenario = 5;
+				}
 			}
 		}
 
