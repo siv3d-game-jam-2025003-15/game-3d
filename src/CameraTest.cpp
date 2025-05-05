@@ -42,26 +42,6 @@ CameraTest::CameraTest(const InitData& init)
 
 #ifdef _DEBUG
 	bDebugViewCollision = true;
-
-	//lightPos.x = 16.03;
-	//lightPos.y = 2.60;
-	//lightPos.z = -0.92;
-
-	//items << 0;
-	//items << 0;
-	//items << 0;
-	//items << 0;
-	//items << 0;
-	//items << 0;
-	//items << 0;
-	//items << 0;
-
-//	tmpItemX = 164;
-//	tmpItemY = 53;
-
-	//itemMessageX = 400;
-	//itemMessageY = 400;
-
 #endif
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
@@ -550,8 +530,8 @@ void CameraTest::update()
 		}
 
 		{
-			const double xr = (scaledSpeed * s);
-			const double zr = (scaledSpeed * c);
+			const double xr = (scaledSpeed * sss);
+			const double zr = (scaledSpeed * ccc);
 
 			bool isWalk = false;
 			if (KeyW.pressed())
@@ -876,11 +856,7 @@ void CameraTest::update()
 
 			if (itemIndex < 0)
 			{
-				itemIndex += 16;
-				if (itemIndex == 15)
-				{
-					itemIndex = 11;
-				}
+				itemIndex += 12;
 			}
 		}
 
@@ -888,10 +864,9 @@ void CameraTest::update()
 		{
 			itemIndex += 4;
 
-			if (itemIndex >= 15)
+			if (itemIndex >= 12)
 			{
-				itemIndex += 12;
-				itemIndex %= 4;
+				itemIndex -= 12;
 			}
 		}
 
@@ -900,7 +875,7 @@ void CameraTest::update()
 			itemIndex -= 1;
 			if (itemIndex < 0)
 			{
-				itemIndex += 15;
+				itemIndex += 12;
 			}
 		}
 
@@ -909,7 +884,7 @@ void CameraTest::update()
 			itemIndex += 1;
 			if (itemIndex >= 15)
 			{
-				itemIndex -= 15;
+				itemIndex -= 12;
 			}
 		}
 
@@ -926,19 +901,6 @@ void CameraTest::update()
 		// いったんカーソルを強制的に中央に戻す
 		Cursor::SetPos(center.x, center.y);
 	}
-
-
-
-	const double to_s = (Math::Cos(phiController.getPhi()));
-	const double to_c = (Math::Sin(phiController.getPhi()));
-
-	s = Math::Lerp(s, to_s, smooth / focusSmooth); // 回転もスムーズに
-	c = Math::Lerp(c, to_c, smooth / focusSmooth); // 回転もスムーズに
-
-
-
-	// ゆっくり移動
-	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth / focusSmooth);
 
 	// コリジョンを無効にするエリア
 	for (int i = 0; i < 4; i++)
@@ -1189,16 +1151,28 @@ void CameraTest::update()
 		}
 	}
 
+	// カメラ関係
+	const double to_s = (Math::Cos(phiController.getPhi()));
+	const double to_c = (Math::Sin(phiController.getPhi()));
+
+	sss = Math::Lerp(sss, to_s, smooth); // 回転もスムーズに
+	ccc = Math::Lerp(ccc, to_c, smooth); // 回転もスムーズに
+
+	// ゆっくり移動
+	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth);
+
 	last_eyePosition = toCameraPos;
 
-	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth / focusSmooth); // 回転もスムーズに
+	// 回転もスムーズに
+	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth); 
 
 	// カメラ
-	Vec3 focusVector { s, m_focusY, c };
+	Vec3 focusVector { sss, m_focusY, ccc };
 
 	camera.setProjection(
 		Graphics3D::GetRenderTargetSize(),
-		m_verticalFOV - zoom,
+		//m_verticalFOV - zoom,
+		m_verticalFOV,
 		m_nearClip
 	);
 
@@ -1207,62 +1181,12 @@ void CameraTest::update()
 	Graphics3D::SetCameraTransform(camera);
 
 
-	// 対象物の座標
-	//Vec3 keyObjectPosition = Vec3{ keyX, keyY, keyZ };
-
-	// 対象のオブジェクトが画面の中心にあるかどうかの判定
-	//Vec3 worldScreenPoint = camera.worldToScreenPoint(keyObjectPostion);
-
-	// 対象オブジェクトとの距離
-	//double keyDistance = m_eyePosition.distanceFrom(keyObjectPostion);
-
-	// 毎フレーム更新
-//	focusWait -= deltaTime;
-
-
-
-
-
-//	if (
-//		worldScreenPoint.x >= (1280 / 2 - 200)
-//	 && worldScreenPoint.x <= (1280 / 2 + 200)
-//	 && worldScreenPoint.y >= (720 / 2 - 200)
-//	 && worldScreenPoint.y <= (720 / 2 + 200)
-//	 && keyDistance < 3.5
-//	)
-//	{
-//		// オブジェクトが画面の中心にある
-//#ifdef _DEBUG
-//		Print << U"オブジェクトが画面の中心にある";
-//#endif
-//		Print << U"左クリックで取る";
-//		Print << U"エンターキーで取る";
-//
-//		isFocus = true;
-//
-//		if (controller.buttonA.pressed()
-//			|| KeyEnter.pressed()
-//		)
-//		{
-//			isKeyHave = true;
-//			AudioAsset(U"GET").play();
-//			AudioAsset(U"BGM").stop();
-//		}
-//	}
-
-
 	// ドアの回転
 //	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth);
 	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth/10);	// ドアはゆっくり開ける
 
 
-
-
-
-	// 止まっているBGMを再度鳴らす TODO 汎用的な仕組みではないので、修正する
-	//if (bKeyHave == true
-	//&& bClear == false
-	//)
+	// 止まっているBGMを再度鳴らす
 	{
 		// BGMの再開
 		if (bgmStopCount < 0.0f)
@@ -1278,136 +1202,9 @@ void CameraTest::update()
 	}
 
 
-	//Vec3 doorObjectPostion = Vec3{ doorX, doorY, doorZ };
-
-	//worldScreenPoint = camera.worldToScreenPoint(doorObjectPostion);
-
-	//double doorDistance = m_eyePosition.distanceFrom(doorObjectPostion);
-
-	//Print << U"doorObjectPostion=" << doorObjectPostion;
-	//Print << U"worldScreenPoint2=" << worldScreenPoint;
-	//Print << U"doorDistance=" << doorDistance;
-
-	// TODO 共通化する
-	/* 扉のフォーカスはいったんクローズ
-	if (
-		worldScreenPoint.x >= (1280 / 2 - 200)
-		&& worldScreenPoint.x <= (1280 / 2 + 200)
-		&& worldScreenPoint.y >= (720 / 2 - 200)
-		&& worldScreenPoint.y <= (720 / 2 + 200)
-		&& doorDistance < 2.0
-		&& isFocusSmooth == false
-		&& focusWait < 0.0f
-	)
-	{
-		// オブジェクトが画面の中心にある
-#ifdef _DEBUG
-		Print << U"オブジェクトが画面の中心にある";
-#endif
-		Print << U"左クリックで扉を開ける";
-		Print << U"右クリックでズーム解除";
-
-		// ズームしていたらフォーカスする
-		//if (
-		//	controller.rightTrigger > 0.5
-		//	|| KeyZ.pressed()
-		//	|| isFocus	// フォーカス中はカメラをフォーカスしたままにしたいため
-		//	)
-		//{
-			// 前の位置を記憶
-			if (isFocus == false)
-			{
-				lastToCameraPos = toCameraPos;
-				last_to_m_focusY = to_m_focusY;
-				last_m_phi = m_phi;
-			}
-
-			// カメラの移動
-			toCameraPos = Vec3{ doorFocusX ,doorFocusY, doorFocusZ };
-
-			// カメラの向き
-			to_m_focusY = doorFocusCameraY;
-			m_phi = doorFocusPhi;
-
-			// フォーカスの速度を遅くする
-			focusSmooth = 2;
-
-			isFocus = true;
-
-			if (isClear == false && isKeyHave == true)
-			{
-				if (controller.buttonA.pressed()
-				|| KeyEnter.pressed()
-				//|| MouseL.down()
-				//|| MouseR.down()
-					)
-				{
-					// クリア
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"牢屋の扉を開ける").play();
-					isClear = true;
-					changeScene(State::Title);
-				}
-			}
-		//}
-
-	}
-	*/
-
-	//Print << U"isFocusSmooth" << isFocusSmooth;
-
-    /* フォーカスのキャンセルをいったんクローズ
-	if (KeyBackspace.pressed()
-	 || controller.buttonB.pressed()
-//	 || MouseL.down()
-	 || MouseR.down()
-	)
-	{
-		// フォーカスのキャンセル
-		if (isFocus)
-		{
-			toCameraPos = lastToCameraPos;
-			to_m_focusY = last_to_m_focusY;
-			m_phi = last_m_phi;
-
-			//focusSmooth = 1;	// 終わってから
-			isFocusSmooth = true;
-
-			isFocus = false;
-
-			focusWait = 5.0f;	// ５秒間フォーカスできない
-		}
-	}
-	*/
-
-	/* いったんクローズ
-	if (isFocusSmooth)
-	{
-		double distance = toCameraPos.distanceFrom(m_eyePosition);
-
-	//	Print << U"差分：" << distance;
-
-		if (distance < 0.01)
-		{
-			focusSmooth = 1;
-			isFocusSmooth = false;
-		}
-	}
-	*/
-
 	if (lightArea != lastLightArea)
 	{
 		// ライトの位置が変わった
-	//	isGlowEffect = false;
-
-	//	lightSmooth = 0.05f;
-
-		// 点滅の状態にする
-		//glowEffectType == 9;
-
-	//	isGlowEffect = false;
-
-	//	lightSmooth = 0.1;
 
 		toGlobalAmbientColorR = 0.1;
 		toGlobalAmbientColorG = 0.1;
@@ -1418,23 +1215,8 @@ void CameraTest::update()
 		if (lightTime < 0)
 		{
 			lastLightArea = lightArea;
-		//	lightTime2 = 2;
-
-			// 点滅の状態を調整
-			//glowEffectType = 0;
 
 			isGlowEffect = true;
-
-			//// 点灯していない
-			//toGlobalAmbientColorR = 0;
-			//toGlobalAmbientColorG = 0;
-			//toGlobalAmbientColorB = 0;
-
-			//GlobalAmbientColorR = 0.0;
-			//GlobalAmbientColorG = 0.0;
-			//GlobalAmbientColorB = 0.0;
-
-		//	lightSmooth = 0.05;
 		}
 	}
 	else
@@ -1464,16 +1246,7 @@ void CameraTest::update()
 			break;
 		}
 
-		//if (lightTime2 < 0)
-		//{
-		//	lightSmooth = 0.1f;
-		//}
-		//else
-		//{
-		//	lightTime2 -= deltaTime;
-		//}
-
-		// ライトの点滅
+		// ライトの点滅 TODO いつか使うかも？
 		//if (Random(0, 100) == 0)
 		//{
 		//	glowEffectType++;
@@ -1520,7 +1293,6 @@ void CameraTest::update()
 		//	isGlowEffect = true;
 		//}
 
-
 		// 光源の設定
 		if (isGlowEffect)
 		{
@@ -1538,8 +1310,6 @@ void CameraTest::update()
 		}
 	}
 
-
-
 	GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, lightSmooth);
 	GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, lightSmooth);
 	GlobalAmbientColorB = Math::Lerp(GlobalAmbientColorB, toGlobalAmbientColorB, lightSmooth);
@@ -1551,8 +1321,6 @@ void CameraTest::update()
 	{
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
-		//if (bDebugShader)
-		//{
 		ConstantBuffer<Light> cb;
 
 		cb->g_pointLightPos = lightPos;
@@ -1567,16 +1335,6 @@ void CameraTest::update()
 			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
 			model.draw();
 		}
-		//}
-		//else
-		//{
-		//	// モデルを描画
-		//	if (bDebugviewModel)
-		//	{
-		//		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-		//		model.draw();
-		//	}
-		//}
 
 		// ドア
 		{
@@ -1868,8 +1626,6 @@ void CameraTest::update()
 		// アイテム
 		for (int i = 0; i < items.size(); i++)
 		{
-			//	int itemMiniX = center.x - 60 / 2 + (i % 4 * 80) - 224;
-			//	int itemMiniY = center.y - 60 / 2 + (i / 4 * 80) - 110;
 			int itemMiniX = center.x - 60 / 2 + (i % 4 * 82) - 194;
 			int itemMiniY = center.y - 60 / 2 + (i / 4 * 82) - 104;
 
@@ -1904,8 +1660,6 @@ void CameraTest::update()
 		//現在選択中のアイテム
 		if (selectItem >= 0)
 		{
-			//	int itemBigX = center.x - 160 / 2 + 164;
-			//	int itemBigY = center.y - 160 / 2 - 53;
 			int itemBigX = center.x - 160 / 2 + 176;
 			int itemBigY = center.y - 160 / 2 - 57;
 
@@ -1931,6 +1685,7 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
+	// 画面下のテキスト
 	Array<String> Text =
 	{
 		// シナリオ系
@@ -1999,8 +1754,6 @@ void CameraTest::draw() const
 
 	};
 
-//	Print << U"size=" << Text.size();
-
 	if (0 <= message && message < Text.size())
 	{
 		// セリフ表示（仮）
@@ -2012,6 +1765,7 @@ void CameraTest::draw() const
 		);
 	}
 
+	// インベントリ用のテキスト
 	Array<String> itemText =
 	{
 		// アイテム系
@@ -2038,7 +1792,7 @@ void CameraTest::draw() const
 		const Font& boldFont = FontAsset(U"Bold");
 		boldFont(itemText[itemMessage]).drawAt(
 			28,
-			{ center.x, itemMessageY },
+			{ center.x, 546 },
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}

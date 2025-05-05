@@ -216,9 +216,7 @@ private:
 	// 羊皮紙
 	const Model modelParchment{ U"assets/models/Parchment/Gimmick_Parchment01.obj" };
 
-	
-
-	// 各オブジェクトの位置
+	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
 
 	// ドアの位置
@@ -236,7 +234,7 @@ private:
 	bool bBreadHave = false;
 	bool bPokerHave = false;
 	bool bParchmentHave = false;
-	bool bClear = false;
+	//bool bClear = false;
 
 	double bgmStopCount = 0.0f;
 
@@ -284,14 +282,14 @@ private:
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
 	double to_m_focusY = m_focusY;
-	double s = 0;
-	double c = 0;
+	double sss = 0;
+	double ccc = 0;
 
 	// 動きをスムーズにする値
 	double smooth = 0.1f;
 	double lightSmooth = 0.025f;
 
-	// プレイヤーインデックス (0 - 3)
+	// XINPUT：プレイヤーインデックス (0 - 3)
 	size_t playerIndex = 0;
 
 	// m_focusY
@@ -305,9 +303,9 @@ private:
 	double emission = 1.0;
 	double toEmission = 1.0;
 
-	double zoom = 0.0;
-	double to_zoom = 0.0;
-	double zoom_smooth = 2;
+	//double zoom = 0.0;
+	//double to_zoom = 0.0;
+	//double zoom_smooth = 2;
 
 	// 鍵の座標
 	Vec3 keyPos = { 0, 0.75, 8 };
@@ -352,21 +350,9 @@ private:
 	ObjectController toiletController;
 	ObjectController shelfController;
 	
-
-	// 鍵をフォーカスする時の座標
-	//double keyFocusX = keyPos.x - 0.5;
-	//double keyFocusY = keyPos.y+ 0.25;
-	//double keyFocusZ = keyPos.z + 0.0;
-	//double keyFocusCameraY = -0.5;
-	//sdouble keyFocusPhi = 0;
-
-	bool isFocus = false;
-	double focusSmooth = 1;
-	bool isFocusSmooth = false;
-
-	Vec3 lastToCameraPos = {0.0, 0.0, 0.0};
-	double last_to_m_focusY = 0;
-	double last_m_phi = 0;
+	//Vec3 lastToCameraPos = {0.0, 0.0, 0.0};
+	//double last_to_m_focusY = 0;
+	//double last_m_phi = 0;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -380,11 +366,11 @@ private:
 //	Vec3 doorPos { -1.6, 1.0,-4.9 };
 
 	// ドアをフォーカスする時の座標
-	double doorFocusX = -1.6 + 0.0;
-	double doorFocusY =  1.0 + 0.25;
-	double doorFocusZ = -4.9 + 0.5;
-	double doorFocusCameraY = -0.5;
-	double doorFocusPhi = -1.5;
+	//double doorFocusX = -1.6 + 0.0;
+	//double doorFocusY =  1.0 + 0.25;
+	//double doorFocusZ = -4.9 + 0.5;
+	//double doorFocusCameraY = -0.5;
+	//double doorFocusPhi = -1.5;
 
 	double mousePosX = 0.0f;
 	double mousePosY = 0.0f;
@@ -442,13 +428,14 @@ private:
 	   { 5, 6, 7 },
 	};
 
+	// デバッグ用のフラグ
 	bool bDebugViewFrame = true;
     bool bDebugViewCollision = false;
 	bool bDebugviewModel = true;
 	bool bDebugFlashingLight = true;
 //	bool bDebugShader = true;
 
-
+	// コリジョン無効エリア
 	double collisionNone[4][4] =
 	{
 		{ -2.2, -1.1, 1.2, 2.6},	// x_min, x_max, z_min, z_max
@@ -457,6 +444,7 @@ private:
 		{ 6.3, 7.0, -4.4, -3.0},
 	};
 
+	// ライトを切り替えるエリア
 	double collisionLight[4][4] =
 	{
 		{ -3, 3, 3, 11},	// x_min, x_max, z_min, z_max
@@ -487,30 +475,28 @@ private:
 	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
 	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
 
-
 	// インベントリの表示
 	bool bInventory = false;
 
-	int tmpItemX = 0;
-	int tmpItemY = 0;
+	//int tmpItemX = 0;
+	//int tmpItemY = 0;
 
 	// 選択中のアイテム番号
 	int itemIndex = 0;
 
+	// ビックリマークのポジション
 	Vec3 MarkPosition{ 0.0, 0.0, 0.0 };
 
+	// 取得しているアイテム一覧
 	Array<int> items;
 
 	// メッセージ番号
 	int message = 0;
 	int itemMessage = -1;
 
+	// ライト関係の変数
 	int lightArea = 0;
 	int lastLightArea = 0;
 	double lightTime = 0;
-	//double lightTime2 = 0;
-
-//	int itemMessageX = 400;
-	int itemMessageY = 546;
 
 };
