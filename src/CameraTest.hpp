@@ -477,4 +477,7 @@ private:
 	int debugItemNameX = 805;
 	int debugItemNameY = 236;
 
+	// シナリオ番号
+	int scenario = 0;
+
 };

@@ -434,8 +434,8 @@ void CameraTest::update()
 	// デバッグ表示
 	debug();
 
-	// TODO シナリオの進捗によってメッセージを変える
-	message = 0;
+	// シナリオの進捗によってメッセージを変える
+	message = scenario;
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
@@ -1665,6 +1665,28 @@ void CameraTest::update()
 			int itemBigY = center.y - 160 / 2 - 25;
 
 			drawBigItem(items[selectItem], itemBigX, itemBigY);
+		}
+
+		if (MouseL.down())
+		{
+			// アイテムを使う
+			if (items[selectItem] == 0)
+			{
+				// パンを食べる
+				//items.remove_at(selectItem);
+
+				// 手記を手に入れる
+				//items << 1;
+				items[selectItem] = 1;
+
+				// シナリオを進める
+				scenario = 1;
+
+				// SEを鳴らす
+				AudioAsset(U"BGM").stop();
+				AudioAsset(U"GET").play();
+				bgmStopCount = 4.00;
+			}
 		}
 
 	}
