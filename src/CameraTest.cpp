@@ -885,7 +885,7 @@ void CameraTest::update()
 		// 壁
 		if (!bLockon && !bWall && scenario == 2)
 		{
-			auto [a, b, c] = parchmentController.update(wallPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = wallController.update(wallPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true && bParchmentHave == false)
 			{
 				// 鍵が現れる

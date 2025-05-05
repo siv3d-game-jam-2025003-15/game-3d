@@ -296,20 +296,20 @@ private:
 	double toEmission = 1.0;
 
 	// 鍵の座標
-	Vec3 keyPos = { 3.7, 0.25, 3 };
+	Vec3 keyPos = { 3.7, 0.1, 3 };
 
 	// パンの座標
 	Vec3 breadPos = { 0, 0.75, 7 };
 
 	// 火かき棒の座標
-	Vec3 pokerPos = { 0, 0.75, 6 };
+	Vec3 pokerPos = { 19, 0.1, -4.8 };
 
 	// 引き出し
 	Vec3 drawerPos = { 16.3, 0, 1.6 };
 	double debugDrawerY = 0;
 
 	// 羊皮紙
-	Vec3 parchmentPos = { 0, 0.75, 6.5 };
+	Vec3 parchmentPos = { 14, 0.1, -4.8 };
 
 	// ベッド
 	Vec3 bedPos = { 2.87, 0.5, 11.3 };
