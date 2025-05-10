@@ -360,6 +360,7 @@ private:
 	ObjectController shelfController;
 	ObjectController wallController;
 	ObjectController fireplaceController;
+	ObjectController fireplaceStrongController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -566,7 +567,7 @@ private:
 		U"暖炉がある。火が弱い。",	// 18
 		U"（「I」キーを押して、持ち物からパンを食べよう。）",	// 19
 		U"扉だ。この針金の鍵で開けられるかもしれない。",	// 20
-		U"暖炉がある。火が強い。",	// 21
+		U"暖炉がある。火が強くなった。",	// 21
 		U"（予備）",	// 22
 		U"（予備）",	// 23
 		U"（予備）",	// 24
