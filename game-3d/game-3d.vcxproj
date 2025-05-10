@@ -117,6 +117,12 @@
       <Command>xcopy /I /D /Y "$(OutDir)$(TargetFileName)" "$(ProjectDir)App"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <Link>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\External\Prebuilt</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Siv3D.lib</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CameraTest.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
