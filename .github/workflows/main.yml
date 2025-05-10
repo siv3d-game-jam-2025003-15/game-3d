@@ -20,6 +20,20 @@ jobs:
       - name: Clone Civ3D (or OpenSiv3D) source into External folder
         run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
 
+      - name: Inject .vcxproj.user with include paths
+        shell: pwsh
+        run: |
+          $projPath = "${{ github.workspace }}\game-3d\game-3d.vcxproj.user"
+          $content = @"
+          <?xml version="1.0" encoding="utf-8"?>
+          <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+            <PropertyGroup>
+              <IncludePath>$(ProjectDir)..\External\Siv3D\include;$(ProjectDir)..\External\Siv3D\include\ThirdParty</IncludePath>
+            </PropertyGroup>
+          </Project>
+          "@
+              Set-Content -Encoding UTF8 -Path $projPath -Value $content
+
       - name: Build project with MSBuild
         shell: cmd
         run: |
