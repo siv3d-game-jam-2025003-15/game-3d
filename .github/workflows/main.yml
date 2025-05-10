@@ -1,4 +1,4 @@
-name: Manual Build OpenSiv3D
+name: Manual Build with Civ3D
 
 on:
   workflow_dispatch:
@@ -8,35 +8,23 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout your repository
+      - name: Checkout repository (with submodules if needed)
         uses: actions/checkout@v4
 
-      - name: Install dependencies (CMake, Ninja, 7zip) # 必要なものをinstall
+      - name: Install dependencies (CMake, Ninja, 7zip)
         run: |
           choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
           choco install ninja -y
           choco install 7zip -y
 
-      - name: Clone OpenSiv3D v0.6.15　 # Siv3Dを持ってくる
-        run: git clone --branch v0.6.15 --depth=1 https://github.com/Siv3D/OpenSiv3D.git
+      - name: Clone Civ3D (or OpenSiv3D) source into External folder
+        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
 
-      - name: Configure CMake project
-        run: |
-          cd OpenSiv3D
-          mkdir build
-          cd build
-          cmake .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release
-
-      - name: Build OpenSiv3D
-        run: |
-          cd OpenSiv3D/build
-          cmake --build .
-
-      - name: Build your project
+      - name: Build project with MSBuild
         run: |
           msbuild game-3d\game-3d.vcxproj `
             /p:Configuration=Release `
             /p:Platform=x64 `
-            /p:IncludePath="${{ github.workspace }}\OpenSiv3D\Siv3D\Include" `
-            /p:LibraryPath="${{ github.workspace }}\OpenSiv3D\build\Release" `
+            /p:IncludePath="${{ github.workspace }}\External\Siv3D\include;${{ github.workspace }}\External\Siv3D\include\ThirdParty" `
+            /p:LibraryPath="${{ github.workspace }}\External\Siv3D\lib\x64" `
             /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
