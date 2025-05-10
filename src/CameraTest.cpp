@@ -189,8 +189,8 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"fireplacePos=" << fireplacePos;
-
+	Print << U"bFireplaceStrong=" << bFireplaceStrong;
+	
 #endif
 }
 
@@ -923,7 +923,7 @@ void CameraTest::update()
 		if (!bLockon)
 		{
 			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
-			if (a == true && bParchmentHave == false)
+			if (a == true)
 			{
 				// 火が強くなった
 				bFireplaceStrong = true;
@@ -939,7 +939,7 @@ void CameraTest::update()
 		// 暖炉（火が強い）
 		if (!bLockon && bFireplaceStrong)
 		{
-			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
+			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, -1, false);
 			if (b)
 			{
 				// 見ている
