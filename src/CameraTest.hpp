@@ -324,7 +324,7 @@ private:
 	double debugDrawerY = 0;
 
 	// 羊皮紙
-	Vec3 parchmentPos = { 14, 0.1, -4.8 };
+	Vec3 parchmentPos = { 16, 0.75, -3 };
 
 	// ベッド
 	Vec3 bedPos = { 2.87, 0.5, 11.3 };
