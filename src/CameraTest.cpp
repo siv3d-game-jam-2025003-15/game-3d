@@ -348,41 +348,42 @@ void CameraTest::drawMiniItem(
 {
 	switch (itemId)
 	{
-	case 0:
+	case Bread:
 		// パン
 		breadMiniSprite.draw(x, y);
 		break;
-	case 1:
+	case Memo:
 		// 手記
 		memoMiniSprite.draw(x, y);
 		break;
-	case 2:
+	case Key:
 		// 鍵
 		keyMiniSprite.draw(x, y);
 		break;
-	case 3:
+	case Poker:
 		// 火かき棒
 		pokerMiniSprite.draw(x, y);
 		break;
-	case 4:
+	case Parchment:
 		// 羊皮紙
 		parchmentMiniSprite.draw(x, y);
 		break;
-	case 5:
+	case Shelf:
 		// 針金
 		wireMiniSprite.draw(x, y);
 		break;
-	case 6:
+	case DirtyCloth:
+		// 汚れた布
 		break;
-	case 7:
+	case Cloth:
+		// 布
 		break;
-	case 8:
+	case ToastedParchment:
+		// 炙った羊皮紙
 		break;
-	case 9:
+	case ShelfKey:
 		// 針金の鍵
 		wireKeyMiniSprite.draw(x, y);
-		break;
-	case 10:
 		break;
 	}
 }
@@ -395,41 +396,42 @@ void CameraTest::drawBigItem(
 {
 	switch (itemId)
 	{
-	case 0:
+	case Bread:
 		// パン
 		breadBigSprite.draw(x, y);
 		break;
-	case 1:
+	case Memo:
 		// 手記
 		memoBigSprite.draw(x, y);
 		break;
-	case 2:
+	case Key:
 		// 鍵
 		keyBigSprite.draw(x, y);
 		break;
-	case 3:
+	case Poker:
 		// 火かき棒
 		pokerBigSprite.draw(x, y);
 		break;
-	case 4:
+	case Parchment:
 		// 羊皮紙
 		parchmentBigSprite.draw(x, y);
 		break;
-	case 5:
+	case Shelf:
 		// 針金
 		wireBigSprite.draw(x, y);
 		break;
-	case 6:
+	case DirtyCloth:
+		// 汚れた布
 		break;
-	case 7:
+	case Cloth:
+		// 布
 		break;
-	case 8:
+	case ToastedParchment:
+		// 炙った羊皮紙
 		break;
-	case 9:
+	case ShelfKey:
 		// 針金の鍵
 		wireKeyBigSprite.draw(x, y);
-		break;
-	case 10:
 		break;
 	}
 }
@@ -682,7 +684,7 @@ void CameraTest::update()
 			if (a == true && bBreadHave == false)
 			{
 				// アイテムを取った
-				items << 0;
+				items << Bread;
 				bBreadHave = a;
 				bgmStopCount = c;
 
@@ -708,7 +710,7 @@ void CameraTest::update()
 			if (a == true && bKeyHave == false)
 			{
 				// アイテムを取った
-				items << 2;
+				items << Key;
 				bKeyHave = a;
 				bgmStopCount = c;
 				scenario = 3;
@@ -728,7 +730,7 @@ void CameraTest::update()
 			if (a == true && bPokerHave == false)
 			{
 				// アイテムを取った
-				items << 3;
+				items << Poker;
 				bPokerHave = a;
 				bgmStopCount = c;
 			}
@@ -781,7 +783,7 @@ void CameraTest::update()
 			if (a == true && bParchmentHave == false)
 			{
 				// アイテムを取った
-				items << 4;
+				items << Parchment;
 				bParchmentHave = a;
 				bgmStopCount = c;
 			}
@@ -872,7 +874,7 @@ void CameraTest::update()
 			if (a == true && bWire == false)
 			{
 				// 針金が取れる
-				items << 5;
+				items << Shelf;
 				bWire = true;
 				bgmStopCount = c;
 				scenario = 4;
@@ -915,12 +917,21 @@ void CameraTest::update()
 		// 暖炉
 		if (!bLockon)
 		{
-			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
-				message = 18;
+				if (bFireplace)
+				{
+					// 火が強い
+					message = 21;
+				}
+				else
+				{
+					// 火が弱い
+					message = 18;
+				}
 			}
 		}
 
@@ -1730,8 +1741,8 @@ void CameraTest::update()
 		// アイテム
 		for (int i = 0; i < items.size(); i++)
 		{
-			int itemMiniX = center.x - 60 / 2 + (i % 4 * 82) - 194;
-			int itemMiniY = center.y - 60 / 2 + (i / 4 * 82) - 104;
+			int itemMiniX = center.x - itemMiniWidth / 2 + (i % 4 * 82) - 194;
+			int itemMiniY = center.y - itemMiniHeight / 2 + (i / 4 * 82) - 104;
 
 			drawMiniItem(items[i], itemMiniX, itemMiniY);
 
@@ -1741,7 +1752,7 @@ void CameraTest::update()
 				continue;
 			}
 
-			Rect rect(itemMiniX, itemMiniY, 60, 60);
+			Rect rect(itemMiniX, itemMiniY, itemMiniWidth, itemMiniHeight);
 
 			if (rect.mouseOver())
 			{
@@ -1770,8 +1781,8 @@ void CameraTest::update()
 		//現在選択中のアイテム
 		if (selectItem >= 0)
 		{
-			int itemBigX = center.x - 160 / 2 + 176;
-			int itemBigY = center.y - 160 / 2 - 25;
+			int itemBigX = center.x - itemBigWidth / 2 + 166;
+			int itemBigY = center.y - itemBigHeight / 2 - 35;
 
 			drawBigItem(items[selectItem], itemBigX, itemBigY);
 		}
@@ -1788,14 +1799,12 @@ void CameraTest::update()
 			{
 				// 処理しない
 			}
-			else if (items[selectItem] == 0)
+			else if (items[selectItem] == Bread)
 			{
 				// パンを食べる
-				//items.remove_at(selectItem);
 
 				// 手記を手に入れる
-				//items << 1;
-				items[selectItem] = 1;
+				items[selectItem] = Memo;
 
 				// シナリオを進める
 				scenario = 1;
@@ -1805,7 +1814,7 @@ void CameraTest::update()
 				AudioAsset(U"GET").play();
 				bgmStopCount = 4.00;
 			}
-			else if (items[selectItem] == 1)
+			else if (items[selectItem] == Memo)
 			{
 				// 手記を使った
 				bMemo = true;
@@ -1815,12 +1824,12 @@ void CameraTest::update()
 					scenario = 2;
 				}
 			}
-			else if (items[selectItem] == 5)
+			else if (items[selectItem] == Shelf)
 			{
 				if (bKeyHave)
 				{
 					// 鍵を持っている状態で針金を使う
-					items[selectItem] = 9;
+					items[selectItem] = ShelfKey;
 					bWireKey = true;
 
 					// SEを鳴らす
@@ -1829,6 +1838,23 @@ void CameraTest::update()
 					bgmStopCount = 4.00;
 
 					scenario = 5;
+				}
+			}
+			else if (items[selectItem] == Poker)
+			{
+				if (bFireplace == false)
+				{
+					// TODO 暖炉の近くでのみ使えるようにする
+
+					bFireplace = true;
+
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
+
+					// TODO
+					//scenario = 5;
 				}
 			}
 		}
