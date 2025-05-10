@@ -95,19 +95,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		wallPos.x += 0.01;
+		fireplacePos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		wallPos.x -= 0.01;
+		fireplacePos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		wallPos.z += 0.01;
+		fireplacePos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		wallPos.z -= 0.01;
+		fireplacePos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -189,7 +189,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"wallPos=" << wallPos;
+	Print << U"fireplacePos=" << fireplacePos;
 
 #endif
 }
@@ -909,6 +909,18 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 16;
+			}
+		}
+
+		// 暖炉
+		if (!bLockon)
+		{
+			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 18;
 			}
 		}
 

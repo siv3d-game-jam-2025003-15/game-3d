@@ -327,6 +327,9 @@ private:
 	// 壁
 	Vec3 wallPos = { 3.7, 0.25, 3 };
 
+	// 暖炉
+	Vec3 fireplacePos = { 16.3, 0.5, -6.5 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController keyController;
@@ -341,6 +344,7 @@ private:
 	ObjectController toiletController;
 	ObjectController shelfController;
 	ObjectController wallController;
+	ObjectController fireplaceController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -535,7 +539,7 @@ private:
 		U"これは古いベッドだ。今は使われていない。",	// 15
 		U"ん？この壁は…。",	// 16
 		U"これは棚だ。何かあるぞ。",	// 17
-		U"暖炉がある。",	// 18
+		U"暖炉がある。火が弱い。",	// 18
 		U"（「I」キーを押して、持ち物からパンを食べよう。）",	// 19
 		U"扉だ。この針金の鍵で開けられるかもしれない。",	// 20
 		U"（予備）",	// 21
