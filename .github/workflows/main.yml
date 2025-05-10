@@ -41,5 +41,5 @@ jobs:
         shell: cmd
         run: |
           msbuild game-3d\game-3d.vcxproj ^
-            /p:Configuration=Debug ^
+            /p:Configuration=Release ^
             /p:Platform=x64
