@@ -19,9 +19,13 @@ jobs:
 
       - name: Build project with MSBuild
         run: |
-          msbuild game-3d\game-3d.vcxproj `
+          $includePath = "$env:GITHUB_WORKSPACE\External\Siv3D\include;$env:GITHUB_WORKSPACE\External\Siv3D\include\ThirdParty"
+          $libraryPath = "$env:GITHUB_WORKSPACE\External\Siv3D\lib\x64"
+          $options = '/DUNICODE /D_UNICODE /std:c++20'
+
+          msbuild "game-3d\game-3d.vcxproj" `
             /p:Configuration=Release `
             /p:Platform=x64 `
-            /p:IncludePath="${{ github.workspace }}\External\Siv3D\include;${{ github.workspace }}\External\Siv3D\include\ThirdParty" `
-            /p:LibraryPath="${{ github.workspace }}\External\Siv3D\lib\x64" `
-            /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
+            "/p:IncludePath=$includePath" `
+            "/p:LibraryPath=$libraryPath" `
+            "/p:CLAdditionalOptions=$options"
