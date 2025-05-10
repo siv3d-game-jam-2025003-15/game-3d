@@ -1,0 +1,39 @@
+name: Build OpenSiv3D Library
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout your repository
+        uses: actions/checkout@v4
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Clone OpenSiv3D (v0.6.15)
+        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/OpenSiv3D
+
+      - name: Download Boost headers (1.83.0)
+        run: |
+          curl -L -o boost.zip https://boostorg.jfrog.io/artifactory/main/release/1.83.0/source/boost_1_83_0.zip
+          powershell -Command "Expand-Archive -Path boost.zip -DestinationPath ."
+          mkdir External\OpenSiv3D\Dependencies\boost_1_83_0
+          xcopy /E /I /Y boost_1_83_0\boost External\OpenSiv3D\Dependencies\boost_1_83_0\boost
+
+      - name: Build OpenSiv3D.lib
+        shell: cmd
+        run: |
+          msbuild External\OpenSiv3D\WindowsDesktop\Siv3D.vcxproj ^
+            /p:Configuration=Release ^
+            /p:Platform=x64
+
+      - name: Archive built library
+        uses: actions/upload-artifact@v4
+        with:
+          name: Siv3D-lib
+          path: |
+            External/OpenSiv3D/Build/lib/x64/Release/Siv3D.lib
