@@ -1,0 +1,42 @@
+name: Manual Build OpenSiv3D
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout your repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (CMake, Ninja, 7zip) # 必要なものをinstall
+        run: |
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+          choco install ninja -y
+          choco install 7zip -y
+
+      - name: Clone OpenSiv3D v0.6.15　 # Siv3Dを持ってくる
+        run: git clone --branch v0.6.15 --depth=1 https://github.com/Siv3D/OpenSiv3D.git
+
+      - name: Configure CMake project
+        run: |
+          cd OpenSiv3D
+          mkdir build
+          cd build
+          cmake .. -G "Ninja" -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build OpenSiv3D
+        run: |
+          cd OpenSiv3D/build
+          cmake --build .
+
+      - name: Build your project
+        run: |
+          msbuild game-3d\game-3d.vcxproj `
+            /p:Configuration=Release `
+            /p:Platform=x64 `
+            /p:IncludePath="${{ github.workspace }}\OpenSiv3D\Siv3D\Include" `
+            /p:LibraryPath="${{ github.workspace }}\OpenSiv3D\build\Release" `
+            /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
