@@ -1659,6 +1659,11 @@ void CameraTest::update()
 			}
 
 		}
+		
+#if _DEBUG
+		Print << U"m_focusPosition" << camera.getFocusPosition();
+		modelExclamationMark.draw(camera.getFocusPosition());
+#endif
 	}
 
 	// [RenderTexture を 2D シーンに描画]
@@ -1885,8 +1890,22 @@ void CameraTest::update()
 			}
 
 		}
-
 	}
+	else
+	{
+#if _DEBUG
+		// フォーカスエリア
+		Rect rect(
+			WINDOW_WIDTH / 2 - 200,
+			WINDOW_HEIGHT / 2 - 200,
+			400,
+			400
+		);
+
+		rect.drawFrame(2, Palette::Red);
+#endif
+	}
+
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
@@ -2005,6 +2024,4 @@ void CameraTest::draw() const
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
-
-
 }

@@ -24,13 +24,21 @@ std::tuple<bool, bool, int> ObjectController::update(
 	}
 
 	Vec3 screenPos = camera.worldToScreenPoint(objPos);
-	double distance = eyePos.distanceFrom(objPos);
+	//double distance = eyePos.distanceFrom(objPos);
 
-	if (screenPos.x >= (WINDOW_WIDTH / 2 - 200)
+	Vec3 focus = camera.getFocusPosition();
+	double focusDistance = focus.distanceFrom(objPos);
+
+	//Print << U"focusDistance=" << focusDistance;
+
+	if (
+		screenPos.x >= (WINDOW_WIDTH / 2 - 200)
 		&& screenPos.x <= (WINDOW_WIDTH / 2 + 200)
 		&& screenPos.y >= (WINDOW_HEIGHT / 2 - 200)
 		&& screenPos.y <= (WINDOW_HEIGHT / 2 + 200)
-		&& distance < 3.5)
+		//&& distance < 3.5
+		&& focusDistance < 1.5
+	)
 	{
 #ifdef _DEBUG
 		Print << U"オブジェクトが画面の中心にある";
