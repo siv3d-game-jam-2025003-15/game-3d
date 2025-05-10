@@ -135,12 +135,12 @@
     <Link>
       <AdditionalLibraryDirectories>
         $(ProjectDir)..\External;
-        $(ProjectDir)..\External\Siv3D\Siv3D\lib\Windows\curl;
+        $(ProjectDir)..\External\Siv3D\Siv3D\lib\Windows;
         %(AdditionalLibraryDirectories)
       </AdditionalLibraryDirectories>
       <AdditionalDependencies>
         Siv3D.lib;
-        libcurl.lib;
+        curl\libcurl.lib;
         %(AdditionalDependencies)
       </AdditionalDependencies>
     </Link>
