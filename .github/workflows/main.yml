@@ -17,8 +17,8 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Clone Civ3D (or OpenSiv3D) source into External folder
-        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git game-3d/External/Siv3D
+      #- name: Clone Civ3D (or OpenSiv3D) source into External folder
+      #  run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git game-3d/External/Siv3D
 
       #- name: Inject .vcxproj.user with include paths
       #  shell: pwsh
@@ -34,10 +34,10 @@ jobs:
       #    '@
       #        Set-Content -Encoding UTF8 -Path $projPath -Value $content
       
-      - name: Build project with MSBuild
+      - name: Build game project
         shell: cmd
         run: |
           msbuild game-3d\game-3d.vcxproj ^
-            /p:Configuration=Debug ^
+            /p:Configuration=Release ^
             /p:Platform=x64 ^
-            /p:CL=" /I%GITHUB_WORKSPACE%\game-3d\External\Siv3D\include /I%GITHUB_WORKSPACE%\game-3d\External\Siv3D\include\ThirdParty /DUNICODE /D_UNICODE /std:c++20"
+            /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
