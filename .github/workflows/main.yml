@@ -38,6 +38,6 @@ jobs:
         shell: cmd
         run: |
           msbuild game-3d\game-3d.vcxproj ^
-            /p:Configuration=Release ^
+            /p:Configuration=Debug ^
             /p:Platform=x64 ^
-            /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
+            #/p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
