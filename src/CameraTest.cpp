@@ -905,6 +905,11 @@ void CameraTest::update()
 	{
 		// インベントリを表示している
 
+		// 足音の削除
+		if (AudioAsset(U"足音45秒のループ").isPlaying()) {
+			AudioAsset(U"足音45秒のループ").stop();
+		}
+
 		if (KeyUp.down())
 		{
 			itemIndex -= 4;
