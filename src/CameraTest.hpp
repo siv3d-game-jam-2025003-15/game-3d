@@ -317,7 +317,7 @@ private:
 	Vec3 breadPos = { 0, 0.75, 7 };
 
 	// 火かき棒の座標
-	Vec3 pokerPos = { 19, 0.1, -4.8 };
+	Vec3 pokerPos = { 20, 0.45, -6.2 };
 
 	// 引き出し
 	Vec3 drawerPos = { 16.3, 0, 1.6 };

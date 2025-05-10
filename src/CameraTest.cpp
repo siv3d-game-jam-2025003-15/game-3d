@@ -95,19 +95,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		fireplacePos.x += 0.01;
+		pokerPos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		fireplacePos.x -= 0.01;
+		pokerPos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		fireplacePos.z += 0.01;
+		pokerPos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		fireplacePos.z -= 0.01;
+		pokerPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -189,7 +189,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"bFireplaceStrong=" << bFireplaceStrong;
+	Print << U"pokerPos=" << pokerPos;
 	
 #endif
 }
@@ -1477,7 +1477,7 @@ void CameraTest::update()
 		if (bPokerHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(pokerPos)
+				Mat4x4::RotateZ(75_deg).scaled(0.01).translated(pokerPos)
 			};
 
 			modelPoker.draw();
