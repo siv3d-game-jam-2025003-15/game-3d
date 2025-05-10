@@ -118,7 +118,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-      <ClCompile>
+    <ClCompile>
       <AdditionalIncludeDirectories>
         $(ProjectDir)..\External\Siv3D\Siv3D\include;
         $(ProjectDir)..\External\Siv3D\Siv3D\include\ThirdParty;
