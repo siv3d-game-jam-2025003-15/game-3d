@@ -119,7 +119,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\External\Prebuilt</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\External</AdditionalLibraryDirectories>
       <AdditionalDependencies>Siv3D.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
