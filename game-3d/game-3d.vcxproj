@@ -125,6 +125,13 @@
         %(AdditionalIncludeDirectories)
       </AdditionalIncludeDirectories>
     </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>
+        $(ProjectDir)..\External\Siv3D\include;
+        $(ProjectDir)..\External\Siv3D\include\ThirdParty;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+      </ResourceCompile>
     <Link>
       <AdditionalLibraryDirectories>$(ProjectDir)..\External</AdditionalLibraryDirectories>
       <AdditionalDependencies>Siv3D.lib</AdditionalDependencies>
