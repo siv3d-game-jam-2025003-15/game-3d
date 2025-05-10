@@ -44,6 +44,10 @@ jobs:
             /p:Configuration=Release ^
             /p:Platform=x64
 
+      - name: Check built executable
+        shell: cmd
+        run: dir game-3d\App /b /s
+
       - name: Upload to GitHub Release (auto-tag)
         uses: softprops/action-gh-release@v1
         with:
