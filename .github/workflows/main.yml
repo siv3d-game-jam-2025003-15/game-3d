@@ -47,9 +47,10 @@ jobs:
             /p:Configuration=Debug ^
             /p:Platform=x64
 
-      - name: Package app directory
+      - name: Compress App folder to zip
+        shell: pwsh
         run: |
-          powershell Compress-Archive -Path "game-3d/game-3d/App/*" -DestinationPath app.zip
+          Compress-Archive -Path "game-3d/game-3d/App" -DestinationPath "app.zip"
 
       - name: Upload app.zip to GitHub Release
         uses: softprops/action-gh-release@v1
