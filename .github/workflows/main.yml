@@ -1,0 +1,29 @@
+name: Manual Build with Civ3D
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository (with submodules if needed)
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Clone Civ3D (or OpenSiv3D) source into External folder
+        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
+
+      - name: Build project with MSBuild
+        shell: cmd
+        run: |
+          msbuild game-3d\game-3d.vcxproj ^
+            /p:Configuration=Release ^
+            /p:Platform=x64 ^
+            /p:IncludePath="%GITHUB_WORKSPACE%\External\Siv3D\include;%GITHUB_WORKSPACE%\External\Siv3D\include\ThirdParty" ^
+            /p:LibraryPath="%GITHUB_WORKSPACE%\External\Siv3D\lib\x64" ^
+            /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
+

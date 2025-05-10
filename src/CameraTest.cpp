@@ -95,19 +95,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		wallPos.x += 0.01;
+		fireplacePos.x += 0.01;
 	}
 	if (Key0.pressed())
 	{
-		wallPos.x -= 0.01;
+		fireplacePos.x -= 0.01;
 	}
 	if (KeyO.pressed())
 	{
-		wallPos.z += 0.01;
+		fireplacePos.z += 0.01;
 	}
 	if (KeyP.pressed())
 	{
-		wallPos.z -= 0.01;
+		fireplacePos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -189,7 +189,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"wallPos=" << wallPos;
+	Print << U"fireplacePos=" << fireplacePos;
 
 #endif
 }
@@ -432,6 +432,18 @@ void CameraTest::drawBigItem(
 	case 10:
 		break;
 	}
+}
+
+void CameraTest::inventoryOnOff()
+{
+	// インベントリフラグの切り替え
+	bInventory = bInventory ? false : true;
+
+	// いったんカーソルを強制的に中央に戻す
+	Cursor::SetPos(center.x, center.y);
+
+	// 手記のフラグはオフにする
+	bMemo = false;
 }
 
 void CameraTest::update()
@@ -900,10 +912,27 @@ void CameraTest::update()
 			}
 		}
 
+		// 暖炉
+		if (!bLockon)
+		{
+			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 18;
+			}
+		}
+
 	}
 	else
 	{
 		// インベントリを表示している
+
+		// 足音の削除
+		if (AudioAsset(U"足音45秒のループ").isPlaying()) {
+			AudioAsset(U"足音45秒のループ").stop();
+		}
 
 		if (KeyUp.down())
 		{
@@ -950,14 +979,7 @@ void CameraTest::update()
 	// インベントリの表示・非表示
 	if (KeyI.down())
 	{
-		// インベントリフラグの切り替え
-		bInventory = bInventory ? false : true;
-
-		// いったんカーソルを強制的に中央に戻す
-		Cursor::SetPos(center.x, center.y);
-
-		// 手記のフラグはオフにする
-		bMemo = false;
+		inventoryOnOff();
 	}
 
 	// コリジョンを無効にするエリア
@@ -1678,14 +1700,32 @@ void CameraTest::update()
 	if (bInventory)
 	{
 		// インベントリ
-		int itemX = center.x - 512 / 2;
-		int itemY = center.y - 512 / 2;
+		int itemX = center.x - inventoryWidth / 2;
+		int itemY = center.y - inventoryHeight / 2;
 		inventorySprite.scaled(0.5).draw(itemX, itemY);
 
 		int selectItem = -1;
 
 		// 初期化
 		itemMessage = -1;
+
+		// インベントリ全体
+		{
+			Rect rect(itemX, itemY, inventoryWidth, inventoryHeight);
+			if (rect.mouseOver())
+			{
+				//Print << U"インベントリ内";
+			}
+			else
+			{
+				//Print << U"インベントリ外";
+				if (MouseL.down())
+				{
+					// インベントリを非表示にする
+					inventoryOnOff();
+				}
+			}
+		}
 
 		// アイテム
 		for (int i = 0; i < items.size(); i++)
