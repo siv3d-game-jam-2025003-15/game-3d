@@ -914,24 +914,32 @@ void CameraTest::update()
 			}
 		}
 
-		// 暖炉
+		// 暖炉（火が弱い）
 		if (!bLockon)
 		{
-			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
+			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
+			if (a == true && bParchmentHave == false)
+			{
+				// 火が強くなった
+				bFireplace = true;
+			}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
-				if (bFireplace)
-				{
-					// 火が強い
-					message = 21;
-				}
-				else
-				{
-					// 火が弱い
-					message = 18;
-				}
+				message = 18;
+			}
+		}
+
+		// 暖炉（火が強い）
+		if (!bLockon && bFireplace)
+		{
+			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 21;
 			}
 		}
 
@@ -1840,23 +1848,23 @@ void CameraTest::update()
 					scenario = 5;
 				}
 			}
-			else if (items[selectItem] == Poker)
-			{
-				if (bFireplace == false)
-				{
-					// TODO 暖炉の近くでのみ使えるようにする
+			//else if (items[selectItem] == Poker)
+			//{
+			//	if (bFireplace == false)
+			//	{
+			//		// TODO 暖炉の近くでのみ使えるようにする
 
-					bFireplace = true;
+			//		bFireplace = true;
 
-					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"GET").play();
-					bgmStopCount = 4.00;
+			//		// SEを鳴らす
+			//		AudioAsset(U"BGM").stop();
+			//		AudioAsset(U"GET").play();
+			//		bgmStopCount = 4.00;
 
-					// TODO
-					//scenario = 5;
-				}
-			}
+			//		// TODO
+			//		//scenario = 5;
+			//	}
+			//}
 		}
 
 	}
