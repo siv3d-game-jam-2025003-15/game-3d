@@ -434,6 +434,18 @@ void CameraTest::drawBigItem(
 	}
 }
 
+void CameraTest::inventoryOnOff()
+{
+	// インベントリフラグの切り替え
+	bInventory = bInventory ? false : true;
+
+	// いったんカーソルを強制的に中央に戻す
+	Cursor::SetPos(center.x, center.y);
+
+	// 手記のフラグはオフにする
+	bMemo = false;
+}
+
 void CameraTest::update()
 {
 	const double deltaTime = Scene::DeltaTime();
@@ -955,14 +967,7 @@ void CameraTest::update()
 	// インベントリの表示・非表示
 	if (KeyI.down())
 	{
-		// インベントリフラグの切り替え
-		bInventory = bInventory ? false : true;
-
-		// いったんカーソルを強制的に中央に戻す
-		Cursor::SetPos(center.x, center.y);
-
-		// 手記のフラグはオフにする
-		bMemo = false;
+		inventoryOnOff();
 	}
 
 	// コリジョンを無効にするエリア
@@ -1683,14 +1688,32 @@ void CameraTest::update()
 	if (bInventory)
 	{
 		// インベントリ
-		int itemX = center.x - 512 / 2;
-		int itemY = center.y - 512 / 2;
+		int itemX = center.x - inventoryWidth / 2;
+		int itemY = center.y - inventoryHeight / 2;
 		inventorySprite.scaled(0.5).draw(itemX, itemY);
 
 		int selectItem = -1;
 
 		// 初期化
 		itemMessage = -1;
+
+		// インベントリ全体
+		{
+			Rect rect(itemX, itemY, inventoryWidth, inventoryHeight);
+			if (rect.mouseOver())
+			{
+				//Print << U"インベントリ内";
+			}
+			else
+			{
+				//Print << U"インベントリ外";
+				if (MouseL.down())
+				{
+					// インベントリを非表示にする
+					inventoryOnOff();
+				}
+			}
+		}
 
 		// アイテム
 		for (int i = 0; i < items.size(); i++)

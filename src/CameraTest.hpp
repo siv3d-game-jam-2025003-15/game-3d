@@ -458,6 +458,13 @@ private:
 	// インベントリの表示
 	bool bInventory = false;
 
+	// インベントリの大きさ
+	const int inventoryWidth = 512;
+	const int inventoryHeight = 512;
+
+	// インベントリのON／OFF
+	void inventoryOnOff();
+
 	// 選択中のアイテム番号
 	int itemIndex = 0;
 
