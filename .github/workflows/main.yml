@@ -11,11 +11,8 @@ jobs:
       - name: Checkout repository (with submodules if needed)
         uses: actions/checkout@v4
 
-      - name: Install dependencies (CMake, Ninja, 7zip)
-        run: |
-          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
-          choco install ninja -y
-          choco install 7zip -y
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
 
       - name: Clone Civ3D (or OpenSiv3D) source into External folder
         run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
