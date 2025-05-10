@@ -139,8 +139,9 @@
         %(AdditionalLibraryDirectories)
       </AdditionalLibraryDirectories>
       <AdditionalDependencies>
-        Siv3D.lib;
+        Siv3D_d.lib;
         curl\libcurl.lib;
+        curl\libcurl-d.lib;
         %(AdditionalDependencies)
       </AdditionalDependencies>
     </Link>
