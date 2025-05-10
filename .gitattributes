@@ -1,0 +1,2 @@
+*Siv3D.lib filter=lfs diff=lfs merge=lfs -text
+External/Siv3D_d.lib filter=lfs diff=lfs merge=lfs -text

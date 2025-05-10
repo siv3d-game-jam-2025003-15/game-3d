@@ -3,6 +3,9 @@ name: Manual Build with Civ3D
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -13,12 +16,15 @@ jobs:
     steps:
       - name: Checkout repository (with submodules if needed)
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: true
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
       - name: Clone Civ3D (or OpenSiv3D) source into External folder
-        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git game-3d/External/Siv3D
+        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
 
       #- name: Inject .vcxproj.user with include paths
       #  shell: pwsh
@@ -34,10 +40,24 @@ jobs:
       #    '@
       #        Set-Content -Encoding UTF8 -Path $projPath -Value $content
       
-      - name: Build project with MSBuild
+      - name: Build game project
         shell: cmd
         run: |
           msbuild game-3d\game-3d.vcxproj ^
             /p:Configuration=Debug ^
-            /p:Platform=x64 ^
-            /p:CL=" /I%GITHUB_WORKSPACE%\game-3d\External\Siv3D\include /I%GITHUB_WORKSPACE%\game-3d\External\Siv3D\include\ThirdParty /DUNICODE /D_UNICODE /std:c++20"
+            /p:Platform=x64
+
+      - name: Compress App folder to zip
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "game-3d/App" -DestinationPath "app.zip"
+
+      - name: Upload app.zip to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: manual-${{ github.run_id }}
+          name: ${{ github.event.inputs.release_name || format('Manual Release /#{0}', github.run_number) }}
+          files: app.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -117,6 +117,35 @@
       <Command>xcopy /I /D /Y "$(OutDir)$(TargetFileName)" "$(ProjectDir)App"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(ProjectDir)..\External\Siv3D\Siv3D\include;
+        $(ProjectDir)..\External\Siv3D\Siv3D\include\ThirdParty;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>
+        $(ProjectDir)..\External\Siv3D\Siv3D\include;
+        $(ProjectDir)..\External\Siv3D\Siv3D\include\ThirdParty;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+      </ResourceCompile>
+    <Link>
+      <AdditionalLibraryDirectories>
+        $(ProjectDir)..\External;
+        $(ProjectDir)..\External\Siv3D\Siv3D\lib\Windows;
+        %(AdditionalLibraryDirectories)
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        Siv3D_d.lib;
+        curl\libcurl.lib;
+        curl\libcurl-d.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CameraTest.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
