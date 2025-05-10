@@ -55,7 +55,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: manual-${{ github.run_id }}
-          name: ${{ github.event.inputs.release_name || format('Manual Release #{0}', github.run_number) }}
+          name: ${{ github.event.inputs.release_name || format('Manual Release /#{0}', github.run_number) }}
           files: app.zip
           generate_release_notes: true
         env:
