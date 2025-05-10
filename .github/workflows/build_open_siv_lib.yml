@@ -18,21 +18,12 @@ jobs:
         run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/OpenSiv3D
 
       - name: Download and extract Boost headers (1.74.0)
-        shell: pwsh
         run: |
-          Invoke-WebRequest -Uri "https://sourceforge.net/projects/boost/files/boost/1.74.0/boost_1_74_0.zip/download" -OutFile "boost_1_74_0.zip"
-      
-          if (Test-Path "boost_1_74_0") {
-            Remove-Item -Recurse -Force "boost_1_74_0"
-          }
-      
-          Expand-Archive -Path "boost_1_74_0.zip" -DestinationPath "."
-      
-          $target = "External/OpenSiv3D/Dependencies/boost_1_74_0/boost"
-          if (-Not (Test-Path $target)) {
-            New-Item -ItemType Directory -Path $target | Out-Null
-          }
-          Copy-Item -Recurse -Force "boost_1_74_0/boost" $target
+          curl -L -o boost.zip https://archives.boost.io/release/1.74.0/source/boost_1_74_0.zip
+          tar -xf boost.zip
+          mkdir External\OpenSiv3D\Dependencies\boost_1_74_0
+          xcopy /E /I /Y boost_1_74_0\boost External\OpenSiv3D\Dependencies\boost_1_74_0\boost
+
 
       - name: Build OpenSiv3D.lib
         shell: cmd
