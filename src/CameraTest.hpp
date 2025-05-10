@@ -54,6 +54,21 @@ struct Segment {
 	Vec3_ end;
 };
 
+// アイテムID
+enum ItemID
+{
+	Bread,	// 0 パン
+	Memo,	// 1 手記
+	Key,	// 2 古びた鍵
+	Poker,	// 3 火かき棒
+	Parchment, // 4 羊皮紙
+	Shelf, // 5 針金
+	DirtyCloth,	// 6 汚れた布
+	Cloth,	// 7 布
+	ToastedParchment,	// 8 炙った羊皮紙
+	ShelfKey, // 9 針金の鍵
+};
+
 // カメラの実験
 class CameraTest : public App::Scene
 {
@@ -469,6 +484,12 @@ private:
 	// インベントリのON／OFF
 	void inventoryOnOff();
 
+	// アイテムアイコンの大きさ
+	const int itemMiniWidth = 60;
+	const int itemMiniHeight = 60;
+	const int itemBigWidth = 140;
+	const int itemBigHeight = 140;
+
 	// 選択中のアイテム番号
 	int itemIndex = 0;
 
@@ -517,6 +538,9 @@ private:
 	// 針金の鍵を持っている
 	bool bWireKey = false;
 
+	// 暖炉の火が強くなった
+	bool bFireplace = false;
+
 	// 画面下のテキスト
 	Array<String> Text =
 	{
@@ -542,7 +566,7 @@ private:
 		U"暖炉がある。火が弱い。",	// 18
 		U"（「I」キーを押して、持ち物からパンを食べよう。）",	// 19
 		U"扉だ。この針金の鍵で開けられるかもしれない。",	// 20
-		U"（予備）",	// 21
+		U"暖炉がある。火が強い。",	// 21
 		U"（予備）",	// 22
 		U"（予備）",	// 23
 		U"（予備）",	// 24
