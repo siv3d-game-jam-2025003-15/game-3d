@@ -21,7 +21,7 @@ jobs:
         run: |
           curl -L -o boost.zip https://boostorg.jfrog.io/artifactory/main/release/1.74.0/source/boost_1_74_0.zip
           tar -xf boost.zip
-          mkdir External\OpenSiv3D\Dependencies\boost_1_74_0
+          #mkdir External\OpenSiv3D\Dependencies\boost_1_74_0
           xcopy /E /I /Y boost_1_74_0\boost External\OpenSiv3D\Dependencies\boost_1_74_0\boost
 
       - name: Build OpenSiv3D.lib
