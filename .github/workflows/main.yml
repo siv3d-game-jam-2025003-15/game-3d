@@ -18,7 +18,7 @@ jobs:
         uses: microsoft/setup-msbuild@v2
 
       - name: Clone Civ3D (or OpenSiv3D) source into External folder
-        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git game-3d/game-3dExternal/Siv3D
+        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
 
       #- name: Inject .vcxproj.user with include paths
       #  shell: pwsh

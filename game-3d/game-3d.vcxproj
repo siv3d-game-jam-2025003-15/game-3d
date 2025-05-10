@@ -120,8 +120,8 @@
   <ItemDefinitionGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
       <ClCompile>
       <AdditionalIncludeDirectories>
-        $(ProjectDir)..\External\Siv3D\include;
-        $(ProjectDir)..\External\Siv3D\include\ThirdParty;
+        $(ProjectDir)..\External\Siv3D\Siv3D\include;
+        $(ProjectDir)..\External\Siv3D\Siv3D\include\ThirdParty;
         %(AdditionalIncludeDirectories)
       </AdditionalIncludeDirectories>
     </ClCompile>
