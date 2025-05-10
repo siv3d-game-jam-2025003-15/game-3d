@@ -18,14 +18,12 @@ jobs:
         run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
 
       - name: Build project with MSBuild
+        shell: cmd
         run: |
-          $includePath = "$env:GITHUB_WORKSPACE\External\Siv3D\include;$env:GITHUB_WORKSPACE\External\Siv3D\include\ThirdParty"
-          $libraryPath = "$env:GITHUB_WORKSPACE\External\Siv3D\lib\x64"
-          $options = "/DUNICODE /D_UNICODE /std:c++20"
+          msbuild game-3d\game-3d.vcxproj ^
+            /p:Configuration=Release ^
+            /p:Platform=x64 ^
+            /p:IncludePath="%GITHUB_WORKSPACE%\External\Siv3D\include;%GITHUB_WORKSPACE%\External\Siv3D\include\ThirdParty" ^
+            /p:LibraryPath="%GITHUB_WORKSPACE%\External\Siv3D\lib\x64" ^
+            /p:CLAdditionalOptions="/DUNICODE /D_UNICODE /std:c++20"
 
-          & msbuild "game-3d\game-3d.vcxproj" `
-            "/p:Configuration=Release" `
-            "/p:Platform=x64" `
-            "/p:IncludePath=$includePath" `
-            "/p:LibraryPath=$libraryPath" `
-            "/p:CLAdditionalOptions=$options"
