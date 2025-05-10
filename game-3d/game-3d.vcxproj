@@ -133,8 +133,16 @@
       </AdditionalIncludeDirectories>
       </ResourceCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\External</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Siv3D.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+        $(ProjectDir)..\External;
+        $(ProjectDir)..\External\Siv3D\lib\Windows\curl;
+        %(AdditionalLibraryDirectories)
+      </AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        Siv3D.lib;
+        libcurl.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
