@@ -380,6 +380,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
+		toastedParchmentMiniSprite.draw(x, y);
 		break;
 	case ShelfKey:
 		// 針金の鍵
@@ -428,6 +429,7 @@ void CameraTest::drawBigItem(
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
+		toastedParchmentBigSprite.draw(x, y);
 		break;
 	case ShelfKey:
 		// 針金の鍵
@@ -446,6 +448,9 @@ void CameraTest::inventoryOnOff()
 
 	// 手記のフラグはオフにする
 	bMemo = false;
+
+	// 炙った羊皮紙フラグはオフにする
+	bToastedParchment = false;
 }
 
 void CameraTest::update()
@@ -921,7 +926,7 @@ void CameraTest::update()
 			if (a == true && bParchmentHave == false)
 			{
 				// 火が強くなった
-				bFireplace = true;
+				bFireplaceStrong = true;
 			}
 			if (b)
 			{
@@ -932,7 +937,7 @@ void CameraTest::update()
 		}
 
 		// 暖炉（火が強い）
-		if (!bLockon && bFireplace)
+		if (!bLockon && bFireplaceStrong)
 		{
 			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
 			if (b)
@@ -1754,7 +1759,7 @@ void CameraTest::update()
 
 			drawMiniItem(items[i], itemMiniX, itemMiniY);
 
-			if (bMemo)
+			if (bMemo || bToastedParchment)
 			{
 				// 選択できないようにする
 				continue;
@@ -1798,10 +1803,11 @@ void CameraTest::update()
 		if (MouseL.down())
 		{
 			// アイテムを使う
-			if (bMemo)
+			if (bMemo || bToastedParchment)
 			{
-				// 手記のメモを閉じる
+				// メッセージが表示されていたら閉じる
 				bMemo = false;
+				bToastedParchment = false;
 			}
 			else if (items.size() <= selectItem)
 			{
@@ -1848,23 +1854,36 @@ void CameraTest::update()
 					scenario = 5;
 				}
 			}
-			//else if (items[selectItem] == Poker)
-			//{
-			//	if (bFireplace == false)
-			//	{
-			//		// TODO 暖炉の近くでのみ使えるようにする
+			else if (items[selectItem] == Parchment)
+			{
+				if (bFireplaceStrong)
+				{
+					// TODO 暖炉の近くで使う
 
-			//		bFireplace = true;
+					// 暖炉で羊皮紙を使う 
+					items[selectItem] = ToastedParchment;
 
-			//		// SEを鳴らす
-			//		AudioAsset(U"BGM").stop();
-			//		AudioAsset(U"GET").play();
-			//		bgmStopCount = 4.00;
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
 
-			//		// TODO
-			//		//scenario = 5;
-			//	}
-			//}
+					// TODO
+					//scenario = 5;
+				}
+			}
+			else if (items[selectItem] == ToastedParchment)
+			{
+				// 炙った羊皮紙を使った
+				bToastedParchment = true;
+
+				// TODO
+				//if (scenario == 1)
+				//{
+				//	scenario = 2;
+				//}
+			}
+
 		}
 
 	}
@@ -1931,6 +1950,7 @@ void CameraTest::draw() const
 		);
 	}
 
+	// 手記
 	if (bInventory && bMemo)
 	{
 		// 半透明の黒い画像
@@ -1951,6 +1971,32 @@ void CameraTest::draw() const
 		memoText += U"\n";
 		memoText += U"……俺には、もう時間がなかった。";
 		
+		// セリフ表示（仮）
+		const Font& boldFont = FontAsset(U"Bold");
+		boldFont(memoText).drawAt(
+			28,
+			{ center.x, center.y },
+			ColorF{ 1, 1, 1, 1 }
+		);
+	}
+
+	// 羊皮紙
+	if (bInventory && bToastedParchment)
+	{
+		// 半透明の黒い画像
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
+
+		String memoText = U"ちぎれた輪が、\n";
+		memoText += U"空の底へと沈む。\n";
+		memoText += U"白い欠片が、\n";
+		memoText += U"風に踊り、やがて落ちる。\n";
+		memoText += U"絡みつくものが、\n";
+		memoText += U"静かに喉元へ這う。\n";
+		memoText += U"枯れた夢が、\n";
+		memoText += U"黒ずんだ土に崩れ落ちる。\n";
+		memoText += U"見開かれたそれが、\n";
+		memoText += U"すべてを呪うように、夜を睨む。\n";
+
 		// セリフ表示（仮）
 		const Font& boldFont = FontAsset(U"Bold");
 		boldFont(memoText).drawAt(

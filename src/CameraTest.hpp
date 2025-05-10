@@ -474,6 +474,9 @@ private:
 	const Texture wireBigSprite{ U"assets/sprites/wire_big.png" };
 	const Texture wireKeyMiniSprite{ U"assets/sprites/wirekey_mini.png" };
 	const Texture wireKeyBigSprite{ U"assets/sprites/wirekey_big.png" };
+	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
+	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };
+
 
 	// インベントリの表示
 	bool bInventory = false;
@@ -540,7 +543,10 @@ private:
 	bool bWireKey = false;
 
 	// 暖炉の火が強くなった
-	bool bFireplace = false;
+	bool bFireplaceStrong = false;
+
+	// 炙った羊皮紙を読んでいる
+	bool bToastedParchment = false;
 
 	// 画面下のテキスト
 	Array<String> Text =
