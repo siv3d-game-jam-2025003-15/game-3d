@@ -8,7 +8,7 @@ jobs:
     runs-on: windows-latest
 
     env:
-        SIV3D_INCLUDE_PATH: ${{ github.workspace }}\External\Siv3D\include;${{ github.workspace }}\External\Siv3D\include\ThirdParty
+        CI: true
 
     steps:
       - name: Checkout repository (with submodules if needed)
