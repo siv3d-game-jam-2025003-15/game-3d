@@ -43,3 +43,13 @@ jobs:
           msbuild game-3d\game-3d.vcxproj ^
             /p:Configuration=Release ^
             /p:Platform=x64
+
+      - name: Upload to GitHub Release (auto-tag)
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: manual-${{ github.run_id }}
+          name: ${{ github.event.inputs.release_name || format('Manual Release \#{0}', github.run_number) }}
+          files: "game-3d/App/game-3d(debug).exe"
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
