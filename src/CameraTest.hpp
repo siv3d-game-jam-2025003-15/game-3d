@@ -231,6 +231,9 @@ private:
 	// 羊皮紙
 	const Model modelParchment{ U"assets/models/Parchment/Gimmick_Parchment01.obj" };
 
+	// ハンガー
+	const Model modelHangar{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
+
 	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
 
@@ -344,6 +347,9 @@ private:
 
 	// 暖炉
 	Vec3 fireplacePos = { 16.3, 0.5, -6.5 };
+
+	// ハンガー
+	Vec3 hangarPos = { 0, 0.75, 8 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
@@ -477,7 +483,6 @@ private:
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
 	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };
 
-
 	// インベントリの表示
 	bool bInventory = false;
 
@@ -547,6 +552,9 @@ private:
 
 	// 炙った羊皮紙を読んでいる
 	bool bToastedParchment = false;
+
+	// ハンガーを持っている
+	bool bHangarHave = false;
 
 	// 画面下のテキスト
 	Array<String> Text =

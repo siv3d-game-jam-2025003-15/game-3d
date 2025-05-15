@@ -25,7 +25,8 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
-	
+	Model::RegisterDiffuseTextures(modelHangar, TextureDesc::MippedSRGB);
+
 	// BGMの再生
 	AudioAsset(U"BGM").play();
 
@@ -182,7 +183,7 @@ void CameraTest::debug()
 	//	Print << U"[8]シェーダー：なし";
 	//}
 
-//	Print << U"[R][F]上下移動";
+	Print << U"[R][F]上下移動";
 
 #ifdef _DEBUG
 
@@ -1566,6 +1567,16 @@ void CameraTest::update()
 			};
 
 			modelParchment.draw();
+		}
+
+		// ハンガーの描画
+		if (bHangarHave == false)
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(hangarPos)
+			};
+
+			modelHangar.draw();
 		}
 
 		// デバッグ表示
