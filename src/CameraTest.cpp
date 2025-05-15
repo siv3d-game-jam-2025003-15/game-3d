@@ -182,7 +182,7 @@ void CameraTest::debug()
 	//	Print << U"[8]シェーダー：なし";
 	//}
 
-	Print << U"[R][F]上下移動";
+//	Print << U"[R][F]上下移動";
 
 #ifdef _DEBUG
 
@@ -1990,13 +1990,31 @@ void CameraTest::draw() const
 		memoText += U"\n";
 		memoText += U"……俺には、もう時間がなかった。";
 		
-		// セリフ表示（仮）
+		// セリフ表示
 		const Font& boldFont = FontAsset(U"Bold");
-		boldFont(memoText).drawAt(
-			28,
-			{ center.x, center.y },
-			ColorF{ 1, 1, 1, 1 }
-		);
+		//boldFont(memoText).drawAt(
+		//	28,
+		//	{ center.x, center.y },
+		//	ColorF{ 1, 1, 1, 1 }
+		//);
+
+		// TODO 共通化する
+		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
+
+		Array<String> lines = memoText.split(U'\n');
+
+		for (int i = 0; i < lines.size(); ++i)
+		{
+			double x = center.x;
+			double y = center.y + lineSpacing * (i - (int)lines.size()/2);
+
+			boldFont(lines[i]).drawAt(
+				28,
+				{ x, y },
+				ColorF{ 1, 1, 1, 1 }
+			);
+		}
+
 	}
 
 	// 羊皮紙
@@ -2018,10 +2036,27 @@ void CameraTest::draw() const
 
 		// セリフ表示（仮）
 		const Font& boldFont = FontAsset(U"Bold");
-		boldFont(memoText).drawAt(
-			28,
-			{ center.x, center.y },
-			ColorF{ 1, 1, 1, 1 }
-		);
+		//boldFont(memoText).drawAt(
+		//	28,
+		//	{ center.x, center.y },
+		//	ColorF{ 1, 1, 1, 1 }
+		//);
+
+		// TODO 共通化する
+		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
+
+		Array<String> lines = memoText.split(U'\n');
+
+		for (int i = 0; i < lines.size(); ++i)
+		{
+			double x = center.x;
+			double y = center.y + lineSpacing * (i - (int)lines.size() / 2);
+
+			boldFont(lines[i]).drawAt(
+				28,
+				{ x, y },
+				ColorF{ 1, 1, 1, 1 }
+			);
+		}
 	}
 }

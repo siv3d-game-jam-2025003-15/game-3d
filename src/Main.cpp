@@ -22,11 +22,13 @@ void Main()
 	// フルスクリーンモード
 //	Window::SetFullscreen(true);
     
-	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
+//	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
+	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"assets/font/SoukouMincho-Font/SoukouMincho.ttf");
 	FontAsset(U"TitleFont").setBufferThickness(4);
 
-	FontAsset::Register(U"Bold", FontMethod::MSDF, 48, Typeface::Bold);
-    AudioAsset::Register(U"足音45秒のループ", U"assets/sound/se/足音45秒のループ.wav", true);
+//	FontAsset::Register(U"Bold", FontMethod::MSDF, 48, Typeface::Bold);
+	FontAsset::Register(U"Bold", FontMethod::MSDF, 48, U"assets/font/SoukouMincho-Font/SoukouMincho.ttf");
+	AudioAsset::Register(U"足音45秒のループ", U"assets/sound/se/足音45秒のループ.wav", true);
     AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
     AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
     AudioAsset::Register(U"GET", U"assets/sound/bgm/GET.wav");
