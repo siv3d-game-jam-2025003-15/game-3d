@@ -105,5 +105,11 @@ void main()
 
 	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), 2.0));
 
+    vec4 texColor = texture(Texture0,UV);
+    if (texColor.a < 0.1)
+    {
+        discard;
+    }
+
 	FragColor = vec4(diffuseReflection*attenuation + specularReflection*attenuation + g_emissionColor, diffuseColor.a);
 }
