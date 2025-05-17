@@ -81,15 +81,11 @@ vec3 CalculateSpecularReflection(vec3 n, vec3 h, float shininess, float nl, vec3
 
 void main()
 {
+	// Setting the light color and direction
 	vec3 lightColor		= g_sunColor;
-
-	//PointLight Pos
-	//vec3 pointLightPos = vec3(0.0, 0.0, 7.0);
-	//g_pointLightPos = pointLightPos;
-
-    //vec3 lightDirection	= g_sunDirection;
 	vec3 lightDirection	= normalize(g_pointLightPos - WorldPosition);
 
+	// Obtaining color information from normal vectors and UVs
 	vec3 n = normalize(Normal);
 	vec3 l = lightDirection;
 	vec4 diffuseColor = GetDiffuseColor(UV);
@@ -103,8 +99,10 @@ void main()
 	vec3 h = normalize(v + lightDirection);
 	vec3 specularReflection = CalculateSpecularReflection(n, h, g_shininess, dot(n, l), lightColor, g_specularColor);
 
+	// Distance attenuation
 	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), 2.0));
 
+	// Pixel discard due to alpha (transparency)
     vec4 texColor = texture(Texture0,UV);
     if (texColor.a < 0.1)
     {
