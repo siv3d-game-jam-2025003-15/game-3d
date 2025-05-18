@@ -103,7 +103,7 @@ private:
 		const Vec2& b,
 		const Vec2& c
 	);
-	
+
 	// 線分同士が交差しているかを判定
 	bool isIntersecting(
 		const Vec2& a,
@@ -111,7 +111,7 @@ private:
 		const Vec2& c,
 		const Vec2& d
 	);
-	
+
 	// 2Dの線分同士の交差判定
 	bool isCollision(
 		const Vec2& a,
@@ -139,7 +139,7 @@ private:
 		const Vec3_& sphereCenter,
 		double radius,
 		const Vec3_& a,
-		const Vec3_& b, 
+		const Vec3_& b,
 		const Vec3_& c
 	);
 
@@ -161,9 +161,9 @@ private:
 	// カメラスピード
 	const double cameraSpeed = 2.0f;
 
-//	Size SceneSize{ 256, 192 };
+	//	Size SceneSize{ 256, 192 };
 
-	// HDR（ハイダイナミックレンジ）レンダリング
+		// HDR（ハイダイナミックレンジ）レンダリング
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 
 	// 地面
@@ -205,10 +205,10 @@ private:
 
 	// ドア
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
-//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
+	//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
 
-	// 鍵
-//	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
+		// 鍵
+	//	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
 	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
 
 	// パン
@@ -225,7 +225,7 @@ private:
 	const Model modelDrawerNon{ U"assets/models/Drawer/Gimmick_Drawer01_Non.obj" };
 	const Model modelDrawerSnake{ U"assets/models/Drawer/Gimmick_Drawer01_Snake.obj" };
 	const Model modelShelf{ U"assets/models/Drawer/Gimmick_Shelf01.obj" };
-	
+
 	// ビックリマーク
 	const Model modelExclamationMark{ U"assets/models/ExclamationMark/ExclamationMark.obj" };
 
@@ -240,9 +240,9 @@ private:
 
 	// ドアの位置
 	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
-//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
+	//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
 
-	// ドアの回転
+		// ドアの回転
 	Vec3 doorRot{ 0, 180_deg, 0 };
 	double toDoorRotY = doorRot.y;
 
@@ -258,21 +258,21 @@ private:
 	double bgmStopCount = 0.0f;
 
 	const PixelShader psBright = HLSL{
-		U"example/shader/hlsl/extract_bright_linear.hlsl", 
-		U"PS" 
+		U"example/shader/hlsl/extract_bright_linear.hlsl",
+		U"PS"
 	}
-	| GLSL{
-		U"example/shader/glsl/extract_bright_linear.frag",
-		{
-			{U"PSConstants2D", 0}
-		}
+		| GLSL{
+			U"example/shader/glsl/extract_bright_linear.frag",
+			{
+				{U"PSConstants2D", 0}
+			}
 	};
 
 	// 頂点シェーダ
 	const VertexShader vs3D = GLSL{
 		U"example/shader/glsl/default3d_forward.vert",
 		{
-			{ U"VSPerView", 1 }, 
+			{ U"VSPerView", 1 },
 			{ U"VSPerObject", 2 },
 			{ U"VSPerMaterial", 3 }
 		}
@@ -287,7 +287,7 @@ private:
 			{ U"PSPointLightPos", 2 },
 			{ U"PSPerMaterial", 3 }
 		}
-	};	
+	};
 
 	const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
 	const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
@@ -441,12 +441,12 @@ private:
 
 	// デバッグ用のフラグ
 	bool bDebugViewFrame = true;
-    bool bDebugViewCollision = false;
+	bool bDebugViewCollision = false;
 	bool bDebugviewModel = true;
 	bool bDebugFlashingLight = true;
-//	bool bDebugShader = true;
+	//	bool bDebugShader = true;
 
-	// コリジョン無効エリア
+		// コリジョン無効エリア
 	double collisionNone[4][4] =
 	{
 		{ -2.2, -1.1, 1.2, 2.6},	// x_min, x_max, z_min, z_max
@@ -519,6 +519,8 @@ private:
 
 	// メッセージ番号
 	int message = 0;
+	int messagePattern = 0;
+	double messagePatternCount = 0.0;
 	int itemMessage = -1;
 
 	// ライト関係の変数
@@ -568,6 +570,11 @@ private:
 	// ハンガーを持っている
 	bool bHangerHave = false;
 
+	const Font& boldFont = FontAsset(U"Bold");
+
+	// テキストを事前に読み込むための関数
+	void dummyTextView(Array<String> text);
+
 	// 画面下のテキスト
 	Array<String> Text =
 	{
@@ -576,64 +583,64 @@ private:
 		U"パンの中に手記が入っていた。",	// 1
 		U"ベッド脇の壁を調べてみよう。",	// 2
 		U"この鍵は錆びて使えないな…。",	// 3
-	//	U"針金を見つけた。この針金で錆びた鍵の形を模すことはできるだろうか…。",	// 4
-		U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 4
-		U"この針金の鍵で扉を開けてみよう。",	// 5
-		U"",	// 6　扉を開けた後
-		U"水槽がある。",	// 7
-		U"羊皮紙の汚れを落としたい。",	// 8
-		U"この引き出しは何だろう。",	// 9
-		U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
-		U"これは自分のベッドだ。",	// 11
-		U"これはトイレだ。…臭い。",	// 12
-		U"これは棚だ。",	// 13
-		U"これは他人のベッドだ。",	// 14
-		U"これは古いベッドだ。今は使われていない。",	// 15
-		U"ん？この壁は…。",	// 16
-		U"これは棚だ。何かあるぞ。",	// 17
-		U"暖炉がある。火が弱い。",	// 18
-		U"（「I」キーを押して、持ち物からパンを食べよう。）",	// 19
-		U"扉だ。この針金の鍵で開けられるかもしれない。",	// 20
-		U"暖炉がある。火が強くなった。",	// 21
-		U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 22
-		U"（予備）",	// 23
-		U"（予備）",	// 24
-		U"（予備）",	// 25
-		U"（予備）",	// 26
-		U"（予備）",	// 27
-		U"（予備）",	// 28
-		U"（予備）",	// 29
-		U"（予備）",	// 30
-		U"（予備）",	// 31
-		U"（予備）",	// 32
-		U"（予備）",	// 33
-		U"（予備）",	// 34
-		U"（予備）",	// 35
-		U"（予備）",	// 36
-		U"（予備）",	// 37
-		U"（予備）",	// 38
-		U"（予備）",	// 39
-		U"（予備）",	// 40
-		U"（予備）",	// 41
-		U"（予備）",	// 42
-		U"（予備）",	// 43
-		U"（予備）",	// 44
-		U"（予備）",	// 45
-		U"（予備）",	// 46
-		U"（予備）",	// 47
-		U"（予備）",	// 48
-		U"（予備）",	// 49
+		//	U"針金を見つけた。この針金で錆びた鍵の形を模すことはできるだろうか…。",	// 4
+			U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 4
+			U"この針金の鍵で扉を開けてみよう。",	// 5
+			U"",	// 6　扉を開けた後
+			U"水槽がある。",	// 7
+			U"羊皮紙の汚れを落としたい。",	// 8
+			U"この引き出しは何だろう。",	// 9
+			U"扉だ。鍵がかかっていて、開かない。",	// 10 ドア
+			U"これは自分のベッドだ。",	// 11 ベッド
+			U"これはトイレだ。…臭い。",	// 12 トイレ
+			U"これは棚だ。",	// 13
+			U"これは他人のベッドだ。",	// 14 ベッド
+			U"これは古いベッドだ。今は使われていない。",	// 15 ベッド
+			U"ん？この壁は…。",	// 16
+			U"これは棚だ。何かあるぞ。",	// 17
+			U"暖炉がある。火が弱い。",	// 18
+			U"（「I」キーを押して、持ち物からパンを食べよう。）",	// 19
+			U"扉だ。この針金の鍵で開けられるかもしれない。",	// 20
+			U"暖炉がある。火が強くなった。",	// 21
+			U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 22
+			U"薄汚れたマットレスが載っている。何かの染みが点々とついている……。",	// 23 ベッド１
+			U"横になる気も失せるほど、マットレスがへたっている。カビ臭さが鼻を刺す。",	// 24 ベッド２
+			U"汚れと湿気が染みついた寝床。数日は誰かがここで過ごした形跡がある。",	// 25 ベッド３
+			U"（予備）",	// 26
+			U"（予備）",	// 27
+			U"（予備）",	// 28
+			U"（予備）",	// 29
+			U"（予備）",	// 30
+			U"（予備）",	// 31
+			U"（予備）",	// 32
+			U"（予備）",	// 33
+			U"（予備）",	// 34
+			U"（予備）",	// 35
+			U"（予備）",	// 36
+			U"（予備）",	// 37
+			U"（予備）",	// 38
+			U"（予備）",	// 39
+			U"（予備）",	// 40
+			U"（予備）",	// 41
+			U"（予備）",	// 42
+			U"（予備）",	// 43
+			U"（予備）",	// 44
+			U"（予備）",	// 45
+			U"（予備）",	// 46
+			U"（予備）",	// 47
+			U"（予備）",	// 48
+			U"（予備）",	// 49
 
-		// アイテム系
-		U"黒ずんだ硬いパンがある。これは食べられそうだ。",	// 50 パン
-		U"",	// 51 手記
-		U"鍵だ！",	// 52 鍵
-		U"何の棒だろう。",	// 53 火かき棒
-		U"紙？",	// 54 羊皮紙
-		U"ただの針金だ。",	// 55 針金
-		U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
-		U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 
-		U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 
+			// アイテム系
+			U"黒ずんだ硬いパンがある。これは食べられそうだ。",	// 50 パン
+			U"",	// 51 手記
+			U"鍵だ！",	// 52 鍵
+			U"何の棒だろう。",	// 53 火かき棒
+			U"紙？",	// 54 羊皮紙
+			U"ただの針金だ。",	// 55 針金
+			U"ひどく汚れていて、何かが書かれているようだが判別できない。洗えば読めるかもしれない。",	// 
+			U"文字がはっきりと見える。何かの順番を示しているようだ。",	// 
+			U"表面に新たな文字が浮かび上がった。これは隠された何かのヒントだろうか？",	// 
 
 	};
 
@@ -671,4 +678,37 @@ private:
 
 	};
 
+	// 手記
+	Array<String> memoText =
+	{
+		U"【囚人の手記】\n",
+		U"看守が巡回中に、腰の鍵を落とした\n",
+		U"奇跡だ。…いや、呪いかもしれない\n",
+		U"やつは気づかずに通り過ぎた。俺は急いで拾い、音を立てぬように隠した\n",
+		U"\n",
+		U"隠すには、見えぬ場所がよかった\n",
+		U"見えるけど、見ようとしなければ通り過ぎてしまうような…そんな場所\n",
+		U"いつも眠りに落ちるとき、顔を向ける方角。\n",
+		U"眠っている間、壁の向こうでこいつも眠っている——\n",
+		U"\n",
+		U"お前がこれを見つけたなら、まだ希望はある\n",
+		U"見つけてくれ、この“目に見えぬ出口”を\n",
+		U"\n",
+		U"……俺には、もう時間がなかった。",
+	};
+
+	// 羊皮紙
+	Array<String> toastedParchmentText =
+	{
+		U"ちぎれた輪が、\n",
+		U"空の底へと沈む。\n",
+		U"白い欠片が、\n",
+		U"風に踊り、やがて落ちる。\n",
+		U"絡みつくものが、\n",
+		U"静かに喉元へ這う。\n",
+		U"枯れた夢が、\n",
+		U"黒ずんだ土に崩れ落ちる。\n",
+		U"見開かれたそれが、\n",
+		U"すべてを呪うように、夜を睨む。\n",
+	};
 };

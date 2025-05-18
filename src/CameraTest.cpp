@@ -46,6 +46,26 @@ CameraTest::CameraTest(const InitData& init)
 #endif
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
+
+	// テキストメッセージを先に読み込んでおく
+	dummyTextView(Text);
+	dummyTextView(itemText);
+	dummyTextView(itemNameText);
+	dummyTextView(memoText);
+	dummyTextView(toastedParchmentText);
+
+}
+
+void CameraTest::dummyTextView(Array<String> text)
+{
+	for (int i = 0; i < text.size(); ++i)
+	{
+		boldFont(text[i]).drawAt(
+			28,
+			{ 0, 0 },
+			ColorF{ 0, 0, 0, 0 }
+		);
+	}
 }
 
 // デバッグ機能
@@ -471,6 +491,14 @@ void CameraTest::update()
 
 	// シナリオの進捗によってメッセージを変える
 	message = scenario;
+
+	// メッセージパターンの自動変更
+	messagePatternCount += deltaTime;
+	if (messagePatternCount > 5.0)
+	{
+		messagePattern++;
+		messagePatternCount -= 5.0;
+	}
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
@@ -979,6 +1007,32 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 22;
+			}
+		}
+
+		// メッセージを切り替える
+		if (message == 14)
+		{
+			if (MouseL.down())
+			{
+				messagePattern++;
+				messagePatternCount = 0;
+			}
+
+			messagePattern %= 3;
+
+			// ベッド
+			switch (messagePattern)
+			{
+			case 0:
+				message = 23;
+				break;
+			case 1:
+				message = 24;
+				break;
+			case 2:
+				message = 25;
+				break;
 			}
 		}
 
@@ -1976,8 +2030,10 @@ void CameraTest::draw() const
 
 	if (0 <= message && message < Text.size())
 	{
+		// 画面全体を黒い半透明で描画
+		Rect{ 0, Scene::Height()-40, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
+
 		// セリフ表示（仮）
-		const Font& boldFont = FontAsset(U"Bold");
 		boldFont(Text[message]).drawAt(
 			28,
 			{ center.x, 700 },
@@ -1994,7 +2050,6 @@ void CameraTest::draw() const
 	)
 	{
 		// セリフ表示（仮）
-		const Font& boldFont = FontAsset(U"Bold");
 		boldFont(itemText[itemMessage]).drawAt(
 			28,
 			{ center.x, 546 },
@@ -2010,7 +2065,6 @@ void CameraTest::draw() const
 		)
 	{
 		// セリフ表示（仮）
-		const Font& boldFont = FontAsset(U"Bold");
 		boldFont(itemNameText[itemMessage]).drawAt(
 			28,
 			{ 805, 236 },
@@ -2024,23 +2078,7 @@ void CameraTest::draw() const
 		// 半透明の黒い画像
 		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
-		String memoText = U"【囚人の手記】\n";
-		memoText += U"看守が巡回中に、腰の鍵を落とした\n";
-		memoText += U"奇跡だ。…いや、呪いかもしれない\n";
-		memoText += U"やつは気づかずに通り過ぎた。俺は急いで拾い、音を立てぬように隠した\n";
-		memoText += U"\n";
-		memoText += U"隠すには、見えぬ場所がよかった\n";
-		memoText += U"見えるけど、見ようとしなければ通り過ぎてしまうような…そんな場所\n";
-		memoText += U"いつも眠りに落ちるとき、顔を向ける方角。\n";
-		memoText += U"眠っている間、壁の向こうでこいつも眠っている——\n";
-		memoText += U"\n";
-		memoText += U"お前がこれを見つけたなら、まだ希望はある\n";
-		memoText += U"見つけてくれ、この“目に見えぬ出口”を\n";
-		memoText += U"\n";
-		memoText += U"……俺には、もう時間がなかった。";
-		
 		// セリフ表示
-		const Font& boldFont = FontAsset(U"Bold");
 		//boldFont(memoText).drawAt(
 		//	28,
 		//	{ center.x, center.y },
@@ -2050,14 +2088,14 @@ void CameraTest::draw() const
 		// TODO 共通化する
 		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
 
-		Array<String> lines = memoText.split(U'\n');
+		//Array<String> lines = memoText.split(U'\n');
 
-		for (int i = 0; i < lines.size(); ++i)
+		for (int i = 0; i < memoText.size(); ++i)
 		{
 			double x = center.x;
-			double y = center.y + lineSpacing * (i - (int)lines.size()/2);
+			double y = center.y + lineSpacing * (i - (int)memoText.size()/2);
 
-			boldFont(lines[i]).drawAt(
+			boldFont(memoText[i]).drawAt(
 				28,
 				{ x, y },
 				ColorF{ 1, 1, 1, 1 }
@@ -2072,19 +2110,7 @@ void CameraTest::draw() const
 		// 半透明の黒い画像
 		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
-		String memoText = U"ちぎれた輪が、\n";
-		memoText += U"空の底へと沈む。\n";
-		memoText += U"白い欠片が、\n";
-		memoText += U"風に踊り、やがて落ちる。\n";
-		memoText += U"絡みつくものが、\n";
-		memoText += U"静かに喉元へ這う。\n";
-		memoText += U"枯れた夢が、\n";
-		memoText += U"黒ずんだ土に崩れ落ちる。\n";
-		memoText += U"見開かれたそれが、\n";
-		memoText += U"すべてを呪うように、夜を睨む。\n";
-
 		// セリフ表示（仮）
-		const Font& boldFont = FontAsset(U"Bold");
 		//boldFont(memoText).drawAt(
 		//	28,
 		//	{ center.x, center.y },
@@ -2094,14 +2120,14 @@ void CameraTest::draw() const
 		// TODO 共通化する
 		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
 
-		Array<String> lines = memoText.split(U'\n');
+		//Array<String> lines = memoText.split(U'\n');
 
-		for (int i = 0; i < lines.size(); ++i)
+		for (int i = 0; i < toastedParchmentText.size(); ++i)
 		{
 			double x = center.x;
-			double y = center.y + lineSpacing * (i - (int)lines.size() / 2);
+			double y = center.y + lineSpacing * (i - (int)toastedParchmentText.size() / 2);
 
-			boldFont(lines[i]).drawAt(
+			boldFont(toastedParchmentText[i]).drawAt(
 				28,
 				{ x, y },
 				ColorF{ 1, 1, 1, 1 }
