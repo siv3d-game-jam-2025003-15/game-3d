@@ -54,6 +54,10 @@ CameraTest::CameraTest(const InitData& init)
 	dummyTextView(memoText);
 	dummyTextView(toastedParchmentText);
 
+	for (int i = 0; i < Text.size() / MessagePatternMax; i++)
+	{
+		messageRead.push_back(-1);
+	}
 }
 
 void CameraTest::dummyTextView(Array<String> text)
@@ -219,7 +223,11 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"emblemPos=" << emblemPos;
-	
+
+	Print << U"messagePattern=" << messagePattern;
+	Print << U"messagePattern=" << messagePatternCount;
+	Print << U"messageRead=" << messageRead[message];
+
 #endif
 }
 
@@ -1071,7 +1079,15 @@ void CameraTest::update()
 				messagePattern++;
 				messagePattern %= 3;
 			}
+
+			if (messagePattern > messageRead[message])
+			{
+				messageRead[message]++;
+				messagePattern = messageRead[message];
+			}
 		}
+
+
 
 		//if (message == 14)
 		//{
@@ -2086,7 +2102,6 @@ void CameraTest::draw() const
 {
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
-
 
 	if (0 <= message && message < Text.size() / MessagePatternMax)
 	{

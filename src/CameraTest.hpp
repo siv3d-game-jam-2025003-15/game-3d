@@ -584,7 +584,10 @@ private:
 	// テキストを事前に読み込むための関数
 	void dummyTextView(Array<String> text);
 
+	// メッセージのパターン数
 	const int MessagePatternMax = 3;
+
+	Array<int> messageRead;
 
 	// 画面下のテキスト
 	Array<String> Text =
