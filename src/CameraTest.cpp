@@ -219,6 +219,9 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"hangerPos=" << hangerPos;
+
+	Print << U"messagePattern=" << messagePattern;
+	Print << U"messagePatternCount=" << messagePatternCount;
 	
 #endif
 }
@@ -491,14 +494,6 @@ void CameraTest::update()
 
 	// シナリオの進捗によってメッセージを変える
 	message = scenario;
-
-	// メッセージパターンの自動変更
-	messagePatternCount += deltaTime;
-	if (messagePatternCount > 5.0)
-	{
-		messagePattern++;
-		messagePatternCount -= 5.0;
-	}
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
@@ -1010,31 +1005,50 @@ void CameraTest::update()
 			}
 		}
 
+		// メッセージパターンの自動変更
+		messagePatternCount += deltaTime;
+
 		// メッセージを切り替える
-		if (message == 14)
+		if (bLockon == false)
+		{
+			if (messagePatternCount > 5.0)
+			{
+				messagePattern++;
+				messagePattern %= MessagePatternMax;
+				messagePatternCount = 0;
+			}
+		}
+		else
 		{
 			if (MouseL.down())
 			{
 				messagePattern++;
-				messagePatternCount = 0;
-			}
-
-			messagePattern %= 3;
-
-			// ベッド
-			switch (messagePattern)
-			{
-			case 0:
-				message = 23;
-				break;
-			case 1:
-				message = 24;
-				break;
-			case 2:
-				message = 25;
-				break;
+				messagePattern %= 3;
 			}
 		}
+
+		//if (message == 14)
+		//{
+		//	if (MouseL.down())
+		//	{
+		//		messagePattern++;
+		//		messagePattern %= 3;
+		//	}
+
+		//	// ベッド
+		//	switch (messagePattern)
+		//	{
+		//	case 0:
+		//		message = 23;
+		//		break;
+		//	case 1:
+		//		message = 24;
+		//		break;
+		//	case 2:
+		//		message = 25;
+		//		break;
+		//	}
+		//}
 
 	}
 	else
@@ -2028,20 +2042,27 @@ void CameraTest::draw() const
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
 
-	if (0 <= message && message < Text.size())
+	if (0 <= message && message < Text.size() / MessagePatternMax)
 	{
 		// 画面全体を黒い半透明で描画
 		Rect{ 0, Scene::Height()-40, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
+		int m = message * MessagePatternMax + messagePattern;
+
+		if (Text[m].isEmpty())
+		{
+			m = message * MessagePatternMax;
+		}
+
+		Print << U"m=" << m;
+
 		// セリフ表示（仮）
-		boldFont(Text[message]).drawAt(
+		boldFont(Text[m]).drawAt(
 			28,
 			{ center.x, 700 },
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
-
-
 
 	if (
 		bInventory
@@ -2056,7 +2077,6 @@ void CameraTest::draw() const
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
-
 
 	if (
 		bInventory
@@ -2078,17 +2098,8 @@ void CameraTest::draw() const
 		// 半透明の黒い画像
 		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
-		// セリフ表示
-		//boldFont(memoText).drawAt(
-		//	28,
-		//	{ center.x, center.y },
-		//	ColorF{ 1, 1, 1, 1 }
-		//);
-
 		// TODO 共通化する
 		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
-
-		//Array<String> lines = memoText.split(U'\n');
 
 		for (int i = 0; i < memoText.size(); ++i)
 		{
@@ -2110,17 +2121,8 @@ void CameraTest::draw() const
 		// 半透明の黒い画像
 		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
-		// セリフ表示（仮）
-		//boldFont(memoText).drawAt(
-		//	28,
-		//	{ center.x, center.y },
-		//	ColorF{ 1, 1, 1, 1 }
-		//);
-
 		// TODO 共通化する
 		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
-
-		//Array<String> lines = memoText.split(U'\n');
 
 		for (int i = 0; i < toastedParchmentText.size(); ++i)
 		{
