@@ -233,7 +233,7 @@ private:
 	const Model modelParchment{ U"assets/models/Parchment/Gimmick_Parchment01.obj" };
 
 	// ハンガー
-	const Model modelHangar{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
+	const Model modelHanger{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
 
 	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -356,7 +356,7 @@ private:
 	Vec3 fireplacePos = { 16.3, 0.5, -6.5 };
 
 	// ハンガー
-	Vec3 hangarPos = { 0, 1.03, 11.8 };
+	Vec3 hangerPos = { 0, 1.03, 11.8 };
 	Vec3 hangerRot{ 0, 90_deg, 0 };
 
 	// オブジェクトクラス
@@ -375,6 +375,7 @@ private:
 	ObjectController wallController;
 	ObjectController fireplaceController;
 	ObjectController fireplaceStrongController;
+	ObjectController hangerController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -562,7 +563,7 @@ private:
 	bool bToastedParchment = false;
 
 	// ハンガーを持っている
-	bool bHangarHave = false;
+	bool bHangerHave = false;
 
 	// 画面下のテキスト
 	Array<String> Text =
@@ -590,7 +591,7 @@ private:
 		U"（「I」キーを押して、持ち物からパンを食べよう。）",	// 19
 		U"扉だ。この針金の鍵で開けられるかもしれない。",	// 20
 		U"暖炉がある。火が強くなった。",	// 21
-		U"（予備）",	// 22
+		U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 22
 		U"（予備）",	// 23
 		U"（予備）",	// 24
 		U"（予備）",	// 25

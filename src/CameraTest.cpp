@@ -25,7 +25,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelHangar, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -96,27 +96,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		hangarPos.x += 0.001;
+		hangerPos.x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		hangarPos.x -= 0.001;
+		hangerPos.x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		hangarPos.z += 0.001;
+		hangerPos.z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		hangarPos.z -= 0.001;
+		hangerPos.z -= 0.001;
 	}
 	if (KeyK.pressed())
 	{
-		hangarPos.y += 0.001;
+		hangerPos.y += 0.001;
 	}
 	if (KeyL.pressed())
 	{
-		hangarPos.y -= 0.001;
+		hangerPos.y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -198,7 +198,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"hangarPos=" << hangarPos;
+	Print << U"hangerPos=" << hangerPos;
 	
 #endif
 }
@@ -963,6 +963,18 @@ void CameraTest::update()
 			}
 		}
 
+		// ハンガー
+		if (!bLockon)
+		{
+			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 22;
+			}
+		}
+
 	}
 	else
 	{
@@ -1587,13 +1599,13 @@ void CameraTest::update()
 		}
 
 		// ハンガーの描画
-		if (bHangarHave == false)
+		if (bHangerHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangarPos)
+				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangerPos)
 			};
 
-			modelHangar.draw();
+			modelHanger.draw();
 		}
 
 		// デバッグ表示
