@@ -500,29 +500,33 @@ void CameraTest::update()
 	{
 		// インベントリを表示していない（通常時）
 
-		// マウスカーソルを非表示
-		Cursor::RequestStyle(CursorStyle::Hidden);
+		// このアプリケーションがアクティブな時だけ
+		if (Window::GetState().focused)
+		{
+			// マウスカーソルを非表示
+			Cursor::RequestStyle(CursorStyle::Hidden);
 
-		// 現在のマウス座標
-		Vec2 currentCursorPos = Cursor::PosF();
+			// 現在のマウス座標
+			Vec2 currentCursorPos = Cursor::PosF();
 
-		// 中心からの差分を取る
-		Vec2 delta = currentCursorPos - center;
+			// 中心からの差分を取る
+			Vec2 delta = currentCursorPos - center;
 
-		// 仮想座標に加算
-		virtualCursorPos += delta;
+			// 仮想座標に加算
+			virtualCursorPos += delta;
 
-		toMousePosX = virtualCursorPos.x;
-		toMousePosY = virtualCursorPos.y;
+			toMousePosX = virtualCursorPos.x;
+			toMousePosY = virtualCursorPos.y;
 
-		diffMousePosX = (toMousePosX - mousePosX) / 10 * mouseDirectionX;
-		diffMousePosY = -(toMousePosY - mousePosY) / 10 * mouseDirectionY;
+			diffMousePosX = (toMousePosX - mousePosX) / 10 * mouseDirectionX;
+			diffMousePosY = -(toMousePosY - mousePosY) / 10 * mouseDirectionY;
 
-		mousePosX = toMousePosX;
-		mousePosY = toMousePosY;
+			mousePosX = toMousePosX;
+			mousePosY = toMousePosY;
 
-		// 毎フレーム、カーソルを強制的に中央に戻す
-		Cursor::SetPos(center.x, center.y);
+			// 毎フレーム、カーソルを強制的に中央に戻す
+			Cursor::SetPos(center.x, center.y);
+		}
 
 
 
