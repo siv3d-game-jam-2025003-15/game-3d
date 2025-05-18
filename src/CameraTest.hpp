@@ -205,10 +205,10 @@ private:
 
 	// ドア
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
-	//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
+//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
 
-		// 鍵
-	//	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
+	// 鍵
+//	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
 	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
 
 	// パン
@@ -240,9 +240,9 @@ private:
 
 	// ドアの位置
 	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
-	//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
+//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
 
-		// ドアの回転
+	// ドアの回転
 	Vec3 doorRot{ 0, 180_deg, 0 };
 	double toDoorRotY = doorRot.y;
 
@@ -359,6 +359,11 @@ private:
 	Vec3 hangerPos = { 0, 1.03, 11.8 };
 	Vec3 hangerRot{ 0, 90_deg, 0 };
 
+	// 樽
+	Vec3 barrelPos = { -3.55, 0.965, 0.185 };
+	Vec3 barrel2Pos = { -3.55, 0.965, -0.72 };
+	Vec3 barrel3Pos = { 13.07, 0.965, -6.8 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController keyController;
@@ -376,6 +381,7 @@ private:
 	ObjectController fireplaceController;
 	ObjectController fireplaceStrongController;
 	ObjectController hangerController;
+	ObjectController barrelController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -690,7 +696,7 @@ private:
 		U"",	// 24
 		U"",	// 24
 
-		// 樽
+		// 25 樽
 		U"古びた木製の樽。中からは液体の音がしない。空っぽのようだ。",	// 25
 		U"",	// 25
 		U"",	// 25

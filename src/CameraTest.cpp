@@ -116,27 +116,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		hangerPos.x += 0.001;
+		barrel3Pos.x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		hangerPos.x -= 0.001;
+		barrel3Pos.x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		hangerPos.z += 0.001;
+		barrel3Pos.z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		hangerPos.z -= 0.001;
+		barrel3Pos.z -= 0.001;
 	}
 	if (KeyK.pressed())
 	{
-		hangerPos.y += 0.001;
+		barrel3Pos.y += 0.001;
 	}
 	if (KeyL.pressed())
 	{
-		hangerPos.y -= 0.001;
+		barrel3Pos.y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -218,10 +218,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"hangerPos=" << hangerPos;
-
-	Print << U"messagePattern=" << messagePattern;
-	Print << U"messagePatternCount=" << messagePatternCount;
+	Print << U"barrel3Pos=" << barrel3Pos;
 	
 #endif
 }
@@ -990,7 +987,7 @@ void CameraTest::update()
 		// ハンガー
 		if (!bLockon && bHangerFind && bHangerHave == false)
 		{
-			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, -1, bHangerFind);
+			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, 0, bHangerFind);
 			if (a == true)
 			{
 				// ハンガーを取得
@@ -1002,6 +999,42 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 22;
+			}
+		}
+
+		// 樽
+		if (!bLockon)
+		{
+			auto [a, b, c] = barrelController.update(barrelPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 25;
+			}
+		}
+
+		// 樽2
+		if (!bLockon)
+		{
+			auto [a, b, c] = barrelController.update(barrel2Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 25;
+			}
+		}
+
+		// 樽3
+		if (!bLockon)
+		{
+			auto [a, b, c] = barrelController.update(barrel3Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 25;
 			}
 		}
 
@@ -2054,7 +2087,7 @@ void CameraTest::draw() const
 			m = message * MessagePatternMax;
 		}
 
-		Print << U"m=" << m;
+		//Print << U"m=" << m;
 
 		// セリフ表示（仮）
 		boldFont(Text[m]).drawAt(
