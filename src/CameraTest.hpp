@@ -161,8 +161,9 @@ private:
 	// カメラスピード
 	const double cameraSpeed = 2.0f;
 
-	Size SceneSize{ 256, 192 };
+//	Size SceneSize{ 256, 192 };
 
+	// HDR（ハイダイナミックレンジ）レンダリング
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 
 	// 地面
@@ -211,7 +212,7 @@ private:
 	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
 
 	// パン
-	const Model modelBread{ U"assets/models/Bread/bread.obj" };
+	const Model modelBread{ U"assets/models/Bread/Gimmick_bread01.obj" };
 
 	// 火かき棒
 	const Model modelPoker{ U"assets/models/Poker/Gimmick_Poker01.obj" };

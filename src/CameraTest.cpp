@@ -1459,7 +1459,7 @@ void CameraTest::update()
 		if (bBreadHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(1.0).translated(breadPos)
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(breadPos)
 			};
 
 			modelBread.draw();
