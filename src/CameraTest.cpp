@@ -96,19 +96,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		toDoorPosX += 0.001;
+		hangarPos.x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		toDoorPosX -= 0.001;
+		hangarPos.x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		doorPos.z += 0.001;
+		hangarPos.z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		doorPos.z -= 0.001;
+		hangarPos.z -= 0.001;
+	}
+	if (KeyK.pressed())
+	{
+		hangarPos.y += 0.001;
+	}
+	if (KeyL.pressed())
+	{
+		hangarPos.y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -190,7 +198,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"doorPos=" << doorPos;
+	Print << U"hangarPos=" << hangarPos;
 	
 #endif
 }
@@ -1582,7 +1590,7 @@ void CameraTest::update()
 		if (bHangarHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(hangarPos)
+				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangarPos)
 			};
 
 			modelHangar.draw();

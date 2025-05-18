@@ -356,7 +356,8 @@ private:
 	Vec3 fireplacePos = { 16.3, 0.5, -6.5 };
 
 	// ハンガー
-	Vec3 hangarPos = { 0, 0.75, 8 };
+	Vec3 hangarPos = { 0, 1.03, 11.8 };
+	Vec3 hangerRot{ 0, 90_deg, 0 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
