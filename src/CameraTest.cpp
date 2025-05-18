@@ -96,19 +96,19 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		pokerPos.x += 0.01;
+		toDoorPosX += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		pokerPos.x -= 0.01;
+		toDoorPosX -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		pokerPos.z += 0.01;
+		doorPos.z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		pokerPos.z -= 0.01;
+		doorPos.z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -190,7 +190,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"pokerPos=" << pokerPos;
+	Print << U"doorPos=" << doorPos;
 	
 #endif
 }
@@ -753,7 +753,8 @@ void CameraTest::update()
 		{
 			// 座標の調整
 			Vec3 temp = doorPos;
-			temp.x += 0.70;
+			//temp.x += 0.70;	// 原点が端っこの時
+			temp.x += 0.0;
 			temp.y += 1.2;
 			temp.z += 0.2;
 
@@ -762,7 +763,8 @@ void CameraTest::update()
 			{
 				// ドアを開いた
 				bDoorOpen = true;
-				toDoorRotY = 270_deg;
+			//	toDoorRotY = 270_deg;	// 回転で開ける
+				toDoorPosX = -0.11;	// 移動で開ける
 				bgmStopCount = c;
 
 				scenario = 6;
@@ -1288,7 +1290,10 @@ void CameraTest::update()
 
 	// ドアの回転
 //	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth);
-	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth/10);	// ドアはゆっくり開ける
+//	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth/10);	// ドアはゆっくり開ける
+
+	// ドアの移動
+	doorPos.x = Math::Lerp(doorPos.x, toDoorPosX, smooth / 10);	// ドアはゆっくり開ける
 
 
 	// 止まっているBGMを再度鳴らす
@@ -1672,8 +1677,10 @@ void CameraTest::update()
 		}
 		
 #if _DEBUG
-		Print << U"m_focusPosition" << camera.getFocusPosition();
-		modelExclamationMark.draw(camera.getFocusPosition());
+		{
+			Print << U"m_focusPosition" << camera.getFocusPosition();
+			modelExclamationMark.draw(camera.getFocusPosition());
+		}
 #endif
 	}
 

@@ -204,8 +204,8 @@ private:
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 
 	// ドア
-//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
-	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
+	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
+//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
 
 	// 鍵
 //	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
@@ -239,11 +239,17 @@ private:
 	const Vec3 roomPos{ 0, 0, 0 };
 
 	// ドアの位置
-	Vec3 doorPos{ -2.3, 0, 2 };
+	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
+//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
 
 	// ドアの回転
 	Vec3 doorRot{ 0, 180_deg, 0 };
 	double toDoorRotY = doorRot.y;
+
+	// ドアの移動（開ける）
+	double toDoorPosX = doorPos.x;
+
+	// ドアが開いているかどうかのフラグ
 	bool bDoorOpen = false;
 
 	// スケーリングの倍率
