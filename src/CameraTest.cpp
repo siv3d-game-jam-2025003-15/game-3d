@@ -116,27 +116,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		barrel3Pos.x += 0.001;
+		emblemPos.x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		barrel3Pos.x -= 0.001;
+		emblemPos.x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		barrel3Pos.z += 0.001;
+		emblemPos.z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		barrel3Pos.z -= 0.001;
+		emblemPos.z -= 0.001;
 	}
 	if (KeyK.pressed())
 	{
-		barrel3Pos.y += 0.001;
+		emblemPos.y += 0.001;
 	}
 	if (KeyL.pressed())
 	{
-		barrel3Pos.y -= 0.001;
+		emblemPos.y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -218,7 +218,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"barrel3Pos=" << barrel3Pos;
+	Print << U"emblemPos=" << emblemPos;
 	
 #endif
 }
@@ -1037,6 +1037,19 @@ void CameraTest::update()
 				message = 25;
 			}
 		}
+
+		// 教団の紋章
+		if (!bLockon)
+		{
+			auto [a, b, c] = barrelController.update(emblemPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 23;
+			}
+		}
+
 
 		// メッセージパターンの自動変更
 		messagePatternCount += deltaTime;

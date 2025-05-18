@@ -364,6 +364,9 @@ private:
 	Vec3 barrel2Pos = { -3.55, 0.965, -0.72 };
 	Vec3 barrel3Pos = { 13.07, 0.965, -6.8 };
 
+	// 教団の紋章
+	Vec3 emblemPos = { 16.43, 2, -6.83 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController keyController;
