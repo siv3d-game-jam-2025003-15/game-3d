@@ -965,9 +965,15 @@ void CameraTest::update()
 		}
 
 		// ハンガー
-		if (!bLockon && bHangerFind)
+		if (!bLockon && bHangerFind && bHangerHave == false)
 		{
-			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, -1, bHangerFind);
+			if (a == true)
+			{
+				// ハンガーを取得
+				bHangerHave = true;
+				items << Shelf;
+			}
 			if (b)
 			{
 				// 見ている
