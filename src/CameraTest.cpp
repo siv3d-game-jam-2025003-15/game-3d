@@ -894,10 +894,11 @@ void CameraTest::update()
 			if (a == true && bWire == false)
 			{
 				// 針金が取れる
-				items << Shelf;
+			//	items << Shelf;
 				bWire = true;
 				bgmStopCount = c;
 				scenario = 4;
+				bHangerFind = true;
 			}
 			if (b)
 			{
@@ -964,7 +965,7 @@ void CameraTest::update()
 		}
 
 		// ハンガー
-		if (!bLockon)
+		if (!bLockon && bHangerFind)
 		{
 			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
 			if (b)
@@ -1599,7 +1600,7 @@ void CameraTest::update()
 		}
 
 		// ハンガーの描画
-		if (bHangerHave == false)
+		if (bHangerFind == true && bHangerHave == false)
 		{
 			Transformer3D t{
 				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangerPos)
