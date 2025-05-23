@@ -58,8 +58,8 @@
     <OutDir>$(SolutionDir)Intermediate\$(ProjectName)\Release\</OutDir>
     <IntDir>$(SolutionDir)Intermediate\$(ProjectName)\Release\Intermediate\</IntDir>
     <LocalDebuggerWorkingDirectory>$(ProjectDir)App</LocalDebuggerWorkingDirectory>
-    <IncludePath>$(SIV3D_0_6_15)\include;$(SIV3D_0_6_15)\include\ThirdParty;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SIV3D_0_6_15)\lib\Windows;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SIV3D_0_6_16)\include;$(SIV3D_0_6_16)\include\ThirdParty;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SIV3D_0_6_16)\lib\Windows;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -131,7 +131,7 @@
         $(ProjectDir)..\External\Siv3D\Siv3D\include\ThirdParty;
         %(AdditionalIncludeDirectories)
       </AdditionalIncludeDirectories>
-      </ResourceCompile>
+    </ResourceCompile>
     <Link>
       <AdditionalLibraryDirectories>
         $(ProjectDir)..\External;
