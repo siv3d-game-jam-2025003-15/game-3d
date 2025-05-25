@@ -1062,9 +1062,15 @@ void CameraTest::update()
 		}
 
 		// 汚れた布
-		if (!bLockon)
+		if (!bLockon && bClothHave == false)
 		{
 			auto [a, b, c] = clothController.update(clothPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			if (a == true)
+			{
+				// 汚れた布を取得
+				bClothHave = true;
+				items << DirtyCloth;
+			}
 			if (b)
 			{
 				// 見ている
