@@ -223,9 +223,9 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"lightPos=" << lightPos;
-
-	Print << U"bBarrel3Lockon=" << bBarrel3Lockon;
+	Print << U"bFireplaceWeakLockon=" << bFireplaceWeakLockon;
+	Print << U"bFireplaceStrong=" << bFireplaceStrong;
+	Print << U"bFireplaceStrongLockon=" << bFireplaceStrongLockon;
 
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePattern=" << messagePatternCount;
@@ -970,20 +970,30 @@ void CameraTest::update()
 		}
 
 		// 暖炉（火が弱い）
-		if (!bLockon)
+		if (!bLockon && bFireplaceStrong == false)
 		{
-			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
-			if (a == true)
-			{
-				// 火が強くなった
-				bFireplaceStrong = true;
-			}
+		//	auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
+			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
+			//if (a == true)
+			//{
+			//	// 火が強くなった
+			//	bFireplaceStrong = true;
+			//}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
 				message = 18;
+				bFireplaceWeakLockon = true;
 			}
+			else
+			{
+				bFireplaceWeakLockon = false;
+			}
+		}
+		else
+		{
+			bFireplaceWeakLockon = false;
 		}
 
 		// 暖炉（火が強い）
@@ -2092,6 +2102,23 @@ void CameraTest::update()
 					bgmStopCount = 4.00;
 
 					scenario = 5;
+				}
+			}
+			else if (items[selectItem] == Poker)
+			{
+				// 火が弱い暖炉の近くで使う
+				if (bFireplaceWeakLockon)
+				{
+					// 暖炉の火を強くする
+					bFireplaceStrong = true;
+
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
+
+					// TODO
+					//scenario = 5;
 				}
 			}
 			else if (items[selectItem] == Parchment)

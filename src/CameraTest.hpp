@@ -610,6 +610,9 @@ private:
 	// 樽３の近くにいる
 	bool bBarrel3Lockon = false;
 
+	// 火の弱い暖炉の近くにいる
+	bool bFireplaceWeakLockon = false;
+
 	// 火の強い暖炉の近くにいる
 	bool bFireplaceStrongLockon = false;
 
