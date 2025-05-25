@@ -521,6 +521,8 @@ private:
 	const Texture wireKeyBigSprite{ U"assets/sprites/wirekey_big.png" };
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
 	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };
+	const Texture dirtyClothMiniSprite{ U"assets/sprites/DirtyCloth_mini.png" };
+	const Texture dirtyClothBigSprite{ U"assets/sprites/DirtyCloth_big.png" };
 
 	// インベントリの表示
 	bool bInventory = false;
@@ -892,11 +894,11 @@ private:
 		U"長い間放置されていたのか、　　　\nすっかり錆びついている。　　　　\n力を加えると折れてしまいそうだ。",	// 2 鍵
 		U"鉄製の長い棒。　　　　　　　　　\n炉の中をかき混ぜたり、熱いものを\n引き寄せたりするのに使えそうだ。",	// 3 火かき棒
 		U"無地の羊皮紙。　　　　　　　　　\n触るとわずかにざらつきがある。　\n",	// 4 羊皮紙
-		U"ただの針金だが、適度に柔らかく　\n曲げやすい。何かの形を真似ること\nができるかもしれない。",	// 5 針金
+		U"ただのハンガーだが適度に柔らかく\n曲げやすい。何かの形を真似ること\nができるかもしれない。",	// 5 針金
 		U"ひどく汚れていて、何かが書かれて\nいるようだが判別できない。　　　\n洗えば読めるかもしれない。",	// 6 汚れた布
 		U"文字がはっきりと見える。　　　　\n何かの順番を示しているようだ。　\n",	// 7 布
 		U"表面に新たな文字が浮かび上がった。\nこれは隠された何かの　　　　　　\nヒントだろうか？",	// 8 炙った羊皮紙
-		U"針金で作った鍵。　　　　　　　　\nこれで扉を開けることができるかも\nしれない。",	// 9 針金の鍵
+		U"ハンガーの針金で作った鍵。　　　\nこれで扉を開けることができるかも\nしれない。",	// 9 針金の鍵
 
 	};
 
@@ -909,7 +911,7 @@ private:
 		U"錆びた鍵",	// 2 
 		U"火かき棒",	// 3 
 		U"羊皮紙",	// 4 
-		U"針金",	// 5 
+		U"ハンガー",	// 5 針金→ハンガー
 		U"汚れた布",	// 6
 		U"布",	// 7
 		U"炙った羊皮紙",	// 8

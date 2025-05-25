@@ -414,11 +414,11 @@ void CameraTest::drawMiniItem(
 		break;
 	case DirtyCloth:
 		// 汚れた布
-		toastedParchmentMiniSprite.draw(x, y);	// TODO
+		dirtyClothMiniSprite.draw(x, y);
 		break;
 	case Cloth:
 		// 布
-		toastedParchmentMiniSprite.draw(x, y);	// TODO
+		dirtyClothMiniSprite.draw(x, y);	// TODO
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
@@ -465,7 +465,7 @@ void CameraTest::drawBigItem(
 		break;
 	case DirtyCloth:
 		// 汚れた布
-		toastedParchmentBigSprite.draw(x, y);	// TODO
+		dirtyClothBigSprite.draw(x, y);
 		break;
 	case Cloth:
 		// 布
