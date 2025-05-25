@@ -225,6 +225,8 @@ void CameraTest::debug()
 
 	Print << U"lightPos=" << lightPos;
 
+	Print << U"bBarrel3Lockon=" << bBarrel3Lockon;
+
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePattern=" << messagePatternCount;
 	Print << U"messageRead=" << messageRead[message];
@@ -1047,7 +1049,17 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 27;
+
+				bBarrel3Lockon = true;
 			}
+			else
+			{
+				bBarrel3Lockon = false;
+			}
+		}
+		else
+		{
+			bBarrel3Lockon = false;
 		}
 
 		// 教団の紋章
@@ -2104,17 +2116,19 @@ void CameraTest::update()
 			}
 			else if (items[selectItem] == DirtyCloth)
 			{
-				// TODO 樽の近くで使う
+				// 樽の近くで使う
+				if (bBarrel3Lockon)
+				{
+					items[selectItem] = Cloth;
 
-				items[selectItem] = Cloth;
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
 
-				// SEを鳴らす
-				AudioAsset(U"BGM").stop();
-				AudioAsset(U"GET").play();
-				bgmStopCount = 4.00;
-
-				// TODO
-				//scenario = 5;
+					// TODO
+					//scenario = 5;
+				}
 			}
 			else if (items[selectItem] == Cloth)
 			{

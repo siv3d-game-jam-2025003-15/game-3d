@@ -607,6 +607,9 @@ private:
 	// 布を読んでいる
 	bool bClothRead = false;
 
+	// 樽３の近くにいる
+	bool bBarrel3Lockon = false;
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数
