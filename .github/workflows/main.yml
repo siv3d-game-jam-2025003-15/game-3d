@@ -23,28 +23,47 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Clone Civ3D (or OpenSiv3D) source into External folder
-        run: git clone --depth=1 --branch v0.6.15 https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
+      - name: Check Siv3D Version
+        id: siv3d-version
+        run: |
+          $vcxproj = (Get-ChildItem -Recurse *.vcxproj).FullName
+          $content = ""
+          foreach($item in $vcxproj) { $content += (Get-Content $item) }
+          $m = [regex]::Match($content, "SIV3D_\d*_\d*_\d*")
+          $siv3d_version = $m.Value -replace "^SIV3D_", "" -replace "_", "."
+          Write-Host "Siv3D Version is ${siv3d_version}"
+          "SIV3D_VERSION=${siv3d_version}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+        shell: pwsh
 
-      #- name: Inject .vcxproj.user with include paths
-      #  shell: pwsh
-      #  run: |
-      #    $projPath = "${{ github.workspace }}\game-3d\game-3d.vcxproj.user"
-      #    $content = @'
-      #    <?xml version="1.0" encoding="utf-8"?>
-      #    <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-      #      <PropertyGroup>
-      #        <IncludePath>$(ProjectDir)..\External\Siv3D\include;$(ProjectDir)..\External\Siv3D\include\ThirdParty</IncludePath>
-      #      </PropertyGroup>
-      #    </Project>
-      #    '@
-      #        Set-Content -Encoding UTF8 -Path $projPath -Value $content
+      - name: Clone Civ3D (or OpenSiv3D) source into External folder
+        run: git clone --depth=1 --branch v${{ steps.siv3d-version.outputs.SIV3D_VERSION }} https://github.com/Siv3D/OpenSiv3D.git External/Siv3D
+
+      - name: Inject .vcxproj.user with include paths
+        shell: pwsh
+        run: |
+         $projPath = "${{ github.workspace }}\game-3d\game-3d.vcxproj.user"
+         $content = @'
+         <?xml version="1.0" encoding="utf-8"?>
+         <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+           <PropertyGroup>
+             <IncludePath>$(ProjectDir)..\External\Siv3D\include;$(ProjectDir)..\External\Siv3D\include\ThirdParty</IncludePath>
+           </PropertyGroup>
+         </Project>
+         '@
+             Set-Content -Encoding UTF8 -Path $projPath -Value $content
       
-      - name: Build game project
+      - name: Build game project (Debug)
         shell: cmd
         run: |
           msbuild game-3d\game-3d.vcxproj ^
             /p:Configuration=Debug ^
+            /p:Platform=x64
+
+      - name: Build game project (Release)
+        shell: cmd
+        run: |
+          msbuild game-3d\game-3d.vcxproj ^
+            /p:Configuration=Release ^
             /p:Platform=x64
 
       - name: Compress App folder to zip
