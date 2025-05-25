@@ -2,11 +2,6 @@ name: Manual Build with Civ3D
 
 on:
   workflow_dispatch:
-    inputs:
-    siv3d-version:
-      description: "Siv3D version used in your project. Set \"auto\" to use detect version. Example: 0.6.13"
-      required: false
-      default: auto
 
 permissions:
   contents: write
@@ -31,19 +26,13 @@ jobs:
       - name: Check Siv3D Version
         id: siv3d-version
         run: |
-          If ("${{ inputs.siv3d-version }}" -eq "auto") {
-            $vcxproj = (Get-ChildItem -Recurse *.vcxproj).FullName
-            $content = ""
-            foreach($item in $vcxproj) { $content += (Get-Content $item) }
-            $m = [regex]::Match($content, "SIV3D_\d*_\d*_\d*")
-            $siv3d_version = $m.Value -replace "^SIV3D_", "" -replace "_", "."
-            Write-Host "Siv3D Version is ${siv3d_version}"
-            "SIV3D_VERSION=${siv3d_version}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          }
-          Else {
-            Write-Host "Siv3D Version is ${{ inputs.siv3d-version }}"
-            "SIV3D_VERSION=${{ inputs.siv3d-version }}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          }
+          $vcxproj = (Get-ChildItem -Recurse *.vcxproj).FullName
+          $content = ""
+          foreach($item in $vcxproj) { $content += (Get-Content $item) }
+          $m = [regex]::Match($content, "SIV3D_\d*_\d*_\d*")
+          $siv3d_version = $m.Value -replace "^SIV3D_", "" -replace "_", "."
+          Write-Host "Siv3D Version is ${siv3d_version}"
+          "SIV3D_VERSION=${siv3d_version}" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
         shell: pwsh
 
       #- name: Clone Civ3D (or OpenSiv3D) source into External folder
