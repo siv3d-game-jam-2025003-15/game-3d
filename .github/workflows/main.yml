@@ -1,5 +1,11 @@
 name: Manual Build with Civ3D
 
+inputs:
+  siv3d-version:
+    description: "Siv3D version used in your project. Set \"auto\" to use detect version. Example: 0.6.13"
+    required: false
+    default: auto
+
 on:
   workflow_dispatch:
 
