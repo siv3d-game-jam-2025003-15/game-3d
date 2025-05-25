@@ -62,11 +62,11 @@ enum ItemID
 	Key,	// 2 古びた鍵
 	Poker,	// 3 火かき棒
 	Parchment, // 4 羊皮紙
-	Shelf, // 5 針金
+	Wire, // 5 針金（ハンガー）
 	DirtyCloth,	// 6 汚れた布
 	Cloth,	// 7 布
 	ToastedParchment,	// 8 炙った羊皮紙
-	ShelfKey, // 9 針金の鍵
+	WireKey, // 9 針金の鍵
 };
 
 // カメラの実験
@@ -513,8 +513,10 @@ private:
 	const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
 	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
 	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
-	const Texture wireMiniSprite{ U"assets/sprites/wire_mini.png" };
-	const Texture wireBigSprite{ U"assets/sprites/wire_big.png" };
+	//const Texture wireMiniSprite{ U"assets/sprites/wire_mini.png" };
+	//const Texture wireBigSprite{ U"assets/sprites/wire_big.png" };
+	const Texture wireMiniSprite{ U"assets/sprites/hanger_mini.png" };
+	const Texture wireBigSprite{ U"assets/sprites/hanger_big.png" };
 	const Texture wireKeyMiniSprite{ U"assets/sprites/wirekey_mini.png" };
 	const Texture wireKeyBigSprite{ U"assets/sprites/wirekey_big.png" };
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };

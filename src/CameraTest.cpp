@@ -408,7 +408,7 @@ void CameraTest::drawMiniItem(
 		// 羊皮紙
 		parchmentMiniSprite.draw(x, y);
 		break;
-	case Shelf:
+	case Wire:
 		// 針金
 		wireMiniSprite.draw(x, y);
 		break;
@@ -424,7 +424,7 @@ void CameraTest::drawMiniItem(
 		// 炙った羊皮紙
 		toastedParchmentMiniSprite.draw(x, y);
 		break;
-	case ShelfKey:
+	case WireKey:
 		// 針金の鍵
 		wireKeyMiniSprite.draw(x, y);
 		break;
@@ -459,7 +459,7 @@ void CameraTest::drawBigItem(
 		// 羊皮紙
 		parchmentBigSprite.draw(x, y);
 		break;
-	case Shelf:
+	case Wire:
 		// 針金
 		wireBigSprite.draw(x, y);
 		break;
@@ -475,7 +475,7 @@ void CameraTest::drawBigItem(
 		// 炙った羊皮紙
 		toastedParchmentBigSprite.draw(x, y);
 		break;
-	case ShelfKey:
+	case WireKey:
 		// 針金の鍵
 		wireKeyBigSprite.draw(x, y);
 		break;
@@ -1025,7 +1025,7 @@ void CameraTest::update()
 			{
 				// ハンガーを取得
 				bHangerHave = true;
-				items << Shelf;
+				items << Wire;
 			}
 			if (b)
 			{
@@ -2088,12 +2088,12 @@ void CameraTest::update()
 					scenario = 2;
 				}
 			}
-			else if (items[selectItem] == Shelf)
+			else if (items[selectItem] == Wire)
 			{
 				if (bKeyHave)
 				{
 					// 鍵を持っている状態で針金を使う
-					items[selectItem] = ShelfKey;
+					items[selectItem] = WireKey;
 					bWireKey = true;
 
 					// SEを鳴らす
