@@ -610,6 +610,9 @@ private:
 	// 樽３の近くにいる
 	bool bBarrel3Lockon = false;
 
+	// 火の強い暖炉の近くにいる
+	bool bFireplaceStrongLockon = false;
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数
@@ -716,7 +719,7 @@ private:
 		U"",	// 20
 		U"",	// 20
 
-		U"暖炉がある。火が強くなった。",	// 21
+		U"火が強くなった。",	// 21
 		U"",	// 21
 		U"",	// 21
 

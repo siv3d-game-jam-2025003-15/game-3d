@@ -995,7 +995,16 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 21;
+				bFireplaceStrongLockon = true;
 			}
+			else
+			{
+				bFireplaceStrongLockon = false;
+			}
+		}
+		else
+		{
+			bFireplaceStrongLockon = false;
 		}
 
 		// ハンガー
@@ -2087,10 +2096,9 @@ void CameraTest::update()
 			}
 			else if (items[selectItem] == Parchment)
 			{
-				if (bFireplaceStrong)
+				// 火が強くなった暖炉の近くで使う
+				if (bFireplaceStrongLockon)
 				{
-					// TODO 暖炉の近くで使う
-
 					// 暖炉で羊皮紙を使う 
 					items[selectItem] = ToastedParchment;
 
