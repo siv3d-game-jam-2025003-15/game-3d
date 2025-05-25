@@ -1045,7 +1045,7 @@ void CameraTest::update()
 			{
 				// 見ている
 				bLockon = b;
-				message = 25;
+				message = 27;
 			}
 		}
 
@@ -1219,7 +1219,7 @@ void CameraTest::update()
 	}
 
 	// ライトエリア
-	lightArea = 0;
+	int tmpLightArea = 0;
 	for (auto& row : collisionLight)
 	{
 		if (row[0] < toCameraPos.x
@@ -1235,10 +1235,10 @@ void CameraTest::update()
 				lightTime = 1;
 			//	lightTime = 0.5;
 			}
-			//lightArea = i;
+			lightArea = tmpLightArea;
 			break;
 		}
-		lightArea++;
+		tmpLightArea++;
 	}
 
 	Vec3_ myPosition = {
