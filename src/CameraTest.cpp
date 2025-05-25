@@ -1691,7 +1691,7 @@ void CameraTest::update()
 		if (bKeyHave == false && bWall)
 		{
 			Transformer3D t{
-				Mat4x4::RotateZ(0_deg).scaled(0.01).translated(keyPos)
+				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(keyPos)
 			};
 			modelKey.draw();
 		}
