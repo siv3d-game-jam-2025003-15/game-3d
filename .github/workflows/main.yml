@@ -52,7 +52,14 @@ jobs:
          '@
              Set-Content -Encoding UTF8 -Path $projPath -Value $content
       
-      - name: Build game project
+      - name: Build game project (Debug)
+        shell: cmd
+        run: |
+          msbuild game-3d\game-3d.vcxproj ^
+            /p:Configuration=Debug ^
+            /p:Platform=x64
+
+      - name: Build game project (Release)
         shell: cmd
         run: |
           msbuild game-3d\game-3d.vcxproj ^
