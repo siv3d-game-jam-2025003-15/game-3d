@@ -121,27 +121,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		clothPos.x += 0.001;
+		lightPosList[lightArea].x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		clothPos.x -= 0.001;
+		lightPosList[lightArea].x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		clothPos.z += 0.001;
+		lightPosList[lightArea].z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		clothPos.z -= 0.001;
+		lightPosList[lightArea].z -= 0.001;
 	}
 	if (KeyK.pressed())
 	{
-		clothPos.y += 0.001;
+		lightPosList[lightArea].y += 0.001;
 	}
 	if (KeyL.pressed())
 	{
-		clothPos.y -= 0.001;
+		lightPosList[lightArea].y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -223,7 +223,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"clothPos=" << clothPos;
+	Print << U"lightPos=" << lightPos;
 
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePattern=" << messagePatternCount;
@@ -1213,12 +1213,13 @@ void CameraTest::update()
 	}
 
 	// ライトエリア
-	for (int i = 0; i < 4; i++)
+	lightArea = 0;
+	for (auto& row : collisionLight)
 	{
-		if (collisionLight[i][0] < toCameraPos.x
-			&& toCameraPos.x < collisionLight[i][1]
-			&& collisionLight[i][2] < toCameraPos.z
-			&& toCameraPos.z < collisionLight[i][3]
+		if (row[0] < toCameraPos.x
+			&& toCameraPos.x < row[1]
+			&& row[2] < toCameraPos.z
+			&& toCameraPos.z < row[3]
 			)
 		{
 			// エリアの変更
@@ -1228,9 +1229,10 @@ void CameraTest::update()
 				lightTime = 1;
 			//	lightTime = 0.5;
 			}
-			lightArea = i;
+			//lightArea = i;
 			break;
 		}
+		lightArea++;
 	}
 
 	Vec3_ myPosition = {
@@ -1514,29 +1516,30 @@ void CameraTest::update()
 	else
 	{
 		// ライト位置
-		switch (lightArea)
-		{
-		case 0:
-			lightPos.x = 0;
-			lightPos.y = 2.084;
-			lightPos.z = 7;
-			break;
-		case 1:
-			lightPos.x = 4.26;
-			lightPos.y = 2.60;
-			lightPos.z = -0.93;
-			break;
-		case 2:
-			lightPos.x = 16.05;
-			lightPos.y = 2.60;
-			lightPos.z = -0.92;
-			break;
-		case 3:
-			lightPos.x = 16.05;
-			lightPos.y = 2.60;
-			lightPos.z = -4.27;
-			break;
-		}
+		lightPos = lightPosList[lightArea];
+		//switch (lightArea)
+		//{
+		//case 0:
+		//	lightPos.x = 0;
+		//	lightPos.y = 2.084;
+		//	lightPos.z = 7;
+		//	break;
+		//case 1:
+		//	lightPos.x = 4.26;
+		//	lightPos.y = 2.60;
+		//	lightPos.z = -0.93;
+		//	break;
+		//case 2:
+		//	lightPos.x = 16.05;
+		//	lightPos.y = 2.60;
+		//	lightPos.z = -0.92;
+		//	break;
+		//case 3:
+		//	lightPos.x = 16.05;
+		//	lightPos.y = 2.60;
+		//	lightPos.z = -4.27;
+		//	break;
+		//}
 
 		// ライトの点滅 TODO いつか使うかも？
 		//if (Random(0, 100) == 0)
@@ -1836,28 +1839,27 @@ void CameraTest::update()
 			}
 
 			// ライトの判定
-			for (int i = 0; i < 4; i++)
+			for (auto& row : collisionLight)
 			{
-
 				ColorF color{ 1.0, 1.0, 0.0, 1 };
 
 				// 縦
-				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][2]}, Vec3{collisionLight[i][0], 3, collisionLight[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][1], 0, collisionLight[i][2]}, Vec3{collisionLight[i][1], 3, collisionLight[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][3]}, Vec3{collisionLight[i][0], 3, collisionLight[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][1], 0, collisionLight[i][3]}, Vec3{collisionLight[i][1], 3, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 3, row[2]} }.draw(color);
+				Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
+				Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[0], 3, row[3]} }.draw(color);
+				Line3D{ Vec3{row[1], 0, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
 
 				// 下
-				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][2]}, Vec3{collisionLight[i][1], 0, collisionLight[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][3]}, Vec3{collisionLight[i][1], 0, collisionLight[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][0], 0, collisionLight[i][2]}, Vec3{collisionLight[i][0], 0, collisionLight[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][1], 0, collisionLight[i][2]}, Vec3{collisionLight[i][1], 0, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[1], 0, row[2]} }.draw(color);
+				Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[1], 0, row[3]} }.draw(color);
+				Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 0, row[3]} }.draw(color);
+				Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 0, row[3]} }.draw(color);
 
 				// 上
-				Line3D{ Vec3{collisionLight[i][0], 3, collisionLight[i][2]}, Vec3{collisionLight[i][1], 3, collisionLight[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][0], 3, collisionLight[i][3]}, Vec3{collisionLight[i][1], 3, collisionLight[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][0], 3, collisionLight[i][2]}, Vec3{collisionLight[i][0], 3, collisionLight[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionLight[i][1], 3, collisionLight[i][2]}, Vec3{collisionLight[i][1], 3, collisionLight[i][3]} }.draw(color);
+				Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
+				Line3D{ Vec3{row[0], 3, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
+				Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[0], 3, row[3]} }.draw(color);
+				Line3D{ Vec3{row[1], 3, row[2]}, Vec3{row[1], 3, row[3]} }.draw(color);
 			}
 
 		}
