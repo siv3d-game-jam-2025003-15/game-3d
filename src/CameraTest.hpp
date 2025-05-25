@@ -523,6 +523,8 @@ private:
 	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };
 	const Texture dirtyClothMiniSprite{ U"assets/sprites/DirtyCloth_mini.png" };
 	const Texture dirtyClothBigSprite{ U"assets/sprites/DirtyCloth_big.png" };
+	const Texture clothMiniSprite{ U"assets/sprites/Cloth_mini.png" };
+	const Texture clothBigSprite{ U"assets/sprites/Cloth_big.png" };
 
 	// インベントリの表示
 	bool bInventory = false;
