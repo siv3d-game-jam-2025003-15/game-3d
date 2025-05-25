@@ -26,6 +26,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelCloth, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -120,27 +121,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		emblemPos.x += 0.001;
+		clothPos.x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		emblemPos.x -= 0.001;
+		clothPos.x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		emblemPos.z += 0.001;
+		clothPos.z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		emblemPos.z -= 0.001;
+		clothPos.z -= 0.001;
 	}
 	if (KeyK.pressed())
 	{
-		emblemPos.y += 0.001;
+		clothPos.y += 0.001;
 	}
 	if (KeyL.pressed())
 	{
-		emblemPos.y -= 0.001;
+		clothPos.y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -222,7 +223,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"emblemPos=" << emblemPos;
+	Print << U"clothPos=" << clothPos;
 
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePattern=" << messagePatternCount;
@@ -411,6 +412,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case DirtyCloth:
 		// 汚れた布
+		toastedParchmentMiniSprite.draw(x, y);	// TODO
 		break;
 	case Cloth:
 		// 布
@@ -460,6 +462,7 @@ void CameraTest::drawBigItem(
 		break;
 	case DirtyCloth:
 		// 汚れた布
+		toastedParchmentBigSprite.draw(x, y);	// TODO
 		break;
 	case Cloth:
 		// 布
@@ -1055,6 +1058,18 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 23;
+			}
+		}
+
+		// 汚れた布
+		if (!bLockon)
+		{
+			auto [a, b, c] = clothController.update(clothPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 26;
 			}
 		}
 
@@ -1743,6 +1758,16 @@ void CameraTest::update()
 			};
 
 			modelHanger.draw();
+		}
+
+		// 汚れた布の描画
+		if (bClothHave == false)
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(clothPos)
+			};
+
+			modelCloth.draw();
 		}
 
 		// デバッグ表示

@@ -234,6 +234,9 @@ private:
 
 	// ハンガー
 	const Model modelHanger{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
+	
+	// 汚れた布
+	const Model modelCloth{ U"assets/models/Cloth/Gimmick_Cloth01.obj" };
 
 	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -367,6 +370,9 @@ private:
 	// 教団の紋章
 	Vec3 emblemPos = { 16.43, 2, -6.83 };
 
+	// 汚れた布
+	Vec3 clothPos = { 8.25, 0.75, -8.6 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController keyController;
@@ -385,6 +391,7 @@ private:
 	ObjectController fireplaceStrongController;
 	ObjectController hangerController;
 	ObjectController barrelController;
+	ObjectController clothController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -579,6 +586,9 @@ private:
 	// ハンガーを持っている
 	bool bHangerHave = false;
 
+	// 汚れた布を持っている
+	bool bClothHave = false;
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数
@@ -707,13 +717,15 @@ private:
 		U"",	// 25
 		U"",	// 25
 
-		U"",	// 26
+		// 26 汚れた布
+		U"布だ。",	// 26
 		U"",	// 26
 		U"",	// 26
 
-		U"",	// 27
-		U"",	// 27
-		U"",	// 27
+		// 27 樽（中に水が入っている）
+		U"古びた木製の樽。中に液体が入っている。",
+		U"",
+		U"",
 
 		U"",	// 28
 		U"",	// 28
