@@ -236,7 +236,7 @@ private:
 	const Model modelHanger{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
 	
 	// 汚れた布
-	const Model modelCloth{ U"assets/models/Cloth/Gimmick_Cloth01.obj" };
+	const Model modelDirtyCloth{ U"assets/models/Cloth/Gimmick_Cloth01.obj" };
 
 	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
@@ -371,7 +371,7 @@ private:
 	Vec3 emblemPos = { 16.43, 2, -6.83 };
 
 	// 汚れた布
-	Vec3 clothPos = { 8.25, 0.75, -8.6 };
+	Vec3 dirtyClothPos = { 8.25, 0.75, -8.6 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
@@ -391,7 +391,7 @@ private:
 	ObjectController fireplaceStrongController;
 	ObjectController hangerController;
 	ObjectController barrelController;
-	ObjectController clothController;
+	ObjectController dirtyClothController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -590,7 +590,7 @@ private:
 	bool bFireplaceStrong = false;
 
 	// 炙った羊皮紙を読んでいる
-	bool bToastedParchment = false;
+	bool bToastedParchmentRead = false;
 
 	// ハンガーを見つけた
 	bool bHangerFind = false;
@@ -599,7 +599,13 @@ private:
 	bool bHangerHave = false;
 
 	// 汚れた布を持っている
+	bool bDirtyClothHave = false;
+
+	// 布を持っている
 	bool bClothHave = false;
+
+	// 布を読んでいる
+	bool bClothRead = false;
 
 	const Font& boldFont = FontAsset(U"Bold");
 
@@ -921,6 +927,21 @@ private:
 
 	// 羊皮紙
 	Array<String> toastedParchmentText =
+	{
+		U"ちぎれた輪が、\n",
+		U"空の底へと沈む。\n",
+		U"白い欠片が、\n",
+		U"風に踊り、やがて落ちる。\n",
+		U"絡みつくものが、\n",
+		U"静かに喉元へ這う。\n",
+		U"枯れた夢が、\n",
+		U"黒ずんだ土に崩れ落ちる。\n",
+		U"見開かれたそれが、\n",
+		U"すべてを呪うように、夜を睨む。\n",
+	};
+
+	// 布
+	Array<String> clothText =
 	{
 		U"ちぎれた輪が、\n",
 		U"空の底へと沈む。\n",

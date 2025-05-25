@@ -26,7 +26,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelCloth, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -416,6 +416,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case Cloth:
 		// 布
+		toastedParchmentMiniSprite.draw(x, y);	// TODO
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
@@ -466,6 +467,7 @@ void CameraTest::drawBigItem(
 		break;
 	case Cloth:
 		// 布
+		toastedParchmentBigSprite.draw(x, y);	// TODO
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
@@ -486,11 +488,10 @@ void CameraTest::inventoryOnOff()
 	// いったんカーソルを強制的に中央に戻す
 	Cursor::SetPos(center.x, center.y);
 
-	// 手記のフラグはオフにする
+	// フラグはオフにする TODO 増えたら困る
 	bMemo = false;
-
-	// 炙った羊皮紙フラグはオフにする
-	bToastedParchment = false;
+	bToastedParchmentRead = false;
+	bClothRead = false;
 }
 
 void CameraTest::update()
@@ -1062,13 +1063,13 @@ void CameraTest::update()
 		}
 
 		// 汚れた布
-		if (!bLockon && bClothHave == false)
+		if (!bLockon && bDirtyClothHave == false)
 		{
-			auto [a, b, c] = clothController.update(clothPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = dirtyClothController.update(dirtyClothPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
 			if (a == true)
 			{
 				// 汚れた布を取得
-				bClothHave = true;
+				bDirtyClothHave = true;
 				items << DirtyCloth;
 			}
 			if (b)
@@ -1770,13 +1771,13 @@ void CameraTest::update()
 		}
 
 		// 汚れた布の描画
-		if (bClothHave == false)
+		if (bDirtyClothHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(clothPos)
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(dirtyClothPos)
 			};
 
-			modelCloth.draw();
+			modelDirtyCloth.draw();
 		}
 
 		// デバッグ表示
@@ -1976,7 +1977,7 @@ void CameraTest::update()
 
 			drawMiniItem(items[i], itemMiniX, itemMiniY);
 
-			if (bMemo || bToastedParchment)
+			if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
 			{
 				// 選択できないようにする
 				continue;
@@ -2020,11 +2021,12 @@ void CameraTest::update()
 		if (MouseL.down())
 		{
 			// アイテムを使う
-			if (bMemo || bToastedParchment)
+			if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
 			{
 				// メッセージが表示されていたら閉じる
 				bMemo = false;
-				bToastedParchment = false;
+				bToastedParchmentRead = false;
+				bClothRead = false;
 			}
 			else if (items.size() <= selectItem)
 			{
@@ -2092,7 +2094,7 @@ void CameraTest::update()
 			else if (items[selectItem] == ToastedParchment)
 			{
 				// 炙った羊皮紙を使った
-				bToastedParchment = true;
+				bToastedParchmentRead = true;
 
 				// TODO
 				//if (scenario == 1)
@@ -2100,7 +2102,31 @@ void CameraTest::update()
 				//	scenario = 2;
 				//}
 			}
+			else if (items[selectItem] == DirtyCloth)
+			{
+				// TODO 樽の近くで使う
 
+				items[selectItem] = Cloth;
+
+				// SEを鳴らす
+				AudioAsset(U"BGM").stop();
+				AudioAsset(U"GET").play();
+				bgmStopCount = 4.00;
+
+				// TODO
+				//scenario = 5;
+			}
+			else if (items[selectItem] == Cloth)
+			{
+				// 布を使った
+				bClothRead = true;
+
+				// TODO
+				//if (scenario == 1)
+				//{
+				//	scenario = 2;
+				//}
+			}
 		}
 	}
 	else
@@ -2210,7 +2236,7 @@ void CameraTest::draw() const
 	}
 
 	// 羊皮紙
-	if (bInventory && bToastedParchment)
+	if (bInventory && bToastedParchmentRead)
 	{
 		// 半透明の黒い画像
 		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
@@ -2230,4 +2256,27 @@ void CameraTest::draw() const
 			);
 		}
 	}
+
+	// 羊皮紙
+	if (bInventory && bClothRead)
+	{
+		// 半透明の黒い画像
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
+
+		// TODO 共通化する
+		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
+
+		for (int i = 0; i < clothText.size(); ++i)
+		{
+			double x = center.x;
+			double y = center.y + lineSpacing * (i - (int)clothText.size() / 2);
+
+			boldFont(clothText[i]).drawAt(
+				28,
+				{ x, y },
+				ColorF{ 1, 1, 1, 1 }
+			);
+		}
+	}
+
 }
