@@ -109,6 +109,16 @@ void CameraTest::debug()
 		// モデルを表示
 		bDebugviewModel == true ? bDebugviewModel = false : bDebugviewModel = true;
 	}
+	if (Key7.down())
+	{
+		// キャラライトの強さ
+		lightStrong += 0.1;
+	}
+	if (Key8.down())
+	{
+		// キャラライトの強さ
+		lightStrong -= 0.1;
+	}
 	//if (Key7.down())
 	//{
 	//	// ライトの点滅あり
@@ -121,27 +131,27 @@ void CameraTest::debug()
 	//}
 	if (Key9.pressed())
 	{
-		lightPosList[lightArea].x += 0.001;
+	//	lightPosList[lightArea].x += 0.001;
 	}
 	if (Key0.pressed())
 	{
-		lightPosList[lightArea].x -= 0.001;
+	//	lightPosList[lightArea].x -= 0.001;
 	}
 	if (KeyO.pressed())
 	{
-		lightPosList[lightArea].z += 0.001;
+	//	lightPosList[lightArea].z += 0.001;
 	}
 	if (KeyP.pressed())
 	{
-		lightPosList[lightArea].z -= 0.001;
+	//	lightPosList[lightArea].z -= 0.001;
 	}
 	if (KeyK.pressed())
 	{
-		lightPosList[lightArea].y += 0.001;
+	//	lightPosList[lightArea].y += 0.001;
 	}
 	if (KeyL.pressed())
 	{
-		lightPosList[lightArea].y -= 0.001;
+	//	lightPosList[lightArea].y -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -197,6 +207,8 @@ void CameraTest::debug()
 	{
 		Print << U"[6]モデル：非表示";
 	}
+
+	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
 
 	//if (bDebugFlashingLight)
 	//{
@@ -1253,27 +1265,27 @@ void CameraTest::update()
 	}
 
 	// ライトエリア
-	int tmpLightArea = 0;
-	for (auto& row : collisionLight)
-	{
-		if (row[0] < toCameraPos.x
-			&& toCameraPos.x < row[1]
-			&& row[2] < toCameraPos.z
-			&& toCameraPos.z < row[3]
-			)
-		{
-			// エリアの変更
-			if (lightArea == lastLightArea)
-			{
-			//	lightTime = 2;
-				lightTime = 1;
-			//	lightTime = 0.5;
-			}
-			lightArea = tmpLightArea;
-			break;
-		}
-		tmpLightArea++;
-	}
+	//int tmpLightArea = 0;
+	//for (auto& row : collisionLight)
+	//{
+	//	if (row[0] < toCameraPos.x
+	//		&& toCameraPos.x < row[1]
+	//		&& row[2] < toCameraPos.z
+	//		&& toCameraPos.z < row[3]
+	//		)
+	//	{
+	//		// エリアの変更
+	//		if (lightArea == lastLightArea)
+	//		{
+	//		//	lightTime = 2;
+	//			lightTime = 1;
+	//		//	lightTime = 0.5;
+	//		}
+	//		lightArea = tmpLightArea;
+	//		break;
+	//	}
+	//	tmpLightArea++;
+	//}
 
 	Vec3_ myPosition = {
 		toCameraPos.x,
@@ -1515,48 +1527,49 @@ void CameraTest::update()
 
 
 	// 止まっているBGMを再度鳴らす
-	{
-		// BGMの再開
-		if (bgmStopCount <= 0.0f)
-		{
-			if (!AudioAsset(U"BGM").isPlaying())
-			{
-				AudioAsset(U"BGM").play();
-			}
-		}
-		else {
-			bgmStopCount -= deltaTime;
+	//{
+	//	// BGMの再開
+	//	if (bgmStopCount <= 0.0f)
+	//	{
+	//		if (!AudioAsset(U"BGM").isPlaying())
+	//		{
+	//			AudioAsset(U"BGM").play();
+	//		}
+	//	}
+	//	else {
+	//		bgmStopCount -= deltaTime;
 
-			// 演出
-			if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
-			{
-				bgmStopCount = 1.0;
-			}
-		}
-	}
+	//		// 演出
+	//		if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
+	//		{
+	//			bgmStopCount = 1.0;
+	//		}
+	//	}
+	//}
 
 
-	if (lightArea != lastLightArea)
-	{
-		// ライトの位置が変わった
+	//if (lightArea != lastLightArea)
+	//{
+	//	// ライトの位置が変わった
 
-		toGlobalAmbientColorR = 0.1;
-		toGlobalAmbientColorG = 0.1;
-		toGlobalAmbientColorB = 0.125;
+	//	toGlobalAmbientColorR = 0.1;
+	//	toGlobalAmbientColorG = 0.1;
+	//	toGlobalAmbientColorB = 0.125;
 
-		lightTime -= deltaTime;
+	//	lightTime -= deltaTime;
 
-		if (lightTime < 0)
-		{
-			lastLightArea = lightArea;
+	//	if (lightTime < 0)
+	//	{
+	//		lastLightArea = lightArea;
 
-			isGlowEffect = true;
-		}
-	}
-	else
-	{
+	//		isGlowEffect = true;
+	//	}
+	//}
+	//else
+	//{
 		// ライト位置
-		lightPos = lightPosList[lightArea];
+		lightPos = m_eyePosition;
+		//lightPos = lightPosList[lightArea];
 		//switch (lightArea)
 		//{
 		//case 0:
@@ -1643,7 +1656,7 @@ void CameraTest::update()
 			toGlobalAmbientColorG = 0.1;
 			toGlobalAmbientColorB = 0.125;
 		}
-	}
+	//}
 
 	GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, lightSmooth);
 	GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, lightSmooth);
@@ -1656,10 +1669,10 @@ void CameraTest::update()
 	{
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
+		// ライトの位置
 		ConstantBuffer<Light> cb;
-
 		cb->g_pointLightPos = lightPos;
-
+		cb->g_pointLightStrong = lightStrong;
 		Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
 
 		const ScopedCustomShader3D shader(vs3D, ps3D);

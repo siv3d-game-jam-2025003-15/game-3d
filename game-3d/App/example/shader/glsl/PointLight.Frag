@@ -39,6 +39,7 @@ layout(std140) uniform PSPerView // slot 1
 layout(std140) uniform PSPointLightPos // slot 2
 {
 	vec3 g_pointLightPos;
+	float g_pointLightStrong;
 };
 
 layout(std140) uniform PSPerMaterial // slot 3
@@ -100,7 +101,9 @@ void main()
 	vec3 specularReflection = CalculateSpecularReflection(n, h, g_shininess, dot(n, l), lightColor, g_specularColor);
 
 	// Distance attenuation
-	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), 2.0));
+//	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), 2.0));
+//	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), 5.0));
+	float attenuation = 1.0 / (1.0 + 0.1 * pow(length(g_pointLightPos - WorldPosition), g_pointLightStrong));
 
 	// Pixel discard due to alpha (transparency)
     vec4 texColor = texture(Texture0,UV);

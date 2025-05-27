@@ -6,6 +6,7 @@
 struct Light
 {
 	Float3 g_pointLightPos;
+	float g_pointLightStrong;
 	float _padding;
 };
 
@@ -176,8 +177,11 @@ private:
 
 	bool m_padPressed = false;
 
-	// カメラの視点
+	// カメラの視点（現在）
 	Vec3 m_eyePosition = Vec3{ 2.5, 1.5, 10 };
+
+	// カメラの視点（次）
+	Vec3 toCameraPos = m_eyePosition;
 
 	// カメラの視点（1フレーム前）
 	Vec3 last_eyePosition = Vec3{ 2.5, 1.5, 10 };
@@ -288,7 +292,8 @@ private:
 			{ U"PSPerFrame", 0 },
 			{ U"PSPerView", 1 },
 			{ U"PSPointLightPos", 2 },
-			{ U"PSPerMaterial", 3 }
+			{ U"PSPerMaterial", 3 },
+			{ U"PSPointLightStrong", 4 },
 		}
 	};
 
@@ -298,8 +303,6 @@ private:
 
 	bool isGlowEffect = true;
 	int glowEffectType = 0;
-
-	Vec3 toCameraPos = m_eyePosition;
 
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
@@ -319,6 +322,7 @@ private:
 
 	// ライトの設定
 	Vec3 lightPos;
+	float lightStrong = 3.0;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;
@@ -560,9 +564,9 @@ private:
 	int itemMessage = -1;
 
 	// ライト関係の変数
-	int lightArea = 0;
-	int lastLightArea = 0;
-	double lightTime = 0;
+	//int lightArea = 0;
+	//int lastLightArea = 0;
+	//double lightTime = 0;
 
 	int debugItemNameX = 805;
 	int debugItemNameY = 236;
