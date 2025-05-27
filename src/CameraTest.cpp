@@ -119,6 +119,26 @@ void CameraTest::debug()
 		// キャラライトの強さ
 		lightStrong -= 0.1;
 	}
+	if (Key9.down())
+	{
+		// ビックリマークの大きさ
+		markSize += 0.01;
+	}
+	if (Key0.down())
+	{
+		// ビックリマークの大きさ
+		markSize -= 0.01;
+	}
+	//if (KeyO.down())
+	//{
+	//	// ビックリマークの高さ
+	//	markHigh += 0.01;
+	//}
+	//if (KeyP.down())
+	//{
+	//	// ビックリマークの高さ
+	//	markHigh -= 0.01;
+	//}
 	//if (Key7.down())
 	//{
 	//	// ライトの点滅あり
@@ -129,22 +149,22 @@ void CameraTest::debug()
 	//	// シェーダーあり
 	//	bDebugShader == true ? bDebugShader = false : bDebugShader = true;
 	//}
-	if (Key9.pressed())
-	{
+	//if (Key9.pressed())
+	//{
 	//	lightPosList[lightArea].x += 0.001;
-	}
-	if (Key0.pressed())
-	{
+	//}
+	//if (Key0.pressed())
+	//{
 	//	lightPosList[lightArea].x -= 0.001;
-	}
-	if (KeyO.pressed())
-	{
+	//}
+	//if (KeyO.pressed())
+	//{
 	//	lightPosList[lightArea].z += 0.001;
-	}
-	if (KeyP.pressed())
-	{
+	//}
+	//if (KeyP.pressed())
+	//{
 	//	lightPosList[lightArea].z -= 0.001;
-	}
+	//}
 	if (KeyK.pressed())
 	{
 	//	lightPosList[lightArea].y += 0.001;
@@ -209,6 +229,8 @@ void CameraTest::debug()
 	}
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
+	Print << U"[9][0]ビックリマークの大きさ：" << markSize;
+	//Print << U"[o][p]ビックリマークの高さ：" << markHigh;
 
 	//if (bDebugFlashingLight)
 	//{
@@ -746,7 +768,7 @@ void CameraTest::update()
 		// オブジェクトを取ることができるか
 		if (!bLockon)
 		{
-			auto [a, b, c] = breadController.update(breadPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = breadController.update(breadPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true && bBreadHave == false)
 			{
 				// アイテムを取った
@@ -772,7 +794,7 @@ void CameraTest::update()
 		// 古びた鍵
 		if (!bLockon && bWall)
 		{
-			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true && bKeyHave == false)
 			{
 				// アイテムを取った
@@ -792,7 +814,7 @@ void CameraTest::update()
 		// 火かき棒
 		if (!bLockon)
 		{
-			auto [a, b, c] = pokerController.update(pokerPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = pokerController.update(pokerPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true && bPokerHave == false)
 			{
 				// アイテムを取った
@@ -818,7 +840,7 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z += 0.2;
 
-			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, MarkPosition, 1, bWireKey);
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bWireKey);
 			if (a == true && bDoorOpen == false && bWireKey)
 			{
 				// ドアを開いた
@@ -847,7 +869,7 @@ void CameraTest::update()
 		// 羊皮紙
 		if (!bLockon)
 		{
-			auto [a, b, c] = parchmentController.update(parchmentPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = parchmentController.update(parchmentPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true && bParchmentHave == false)
 			{
 				// アイテムを取った
@@ -866,7 +888,7 @@ void CameraTest::update()
 		// 自分のベッド
 		if (!bLockon)
 		{
-			auto [a, b, c] = bedController.update(bedPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = bedController.update(bedPos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -878,7 +900,7 @@ void CameraTest::update()
 		// 他人のベッド2
 		if (!bLockon)
 		{
-			auto [a, b, c] = bed2Controller.update(bed2Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = bed2Controller.update(bed2Pos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -890,7 +912,7 @@ void CameraTest::update()
 		// 他人のベッド3
 		if (!bLockon)
 		{
-			auto [a, b, c] = bed3Controller.update(bed3Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = bed3Controller.update(bed3Pos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -902,7 +924,7 @@ void CameraTest::update()
 		// 他人のベッド4
 		if (!bLockon)
 		{
-			auto [a, b, c] = bed4Controller.update(bed4Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = bed4Controller.update(bed4Pos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -914,7 +936,7 @@ void CameraTest::update()
 		// 古いベッド
 		if (!bLockon)
 		{
-			auto [a, b, c] = oldBedController.update(oldBedPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = oldBedController.update(oldBedPos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -926,7 +948,7 @@ void CameraTest::update()
 		// トイレ
 		if (!bLockon)
 		{
-			auto [a, b, c] = toiletController.update(toiletPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = toiletController.update(toiletPos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -938,7 +960,7 @@ void CameraTest::update()
 		// 棚
 		if (!bLockon)
 		{
-			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, MarkPosition, 0, bKeyHave);
+			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, markPosition, 0, bKeyHave);
 			if (a == true && bWire == false)
 			{
 				// 針金が取れる
@@ -968,7 +990,7 @@ void CameraTest::update()
 		// 壁
 		if (!bLockon && !bWall && scenario == 2)
 		{
-			auto [a, b, c] = wallController.update(wallPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = wallController.update(wallPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true && bParchmentHave == false)
 			{
 				// 鍵が現れる
@@ -987,7 +1009,7 @@ void CameraTest::update()
 		if (!bLockon && bFireplaceStrong == false)
 		{
 		//	auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
-			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, false);
+			auto [a, b, c] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, markPosition, 0, false);
 			//if (a == true)
 			//{
 			//	// 火が強くなった
@@ -1013,7 +1035,7 @@ void CameraTest::update()
 		// 暖炉（火が強い）
 		if (!bLockon && bFireplaceStrong)
 		{
-			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -1034,7 +1056,7 @@ void CameraTest::update()
 		// ハンガー
 		if (!bLockon && bHangerFind && bHangerHave == false)
 		{
-			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, MarkPosition, 0, bHangerFind);
+			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, markPosition, 0, bHangerFind);
 			if (a == true)
 			{
 				// ハンガーを取得
@@ -1052,7 +1074,7 @@ void CameraTest::update()
 		// 樽
 		if (!bLockon)
 		{
-			auto [a, b, c] = barrelController.update(barrelPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = barrelController.update(barrelPos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -1064,7 +1086,7 @@ void CameraTest::update()
 		// 樽2
 		if (!bLockon)
 		{
-			auto [a, b, c] = barrelController.update(barrel2Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = barrelController.update(barrel2Pos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -1076,7 +1098,7 @@ void CameraTest::update()
 		// 樽3
 		if (!bLockon)
 		{
-			auto [a, b, c] = barrelController.update(barrel3Pos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = barrelController.update(barrel3Pos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -1098,7 +1120,7 @@ void CameraTest::update()
 		// 教団の紋章
 		if (!bLockon)
 		{
-			auto [a, b, c] = barrelController.update(emblemPos, camera, m_eyePosition, ray, MarkPosition, -1, false);
+			auto [a, b, c] = barrelController.update(emblemPos, camera, m_eyePosition, ray, markPosition, -1, false);
 			if (b)
 			{
 				// 見ている
@@ -1110,7 +1132,7 @@ void CameraTest::update()
 		// 汚れた布
 		if (!bLockon && bDirtyClothHave == false)
 		{
-			auto [a, b, c] = dirtyClothController.update(dirtyClothPos, camera, m_eyePosition, ray, MarkPosition, 0, true);
+			auto [a, b, c] = dirtyClothController.update(dirtyClothPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true)
 			{
 				// 汚れた布を取得
@@ -1527,25 +1549,25 @@ void CameraTest::update()
 
 
 	// 止まっているBGMを再度鳴らす
-	//{
-	//	// BGMの再開
-	//	if (bgmStopCount <= 0.0f)
-	//	{
-	//		if (!AudioAsset(U"BGM").isPlaying())
-	//		{
-	//			AudioAsset(U"BGM").play();
-	//		}
-	//	}
-	//	else {
-	//		bgmStopCount -= deltaTime;
+	{
+		// BGMの再開
+		if (bgmStopCount <= 0.0f)
+		{
+			if (!AudioAsset(U"BGM").isPlaying())
+			{
+				AudioAsset(U"BGM").play();
+			}
+		}
+		else {
+			bgmStopCount -= deltaTime;
 
-	//		// 演出
-	//		if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
-	//		{
-	//			bgmStopCount = 1.0;
-	//		}
-	//	}
-	//}
+			// 演出
+			//if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
+			//{
+			//	bgmStopCount = 1.0;
+			//}
+		}
+	}
 
 
 	//if (lightArea != lastLightArea)
@@ -1788,12 +1810,18 @@ void CameraTest::update()
 		// ビックリマーク
 		if(bLockon)
 		{
-			MarkPosition.y += 0.2;
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
-			};
+			// 少し上にする
+			markPosition.y += markHigh;
 
-			modelExclamationMark.draw();
+			// 3Dのビックリマーク
+			//Transformer3D t{
+			//	Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
+			//};
+			//modelExclamationMark.draw();
+
+			// ビルボード
+			const Mat4x4 billboardMat = camera.getInvView();
+			billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
 		}
 
 		// 羊皮紙の描画

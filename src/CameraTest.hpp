@@ -532,6 +532,12 @@ private:
 	const Texture clothMiniSprite{ U"assets/sprites/Cloth_mini.png" };
 	const Texture clothBigSprite{ U"assets/sprites/Cloth_big.png" };
 
+	// ビルボード用
+	const Texture uvChecker{ U"assets/sprites/ExclamationMark.png", TextureDesc::MippedSRGB };
+
+	// ビルボード表示する板
+	const Mesh billboard{ MeshData::Billboard() };
+
 	// インベントリの表示
 	bool bInventory = false;
 
@@ -551,8 +557,10 @@ private:
 	// 選択中のアイテム番号
 	int itemIndex = 0;
 
-	// ビックリマークのポジション
-	Vec3 MarkPosition{ 0.0, 0.0, 0.0 };
+	// ビックリマーク
+	Vec3 markPosition{ 0.0, 0.0, 0.0 };
+	float markSize = 0.3;
+	float markHigh = 0.2;
 
 	// 取得しているアイテム一覧
 	Array<int> items;

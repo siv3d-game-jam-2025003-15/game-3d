@@ -70,7 +70,8 @@ std::tuple<bool, bool, int> ObjectController::update(
 				break;
 			case 1:
 				AudioAsset(U"˜S‰®‚Ì”à‚ðŠJ‚¯‚é").play();
-				bgmStopCount = 999999.0;
+			//	bgmStopCount = 999999.0;
+				bgmStopCount = 4.00;
 				break;
 			}
 			AudioAsset(U"BGM").stop();
