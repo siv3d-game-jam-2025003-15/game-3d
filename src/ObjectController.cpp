@@ -1,4 +1,4 @@
-#include "ObjectController.hpp"
+ï»¿#include "ObjectController.hpp"
 
 ObjectController::ObjectController()
 {
@@ -12,7 +12,7 @@ std::tuple<bool, bool, int> ObjectController::update(
 	Ray ray,
 	Vec3& MarkPosition,
 	int bgmNo,
-	bool bHave	// æ‚é‚±‚Æ‚ª‚Å‚«‚é‚©‚Ç‚¤‚©
+	bool bHave	// å–ã‚‹ã“ã¨ãŒã§ãã‚‹ã‹ã©ã†ã‹
 )
 {
 	bool isLockon = false;
@@ -41,21 +41,21 @@ std::tuple<bool, bool, int> ObjectController::update(
 	)
 	{
 #ifdef _DEBUG
-		Print << U"ƒIƒuƒWƒFƒNƒg‚ª‰æ–Ê‚Ì’†S‚É‚ ‚é";
+		Print << U"ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒç”»é¢ã®ä¸­å¿ƒã«ã‚ã‚‹";
 #endif
-		Print << U"¶ƒNƒŠƒbƒN‚Åæ‚é";
-		Print << U"ƒGƒ“ƒ^[ƒL[‚Åæ‚é";
+		Print << U"å·¦ã‚¯ãƒªãƒƒã‚¯ã§å–ã‚‹";
+		Print << U"ã‚¨ãƒ³ã‚¿ãƒ¼ã‚­ãƒ¼ã§å–ã‚‹";
 
 		isLockon = true;
 
 		MarkPosition = objPos;
 
-		// ƒ}ƒEƒX‚Ì“–‚½‚è”»’è‚Ì•`‰æ
+		// ãƒã‚¦ã‚¹ã®å½“ãŸã‚Šåˆ¤å®šã®æç”»
 		Box box = Box{ objPos, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
 		if (KeyEnter.pressed() && bHave
 		|| (
-		//	box.intersects(ray) &&	// Ray‚Åæ‚ê‚é‚æ‚¤‚É‚·‚é‚Ì‚ğ‚â‚ß‚Ä‚İ‚é
+		//	box.intersects(ray) &&	// Rayã§å–ã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹ã®ã‚’ã‚„ã‚ã¦ã¿ã‚‹
 			MouseL.down()
 			&& bHave
 			)
@@ -69,7 +69,7 @@ std::tuple<bool, bool, int> ObjectController::update(
 				bgmStopCount = 4.00;
 				break;
 			case 1:
-				AudioAsset(U"˜S‰®‚Ì”à‚ğŠJ‚¯‚é").play();
+				AudioAsset(U"ç‰¢å±‹ã®æ‰‰ã‚’é–‹ã‘ã‚‹").play();
 			//	bgmStopCount = 999999.0;
 				bgmStopCount = 4.00;
 				break;
