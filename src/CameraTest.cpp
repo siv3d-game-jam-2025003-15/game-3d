@@ -521,12 +521,14 @@ void CameraTest::update()
 	if ((KeyControl | KeyCommand).pressed())
 	{
 		// コントロールキーを押しているときの速度
-		addSpeed = 20.0;
+	//	addSpeed = 20.0;
+		addSpeed = 5.0;
 	}
 	else if (KeyShift.pressed())
 	{
 		// シフトキーを押しているときの速度
-		addSpeed = 5.0;
+	//	addSpeed = 5.0;
+		addSpeed = 2.5;
 	}
 	const double scaledSpeed = cameraSpeed * addSpeed * deltaTime;
 
