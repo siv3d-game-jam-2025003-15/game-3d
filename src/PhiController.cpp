@@ -22,7 +22,7 @@ void PhiController::rotate(
 {
 	m_phi += deltaDegrees * deltaTime * thumb;
 
-	// ³‹K‰»
+	// æ­£è¦åŒ–
 	if (m_phi < 0.0)
 	{
 		m_phi += 360_deg;
