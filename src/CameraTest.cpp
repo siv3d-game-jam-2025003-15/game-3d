@@ -165,14 +165,14 @@ void CameraTest::debug()
 	//{
 	//	lightPosList[lightArea].z -= 0.001;
 	//}
-	if (KeyK.pressed())
-	{
+	//if (KeyK.pressed())
+	//{
 	//	lightPosList[lightArea].y += 0.001;
-	}
-	if (KeyL.pressed())
-	{
+	//}
+	//if (KeyL.pressed())
+	//{
 	//	lightPosList[lightArea].y -= 0.001;
-	}
+	//}
 
 	if (mouseDirectionX == 1)
 	{

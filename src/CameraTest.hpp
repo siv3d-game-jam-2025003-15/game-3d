@@ -226,7 +226,7 @@ private:
 
 	// ライトの設定
 	Vec3 lightPos;
-	float lightStrong = 3.0;
+	float lightStrong = 4.0;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;

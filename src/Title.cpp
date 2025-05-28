@@ -63,11 +63,11 @@ void Title::draw() const
 
 	// 背景
 	BG.draw(0, 0);
-	BG.draw(1024, 0);
+//	BG.draw(1024, 0);
 
 	// タイトル描画
-	FontAsset(U"TitleFont")(U"Siv3D脱出ゲーム")
-		.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 640, 100 });
+	//FontAsset(U"TitleFont")(U"Siv3D脱出ゲーム")
+	//	.drawAt(TextStyle::OutlineShadow(0.2, ColorF{ 0.2, 0.6, 0.2 }, Vec2{ 3, 3 }, ColorF{ 0.0, 0.5 }), 100, Vec2{ 640, 100 });
 
 	// ボタン描画
 	{
@@ -88,13 +88,13 @@ void Title::draw() const
 	}
 
 	{
-		const Font& boldFont = FontAsset(U"Bold");
-		boldFont(U"操作説明").drawAt(36, { 800, 300 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"AWSD：移動").drawAt(36, { 800, 400 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"↑↓←→：視点").drawAt(36, { 800, 450 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"ドラッグ：視点").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"左クリック：アクション").drawAt(36, { 800, 550 }, ColorF{ 1, 1, 1, 1 });
-		boldFont(U"右クリック：キャンセル").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
+		//const Font& boldFont = FontAsset(U"Bold");
+		//boldFont(U"操作説明").drawAt(36, { 800, 300 }, ColorF{ 1, 1, 1, 1 });
+		//boldFont(U"AWSD：移動").drawAt(36, { 800, 400 }, ColorF{ 1, 1, 1, 1 });
+		//boldFont(U"↑↓←→：視点").drawAt(36, { 800, 450 }, ColorF{ 1, 1, 1, 1 });
+		//boldFont(U"ドラッグ：視点").drawAt(36, { 800, 500 }, ColorF{ 1, 1, 1, 1 });
+		//boldFont(U"左クリック：アクション").drawAt(36, { 800, 550 }, ColorF{ 1, 1, 1, 1 });
+		//boldFont(U"右クリック：キャンセル").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
 	}
 
 }

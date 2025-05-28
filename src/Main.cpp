@@ -17,10 +17,10 @@ void Main()
 
     // ウインドウとシーンをリサイズする
     Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	Scene::Resize(SCENE_WIDTH, SCENE_HEIGHT);
 
 	// フルスクリーンモード
-//	Window::SetFullscreen(true);
+	Window::SetFullscreen(true);
     
 //	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"example/font/RocknRoll/RocknRollOne-Regular.ttf");
 	FontAsset::Register(U"TitleFont", FontMethod::MSDF, 48, U"assets/font/SoukouMincho-Font/SoukouMincho.ttf");

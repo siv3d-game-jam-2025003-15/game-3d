@@ -33,5 +33,11 @@ SIV3D_SET(EngineOption::Renderer::OpenGL);
 // TODO 変えてもズレないようにする（UIスケーリング対応）
 //const int WINDOW_WIDTH = 800;
 //const int WINDOW_HEIGHT = 600;
-const int WINDOW_WIDTH = 1280;
-const int WINDOW_HEIGHT = 720;
+//const int WINDOW_WIDTH = 1280;
+//const int WINDOW_HEIGHT = 720;
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
+
+// シーンサイズ
+const int SCENE_WIDTH = 1920;
+const int SCENE_HEIGHT = 1080;
