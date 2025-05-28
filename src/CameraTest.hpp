@@ -948,6 +948,6 @@ private:
 		U"すべてを呪うように、夜を睨む。\n",
 	};
 
-	int itemHeight = 165;
+//	int itemHeight = 165;
 
 };

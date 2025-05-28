@@ -160,11 +160,11 @@ void CameraTest::debug()
 	//}
 	if (KeyK.pressed())
 	{
-		itemHeight++;
+	//	itemHeight++;
 	}
 	if (KeyL.pressed())
 	{
-		itemHeight--;
+	//	itemHeight--;
 	}
 
 	if (mouseDirectionX == 1)
@@ -250,7 +250,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"itemHeight=" << itemHeight;
+//	Print << U"itemHeight=" << itemHeight;
 
 #endif
 }
@@ -2143,7 +2143,7 @@ void CameraTest::draw() const
 		boldFont(itemNameText[itemMessage]).drawAt(
 			28,
 		//	{ 805, 236 },
-			{ center.x + itemHeight, center.y -128 },
+			{ center.x + 165, center.y -128 },
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
