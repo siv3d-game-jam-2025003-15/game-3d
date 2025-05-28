@@ -177,6 +177,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CameraTest.cpp" />
+    <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\ModelView.cpp" />
@@ -397,6 +398,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\CameraTest.hpp" />
+    <ClInclude Include="..\src\Collision.hpp" />
     <ClInclude Include="..\src\Common.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
     <ClInclude Include="..\src\ModelView.hpp" />
