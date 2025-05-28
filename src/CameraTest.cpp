@@ -46,8 +46,6 @@ CameraTest::CameraTest(const InitData& init)
 	bDebugViewCollision = true;
 #endif
 
-	Stopwatch stopwatch{ StartImmediately::Yes };
-
 	// テキストメッセージを先に読み込んでおく
 	dummyTextView(Text);
 	dummyTextView(itemText);
@@ -55,12 +53,17 @@ CameraTest::CameraTest(const InitData& init)
 	dummyTextView(memoText);
 	dummyTextView(toastedParchmentText);
 
+	// メッセージを読んだかどうかのフラグをリセット
 	for (int i = 0; i < Text.size() / MessagePatternMax; i++)
 	{
 		messageRead.push_back(-1);
 	}
+
+	// ストップウォッチ（なるべく最後に実行する）
+	Stopwatch stopwatch{ StartImmediately::Yes };
 }
 
+// テキストメッセージを先に読み込んでおく
 void CameraTest::dummyTextView(Array<String> text)
 {
 	for (int i = 0; i < text.size(); ++i)
@@ -70,6 +73,14 @@ void CameraTest::dummyTextView(Array<String> text)
 			{ 0, 0 },
 			ColorF{ 0, 0, 0, 0 }
 		);
+	}
+}
+
+void CameraTest::dummyTextView(Array<Array<String>> text)
+{
+	for (int i = 0; i < text.size(); ++i)
+	{
+		dummyTextView(text[i]);
 	}
 }
 
@@ -129,16 +140,6 @@ void CameraTest::debug()
 		// ビックリマークの大きさ
 		markSize -= 0.01;
 	}
-	//if (KeyO.down())
-	//{
-	//	// ビックリマークの高さ
-	//	markHigh += 0.01;
-	//}
-	//if (KeyP.down())
-	//{
-	//	// ビックリマークの高さ
-	//	markHigh -= 0.01;
-	//}
 	//if (Key7.down())
 	//{
 	//	// ライトの点滅あり
@@ -157,22 +158,14 @@ void CameraTest::debug()
 	//{
 	//	lightPosList[lightArea].x -= 0.001;
 	//}
-	//if (KeyO.pressed())
-	//{
-	//	lightPosList[lightArea].z += 0.001;
-	//}
-	//if (KeyP.pressed())
-	//{
-	//	lightPosList[lightArea].z -= 0.001;
-	//}
-	//if (KeyK.pressed())
-	//{
-	//	lightPosList[lightArea].y += 0.001;
-	//}
-	//if (KeyL.pressed())
-	//{
-	//	lightPosList[lightArea].y -= 0.001;
-	//}
+	if (KeyK.pressed())
+	{
+		itemHeight++;
+	}
+	if (KeyL.pressed())
+	{
+		itemHeight--;
+	}
 
 	if (mouseDirectionX == 1)
 	{
@@ -257,13 +250,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"bFireplaceWeakLockon=" << bFireplaceWeakLockon;
-	Print << U"bFireplaceStrong=" << bFireplaceStrong;
-	Print << U"bFireplaceStrongLockon=" << bFireplaceStrongLockon;
-
-	Print << U"messagePattern=" << messagePattern;
-	Print << U"messagePattern=" << messagePatternCount;
-	Print << U"messageRead=" << messageRead[message];
+	Print << U"itemHeight=" << itemHeight;
 
 #endif
 }
@@ -1780,28 +1767,28 @@ void CameraTest::update()
 			}
 
 			// ライトの判定
-			for (auto& row : collisionLight)
-			{
-				ColorF color{ 1.0, 1.0, 0.0, 1 };
+			//for (auto& row : collisionLight)
+			//{
+			//	ColorF color{ 1.0, 1.0, 0.0, 1 };
 
-				// 縦
-				Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 3, row[2]} }.draw(color);
-				Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
-				Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[0], 3, row[3]} }.draw(color);
-				Line3D{ Vec3{row[1], 0, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
+			//	// 縦
+			//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 3, row[2]} }.draw(color);
+			//	Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
+			//	Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[0], 3, row[3]} }.draw(color);
+			//	Line3D{ Vec3{row[1], 0, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
 
-				// 下
-				Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[1], 0, row[2]} }.draw(color);
-				Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[1], 0, row[3]} }.draw(color);
-				Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 0, row[3]} }.draw(color);
-				Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 0, row[3]} }.draw(color);
+			//	// 下
+			//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[1], 0, row[2]} }.draw(color);
+			//	Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[1], 0, row[3]} }.draw(color);
+			//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 0, row[3]} }.draw(color);
+			//	Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 0, row[3]} }.draw(color);
 
-				// 上
-				Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
-				Line3D{ Vec3{row[0], 3, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
-				Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[0], 3, row[3]} }.draw(color);
-				Line3D{ Vec3{row[1], 3, row[2]}, Vec3{row[1], 3, row[3]} }.draw(color);
-			}
+			//	// 上
+			//	Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
+			//	Line3D{ Vec3{row[0], 3, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
+			//	Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[0], 3, row[3]} }.draw(color);
+			//	Line3D{ Vec3{row[1], 3, row[2]}, Vec3{row[1], 3, row[3]} }.draw(color);
+			//}
 
 		}
 		
@@ -2019,9 +2006,6 @@ void CameraTest::update()
 					AudioAsset(U"BGM").stop();
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
-
-					// TODO
-					//scenario = 5;
 				}
 			}
 			else if (items[selectItem] == Parchment)
@@ -2036,21 +2020,12 @@ void CameraTest::update()
 					AudioAsset(U"BGM").stop();
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
-
-					// TODO
-					//scenario = 5;
 				}
 			}
 			else if (items[selectItem] == ToastedParchment)
 			{
 				// 炙った羊皮紙を使った
 				bToastedParchmentRead = true;
-
-				// TODO
-				//if (scenario == 1)
-				//{
-				//	scenario = 2;
-				//}
 			}
 			else if (items[selectItem] == DirtyCloth)
 			{
@@ -2063,21 +2038,12 @@ void CameraTest::update()
 					AudioAsset(U"BGM").stop();
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
-
-					// TODO
-					//scenario = 5;
 				}
 			}
 			else if (items[selectItem] == Cloth)
 			{
 				// 布を使った
 				bClothRead = true;
-
-				// TODO
-				//if (scenario == 1)
-				//{
-				//	scenario = 2;
-				//}
 			}
 		}
 	}
@@ -2114,6 +2080,7 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
+	// セリフ表示
 	if (0 <= message && message < Text.size() / MessagePatternMax)
 	{
 		// 画面全体を黒い半透明で描画
@@ -2126,28 +2093,44 @@ void CameraTest::draw() const
 			m = message * MessagePatternMax;
 		}
 
-		//Print << U"m=" << m;
-
-		// セリフ表示（仮）
 		boldFont(Text[m]).drawAt(
 			28,
-			{ center.x, 700 },
+		//	{ center.x, 700 },
+			{ center.x, height - 20 },
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
 
+	// インベントリのアイテム説明
 	if (
 		bInventory
 		&& 0 <= itemMessage
 		&& itemMessage < itemText.size()
 	)
 	{
-		// セリフ表示（仮）
-		boldFont(itemText[itemMessage]).drawAt(
-			28,
-			{ center.x, 546 },
-			ColorF{ 1, 1, 1, 1 }
-		);
+		//boldFont(itemText[itemMessage]).drawAt(
+		//	28,
+		////	{ center.x, 546 },
+		//	{ center.x, center.y + itemHeight },
+		//	ColorF{ 1, 1, 1, 1 }
+		//);
+
+		// TODO 共通化する
+		double lineSpacing = 40.0; // 行間（フォントサイズより少し大きめ）
+
+		for (int i = 0; i < itemText[itemMessage].size(); ++i)
+		{
+			double x = center.x;
+			double y = center.y + 345 + lineSpacing * (i - (int)itemText.size() / 2);
+
+			boldFont(itemText[itemMessage][i]).drawAt(
+				28,
+				{ x, y },
+				ColorF{ 1, 1, 1, 1 }
+			);
+		}
+
+
 	}
 
 	if (
@@ -2159,7 +2142,8 @@ void CameraTest::draw() const
 		// セリフ表示（仮）
 		boldFont(itemNameText[itemMessage]).drawAt(
 			28,
-			{ 805, 236 },
+		//	{ 805, 236 },
+			{ center.x + itemHeight, center.y -128 },
 			ColorF{ 1, 1, 1, 1 }
 		);
 	}
