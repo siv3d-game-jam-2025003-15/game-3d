@@ -648,14 +648,14 @@ void CameraTest::update()
 		}
 
 		// 古びた鍵
-		if (!bLockon && bWall)
+		if (!bLockon && bKeyHave == false)
 		{
 			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, markPosition, 0, true);
-			if (a == true && bKeyHave == false)
+			if (a == true)
 			{
 				// アイテムを取った
 				items << Key;
-				bKeyHave = a;
+				bKeyHave = true;
 				bgmStopCount = c;
 				scenario = 3;
 			}
@@ -844,22 +844,22 @@ void CameraTest::update()
 		}
 
 		// 壁
-		if (!bLockon && !bWall && scenario == 2)
-		{
-			auto [a, b, c] = wallController.update(wallPos, camera, m_eyePosition, ray, markPosition, 0, true);
-			if (a == true && bParchmentHave == false)
-			{
-				// 鍵が現れる
-				bWall = true;
-				bgmStopCount = c;
-			}
-			if (b)
-			{
-				// 見ている
-				bLockon = b;
-				message = 16;
-			}
-		}
+		//if (!bLockon && !bWall && scenario == 2)
+		//{
+		//	auto [a, b, c] = wallController.update(wallPos, camera, m_eyePosition, ray, markPosition, 0, true);
+		//	if (a == true && bParchmentHave == false)
+		//	{
+		//		// 鍵が現れる
+		//		bWall = true;
+		//		bgmStopCount = c;
+		//	}
+		//	if (b)
+		//	{
+		//		// 見ている
+		//		bLockon = b;
+		//		message = 16;
+		//	}
+		//}
 
 		// 暖炉（火が弱い）
 		if (!bLockon && bFireplaceStrong == false)
@@ -1600,7 +1600,7 @@ void CameraTest::update()
 		}
 
 		// 鍵の描画
-		if (bKeyHave == false && bWall)
+		if (bKeyHave == false)
 		{
 			Transformer3D t{
 				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(keyPos)
