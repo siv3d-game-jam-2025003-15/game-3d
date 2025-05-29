@@ -816,30 +816,30 @@ void CameraTest::update()
 		// 棚
 		if (!bLockon)
 		{
-			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, markPosition, 0, bKeyHave);
-			if (a == true && bWire == false)
-			{
-				// 針金が取れる
-			//	items << Shelf;
-				bWire = true;
-				bgmStopCount = c;
-				scenario = 4;
-				bHangerFind = true;
-			}
+			auto [a, b, c] = shelfController.update(shelfPos, camera, m_eyePosition, ray, markPosition, -1, false);
+			//if (a == true && bWire == false)
+			//{
+			//	// 針金が取れる
+			////	items << Shelf;
+			//	bWire = true;
+			//	bgmStopCount = c;
+			//	scenario = 4;
+			//	bHangerFind = true;
+			//}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
-				if (bKeyHave)
-				{
-					// 鍵を持っている
-					message = 17;
-				}
-				else
-				{
+				//if (bKeyHave)
+				//{
+				//	// 鍵を持っている
+				//	message = 17;
+				//}
+				//else
+				//{
 					// 鍵を持っていない
 					message = 13;
-				}
+				//}
 			}
 		}
 
@@ -910,9 +910,9 @@ void CameraTest::update()
 		}
 
 		// ハンガー
-		if (!bLockon && bHangerFind && bHangerHave == false)
+		if (!bLockon && bHangerHave == false)
 		{
-			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, markPosition, 0, bHangerFind);
+			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true)
 			{
 				// ハンガーを取得
@@ -1710,7 +1710,7 @@ void CameraTest::update()
 		}
 
 		// ハンガーの描画
-		if (bHangerFind == true && bHangerHave == false)
+		if (bHangerHave == false)
 		{
 			Transformer3D t{
 				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangerPos)
