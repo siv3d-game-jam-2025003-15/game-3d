@@ -27,6 +27,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
 
 	// BGMの再生
 	AudioAsset(U"BGM").play();
@@ -160,11 +161,19 @@ void CameraTest::debug()
 	//}
 	if (KeyK.pressed())
 	{
-	//	itemHeight++;
+		memoPos.x += 0.01;
 	}
 	if (KeyL.pressed())
 	{
-	//	itemHeight--;
+		memoPos.x -= 0.01;
+	}
+	if (KeyN.pressed())
+	{
+		memoPos.z += 0.01;
+	}
+	if (KeyM.pressed())
+	{
+		memoPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -250,7 +259,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-//	Print << U"itemHeight=" << itemHeight;
+	Print << U"memoPos=" << memoPos;
 
 #endif
 }
@@ -994,6 +1003,25 @@ void CameraTest::update()
 			}
 		}
 
+		// 手記
+		if (!bLockon && bMemoHave == false)
+		{
+			auto [a, b, c] = memoController.update(memoPos, camera, m_eyePosition, ray, markPosition, 0, true);
+			if (a == true)
+			{
+				// 手記を取得
+				bMemoHave = true;
+				items << Memo;
+			}
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 28;
+			}
+		}
+
+
 
 		// メッセージパターンの自動変更
 		messagePatternCount += deltaTime;
@@ -1701,6 +1729,16 @@ void CameraTest::update()
 			modelDirtyCloth.draw();
 		}
 
+		// 汚れた布の描画
+		if (bMemoHave == false)
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(0_deg).scaled(0.1).translated(memoPos)
+			};
+
+			modelMemo.draw();
+		}
+
 		// デバッグ表示
 		if (bDebugViewCollision)
 		{
@@ -1957,8 +1995,9 @@ void CameraTest::update()
 			{
 				// パンを食べる
 
-				// 手記を手に入れる
-				items[selectItem] = Memo;
+				// 手記を手に入れる（←オミット）
+				//items[selectItem] = Memo;
+				items.remove_at(selectItem);
 
 				// シナリオを進める
 				scenario = 1;

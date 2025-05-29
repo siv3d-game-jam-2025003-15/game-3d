@@ -146,6 +146,9 @@ private:
 	// 汚れた布
 	const Model modelDirtyCloth{ U"assets/models/Cloth/Gimmick_Cloth01.obj" };
 
+	// 手記
+	const Model modelMemo{ U"assets/models/Memo/memo.obj" };
+
 	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
 
@@ -281,6 +284,9 @@ private:
 	// 汚れた布
 	Vec3 dirtyClothPos = { 8.25, 0.75, -8.6 };
 
+	// 手記
+	Vec3 memoPos = { -3.6, 0, 10.6 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController keyController;
@@ -300,6 +306,7 @@ private:
 	ObjectController hangerController;
 	ObjectController barrelController;
 	ObjectController dirtyClothController;
+	ObjectController memoController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -527,6 +534,9 @@ private:
 	// 汚れた布を持っている
 	bool bDirtyClothHave = false;
 
+	// 手記を持っている
+	bool bMemoHave = false;
+
 	// 布を持っている
 	bool bClothHave = false;
 
@@ -557,31 +567,43 @@ private:
 	Array<String> Text =
 	{
 		// シナリオ系
+
+		// 0 最初
 		U"腹が減った。まずは食事をしなければ…。",	// 0
 		U"",	// 0
 		U"",	// 0
 
-		U"パンの中に手記が入っていた。",	// 1
+		// 1 パンを食べた後
+		//U"パンの中に手記が入っていた。",	// 1
+		U"腹の足しになったな…。さて、ここから脱出する方法はないだろうか…。",	// 1
 		U"",	// 1
 		U"",	// 1
-
-		U"ベッド脇の壁を調べてみよう。",	// 2
+		
+		// 2 手記を読んだ後
+		//U"ベッド脇の壁を調べてみよう。",	// 2
+		U"この手記は何かのヒントだろうか…。",	// 2
 		U"",	// 2
 		U"",	// 2
 
+		// 3 錆びた鍵を取った後
 		U"この鍵は錆びて使えないな…。",	// 3
 		U"",	// 3
 		U"",	// 3
 
-		U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 4
+		// 4 棚の上のハンガー（これは使わない）
+		//U"棚の中にハンガーがあった。これは何かに使えるかも？",	// 4
+		U"",	// 4
 		U"",	// 4
 		U"",	// 4
 
-		U"この針金製の鍵で扉を開けてみよう。",	// 5
+		// 5 針金製の鍵を手に入れた後
+		//U"この針金製の鍵で扉を開けてみよう。",	// 5
+		U"",	// 5
 		U"",	// 5
 		U"",	// 5
 
-		U"",	// 6　扉を開けた後
+		// 6 扉を開けた後
+		U"",	// 6
 		U"",	// 6
 		U"",	// 6
 
@@ -681,7 +703,8 @@ private:
 		U"",
 		U"",
 
-		U"",	// 28
+		// 28 手記がある
+		U"古い手記が落ちている。",	// 28
 		U"",	// 28
 		U"",	// 28
 
