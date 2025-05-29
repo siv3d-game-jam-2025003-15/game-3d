@@ -99,8 +99,10 @@ private:
 
 	// 視野角
 	double m_verticalFOV = 55_deg;
-
-	double m_nearClip = 0.2;
+	
+	// 近クリッピング面（Near Clipping Plane）
+	//double m_nearClip = 0.2;
+	double m_nearClip = 0.01;
 
 	// 開始時の目の角度
 	double m_focusY = 0;
