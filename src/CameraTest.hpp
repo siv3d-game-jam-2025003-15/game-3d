@@ -11,6 +11,49 @@ struct Light
 	float _padding;
 };
 
+struct PSLighting
+{
+	static constexpr uint32 MaxPointLights = 4;
+
+	struct Light
+	{
+		Float4 position{ 0, 0, 0, 0 };
+		Float4 diffuseColor{ 0, 0, 0, 0 };
+		Float4 attenuation{ 1.0f, 2.0f, 1.0f, 0 };
+	};
+
+	std::array<Light, MaxPointLights> pointLights;
+
+	/// @brief 点光源を設定します。
+	/// @param i 光源のインデックス。0 以上 MaxPointLights 未満である必要があります。
+	/// @param pos 光源の位置
+	/// @param diffuse 色
+	/// @param r 強さ
+	void setPointLight(uint32 i, const Vec3& pos, const ColorF& diffuse, double r)
+	{
+		pointLights[i].position = Float4{ pos, 1.0f };
+		pointLights[i].diffuseColor = diffuse.toFloat4();
+		pointLights[i].attenuation = Float4{ 1.0, (2.0 / r), (1.0 / (r * r)), 0.0 };
+	}
+
+	/// @brief 点光源を球として描画します。
+	/// @param i 光源のインデックス。0 以上 MaxPointLights 未満である必要があります。
+	/// @param r 球の半径
+	void drawPointLightAsEmissiveSphere(uint32 i, double r)
+	{
+		const Vec3 pos = pointLights[i].position.xyz();
+		const ColorF diffuse{ pointLights[i].diffuseColor };
+
+		PhongMaterial phong;
+		phong.ambientColor = ColorF{ 0.0 };
+		phong.diffuseColor = ColorF{ 0.0 };
+		phong.emissionColor = diffuse;
+#ifdef _DEBUG
+		Sphere{ pos, r }.draw(phong);
+#endif
+	}
+};
+
 // アイテムID
 enum ItemID
 {
@@ -42,6 +85,8 @@ public:
 
 private:
 
+	ConstantBuffer<PSLighting> constantBuffer;
+
 	// デバッグ表示
 	void debug();
 
@@ -66,9 +111,7 @@ private:
 	// カメラスピード
 	const double cameraSpeed = 2.0f;
 
-	//	Size SceneSize{ 256, 192 };
-
-		// HDR（ハイダイナミックレンジ）レンダリング
+	// HDR（ハイダイナミックレンジ）レンダリング
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 
 	// 地面
@@ -202,7 +245,7 @@ private:
 			{ U"PSPerView", 1 },
 			{ U"PSPointLightPos", 2 },
 			{ U"PSPerMaterial", 3 },
-			{ U"PSPointLightStrong", 4 },
+			{ U"PSLighting", 4 }
 		}
 	};
 
@@ -231,10 +274,13 @@ private:
 
 	// ライトの設定
 	Vec3 lightPos;
-	float lightStrong = 4.0;
+	float lightStrong = 2.0;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;
+
+	// 暖炉の明るさ
+	float fireplaceStrong = 1.0;
 
 	// 鍵の座標
 	Vec3 keyPos = { 3.7, 0.01, 3 };
@@ -270,6 +316,7 @@ private:
 
 	// 暖炉
 	Vec3 fireplacePos = { 16.3, 0.5, -6.5 };
+	Vec3 fireplaceLightPos = { 16.3, 0.7, -6.5 };
 
 	// ハンガー
 	Vec3 hangerPos = { 0, 1.03, 11.8 };

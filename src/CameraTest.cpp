@@ -47,12 +47,14 @@ CameraTest::CameraTest(const InitData& init)
 	bDebugViewCollision = true;
 #endif
 
+#ifndef _DEBUG
 	// テキストメッセージを先に読み込んでおく
 	dummyTextView(Text);
 	dummyTextView(itemText);
 	dummyTextView(itemNameText);
 	dummyTextView(memoText);
 	dummyTextView(toastedParchmentText);
+#endif
 
 	// メッセージを読んだかどうかのフラグをリセット
 	for (int i = 0; i < Text.size() / MessagePatternMax; i++)
@@ -71,8 +73,8 @@ void CameraTest::dummyTextView(Array<String> text)
 	{
 		boldFont(text[i]).drawAt(
 			28,
-			{ 0, 0 },
-			ColorF{ 0, 0, 0, 0 }
+			{ center.x, center.y },
+			ColorF{ 1, 1, 1, 1 }
 		);
 	}
 }
@@ -123,23 +125,23 @@ void CameraTest::debug()
 	}
 	if (Key7.down())
 	{
-		// キャラライトの強さ
+		// キャラライトの明るさ
 		lightStrong += 0.1;
 	}
 	if (Key8.down())
 	{
-		// キャラライトの強さ
+		// キャラライトの明るさ
 		lightStrong -= 0.1;
 	}
 	if (Key9.down())
 	{
-		// ビックリマークの大きさ
-		markSize += 0.01;
+		// 暖炉の明るさ
+		fireplaceStrong += 0.1;
 	}
 	if (Key0.down())
 	{
-		// ビックリマークの大きさ
-		markSize -= 0.01;
+		// 暖炉の明るさ
+		fireplaceStrong -= 0.1;
 	}
 	//if (Key7.down())
 	//{
@@ -231,8 +233,7 @@ void CameraTest::debug()
 	}
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
-	Print << U"[9][0]ビックリマークの大きさ：" << markSize;
-	//Print << U"[o][p]ビックリマークの高さ：" << markHigh;
+	Print << U"[9][0]暖炉の明るさ：" << fireplaceStrong << U"～" << (fireplaceStrong+1);
 
 	//if (bDebugFlashingLight)
 	//{
@@ -1539,40 +1540,70 @@ void CameraTest::update()
 		//}
 
 		// 光源の設定
-		if (isGlowEffect)
-		{
-			// 点灯
-			toGlobalAmbientColorR = 0.8;
-			toGlobalAmbientColorG = 0.8;
-			toGlobalAmbientColorB = 1.0;
-		}
-		else
-		{
-			// 点灯していない
-			toGlobalAmbientColorR = 0.1;
-			toGlobalAmbientColorG = 0.1;
-			toGlobalAmbientColorB = 0.125;
-		}
+		//if (isGlowEffect)
+		//{
+		//	// 点灯
+		//	toGlobalAmbientColorR = 0.8;
+		//	toGlobalAmbientColorG = 0.8;
+		//	toGlobalAmbientColorB = 1.0;
+		//}
+		//else
+		//{
+		//	// 点灯していない
+		//	toGlobalAmbientColorR = 0.1;
+		//	toGlobalAmbientColorG = 0.1;
+		//	toGlobalAmbientColorB = 0.125;
+		//}
 	//}
 
-	GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, lightSmooth);
-	GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, lightSmooth);
-	GlobalAmbientColorB = Math::Lerp(GlobalAmbientColorB, toGlobalAmbientColorB, lightSmooth);
+	//GlobalAmbientColorR = Math::Lerp(GlobalAmbientColorR, toGlobalAmbientColorR, lightSmooth);
+	//GlobalAmbientColorG = Math::Lerp(GlobalAmbientColorG, toGlobalAmbientColorG, lightSmooth);
+	//GlobalAmbientColorB = Math::Lerp(GlobalAmbientColorB, toGlobalAmbientColorB, lightSmooth);
 
-	Graphics3D::SetGlobalAmbientColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
-	Graphics3D::SetSunColor(ColorF{ GlobalAmbientColorR, GlobalAmbientColorG, GlobalAmbientColorB });
+	//Graphics3D::SetGlobalAmbientColor(
+	//	ColorF{
+	//		GlobalAmbientColorR,
+	//		GlobalAmbientColorG,
+	//		GlobalAmbientColorB
+	//	}
+	//);
+	//Graphics3D::SetSunColor(
+	//	ColorF{
+	//		GlobalAmbientColorR,
+	//		GlobalAmbientColorG,
+	//		GlobalAmbientColorB
+	//	}
+	//);
+
+	// 環境光を小さくする
+	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.01 });
+	
+	// 太陽光をオフにする
+	Graphics3D::SetSunColor(ColorF{ 0.0 });
 
 	// スポットライト
 	{
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
+		// 点光源を設定する
+		constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
+		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ 1.0, 0.2, 0.0 }, Periodic::Sine0_1(2s) + fireplaceStrong);
+
+		Print << Periodic::Sine0_1(2s)+1;
+
 		// ライトの位置
-		ConstantBuffer<Light> cb;
-		cb->g_pointLightPos = lightPos;
-		cb->g_pointLightStrong = lightStrong;
-		Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
+		//ConstantBuffer<Light> cb;
+		//cb->g_pointLightPos = lightPos;
+		//cb->g_pointLightStrong = lightStrong;
+		//Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
 
 		const ScopedCustomShader3D shader(vs3D, ps3D);
+
+		// ピクセルシェーダに定数バッファを渡す
+		Graphics3D::SetPSConstantBuffer(4, constantBuffer);
+
+		constantBuffer->drawPointLightAsEmissiveSphere(0, 0);
+		constantBuffer->drawPointLightAsEmissiveSphere(1, 0.2);
 
 		// モデルを描画
 		if (bDebugviewModel)
@@ -1829,7 +1860,7 @@ void CameraTest::update()
 			//}
 
 		}
-		
+
 #if _DEBUG
 		{
 			Print << U"m_focusPosition" << camera.getFocusPosition();
