@@ -334,6 +334,8 @@ void CameraTest::debug()
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePatternCount=" << messagePatternCount;
 
+	Print << U"prologueCount=" << prologueCount;
+
 #endif
 }
 
@@ -2311,8 +2313,14 @@ void CameraTest::update()
 #endif
 	}
 
+	// プロローグカウンター
 	prologueCount += deltaTime;
 
+	if (prologueCount > 29)
+	{
+		// 2倍速
+		prologueCount += deltaTime;
+	}
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
