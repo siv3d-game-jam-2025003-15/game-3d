@@ -2322,6 +2322,9 @@ void CameraTest::update()
 		prologueCount += deltaTime;
 	}
 
+	// メッセージカウンター
+	messageCount += deltaTime;
+
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
 	if (frameTime < targetDeltaTime)
@@ -2415,18 +2418,66 @@ void CameraTest::draw() const
 
 		int m = message * MessagePatternMax + messagePattern;
 
+		// 今、表示するための文字数
+		int messageIndex = messageCount * 10;
+
+		// テキストのアルファ値
+		float a = messageCount * 10 - (float)messageIndex;
+
 		// ここでのチェックは不要
 		//if (Text[m].isEmpty())
 		//{
 		//	m = message * MessagePatternMax;
 		//}
 
-		boldFont(Text[m]).drawAt(
+		//boldFont(Text[m]).drawAt(
+		//	28,
+		////	{ center.x, 700 },
+		//	{ center.x, height - 20 },
+		//	ColorF{ 1, 1, 1, a }
+		//);
+
+		double x = center.x;
+		double y = height - 20;
+
+		int num = 0;
+		int sub = 0;
+
+		if (messageIndex >= Text[m].size())
+		{
+			// すべて表示
+			num = Text[m].size();
+		}
+		else
+		{
+			// 一部表示
+			num = messageIndex;
+			sub = Text[m].size() - num;
+		}
+
+		String tmp = Text[m].substr(0, num);
+		tmp.append(sub, U'　');	// 後ろをスペースで埋める
+
+		boldFont(tmp).drawAt(
 			28,
-		//	{ center.x, 700 },
-			{ center.x, height - 20 },
+			{ x, y },
 			ColorF{ 1, 1, 1, 1 }
 		);
+
+		// 半透明文字
+		if (num + 1 < Text[m].size())
+		{
+			String tmp2;
+			tmp2.append(num, U'　');		// 後ろをスペースで埋める
+			tmp2.append(1, Text[m][num]);
+			tmp2.append(sub - 1, U'　');
+
+			boldFont(tmp2).drawAt(
+				28,
+				{ x, y },
+				ColorF{ 1, 1, 1, a }
+			);
+		}
 	}
 
 	// インベントリのアイテム説明

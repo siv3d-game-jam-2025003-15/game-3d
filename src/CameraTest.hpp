@@ -688,7 +688,7 @@ private:
 		// シナリオ系
 
 		// 0 最初
-		U"腹が減った。まずは食事をしなければ…。",	// 0
+		U"　　　腹が減った。まずは食事をしなければ…。　　　",	// 0
 		U"",	// 0
 		U"",	// 0
 
@@ -1124,6 +1124,8 @@ private:
 
 	float prologueCount = 0;
 	int   prologueLength = 0;
+
+	float messageCount = 0;
 
 	double debugHeight = 0;
 
