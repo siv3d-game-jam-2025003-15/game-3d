@@ -1124,9 +1124,12 @@ private:
 
 	float prologueCount = 0;
 	int   prologueLength = 0;
+	bool  bPrologueEnd = false;
 
 	float messageCount = 0;
 
 	double debugHeight = 0;
+
+	bool bPrologueBGM = false;
 
 };

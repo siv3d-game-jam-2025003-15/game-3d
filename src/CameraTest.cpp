@@ -30,8 +30,8 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
 
-	// BGMの再生
-	AudioAsset(U"BGM").play();
+	//// BGMの再生
+	//AudioAsset(U"BGM").play();
 
 	// 最初にカーソルを中央に
 	Cursor::SetPos(center.x, center.y);
@@ -335,6 +335,8 @@ void CameraTest::debug()
 	Print << U"messagePatternCount=" << messagePatternCount;
 
 	Print << U"prologueCount=" << prologueCount;
+
+	Print << U"messageCount=" << messageCount;
 
 #endif
 }
@@ -1591,26 +1593,7 @@ void CameraTest::update()
 	door2Pos.x = Math::Lerp(door2Pos.x, toDoor2PosX, smooth / 10);	// ドアはゆっくり開ける
 
 
-	// 止まっているBGMを再度鳴らす
-	{
-		// BGMの再開
-		if (bgmStopCount <= 0.0f)
-		{
-			if (!AudioAsset(U"BGM").isPlaying())
-			{
-				AudioAsset(U"BGM").play();
-			}
-		}
-		else {
-			bgmStopCount -= deltaTime;
 
-			// 演出
-			//if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
-			//{
-			//	bgmStopCount = 1.0;
-			//}
-		}
-	}
 
 
 	//if (lightArea != lastLightArea)
@@ -2313,17 +2296,62 @@ void CameraTest::update()
 #endif
 	}
 
-	// プロローグカウンター
-	prologueCount += deltaTime;
-
-	if (prologueCount > 29)
+	if (bPrologueEnd == false)
 	{
-		// 2倍速
+		// プロローグカウンター
 		prologueCount += deltaTime;
+
+		if (prologueCount > 29)
+		{
+			// 2倍速
+			prologueCount += deltaTime;
+		}
+
+		if (prologueCount > 45)
+		{
+			bPrologueEnd = true;
+		}
 	}
 
-	// メッセージカウンター
-	messageCount += deltaTime;
+	if (bPrologueEnd)
+	{
+		// メッセージカウンター
+		messageCount += deltaTime;
+
+		if (messageCount > 5)
+		{
+			bPrologueBGM = true;
+		}
+	}
+
+	if (bPrologueBGM)
+	{
+		// 止まっているBGMを再度鳴らす
+		{
+			// BGMの再開
+			if (bgmStopCount <= 0.0f)
+			{
+				if (!AudioAsset(U"BGM").isPlaying())
+				{
+					AudioAsset(U"BGM").play();
+				}
+			}
+			else {
+				bgmStopCount -= deltaTime;
+
+				// 演出
+				//if (scenario == 6 && lightArea == 1 && bgmStopCount > 4.1)
+				//{
+				//	bgmStopCount = 1.0;
+				//}
+			}
+		}
+
+
+
+	}
+
+
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
