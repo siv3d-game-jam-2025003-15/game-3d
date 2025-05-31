@@ -163,6 +163,16 @@ void CameraTest::debug()
 		// 太陽光の明るさ
 		sunColor -= 0.01;
 	}
+	if (KeyK.pressed())
+	{
+		// 暖炉の明るさ（揺らぎ）
+		fireplaceSin += 0.1;
+	}
+	if (KeyL.pressed())
+	{
+		// 暖炉の明るさ（揺らぎ）
+		fireplaceSin -= 0.1;
+	}
 
 	//if (Key7.down())
 	//{
@@ -182,14 +192,7 @@ void CameraTest::debug()
 	//{
 	//	lightPosList[lightArea].x -= 0.001;
 	//}
-	if (KeyK.pressed())
-	{
-		memoPos.x += 0.01;
-	}
-	if (KeyL.pressed())
-	{
-		memoPos.x -= 0.01;
-	}
+
 	if (KeyN.pressed())
 	{
 		memoPos.z += 0.01;
@@ -254,7 +257,8 @@ void CameraTest::debug()
 	}
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
-	Print << U"[9][0]暖炉の明るさ：" << fireplaceStrong << U"～" << (fireplaceStrong + 1);
+	Print << U"[9][0]暖炉の明るさ（最小値）：" << fireplaceStrong;
+	Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong+fireplaceSin;
 	Print << U"[T][Y]環境光の明るさ：" << globalAmbientColor;
 	Print << U"[O][P]太陽光の明るさ：" << sunColor;
 
@@ -1614,17 +1618,15 @@ void CameraTest::update()
 	{
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
 
-		// 点光源を設定する
-		constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
-		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ 1.0, 0.2, 0.0 }, Periodic::Sine0_1(2s) + fireplaceStrong);
-
-		Print << Periodic::Sine0_1(2s)+1;
-
-		// ライトの位置
+		// ライトの位置（ポイントライトVer.1）
 		//ConstantBuffer<Light> cb;
 		//cb->g_pointLightPos = lightPos;
 		//cb->g_pointLightStrong = lightStrong;
 		//Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
+
+		// 点光源を設定する
+		constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
+		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ 1.0, 0.2, 0.0 }, Periodic::Sine0_1(2s)* fireplaceSin + fireplaceStrong);
 
 		const ScopedCustomShader3D shader(vs3D, ps3D);
 
@@ -1907,19 +1909,19 @@ void CameraTest::update()
 
 	// ライトの表示
 #if _DEBUG
-	emission = Math::Lerp(emission, toEmission, smooth);
+	//emission = Math::Lerp(emission, toEmission, smooth);
 
-	if (emission >= 0.2)
-	{ 
-		const ScopedCustomShader2D shader{ psBright };
-		const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
-		renderTexture.scaled(1).draw();
+	//if (emission >= 0.2)
+	//{ 
+	//	const ScopedCustomShader2D shader{ psBright };
+	//	const ScopedRenderTarget2D target{ gaussianA4.clear(ColorF{0.0}) };
+	//	renderTexture.scaled(1).draw();
 
-		PhongMaterial phong;
-		phong.ambientColor = ColorF{ 1.0 };
-		phong.diffuseColor = ColorF{ 0.0 };
-		phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
-		Sphere{ lightPos, lightSize }.draw(phong);
+	//	PhongMaterial phong;
+	//	phong.ambientColor = ColorF{ 1.0 };
+	//	phong.diffuseColor = ColorF{ 0.0 };
+	//	phong.emissionColor = ColorF{ 1.0, 1.0, 1.0 }.removeSRGBCurve() * (emission);
+	//	Sphere{ lightPos, lightSize }.draw(phong);
 
 		//const auto& materials = model.materials();
 		//for (const auto& object : model.objects())
@@ -1954,7 +1956,7 @@ void CameraTest::update()
 		//}
 
 		//gaussianA4.resized(Scene::Size()).draw(ColorF{ 1.0 });
-	}
+	//}
 #endif
 
 	// UI

@@ -4,13 +4,15 @@
 #include "ObjectController.hpp"
 #include "Collision.hpp"
 
-struct Light
-{
-	Float3 g_pointLightPos;
-	float g_pointLightStrong;
-	float _padding;
-};
+// ポイントライトVer.1
+//struct Light
+//{
+//	Float3 g_pointLightPos;
+//	float g_pointLightStrong;
+//	float _padding;
+//};
 
+// ポイントライトVer.2
 struct PSLighting
 {
 	static constexpr uint32 MaxPointLights = 4;
@@ -153,6 +155,10 @@ private:
 	// カメラの角度
 	PhiController phiController = PhiController(m_eyePosition, m_focusPosition);
 
+	//==============================
+	// モデル
+	//==============================
+
 	// モデルの読み込み
 	const Model model{ U"assets/models/Room/EV_Room01.obj" };
 
@@ -194,6 +200,10 @@ private:
 	// 手記
 	const Model modelMemo{ U"assets/models/Memo/memo.obj" };
 
+	//==============================
+	// モデルの座標、向き
+	//==============================
+
 	// ルームの位置
 	const Vec3 roomPos{ 0, 0, 0 };
 
@@ -216,16 +226,20 @@ private:
 
 	double bgmStopCount = 0.0f;
 
-	const PixelShader psBright = HLSL{
-		U"example/shader/hlsl/extract_bright_linear.hlsl",
-		U"PS"
-	}
-		| GLSL{
-			U"example/shader/glsl/extract_bright_linear.frag",
-			{
-				{U"PSConstants2D", 0}
-			}
-	};
+	//==============================
+	// シェーダー
+	//==============================
+
+	//const PixelShader psBright = HLSL{
+	//	U"example/shader/hlsl/extract_bright_linear.hlsl",
+	//	U"PS"
+	//}
+	//	| GLSL{
+	//		U"example/shader/glsl/extract_bright_linear.frag",
+	//		{
+	//			{U"PSConstants2D", 0}
+	//		}
+	//};
 
 	// 頂点シェーダ
 	const VertexShader vs3D = GLSL{
@@ -274,16 +288,17 @@ private:
 
 	// ライトの設定
 	Vec3 lightPos;
-	float lightStrong = 2.0;
+	float lightStrong = 4.0;
 	double lightSize = 0.073;
 	double emission = 1.0;
 	double toEmission = 1.0;
 
 	// 暖炉の明るさ
-	float fireplaceStrong = 1.0;
+	float fireplaceStrong = 2.6;
+	float fireplaceSin = 0.6;
 
 	// 環境光
-	float globalAmbientColor = 0.01;
+	float globalAmbientColor = -0.2;
 
 	// 太陽光
 	float sunColor = 0.0;
