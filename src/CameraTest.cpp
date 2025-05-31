@@ -2407,7 +2407,7 @@ void CameraTest::update()
 			prologueCount += deltaTime;
 		}
 
-		if (prologueCount > 45)
+		if (prologueCount > 47)
 		{
 			bPrologueEnd = true;
 		}
@@ -2418,7 +2418,7 @@ void CameraTest::update()
 		// メッセージカウンター
 		messageCount += deltaTime;
 
-		if (messageCount > 4)
+		if (messageCount > 5)
 		{
 			bPrologueBGM = true;
 		}
@@ -2449,7 +2449,7 @@ void CameraTest::update()
 		}
 	}
 
-	if (bPrologueBGM && messageCount > 7)
+	if (bPrologueBGM && messageCount > 8)
 	{
 		bStartPlaying = true;
 	}
@@ -2471,7 +2471,7 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
-	float prologueAlpha = 7 - messageCount;
+	float prologueAlpha = 8 - messageCount;
 	if (prologueAlpha > 1)
 	{
 		prologueAlpha = 1;
