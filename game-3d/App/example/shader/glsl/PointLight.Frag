@@ -77,6 +77,7 @@ vec3 CalculatePointLight(uint index, vec3 surfaceNormal, vec3 surfacePosition) {
     float Kl = light.attenuation.y;
     float Kq = light.attenuation.z;
     float f_att = 1.0 / (Kc + Kl * d + Kq * d * d);
+    //float f_att = 1.0 / (Kc + Kl * d );
     lightDirection = normalize(lightDirection);
     float diffuseInfluence = max(dot(lightDirection, surfaceNormal), 0.0f) * f_att;
     return light.diffuseColor.rgb * diffuseInfluence;
