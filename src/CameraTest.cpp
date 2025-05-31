@@ -177,12 +177,12 @@ void CameraTest::debug()
 		// 太陽光の明るさ
 		sunColor -= 0.01;
 	}
-	if (KeyK.pressed())
+	if (KeyK.down())
 	{
 		// 暖炉の明るさ（揺らぎ）
 		fireplaceSin += 0.1;
 	}
-	if (KeyL.pressed())
+	if (KeyL.down())
 	{
 		// 暖炉の明るさ（揺らぎ）
 		fireplaceSin -= 0.1;
