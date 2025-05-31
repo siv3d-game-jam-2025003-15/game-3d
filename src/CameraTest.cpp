@@ -62,6 +62,12 @@ CameraTest::CameraTest(const InitData& init)
 		messageRead.push_back(-1);
 	}
 
+	// ドアの回転
+	//toDoorRotY = doorRot.y;
+	// 
+	// ドアの移動（横に開ける）
+	toDoorPosX = doorPos.x;
+
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
 }
