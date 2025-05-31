@@ -68,6 +68,12 @@ CameraTest::CameraTest(const InitData& init)
 	// ドアの移動（横に開ける）
 	toDoorPosX = doorPos.x;
 
+	// ドアが開いているかどうか
+	bDoorOpen[0] = false;	// 最初の部屋
+	bDoorOpen[1] = false;	// 左上の部屋
+	bDoorOpen[2] = true;	// 奥の部屋
+	bDoorOpen[3] = true;	// 左下の部屋
+
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
 }
@@ -737,10 +743,10 @@ void CameraTest::update()
 			temp.z += 0.2;
 
 			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bWireKey);
-			if (a == true && bDoorOpen == false && bWireKey)
+			if (a == true && bDoorOpen[0] == false && bWireKey)
 			{
 				// ドアを開いた
-				bDoorOpen = true;
+				bDoorOpen[0] = true;
 			//	toDoorRotY = 270_deg;	// 回転で開ける
 				toDoorPosX = -0.11;	// 移動で開ける
 				bgmStopCount = c;
@@ -1175,14 +1181,11 @@ void CameraTest::update()
 	}
 
 	// コリジョンを無効にするエリア
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < DoorNum; i++)
 	{
-		if (i == 0)
+		if (bDoorOpen[i] == false)
 		{
-			if (bDoorOpen == false)
-			{
-				continue;
-			}
+			continue;
 		}
 
 		if ( collisionNone[i][0] < toCameraPos.x
@@ -1849,14 +1852,11 @@ void CameraTest::update()
 			}
 
 			// コリジョンなし
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < DoorNum; i++)
 			{
-				if (i == 0)
+				if (bDoorOpen[i] == false)
 				{
-					if (bDoorOpen == false)
-					{
-						continue;
-					}
+					continue;
 				}
 
 				ColorF color{ 0.0, 0.0, 1, 1 };

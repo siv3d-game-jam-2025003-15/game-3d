@@ -87,6 +87,9 @@ public:
 
 private:
 
+	// ドアの数
+	static const int DoorNum = 4;
+
 	// ポイントライトVer.2
 	ConstantBuffer<PSLighting> constantBuffer;
 
@@ -214,6 +217,7 @@ private:
 	// スケーリングの倍率
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 
+
 	//==============================
 	// BGM
 	//==============================
@@ -258,7 +262,7 @@ private:
 	double toDoor2PosX = 0;
 
 	// ドアが開いているかどうかのフラグ
-	bool bDoorOpen = false;
+	bool bDoorOpen[DoorNum];
 	bool bDoor2Open = false;
 
 
@@ -493,12 +497,13 @@ private:
 	//	bool bDebugShader = true;
 
 	// コリジョン無効エリア
-	double collisionNone[4][4] =
+	double collisionNone[DoorNum][4] =
 	{
-		{ -2.2, -1.1, 1.2, 2.6},	// x_min, x_max, z_min, z_max
-		{ 6.1, 7.2, 1.2, 2.6},
-		{ 10, 12, -1.5, -0.3},
-		{ 6.3, 7.0, -4.4, -3.0},
+		// x_min, x_max, z_min, z_max
+		{ -2.2, -1.1, 1.2, 2.6},	// 最初の部屋
+		{ 6.1, 7.2, 1.2, 2.6},		// 左上の部屋
+		{ 10, 12, -1.5, -0.3},		// 奥の部屋
+		{ 6.3, 7.0, -4.4, -3.0},	// 左下の部屋
 	};
 
 	// ライトを切り替えるエリア
