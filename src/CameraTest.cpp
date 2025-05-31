@@ -201,11 +201,11 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		memoPos.z += 0.01;
+		door2Pos.x += 0.01;
 	}
 	if (KeyM.pressed())
 	{
-		memoPos.z -= 0.01;
+		door2Pos.x -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -299,7 +299,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"memoPos=" << memoPos;
+	Print << U"door2Pos=" << door2Pos;
 
 #endif
 }
@@ -1653,6 +1653,14 @@ void CameraTest::update()
 		{
 			Transformer3D t{
 				Mat4x4::RotateY(doorRot.y).scaled(roomScale).translated(doorPos)
+			};
+			modelDoor.draw();
+		}
+
+		// ドア２
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(door2Rot.y).scaled(roomScale).translated(door2Pos)
 			};
 			modelDoor.draw();
 		}

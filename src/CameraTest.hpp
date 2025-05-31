@@ -234,7 +234,7 @@ private:
 	// ドアの位置
 	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
 //	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
-
+	Vec3 door2Pos{ 6.68, 0, 1.9 };	// 原点が中心の時
 
 
 
@@ -250,13 +250,16 @@ private:
 
 	// ドアの回転
 	Vec3 doorRot{ 0, 180_deg, 0 };
+	Vec3 door2Rot{ 0, 180_deg, 0 };
 	//double toDoorRotY = 0;
 
 	// ドアの移動（横に開ける）
 	double toDoorPosX = 0;
+	double toDoor2PosX = 0;
 
 	// ドアが開いているかどうかのフラグ
 	bool bDoorOpen = false;
+	bool bDoor2Open = false;
 
 
 
