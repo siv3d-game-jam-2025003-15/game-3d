@@ -382,6 +382,10 @@ void CameraTest::drawMiniItem(
 		// 針金の鍵
 		wireKeyMiniSprite.draw(x, y);
 		break;
+	case IronKey:
+		// 鉄製の鍵
+		ironKeyMiniSprite.draw(x, y);
+		break;
 	}
 }
 
@@ -432,6 +436,10 @@ void CameraTest::drawBigItem(
 	case WireKey:
 		// 針金の鍵
 		wireKeyBigSprite.draw(x, y);
+		break;
+	case IronKey:
+		// 鉄製の鍵
+		ironKeyBigSprite.draw(x, y);
 		break;
 	}
 }
@@ -728,6 +736,25 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 52;
+			}
+		}
+
+		// 鉄製の鍵
+		if (!bLockon && bIronKeyHave == false)
+		{
+			auto [a, b, c] = keyController.update(IronkeyPos, camera, m_eyePosition, ray, markPosition, 0, bPokerHave);
+			if (a == true)
+			{
+				// アイテムを取った
+				items << IronKey;
+				bIronKeyHave = true;
+				bgmStopCount = c;
+			}
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 31;
 			}
 		}
 

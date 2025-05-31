@@ -61,7 +61,7 @@ enum ItemID
 {
 	Bread,	// 0 パン
 	Memo,	// 1 手記
-	Key,	// 2 古びた鍵
+	Key,	// 2 錆びた鍵
 	Poker,	// 3 火かき棒
 	Parchment, // 4 羊皮紙
 	Wire, // 5 針金（ハンガー）
@@ -69,6 +69,7 @@ enum ItemID
 	Cloth,	// 7 布
 	ToastedParchment,	// 8 炙った羊皮紙
 	WireKey, // 9 針金製の鍵
+	IronKey,	// 10 鉄製の鍵
 };
 
 // カメラの実験
@@ -174,8 +175,10 @@ private:
 	// ドア
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
 
-	// 鍵
+	// 錆びた鍵
 	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
+
+	// 鉄製の鍵
 	const Model modelIronKey{ U"assets/models/Key/Gimmick_RustedKey02.obj" };
 
 	// パン
@@ -339,11 +342,11 @@ private:
 	//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
 	Vec3 door2Pos{ 6.68, 0, 1.9 };	// 原点が中心の時
 
-	// 鍵の座標
+	// 錆びた鍵の座標
 	Vec3 keyPos = { 3.7, 0.01, 3 };
 
-	// 鍵の座標
-	Vec3 IronkeyPos = { -0.49, 0.465, -4.80 };
+	// 鉄製の鍵の座標
+	Vec3 IronkeyPos = { -0.48, 0.465, -4.80 };
 
 	// パンの座標
 	Vec3 breadPos = { 0, 0.75, 7 };
@@ -540,12 +543,8 @@ private:
 	const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
 	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
 	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
-	//const Texture wireMiniSprite{ U"assets/sprites/wire_mini.png" };
-	//const Texture wireBigSprite{ U"assets/sprites/wire_big.png" };
 	const Texture wireMiniSprite{ U"assets/sprites/hanger_mini.png" };
 	const Texture wireBigSprite{ U"assets/sprites/hanger_big.png" };
-//	const Texture wireKeyMiniSprite{ U"assets/sprites/wirekey_mini.png" };
-//	const Texture wireKeyBigSprite{ U"assets/sprites/wirekey_big.png" };
 	const Texture wireKeyMiniSprite{ U"assets/sprites/UI_WireKey_mini.png" };
 	const Texture wireKeyBigSprite{ U"assets/sprites/UI_WireKey_big.png" };
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
@@ -554,6 +553,8 @@ private:
 	const Texture dirtyClothBigSprite{ U"assets/sprites/DirtyCloth_big.png" };
 	const Texture clothMiniSprite{ U"assets/sprites/Cloth_mini.png" };
 	const Texture clothBigSprite{ U"assets/sprites/Cloth_big.png" };
+	const Texture ironKeyMiniSprite{ U"assets/sprites/iron_key_mini.png" };
+	const Texture ironKeyBigSprite{ U"assets/sprites/iron_key_big.png" };
 
 	// ビルボード用
 	const Texture uvChecker{ U"assets/sprites/ExclamationMark.png", TextureDesc::MippedSRGB };
@@ -605,7 +606,7 @@ private:
 	// シナリオ番号
 	int scenario = 0;
 
-	// 鍵を持っている
+	// 錆びた鍵を持っている
 	bool bKeyHave = false;
 
 	// パンを持っている
@@ -832,7 +833,8 @@ private:
 		U"",	// 30
 		U"",	// 30
 
-		U"",	// 31
+		// 31 鉄製の鍵
+		U"鍵がある。何か長くて引っかけるものがあれば取れそうだ。",	// 31
 		U"",	// 31
 		U"",	// 31
 
@@ -1019,6 +1021,13 @@ private:
 			U"これで扉を開けることができるかも　",
 			U"しれない。　　　　　　　　　　　　",
 		},
+
+		// 10 鉄製の鍵
+		{
+			U"鉄製の鍵だ。　　　　　　　　　　　",
+			U"　　　　　　　　　　　　　　　　　",
+			U"　　　　　　　　　　　　　　　　　",
+		},
 	};
 
 	// インベントリ用のテキスト（アイテム名）
@@ -1035,6 +1044,7 @@ private:
 		U"布",	// 7
 		U"炙った羊皮紙",	// 8
 		U"針金製の鍵",	// 9
+		U"鉄製の鍵",	// 10
 
 	};
 
