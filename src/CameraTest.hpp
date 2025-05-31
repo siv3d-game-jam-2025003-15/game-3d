@@ -661,7 +661,10 @@ private:
 	bool bClothRead = false;
 
 	// 樽３の近くにいる
-	bool bBarrel3Lockon = false;
+	//bool bBarrel3Lockon = false;
+
+	// トイレ２の近くにいる
+	bool bToilet2Lockon = false;
 
 	// 火の弱い暖炉の近くにいる
 	bool bFireplaceWeakLockon = false;

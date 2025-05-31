@@ -949,7 +949,16 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 32;
+				bToilet2Lockon = true;
 			}
+			else
+			{
+				bToilet2Lockon = false;
+			}
+		}
+		else
+		{
+			bToilet2Lockon = false;
 		}
 
 		// 棚
@@ -1100,16 +1109,16 @@ void CameraTest::update()
 				bLockon = b;
 				message = 27;
 
-				bBarrel3Lockon = true;
+			//	bBarrel3Lockon = true;
 			}
 			else
 			{
-				bBarrel3Lockon = false;
+			//	bBarrel3Lockon = false;
 			}
 		}
 		else
 		{
-			bBarrel3Lockon = false;
+		//	bBarrel3Lockon = false;
 		}
 
 		// 教団の紋章
@@ -2247,8 +2256,10 @@ void CameraTest::update()
 			}
 			else if (items[selectItem] == DirtyCloth)
 			{
-				// 樽の近くで使う
-				if (bBarrel3Lockon)
+				// 汚れた布
+
+				// トイレの近くで使う
+				if (bToilet2Lockon)
 				{
 					items[selectItem] = Cloth;
 
