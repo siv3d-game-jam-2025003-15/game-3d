@@ -143,6 +143,27 @@ void CameraTest::debug()
 		// 暖炉の明るさ
 		fireplaceStrong -= 0.1;
 	}
+	if (KeyT.down())
+	{
+		// 環境光の明るさ
+		globalAmbientColor += 0.01;
+	}
+	if (KeyY.down())
+	{
+		// 環境光の明るさ
+		globalAmbientColor -= 0.01;
+	}
+	if (KeyO.down())
+	{
+		// 太陽光の明るさ
+		sunColor += 0.01;
+	}
+	if (KeyP.down())
+	{
+		// 太陽光の明るさ
+		sunColor -= 0.01;
+	}
+
 	//if (Key7.down())
 	//{
 	//	// ライトの点滅あり
@@ -233,7 +254,15 @@ void CameraTest::debug()
 	}
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
-	Print << U"[9][0]暖炉の明るさ：" << fireplaceStrong << U"～" << (fireplaceStrong+1);
+	Print << U"[9][0]暖炉の明るさ：" << fireplaceStrong << U"～" << (fireplaceStrong + 1);
+	Print << U"[T][Y]環境光の明るさ：" << globalAmbientColor;
+	Print << U"[O][P]太陽光の明るさ：" << sunColor;
+
+	// 環境光
+	float globalAmbientColor = 0.01;
+
+	// 太陽光
+	float sunColor = 0.0;
 
 	//if (bDebugFlashingLight)
 	//{
@@ -1576,10 +1605,10 @@ void CameraTest::update()
 	//);
 
 	// 環境光を小さくする
-	Graphics3D::SetGlobalAmbientColor(ColorF{ 0.01 });
+	Graphics3D::SetGlobalAmbientColor(ColorF{ globalAmbientColor });
 	
 	// 太陽光をオフにする
-	Graphics3D::SetSunColor(ColorF{ 0.0 });
+	Graphics3D::SetSunColor(ColorF{ sunColor });
 
 	// スポットライト
 	{

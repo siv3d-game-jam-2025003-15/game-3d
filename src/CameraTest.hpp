@@ -282,6 +282,12 @@ private:
 	// 暖炉の明るさ
 	float fireplaceStrong = 1.0;
 
+	// 環境光
+	float globalAmbientColor = 0.01;
+
+	// 太陽光
+	float sunColor = 0.0;
+
 	// 鍵の座標
 	Vec3 keyPos = { 3.7, 0.01, 3 };
 
