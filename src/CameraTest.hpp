@@ -1126,14 +1126,13 @@ private:
 	};
 
 	float prologueCount = 0;
+	float messageCount = 0;
 	int   prologueLength = 0;
 	bool  bPrologueEnd = false;
-
-	float messageCount = 0;
-
-	double debugHeight = 0;
-
 	bool bPrologueBGM = false;
 	bool bStartPlaying = false;
+
+	// デバッグ用
+	double debugHeight = 0;
 
 };

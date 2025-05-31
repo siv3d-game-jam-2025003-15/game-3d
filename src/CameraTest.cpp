@@ -267,6 +267,17 @@ void CameraTest::debug()
 		fireplaceSin -= 0.1;
 	}
 
+	if (KeyTab.down())
+	{
+		// プロローグスキップ
+		bPrologueEnd = true;
+		bPrologueBGM = true;
+		bStartPlaying = true;
+
+		prologueCount = 9999;
+		messageCount = 9999;
+	}
+
 	//if (Key7.down())
 	//{
 	//	// ライトの点滅あり
@@ -370,6 +381,8 @@ void CameraTest::debug()
 	Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong+fireplaceSin;
 	Print << U"[T][Y]環境光の明るさ：" << globalAmbientColor;
 	Print << U"[O][P]太陽光の明るさ：" << sunColor;
+
+	Print << U"[TAB]プロローグスキップ";
 
 	// 環境光
 	float globalAmbientColor = 0.01;
