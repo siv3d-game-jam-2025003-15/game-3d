@@ -87,6 +87,7 @@ public:
 
 private:
 
+	// ポイントライトVer.2
 	ConstantBuffer<PSLighting> constantBuffer;
 
 	// デバッグ表示
@@ -95,12 +96,14 @@ private:
 	// マウスポインタのRay
 	Ray getMouseRay() const;
 
+	// インベントリ：アイテムのミニ画像
 	void drawMiniItem(
 		int itemId,
 		int x,
 		int y
 	) const;
 
+	// インベントリ：アイテムの拡大画像
 	void drawBigItem(
 		int itemId,
 		int x,
@@ -117,14 +120,15 @@ private:
 	const MSRenderTexture renderTexture{ Scene::Size(), TextureFormat::R16G16B16A16_Float, HasDepth::Yes };
 
 	// 地面
-	Texture groundTexture;
-	Mesh groundPlane;
+	//Texture groundTexture;
+	//Mesh groundPlane;
 
+	// 背景色
 	ColorF backgroundColor;
 
-	double m_fastMove = 1.0;
+	//double m_fastMove = 1.0;
 
-	bool m_padPressed = false;
+	//bool m_padPressed = false;
 
 	// カメラの視点（現在）
 	Vec3 m_eyePosition = Vec3{ 2.5, 1.5, 10 };
@@ -138,9 +142,10 @@ private:
 	// カメラの注視点（カメラが「いま見ている」場所のこと）
 	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
 
+	// カメラの上方向ベクトル
 	Vec3 m_upDirection = Vec3{ 0, 1, 0 };
 
-	Size m_sceneSize = Scene::Size();
+	//Size m_sceneSize = Scene::Size();
 
 	// 視野角
 	double m_verticalFOV = 55_deg;
@@ -151,6 +156,7 @@ private:
 
 	// 開始時の目の角度
 	double m_focusY = 0;
+	double to_m_focusY = 0;
 
 	// カメラの角度
 	PhiController phiController = PhiController(m_eyePosition, m_focusPosition);
@@ -201,7 +207,7 @@ private:
 	const Model modelMemo{ U"assets/models/Memo/memo.obj" };
 
 	//==============================
-	// モデルの座標、向き
+	// モデルの座標、向き、スケーリング
 	//==============================
 
 	// ルームの位置
@@ -224,6 +230,7 @@ private:
 	// スケーリングの倍率
 	const Vec3 roomScale{ 0.01, 0.01, 0.01 };
 
+	// BGMがストップしている時間
 	double bgmStopCount = 0.0f;
 
 	//==============================
@@ -263,22 +270,25 @@ private:
 		}
 	};
 
-	const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
-	const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
-	const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
+	//const RenderTexture gaussianA4{ renderTexture.size() / 4 }, gaussianB4{ renderTexture.size() / 4 };
+	//const RenderTexture gaussianA8{ renderTexture.size() / 8 }, gaussianB8{ renderTexture.size() / 8 };
+	//const RenderTexture gaussianA16{ renderTexture.size() / 16 }, gaussianB16{ renderTexture.size() / 16 };
 
-	bool isGlowEffect = true;
-	int glowEffectType = 0;
+	//bool isGlowEffect = true;
+	//int glowEffectType = 0;
 
+	// ストップウォッチ
 	Stopwatch stopwatch{ StartImmediately::Yes };
 
-	double to_m_focusY = m_focusY;
+	// 回転をスムーズにするときに使っている変数
 	double sss = 0;
+
+	// 回転をスムーズにするときに使っている変数
 	double ccc = 0;
 
 	// 動きをスムーズにする値
 	double smooth = 0.1f;
-	double lightSmooth = 0.025f;
+	//double lightSmooth = 0.025f;
 
 	// XINPUT：プレイヤーインデックス (0 - 3)
 	size_t playerIndex = 0;
@@ -289,16 +299,16 @@ private:
 	// ライトの設定
 	Vec3 lightPos;
 	float lightStrong = 4.0;
-	double lightSize = 0.073;
-	double emission = 1.0;
-	double toEmission = 1.0;
+	//double lightSize = 0.073;
+	//double emission = 1.0;
+	//double toEmission = 1.0;
 
 	// 暖炉の明るさ
 	float fireplaceStrong = 2.6;
 	float fireplaceSin = 0.6;
 
 	// 環境光
-	float globalAmbientColor = -0.2;
+	float globalAmbientColor = -0.1;
 
 	// 太陽光
 	float sunColor = 0.0;

@@ -1634,7 +1634,7 @@ void CameraTest::update()
 		Graphics3D::SetPSConstantBuffer(4, constantBuffer);
 
 		constantBuffer->drawPointLightAsEmissiveSphere(0, 0);
-		constantBuffer->drawPointLightAsEmissiveSphere(1, 0.2);
+		constantBuffer->drawPointLightAsEmissiveSphere(1, 0.1);
 
 		// モデルを描画
 		if (bDebugviewModel)
