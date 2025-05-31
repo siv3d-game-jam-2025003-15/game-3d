@@ -394,7 +394,7 @@ private:
 	Vec3 emblemPos = { 16.43, 2, -6.83 };
 
 	// 汚れた布
-	Vec3 dirtyClothPos = { 8.25, 0.75, -8.6 };
+	Vec3 dirtyClothPos = { 11.522, 0.458, 10.29 };
 
 	// 手記
 	Vec3 memoPos = { -3.6, 0, 10.6 };

@@ -209,27 +209,27 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		IronkeyPos.x += 0.001;
+		dirtyClothPos.x += 0.001;
 	}
 	if (KeyM.pressed())
 	{
-		IronkeyPos.x -= 0.001;
+		dirtyClothPos.x -= 0.001;
 	}
 	if (KeyV.pressed())
 	{
-		IronkeyPos.y += 0.001;
+		dirtyClothPos.y += 0.001;
 	}
 	if (KeyB.pressed())
 	{
-		IronkeyPos.y -= 0.001;
+		dirtyClothPos.y -= 0.001;
 	}
 	if (KeyX.pressed())
 	{
-		IronkeyPos.z += 0.001;
+		dirtyClothPos.z += 0.001;
 	}
 	if (KeyC.pressed())
 	{
-		IronkeyPos.z -= 0.001;
+		dirtyClothPos.z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -323,7 +323,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"IronkeyPos=" << IronkeyPos;
+	Print << U"dirtyClothPos=" << dirtyClothPos;
 
 #endif
 }
@@ -351,7 +351,7 @@ void CameraTest::drawMiniItem(
 		memoMiniSprite.draw(x, y);
 		break;
 	case Key:
-		// 鍵
+		// 錆びた鍵
 		keyMiniSprite.draw(x, y);
 		break;
 	case Poker:
@@ -406,7 +406,7 @@ void CameraTest::drawBigItem(
 		memoBigSprite.draw(x, y);
 		break;
 	case Key:
-		// 鍵
+		// 錆びた鍵
 		keyBigSprite.draw(x, y);
 		break;
 	case Poker:
@@ -719,7 +719,7 @@ void CameraTest::update()
 			// アイテム１は手記
 		}
 
-		// 古びた鍵
+		// 錆びた鍵
 		if (!bLockon && bKeyHave == false)
 		{
 			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, markPosition, 0, true);
@@ -1760,7 +1760,7 @@ void CameraTest::update()
 			modelBread.draw();
 		}
 
-		// 鍵の描画
+		// 錆びた鍵の描画
 		if (bKeyHave == false)
 		{
 			Transformer3D t{
@@ -2188,7 +2188,7 @@ void CameraTest::update()
 			{
 				if (bKeyHave)
 				{
-					// 鍵を持っている状態で針金を使う
+					// 錆びた鍵を持っている状態で針金を使う
 					items[selectItem] = WireKey;
 					bWireKey = true;
 
