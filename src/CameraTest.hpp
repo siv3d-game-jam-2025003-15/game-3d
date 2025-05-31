@@ -88,6 +88,9 @@ public:
 
 private:
 
+	// リソースを読み込む
+	void loadResources();
+
 	// ドアの数
 	static const int DoorNum = 4;
 
@@ -1131,5 +1134,6 @@ private:
 	double debugHeight = 0;
 
 	bool bPrologueBGM = false;
+	bool bStartPlaying = false;
 
 };

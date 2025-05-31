@@ -10,31 +10,6 @@ CameraTest::CameraTest(const InitData& init)
 	// カメラ
 	camera = BasicCamera3D{ renderTexture.size(), m_verticalFOV, Vec3{ 10, 10, -10 } };
 
-	// モデルに付随するテクスチャをアセット管理に登録
-	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
-
-	//// BGMの再生（読み込みのため、音を鳴らさない）
-	AudioAsset(U"BGM").setVolume(0.0);
-	AudioAsset(U"BGM").play();
-	AudioAsset(U"BGM").stop();
-
 	// 最初にカーソルを中央に
 	Cursor::SetPos(center.x, center.y);
 
@@ -52,12 +27,7 @@ CameraTest::CameraTest(const InitData& init)
 
 //#ifndef _DEBUG
 	// テキストメッセージを先に読み込んでおく
-	dummyTextView(Text);
-	dummyTextView(itemText);
-	dummyTextView(itemNameText);
-	dummyTextView(memoText);
-	dummyTextView(toastedParchmentText);
-	dummyTextView(prologueText);
+
 //#endif
 
 	// メッセージを読んだかどうかのフラグをリセット
@@ -85,8 +55,108 @@ CameraTest::CameraTest(const InitData& init)
 		prologueLength += prologueText[i].size();
 	}
 
+	// リソースの読み込み
+	loadResources();
+
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
+}
+
+void CameraTest::loadResources()
+{
+	// ローディング画面でリソース読み込み
+
+	// フォント
+	dummyTextView(Text);
+	dummyTextView(itemText);
+	dummyTextView(itemNameText);
+	dummyTextView(memoText);
+	dummyTextView(toastedParchmentText);
+	dummyTextView(prologueText);
+
+	// テクスチャ
+	
+	// モデルに付随するテクスチャをアセット管理に登録
+	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
+
+	// BGMの読み込み
+	AudioAsset(U"BGM").setVolume(0.0);
+	AudioAsset(U"BGM").play();
+	AudioAsset(U"BGM").stop();
+
+	AudioAsset(U"足音45秒のループ").setVolume(0.0);
+	AudioAsset(U"足音45秒のループ").play();
+	AudioAsset(U"足音45秒のループ").stop();
+
+	AudioAsset(U"GET").setVolume(0.0);
+	AudioAsset(U"GET").play();
+	AudioAsset(U"GET").stop();
+
+	// 実際に使用して初回ローディングを済ませる
+	inventorySprite.draw(0, 0);
+	breadMiniSprite.draw(0, 0);
+	breadBigSprite.draw(0, 0);
+	memoMiniSprite.draw(0, 0);
+	memoBigSprite.draw(0, 0);
+	keyMiniSprite.draw(0, 0);
+	keyBigSprite.draw(0, 0);
+	pokerMiniSprite.draw(0, 0);
+	pokerBigSprite.draw(0, 0);
+	parchmentMiniSprite.draw(0, 0);
+	parchmentBigSprite.draw(0, 0);
+	wireMiniSprite.draw(0, 0);
+	wireBigSprite.draw(0, 0);
+	wireKeyMiniSprite.draw(0, 0);
+	wireKeyBigSprite.draw(0, 0);
+	toastedParchmentMiniSprite.draw(0, 0);
+	toastedParchmentBigSprite.draw(0, 0);
+	dirtyClothMiniSprite.draw(0, 0);
+	dirtyClothBigSprite.draw(0, 0);
+	clothMiniSprite.draw(0, 0);
+	clothBigSprite.draw(0, 0);
+	ironKeyMiniSprite.draw(0, 0);
+	ironKeyBigSprite.draw(0, 0);
+
+	billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
+
+	model.draw();
+	modelDoor.draw();
+	modelKey.draw();
+	modelIronKey.draw();
+	modelBread.draw();
+	modelPoker.draw();
+	modelDrawerChain.draw();
+	modelDrawerEye.draw();
+	modelDrawerFeather.draw();
+	modelDrawerFlower.draw();
+	modelDrawerNon.draw();
+	modelDrawerSnake.draw();
+	modelShelf.draw();
+	modelExclamationMark.draw();
+	modelParchment.draw();
+	modelHanger.draw();
+	modelDirtyCloth.draw();
+	modelMemo.draw();
+
+//	Graphics2D::Flush();
+//	System::Update();
 }
 
 // テキストメッセージを先に読み込んでおく
@@ -462,7 +532,7 @@ void CameraTest::drawBigItem(
 
 void CameraTest::inventoryOnOff()
 {
-	if (bPrologueEnd == false)
+	if (bStartPlaying == false)
 	{
 		// プロローグ中は何もしない
 		return;
@@ -524,7 +594,7 @@ void CameraTest::update()
 	bool bLockon = false;
 
 
-	if (bPrologueEnd == false)
+	if (bStartPlaying == false)
 	{
 		// プロローグ中
 		if (Window::GetState().focused)
@@ -670,6 +740,7 @@ void CameraTest::update()
 			if (isWalk)
 			{
 				if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
+					AudioAsset(U"足音45秒のループ").setVolume(1.0);
 					AudioAsset(U"足音45秒のループ").play();
 				}
 			}
@@ -2218,6 +2289,7 @@ void CameraTest::update()
 
 				// SEを鳴らす
 				AudioAsset(U"BGM").stop();
+				AudioAsset(U"GET").setVolume(1.0);
 				AudioAsset(U"GET").play();
 				bgmStopCount = 4.00;
 			}
@@ -2241,6 +2313,7 @@ void CameraTest::update()
 
 					// SEを鳴らす
 					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").setVolume(1.0);
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
 
@@ -2257,6 +2330,7 @@ void CameraTest::update()
 
 					// SEを鳴らす
 					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").setVolume(1.0);
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
 				}
@@ -2271,6 +2345,7 @@ void CameraTest::update()
 
 					// SEを鳴らす
 					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").setVolume(1.0);
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
 				}
@@ -2291,6 +2366,7 @@ void CameraTest::update()
 
 					// SEを鳴らす
 					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").setVolume(1.0);
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
 				}
@@ -2370,6 +2446,11 @@ void CameraTest::update()
 		}
 	}
 
+	if (bPrologueBGM && messageCount > 7)
+	{
+		bStartPlaying = true;
+	}
+
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
 	if (frameTime < targetDeltaTime)
@@ -2397,7 +2478,7 @@ void CameraTest::draw() const
 	if (bPrologueEnd == false || messageCount < 10)
 	{
 		// 画面全体を黒で描画
-		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
+	//	Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
 
 		// TODO 共通化する
 		double lineSpacing = 96; // 行間（フォントサイズより少し大きめ）
