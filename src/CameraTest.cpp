@@ -2119,6 +2119,8 @@ void CameraTest::update()
 		}
 
 #if _DEBUG
+		// デバッグ表示
+		if (bDebugViewCollision)
 		{
 			Print << U"m_focusPosition" << camera.getFocusPosition();
 			modelExclamationMark.draw(camera.getFocusPosition());
@@ -2384,15 +2386,19 @@ void CameraTest::update()
 	else
 	{
 #if _DEBUG
-		// フォーカスエリア
-		Rect rect(
-			WINDOW_WIDTH / 2 - 200,
-			WINDOW_HEIGHT / 2 - 200,
-			400,
-			400
-		);
+		// デバッグ表示
+		if (bDebugViewCollision)
+		{
+			// フォーカスエリア
+			Rect rect(
+				WINDOW_WIDTH / 2 - 200,
+				WINDOW_HEIGHT / 2 - 200,
+				400,
+				400
+			);
 
-		rect.drawFrame(2, Palette::Red);
+			rect.drawFrame(2, Palette::Red);
+		}
 #endif
 	}
 
