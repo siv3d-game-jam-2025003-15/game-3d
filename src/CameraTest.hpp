@@ -1125,6 +1125,6 @@ private:
 	float prologueCount = 0;
 	int   prologueLength = 0;
 
-//	int itemHeight = 165;
+	double debugHeight = 0;
 
 };

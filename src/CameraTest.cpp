@@ -215,11 +215,11 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		door3Pos.x += 0.001;
+		debugHeight += 1;
 	}
 	if (KeyM.pressed())
 	{
-		door3Pos.x -= 0.001;
+		debugHeight -= 1;
 	}
 	if (KeyV.pressed())
 	{
@@ -329,7 +329,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"door3Pos=" << door3Pos;
+	Print << U"debugHeight=" << debugHeight;
 
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePatternCount=" << messagePatternCount;
@@ -2332,16 +2332,18 @@ void CameraTest::draw() const
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
 	// プロローグ
-	/*
 	{
 		// 画面全体を黒で描画
 		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 1.0 });
 
 		// TODO 共通化する
-		double lineSpacing = 80.0; // 行間（フォントサイズより少し大きめ）
+		double lineSpacing = 96; // 行間（フォントサイズより少し大きめ）
 
 		// 今、表示するための文字数
 		int prologueIndex = prologueCount*5;
+
+		// テキストのアルファ値
+		float a = prologueCount * 5 - (float)prologueIndex;
 
 		for (int i = 0; i < prologueText.size(); ++i)
 		{
@@ -2351,7 +2353,7 @@ void CameraTest::draw() const
 			}
 
 			double x = center.x;
-			double y = center.y + lineSpacing * (i - (int)prologueText.size() / 2);
+			double y = center.y + lineSpacing * (i - (int)prologueText.size() / 2) + 38;	// TODO 38は高さ調整のため
 
 			int num = 0;
 			int sub = 0;
@@ -2378,9 +2380,24 @@ void CameraTest::draw() const
 				{ x, y },
 				ColorF{ 1, 1, 1, 1 }
 			);
+
+			// 半透明文字
+			if (num+1 < prologueText[i].size())
+			{
+				String tmp2;
+				tmp2.append(num, U'　');		// 後ろをスペースで埋める
+				tmp2.append(1, prologueText[i][num]);
+				tmp2.append(sub - 1, U'　');
+
+				boldFont(tmp2).drawAt(
+					28,
+					{ x, y },
+					ColorF{ 1, 1, 1, a }
+				);
+			}
+
 		}
 	}
-	*/
 
 	// セリフ表示
 	if (0 <= message && message < Text.size() / MessagePatternMax)
