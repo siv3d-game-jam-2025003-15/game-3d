@@ -554,8 +554,10 @@ void CameraTest::update()
 {
 	const double deltaTime = Scene::DeltaTime();
 
+#ifdef _DEBUG
 	// デバッグ表示
 	debug();
+#endif
 
 	// シナリオの進捗によってメッセージを変える
 	message = scenario;
@@ -1513,8 +1515,9 @@ void CameraTest::update()
 
 				if (IsSphereIntersectingTriangle(myPosition, myRadius, triA, triB, triC))
 				{
+#ifdef _DEBUG
 					Print << U"交差しました！";
-
+#endif
 					// 交差している（ぶつかった）
 					checkCollision = true;
 
@@ -1575,9 +1578,9 @@ void CameraTest::update()
 					//	resultVelocity2.x *= -1;
 					//	resultVelocity2.y *= -1;
 					//}
-
+#ifdef _DEBUG
 					Print << U"dot " << dot;
-
+#endif
 					// いったん前の状態に戻す
 					toCameraPos = last_eyePosition;
 
@@ -2478,7 +2481,7 @@ void CameraTest::draw() const
 	if (bPrologueEnd == false || messageCount < 10)
 	{
 		// 画面全体を黒で描画
-	//	Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
 
 		// TODO 共通化する
 		double lineSpacing = 96; // 行間（フォントサイズより少し大きめ）

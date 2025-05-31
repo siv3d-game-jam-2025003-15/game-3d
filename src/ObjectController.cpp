@@ -42,10 +42,9 @@ std::tuple<bool, bool, int> ObjectController::update(
 	{
 #ifdef _DEBUG
 		Print << U"オブジェクトが画面の中心にある";
-#endif
 		Print << U"左クリックで取る";
 		Print << U"エンターキーで取る";
-
+#endif
 		isLockon = true;
 
 		MarkPosition = objPos;
