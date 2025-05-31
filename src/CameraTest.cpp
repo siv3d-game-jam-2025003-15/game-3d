@@ -209,27 +209,27 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		dirtyClothPos.x += 0.001;
+		toilet2Pos.x += 0.001;
 	}
 	if (KeyM.pressed())
 	{
-		dirtyClothPos.x -= 0.001;
+		toilet2Pos.x -= 0.001;
 	}
 	if (KeyV.pressed())
 	{
-		dirtyClothPos.y += 0.001;
+		toilet2Pos.y += 0.001;
 	}
 	if (KeyB.pressed())
 	{
-		dirtyClothPos.y -= 0.001;
+		toilet2Pos.y -= 0.001;
 	}
 	if (KeyX.pressed())
 	{
-		dirtyClothPos.z += 0.001;
+		toilet2Pos.z += 0.001;
 	}
 	if (KeyC.pressed())
 	{
-		dirtyClothPos.z -= 0.001;
+		toilet2Pos.z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -323,7 +323,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"dirtyClothPos=" << dirtyClothPos;
+	Print << U"toilet2Pos=" << toilet2Pos;
 
 #endif
 }
@@ -937,6 +937,18 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 				message = 12;
+			}
+		}
+
+		// トイレ２（左上の部屋）
+		if (!bLockon)
+		{
+			auto [a, b, c] = toiletController.update(toilet2Pos, camera, m_eyePosition, ray, markPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 32;
 			}
 		}
 
