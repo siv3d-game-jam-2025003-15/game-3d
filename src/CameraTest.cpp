@@ -76,6 +76,12 @@ CameraTest::CameraTest(const InitData& init)
 	bDoorOpen[2] = true;	// 奥の部屋
 	bDoorOpen[3] = true;	// 左上の部屋
 
+	// プロローグの文字列の長さ
+	for (int i = 0; i < prologueText.size(); ++i)
+	{
+		prologueLength += prologueText[i].size();
+	}
+
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
 }
@@ -2305,6 +2311,8 @@ void CameraTest::update()
 #endif
 	}
 
+	prologueCount += deltaTime;
+
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
@@ -2323,10 +2331,61 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
+	// プロローグ
+	/*
+	{
+		// 画面全体を黒で描画
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 1.0 });
+
+		// TODO 共通化する
+		double lineSpacing = 80.0; // 行間（フォントサイズより少し大きめ）
+
+		// 今、表示するための文字数
+		int prologueIndex = prologueCount*5;
+
+		for (int i = 0; i < prologueText.size(); ++i)
+		{
+			if (prologueIndex <= 0)
+			{
+				break;
+			}
+
+			double x = center.x;
+			double y = center.y + lineSpacing * (i - (int)prologueText.size() / 2);
+
+			int num = 0;
+			int sub = 0;
+
+			if (prologueIndex >= prologueText[i].size())
+			{
+				// すべて表示
+				num = prologueText[i].size();
+				prologueIndex -= prologueText[i].size();
+			}
+			else
+			{
+				// 一部表示
+				num = prologueIndex;
+				sub = prologueText[i].size() - num;
+				prologueIndex = 0;
+			}
+
+			String tmp = prologueText[i].substr(0, num);
+			tmp.append(sub, U'　');	// 後ろをスペースで埋める
+
+			boldFont(tmp).drawAt(
+				28,
+				{ x, y },
+				ColorF{ 1, 1, 1, 1 }
+			);
+		}
+	}
+	*/
+
 	// セリフ表示
 	if (0 <= message && message < Text.size() / MessagePatternMax)
 	{
-		// 画面全体を黒い半透明で描画
+		// 画面下を黒い半透明で描画
 		Rect{ 0, Scene::Height()-40, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
 		int m = message * MessagePatternMax + messagePattern;
