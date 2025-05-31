@@ -325,6 +325,9 @@ void CameraTest::debug()
 
 	Print << U"door3Pos=" << door3Pos;
 
+	Print << U"messagePattern=" << messagePattern;
+	Print << U"messagePatternCount=" << messagePatternCount;
+
 #endif
 }
 
@@ -1201,6 +1204,13 @@ void CameraTest::update()
 				messageRead[message]++;
 				messagePattern = messageRead[message];
 			}
+		}
+
+		int m = message * MessagePatternMax + messagePattern;
+		if (Text[m].isEmpty())
+		{
+			// メッセージが空の場合、０に戻す
+			messagePattern = 0;
 		}
 
 
@@ -2321,10 +2331,11 @@ void CameraTest::draw() const
 
 		int m = message * MessagePatternMax + messagePattern;
 
-		if (Text[m].isEmpty())
-		{
-			m = message * MessagePatternMax;
-		}
+		// ここでのチェックは不要
+		//if (Text[m].isEmpty())
+		//{
+		//	m = message * MessagePatternMax;
+		//}
 
 		boldFont(Text[m]).drawAt(
 			28,
