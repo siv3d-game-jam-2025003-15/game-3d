@@ -209,27 +209,27 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		toilet2Pos.x += 0.001;
+		door3Pos.x += 0.001;
 	}
 	if (KeyM.pressed())
 	{
-		toilet2Pos.x -= 0.001;
+		door3Pos.x -= 0.001;
 	}
 	if (KeyV.pressed())
 	{
-		toilet2Pos.y += 0.001;
+		door3Pos.y += 0.001;
 	}
 	if (KeyB.pressed())
 	{
-		toilet2Pos.y -= 0.001;
+		door3Pos.y -= 0.001;
 	}
 	if (KeyX.pressed())
 	{
-		toilet2Pos.z += 0.001;
+		door3Pos.z += 0.001;
 	}
 	if (KeyC.pressed())
 	{
-		toilet2Pos.z -= 0.001;
+		door3Pos.z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -323,7 +323,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"toilet2Pos=" << toilet2Pos;
+	Print << U"door3Pos=" << door3Pos;
 
 #endif
 }
@@ -742,7 +742,7 @@ void CameraTest::update()
 		// 鉄製の鍵
 		if (!bLockon && bIronKeyHave == false)
 		{
-			auto [a, b, c] = keyController.update(IronkeyPos, camera, m_eyePosition, ray, markPosition, 0, bPokerHave);
+			auto [a, b, c] = ironkeyController.update(IronkeyPos, camera, m_eyePosition, ray, markPosition, 0, bPokerHave);
 			if (a == true)
 			{
 				// アイテムを取った
@@ -788,6 +788,7 @@ void CameraTest::update()
 			temp.z += 0.2;
 
 			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bWireKey);
+			// TODO インベントリから開ける
 			if (a == true && bDoorOpen[0] == false && bWireKey)
 			{
 				// ドアを開いた
@@ -823,7 +824,8 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z -= 0.2;
 
-			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bIronKeyHave);
+			auto [a, b, c] = door2Controller.update(temp, camera, m_eyePosition, ray, markPosition, 1, bIronKeyHave);	
+			// TODO インベントリから開ける
 			if (a == true && bDoorOpen[1] == false)
 			{
 				// ドアを開いた
@@ -835,17 +837,19 @@ void CameraTest::update()
 			{
 				// 見ている
 				bLockon = b;
+				message = 30;
+			}
+		}
 
-				if (bIronKeyHave)
-				{
-					// 開けることができるとき
-					message = 30;
-				}
-				else
-				{
-					// 開けることができないとき
-					message = 29;
-				}
+		// ドア３（右上のドア）
+		if (!bLockon)
+		{
+			auto [a, b, c] = door3Controller.update(door3Pos, camera, m_eyePosition, ray, markPosition, -1, false);
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+				message = 33;
 			}
 		}
 

@@ -234,8 +234,8 @@ private:
 	//==============================
 
 	// ドアの回転
-	Vec3 doorRot{ 0, 180_deg, 0 };
-	Vec3 door2Rot{ 0, 180_deg, 0 };
+	Vec3 doorRot{ 0, 180_deg, 0 };	// 最初の扉
+	Vec3 door2Rot{ 0, 180_deg, 0 };	// 左下の部屋の扉
 	//double toDoorRotY = 0;
 
 	// ドアの移動（横に開ける）
@@ -244,10 +244,6 @@ private:
 
 	// ドアが開いているかどうかのフラグ
 	bool bDoorOpen[DoorNum];
-	bool bDoor2Open = false;
-
-
-
 
 	//==============================
 	// シェーダー
@@ -338,9 +334,9 @@ private:
 	const Vec3 roomPos{ 0, 0, 0 };
 
 	// ドアの位置
-	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
-	//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
-	Vec3 door2Pos{ 6.68, 0, 1.9 };	// 原点が中心の時
+	Vec3 doorPos{ -1.6, 0, 1.9 };	// 最初の部屋のドア
+	Vec3 door2Pos{ 6.68, 0, 1.9 };	// 左下の部屋のドア
+	Vec3 door3Pos{ -1.55, 1.2, -3.53 };	// 右上の部屋のドア
 
 	// 錆びた鍵の座標
 	Vec3 keyPos = { 3.7, 0.01, 3 };
@@ -405,8 +401,11 @@ private:
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController keyController;
+	ObjectController ironkeyController;
 	ObjectController pokerController;
 	ObjectController doorController;
+	ObjectController door2Controller;
+	ObjectController door3Controller;
 	ObjectController parchmentController;
 	ObjectController bedController;
 	ObjectController bed2Controller;
@@ -831,14 +830,15 @@ private:
 		U"",	// 28
 
 		// 29 ドア２（開けることができないとき）
-		U"手持ちの鍵で開けることができないようだ。別の鍵があるのだろうか。",	// 29
+		//U"手持ちの鍵で開けることができないようだ。別の鍵があるのだろうか。",	// 29
+		U"",	// 29
 		U"",	// 29
 		U"",	// 29
 
-		// 30 ドア２（開けることができるとき）
-		U"この鉄製の鍵で開けることができるかもしれない。",	// 30
-		U"",	// 30
-		U"",	// 30
+		// 30 閉まっている木製の扉（左下の部屋のドア）
+		U"古びた木の扉。鍵がかかっているようだ",	// 30
+		U"頑丈な造りだ。そう簡単には開かないだろう",	// 30
+		U"",	// 34
 
 		// 31 鉄製の鍵
 		U"格子の向こうに鍵が落ちている……届かない",	// 31
@@ -850,10 +850,12 @@ private:
 		U"見るに耐えない……だが、使うしかなかったのだろう",	// 32
 		U"水が少し溜まっている。使えるかもしれないが……気が進まない",	// 32
 
-		U"",	// 33
-		U"",	// 33
+		// 33 閉まっている鉄製の扉（右上の部屋のドア）
+		U"重たそうな鉄扉だ。びくともしない……",	// 33
+		U"頑丈な造りだ。そう簡単には開かないだろう",	// 33
 		U"",	// 33
 
+		// 34
 		U"",	// 34
 		U"",	// 34
 		U"",	// 34
