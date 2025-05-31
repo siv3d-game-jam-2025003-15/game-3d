@@ -64,15 +64,16 @@ CameraTest::CameraTest(const InitData& init)
 
 	// ドアの回転
 	//toDoorRotY = doorRot.y;
-	// 
+	
 	// ドアの移動（横に開ける）
 	toDoorPosX = doorPos.x;
+	toDoor2PosX = door2Pos.x;
 
 	// ドアが開いているかどうか
 	bDoorOpen[0] = false;	// 最初の部屋
-	bDoorOpen[1] = false;	// 左上の部屋
+	bDoorOpen[1] = false;	// 左下の部屋
 	bDoorOpen[2] = true;	// 奥の部屋
-	bDoorOpen[3] = true;	// 左下の部屋
+	bDoorOpen[3] = true;	// 左上の部屋
 
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
@@ -748,7 +749,8 @@ void CameraTest::update()
 				// ドアを開いた
 				bDoorOpen[0] = true;
 			//	toDoorRotY = 270_deg;	// 回転で開ける
-				toDoorPosX = -0.11;	// 移動で開ける
+			//	toDoorPosX = -0.11;	// 移動で開ける
+				toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
 				bgmStopCount = c;
 
 				scenario = 6;
@@ -764,6 +766,41 @@ void CameraTest::update()
 				else
 				{
 					message = 10;
+				}
+			}
+		}
+
+		// ドア２
+		if (!bLockon)
+		{
+			// 座標の調整
+			Vec3 temp = door2Pos;
+			temp.x += 0.0;
+			temp.y += 1.2;
+			temp.z -= 0.2;
+
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bIronKey);
+			if (a == true && bDoorOpen[1] == false)
+			{
+				// ドアを開いた
+				bDoorOpen[1] = true;
+				toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
+				bgmStopCount = c;
+			}
+			if (b)
+			{
+				// 見ている
+				bLockon = b;
+
+				if (bIronKey)
+				{
+					// 開けることができるとき
+					message = 30;
+				}
+				else
+				{
+					// 開けることができないとき
+					message = 29;
 				}
 			}
 		}
@@ -1464,6 +1501,7 @@ void CameraTest::update()
 
 	// ドアの移動
 	doorPos.x = Math::Lerp(doorPos.x, toDoorPosX, smooth / 10);	// ドアはゆっくり開ける
+	door2Pos.x = Math::Lerp(door2Pos.x, toDoor2PosX, smooth / 10);	// ドアはゆっくり開ける
 
 
 	// 止まっているBGMを再度鳴らす
