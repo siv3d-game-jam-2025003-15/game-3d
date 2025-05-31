@@ -50,14 +50,15 @@ CameraTest::CameraTest(const InitData& init)
 	bDebugViewCollision = true;
 #endif
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
 	// テキストメッセージを先に読み込んでおく
 	dummyTextView(Text);
 	dummyTextView(itemText);
 	dummyTextView(itemNameText);
 	dummyTextView(memoText);
 	dummyTextView(toastedParchmentText);
-#endif
+	dummyTextView(prologueText);
+//#endif
 
 	// メッセージを読んだかどうかのフラグをリセット
 	for (int i = 0; i < Text.size() / MessagePatternMax; i++)
@@ -461,6 +462,12 @@ void CameraTest::drawBigItem(
 
 void CameraTest::inventoryOnOff()
 {
+	if (bPrologueEnd == false)
+	{
+		// プロローグ中は何もしない
+		return;
+	}
+
 	// インベントリフラグの切り替え
 	bInventory = bInventory ? false : true;
 
@@ -516,8 +523,20 @@ void CameraTest::update()
 	// アイテムのロックオンフラグ
 	bool bLockon = false;
 
-	// インベントリを表示しているかどうか
-	if (!bInventory)
+
+	if (bPrologueEnd == false)
+	{
+		// プロローグ中
+		if (Window::GetState().focused)
+		{
+			// マウスカーソルを非表示
+			Cursor::RequestStyle(CursorStyle::Hidden);
+
+			// カーソルを強制的に中央に戻す
+			Cursor::SetPos(center.x, center.y);
+		}
+	}
+	else if (bInventory == false)
 	{
 		// インベントリを表示していない（通常時）
 
