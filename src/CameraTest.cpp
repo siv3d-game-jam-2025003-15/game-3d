@@ -30,8 +30,10 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
 
-	//// BGMの再生
-	//AudioAsset(U"BGM").play();
+	//// BGMの再生（読み込みのため、音を鳴らさない）
+	AudioAsset(U"BGM").setVolume(0.0);
+	AudioAsset(U"BGM").play();
+	AudioAsset(U"BGM").stop();
 
 	// 最初にカーソルを中央に
 	Cursor::SetPos(center.x, center.y);
@@ -2318,7 +2320,7 @@ void CameraTest::update()
 		// メッセージカウンター
 		messageCount += deltaTime;
 
-		if (messageCount > 5)
+		if (messageCount > 4)
 		{
 			bPrologueBGM = true;
 		}
@@ -2333,6 +2335,7 @@ void CameraTest::update()
 			{
 				if (!AudioAsset(U"BGM").isPlaying())
 				{
+					AudioAsset(U"BGM").setVolume(1.0);
 					AudioAsset(U"BGM").play();
 				}
 			}
@@ -2346,12 +2349,7 @@ void CameraTest::update()
 				//}
 			}
 		}
-
-
-
 	}
-
-
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
@@ -2370,10 +2368,17 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
+	float prologueAlpha = 7 - messageCount;
+	if (prologueAlpha > 1)
+	{
+		prologueAlpha = 1;
+	}
+
 	// プロローグ
+	if (bPrologueEnd == false || messageCount < 10)
 	{
 		// 画面全体を黒で描画
-		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 1.0 });
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
 
 		// TODO 共通化する
 		double lineSpacing = 96; // 行間（フォントサイズより少し大きめ）
@@ -2417,7 +2422,7 @@ void CameraTest::draw() const
 			boldFont(tmp).drawAt(
 				28,
 				{ x, y },
-				ColorF{ 1, 1, 1, 1 }
+				ColorF{ 1, 1, 1, prologueAlpha }
 			);
 
 			// 半透明文字
