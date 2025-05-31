@@ -14,6 +14,7 @@ CameraTest::CameraTest(const InitData& init)
 	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
+	Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
 	Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
@@ -208,11 +209,27 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		door2Pos.x += 0.01;
+		IronkeyPos.x += 0.001;
 	}
 	if (KeyM.pressed())
 	{
-		door2Pos.x -= 0.01;
+		IronkeyPos.x -= 0.001;
+	}
+	if (KeyV.pressed())
+	{
+		IronkeyPos.y += 0.001;
+	}
+	if (KeyB.pressed())
+	{
+		IronkeyPos.y -= 0.001;
+	}
+	if (KeyX.pressed())
+	{
+		IronkeyPos.z += 0.001;
+	}
+	if (KeyC.pressed())
+	{
+		IronkeyPos.z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -306,7 +323,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"door2Pos=" << door2Pos;
+	Print << U"IronkeyPos=" << IronkeyPos;
 
 #endif
 }
@@ -779,7 +796,7 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z -= 0.2;
 
-			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bIronKey);
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bIronKeyHave);
 			if (a == true && bDoorOpen[1] == false)
 			{
 				// ドアを開いた
@@ -792,7 +809,7 @@ void CameraTest::update()
 				// 見ている
 				bLockon = b;
 
-				if (bIronKey)
+				if (bIronKeyHave)
 				{
 					// 開けることができるとき
 					message = 30;
@@ -1723,6 +1740,15 @@ void CameraTest::update()
 				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(keyPos)
 			};
 			modelKey.draw();
+		}
+
+		// 鉄製の鍵の描画
+		if (bIronKeyHave == false)
+		{
+			Transformer3D t{
+				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(IronkeyPos)
+			};
+			modelIronKey.draw();
 		}
 
 		// 火かき棒の描画

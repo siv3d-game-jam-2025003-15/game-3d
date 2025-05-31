@@ -173,11 +173,10 @@ private:
 
 	// ドア
 	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
-//	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01_blender.obj" };
 
 	// 鍵
-//	const Model modelKey{ U"assets/models/Key/key.obj" };	// 仮素材
 	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
+	const Model modelIronKey{ U"assets/models/Key/Gimmick_RustedKey02.obj" };
 
 	// パン
 	const Model modelBread{ U"assets/models/Bread/Gimmick_bread01.obj" };
@@ -224,27 +223,6 @@ private:
 
 	// BGMがストップしている時間
 	double bgmStopCount = 0.0f;
-
-
-
-
-	//==============================
-	// モデルの座標
-	//==============================
-
-	// ルームの位置
-	const Vec3 roomPos{ 0, 0, 0 };
-
-	// ドアの位置
-	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
-//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
-	Vec3 door2Pos{ 6.68, 0, 1.9 };	// 原点が中心の時
-
-
-
-
-
-
 
 
 
@@ -349,11 +327,23 @@ private:
 	float sunColor = 0.0;
 
 
+	//==============================
+	// モデルの座標
+	//==============================
 
+	// ルームの位置
+	const Vec3 roomPos{ 0, 0, 0 };
 
+	// ドアの位置
+	Vec3 doorPos{ -1.6, 0, 1.9 };	// 原点が中心の時
+	//	Vec3 doorPos{ -2.3, 0, 2 };	// 原点が端っこの時
+	Vec3 door2Pos{ 6.68, 0, 1.9 };	// 原点が中心の時
 
 	// 鍵の座標
 	Vec3 keyPos = { 3.7, 0.01, 3 };
+
+	// 鍵の座標
+	Vec3 IronkeyPos = { -0.49, 0.465, -4.80 };
 
 	// パンの座標
 	Vec3 breadPos = { 0, 0.75, 7 };
@@ -640,7 +630,7 @@ private:
 	bool bWireKey = false;
 
 	// 鉄製の鍵を持っている
-	bool bIronKey = false;
+	bool bIronKeyHave = false;
 
 	// 暖炉の火が強くなった
 	bool bFireplaceStrong = false;
