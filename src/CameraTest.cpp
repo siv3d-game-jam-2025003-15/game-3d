@@ -76,25 +76,25 @@ void CameraTest::loadResources()
 
 	// テクスチャ
 	
-	// モデルに付随するテクスチャをアセット管理に登録
-	Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
-	Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
+	// // モデルに付随するテクスチャをアセット管理に登録
+	// Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
+	// Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
 
 	// BGMの読み込み
 	AudioAsset(U"BGM").setVolume(0.0);
@@ -140,28 +140,114 @@ void CameraTest::loadResources()
 
 	billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
 
-	model.draw();
-	modelDoor.draw();
-	modelKey.draw();
-	modelIronKey.draw();
-	modelBread.draw();
-	modelPoker.draw();
-	modelDrawerChain.draw();
-	modelDrawerEye.draw();
-	modelDrawerFeather.draw();
-	modelDrawerFlower.draw();
-	modelDrawerNon.draw();
-	modelDrawerSnake.draw();
-	modelShelf.draw();
-	modelExclamationMark.draw();
-	modelParchment.draw();
-	modelHanger.draw();
-	modelDirtyCloth.draw();
-	modelMemo.draw();
+	// model.draw();
+	// modelDoor.draw();
+	// modelKey.draw();
+	// modelIronKey.draw();
+	// modelBread.draw();
+	// modelPoker.draw();
+	// modelDrawerChain.draw();
+	// modelDrawerEye.draw();
+	// modelDrawerFeather.draw();
+	// modelDrawerFlower.draw();
+	// modelDrawerNon.draw();
+	// modelDrawerSnake.draw();
+	// modelShelf.draw();
+	// modelExclamationMark.draw();
+	// modelParchment.draw();
+	// modelHanger.draw();
+	// modelDirtyCloth.draw();
+	// modelMemo.draw();
 
 //	Graphics2D::Flush();
 //	System::Update();
 }
+
+// モデルの読み込み
+void CameraTest::loadModels()
+{
+	switch (modelLoadCount)
+	{
+	case 0:
+		modelPtr = std::make_unique<Model>(modelPath);
+		break;
+	case 1:
+		modelDoorPtr = std::make_unique<Model>(modelDoorPath);
+		break;
+	case 2:
+		modelKeyPtr = std::make_unique<Model>(modelKeyPath);
+		break;
+	case 3:
+		modelIronKeyPtr = std::make_unique<Model>(modelIronKeyPath);
+		break;
+	case 4:
+		modelBreadPtr = std::make_unique<Model>(modelBreadPath);
+		break;
+	case 5:
+		modelPokerPtr = std::make_unique<Model>(modelPokerPath);
+		break;
+	case 6:
+		modelDrawerChainPtr = std::make_unique<Model>(modelDrawerChainPath);
+		break;
+	case 7:
+		modelDrawerEyePtr = std::make_unique<Model>(modelDrawerEyePath);
+		break;
+	case 8:
+		modelDrawerFeatherPtr = std::make_unique<Model>(modelDrawerFeatherPath);
+		break;
+	case 9:
+		modelDrawerFlowerPtr = std::make_unique<Model>(modelDrawerFlowerPath);
+		break;
+	case 10:
+		modelDrawerNonPtr = std::make_unique<Model>(modelDrawerNonPath);
+		break;
+	case 11:
+		modelDrawerSnakePtr = std::make_unique<Model>(modelDrawerSnakePath);
+		break;
+	case 12:
+		modelShelfPtr = std::make_unique<Model>(modelShelfPath);
+		break;
+	case 13:
+		modelExclamationMarkPtr = std::make_unique<Model>(modelExclamationMarkPath);
+		break;
+	case 14:
+		modelParchmentPtr = std::make_unique<Model>(modelParchmentPath);
+		break;
+	case 15:
+		modelHangerPtr = std::make_unique<Model>(modelHangerPath);
+		break;
+	case 16:
+		modelDirtyClothPtr = std::make_unique<Model>(modelDirtyClothPath);
+		break;
+	case 17:
+		modelMemoPtr = std::make_unique<Model>(modelMemoPath);
+		break;
+	default:
+		// モデルに付随するテクスチャをアセット管理に登録
+		Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
+		isModelLoaded = true;
+		break;
+	}
+	modelLoadCount++;
+}
+	
 
 // テキストメッセージを先に読み込んでおく
 void CameraTest::dummyTextView(Array<String> text)
@@ -647,6 +733,10 @@ void CameraTest::update()
 	// アイテムのロックオンフラグ
 	bool bLockon = false;
 
+	if (!bModelLoaded){
+		loadModels();
+		return;
+	}
 
 	if (bStartPlaying == false)
 	{
