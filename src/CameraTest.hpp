@@ -671,8 +671,8 @@ private:
 	// トイレ２の近くにいる
 	bool bToilet2Lockon = false;
 
-	// 火の弱い暖炉の近くにいる
-	bool bFireplaceWeakLockon = false;
+	// 暖炉の近くにいる
+	bool bFireplaceLockon = false;
 
 	// 火の強い暖炉の近くにいる（オミット）
 //	bool bFireplaceStrongLockon = false;
