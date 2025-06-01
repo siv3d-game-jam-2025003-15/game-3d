@@ -304,11 +304,11 @@ void CameraTest::debug()
 
 	if (KeyN.pressed())
 	{
-		debugHeight += 1;
+		door3Pos.x += 0.001;
 	}
 	if (KeyM.pressed())
 	{
-		debugHeight -= 1;
+		door3Pos.x -= 0.001;
 	}
 	if (KeyV.pressed())
 	{
@@ -420,7 +420,7 @@ void CameraTest::debug()
 	Print << U"CameraX=" << toCameraPos.x;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"debugHeight=" << debugHeight;
+	Print << U"door3Pos=" << door3Pos;;
 
 	Print << U"messagePattern=" << messagePattern;
 	Print << U"messagePatternCount=" << messagePatternCount;
@@ -983,7 +983,7 @@ void CameraTest::update()
 			{
 				// 見ている
 				bLockon = b;
-				message = 30;
+				message = 33;
 				bDoor2Lockon = true;
 			}
 			else
@@ -996,7 +996,7 @@ void CameraTest::update()
 			bDoor2Lockon = false;
 		}
 
-		// ドア３（右上のドア）
+		// ドア３（奥のドア）
 		if (!bLockon)
 		{
 			auto [a, b, c] = door3Controller.update(door3Pos, camera, m_eyePosition, ray, markPosition, -1, false);
@@ -1004,7 +1004,7 @@ void CameraTest::update()
 			{
 				// 見ている
 				bLockon = b;
-				message = 33;
+				message = 30;
 			}
 		}
 
