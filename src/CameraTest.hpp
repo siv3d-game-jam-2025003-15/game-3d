@@ -674,6 +674,9 @@ private:
 	// 火の強い暖炉の近くにいる（オミット）
 //	bool bFireplaceStrongLockon = false;
 
+	// 鉄製の鍵の前にいる
+	bool bIronKeyLockon = false;
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数

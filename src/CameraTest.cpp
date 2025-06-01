@@ -866,20 +866,29 @@ void CameraTest::update()
 		// 鉄製の鍵
 		if (!bLockon && bIronKeyHave == false)
 		{
-			auto [a, b, c] = ironkeyController.update(IronkeyPos, camera, m_eyePosition, ray, markPosition, 0, bPokerHave);
-			if (a == true)
-			{
-				// アイテムを取った
-				items << IronKey;
-				bIronKeyHave = true;
-				bgmStopCount = c;
-			}
+			auto [a, b, c] = ironkeyController.update(IronkeyPos, camera, m_eyePosition, ray, markPosition, -1, false);
+			//if (a == true)
+			//{
+			//	// アイテムを取った
+			//	items << IronKey;
+			//	bIronKeyHave = true;
+			//	bgmStopCount = c;
+			//}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
 				message = 31;
+				bIronKeyLockon = true;
 			}
+			else
+			{
+				bIronKeyLockon = false;
+			}
+		}
+		else
+		{
+			bIronKeyLockon = false;
 		}
 
 		// 火かき棒
@@ -2359,12 +2368,21 @@ void CameraTest::update()
 				//	bgmStopCount = 4.00;
 				//}
 
-				// TODO 鉄製の鍵のところで使う
+				// 鉄製の鍵のところで使う
+				if (bIronKeyLockon)
+				{
+					// 鉄製の鍵を入手
+					items << IronKey;
+					bIronKeyHave = true;
 
+					inventoryOnOff();
 
-
-
-
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"GET").setVolume(1.0);
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
+				}
 			}
 			else if (items[selectItem] == Parchment)
 			{
