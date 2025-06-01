@@ -271,6 +271,57 @@ void CameraTest::debug()
 		fireplaceSin -= 0.1;
 	}
 
+	if (KeyZ.down())
+	{
+		fireplaceR += 0.01;
+	}
+	if (KeyX.down())
+	{
+		fireplaceR -= 0.01;
+	}
+	if (fireplaceR > 1)
+	{
+		fireplaceR = 1;
+	}
+	if (fireplaceR < 0)
+	{
+		fireplaceR = 0;
+	}
+
+	if (KeyC.down())
+	{
+		fireplaceG += 0.01;
+	}
+	if (KeyV.down())
+	{
+		fireplaceG -= 0.01;
+	}
+	if (fireplaceG > 1)
+	{
+		fireplaceG = 1;
+	}
+	if (fireplaceG < 0)
+	{
+		fireplaceG = 0;
+	}
+
+	if (KeyB.down())
+	{
+		fireplaceB += 0.01;
+	}
+	if (KeyN.down())
+	{
+		fireplaceB -= 0.01;
+	}
+	if (fireplaceB > 1)
+	{
+		fireplaceB = 1;
+	}
+	if (fireplaceB < 0)
+	{
+		fireplaceB = 0;
+	}
+
 	if (KeyTab.down())
 	{
 		// プロローグスキップ
@@ -302,30 +353,7 @@ void CameraTest::debug()
 	//	lightPosList[lightArea].x -= 0.001;
 	//}
 
-	if (KeyN.pressed())
-	{
-		door3Pos.x += 0.001;
-	}
-	if (KeyM.pressed())
-	{
-		door3Pos.x -= 0.001;
-	}
-	if (KeyV.pressed())
-	{
-		door3Pos.y += 0.001;
-	}
-	if (KeyB.pressed())
-	{
-		door3Pos.y -= 0.001;
-	}
-	if (KeyX.pressed())
-	{
-		door3Pos.z += 0.001;
-	}
-	if (KeyC.pressed())
-	{
-		door3Pos.z -= 0.001;
-	}
+
 
 	if (mouseDirectionX == 1)
 	{
@@ -383,7 +411,10 @@ void CameraTest::debug()
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
 	Print << U"[9][0]暖炉の明るさ（最小値）：" << fireplaceStrong;
-	Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong+fireplaceSin;
+	Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong + fireplaceSin;
+	Print << U"[Z][X]暖炉のR：" << fireplaceR;
+	Print << U"[C][V]暖炉のG：" << fireplaceG;
+	Print << U"[B][N]暖炉のB：" << fireplaceB;
 	Print << U"[T][Y]環境光の明るさ：" << globalAmbientColor;
 	Print << U"[O][P]太陽光の明るさ：" << sunColor;
 
@@ -1888,7 +1919,7 @@ void CameraTest::update()
 
 		// 点光源を設定する
 		constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
-		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ 1.0, 0.2, 0.0 }, Periodic::Sine0_1(2s)* fireplaceSin + fireplaceStrong);
+		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ fireplaceR, fireplaceG, fireplaceB }, Periodic::Sine0_1(2s)* fireplaceSin + fireplaceStrong);
 
 		const ScopedCustomShader3D shader(vs3D, ps3D);
 

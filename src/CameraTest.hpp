@@ -321,6 +321,9 @@ private:
 	// 暖炉の明るさ
 	float fireplaceStrong = 2.6;
 	float fireplaceSin = 0.6;
+	float fireplaceR = 1.0;
+	float fireplaceG = 0.4;
+	float fireplaceB = 0;
 
 	// 環境光
 	float globalAmbientColor = -0.1;
@@ -1149,6 +1152,5 @@ private:
 //	const float prologueMessageWait = 1;
 
 	// デバッグ用
-	double debugHeight = 0;
-
+	float debugHeight = 0;
 };
