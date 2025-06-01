@@ -91,6 +91,9 @@ private:
 	// リソースを読み込む
 	void loadResources();
 
+	// モデルの読み込み
+	void loadModels();
+
 	// ドアの数
 	static const int DoorNum = 4;
 
@@ -173,47 +176,89 @@ private:
 	//==============================
 
 	// モデルの読み込み
-	const Model model{ U"assets/models/Room/EV_Room01.obj" };
+	// const Model model{ U"assets/models/Room/EV_Room01.obj" };
 
-	// ドア
-	const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
+	// // ドア
+	// const Model modelDoor{ U"assets/models/Room/Gimmick_FenceDoor01.obj" };
 
-	// 錆びた鍵
-	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
+	// // 錆びた鍵
+	// const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
 
-	// 鉄製の鍵
-	const Model modelIronKey{ U"assets/models/Key/Gimmick_IronKey01.obj" };
+	// // 鉄製の鍵
+	// const Model modelIronKey{ U"assets/models/Key/Gimmick_IronKey01.obj" };
 
-	// パン
-	const Model modelBread{ U"assets/models/Bread/Gimmick_bread01.obj" };
+	// // パン
+	// const Model modelBread{ U"assets/models/Bread/Gimmick_bread01.obj" };
 
-	// 火かき棒
-	const Model modelPoker{ U"assets/models/Poker/Gimmick_Poker01.obj" };
+	// // 火かき棒
+	// const Model modelPoker{ U"assets/models/Poker/Gimmick_Poker01.obj" };
 
-	// 引き出し
-	const Model modelDrawerChain{ U"assets/models/Drawer/Gimmick_Drawer01_Chain.obj" };
-	const Model modelDrawerEye{ U"assets/models/Drawer/Gimmick_Drawer01_Eye.obj" };
-	const Model modelDrawerFeather{ U"assets/models/Drawer/Gimmick_Drawer01_Feather.obj" };
-	const Model modelDrawerFlower{ U"assets/models/Drawer/Gimmick_Drawer01_Flower.obj" };
-	const Model modelDrawerNon{ U"assets/models/Drawer/Gimmick_Drawer01_Non.obj" };
-	const Model modelDrawerSnake{ U"assets/models/Drawer/Gimmick_Drawer01_Snake.obj" };
-	const Model modelShelf{ U"assets/models/Drawer/Gimmick_Shelf01.obj" };
+	// // 引き出し
+	// const Model modelDrawerChain{ U"assets/models/Drawer/Gimmick_Drawer01_Chain.obj" };
+	// const Model modelDrawerEye{ U"assets/models/Drawer/Gimmick_Drawer01_Eye.obj" };
+	// const Model modelDrawerFeather{ U"assets/models/Drawer/Gimmick_Drawer01_Feather.obj" };
+	// const Model modelDrawerFlower{ U"assets/models/Drawer/Gimmick_Drawer01_Flower.obj" };
+	// const Model modelDrawerNon{ U"assets/models/Drawer/Gimmick_Drawer01_Non.obj" };
+	// const Model modelDrawerSnake{ U"assets/models/Drawer/Gimmick_Drawer01_Snake.obj" };
+	// const Model modelShelf{ U"assets/models/Drawer/Gimmick_Shelf01.obj" };
 
-	// ビックリマーク
-	const Model modelExclamationMark{ U"assets/models/ExclamationMark/ExclamationMark.obj" };
+	// // ビックリマーク
+	// const Model modelExclamationMark{ U"assets/models/ExclamationMark/ExclamationMark.obj" };
 
-	// 羊皮紙
-	const Model modelParchment{ U"assets/models/Parchment/Gimmick_Parchment01.obj" };
+	// // 羊皮紙
+	// const Model modelParchment{ U"assets/models/Parchment/Gimmick_Parchment01.obj" };
 
-	// ハンガー
-	const Model modelHanger{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
+	// // ハンガー
+	// const Model modelHanger{ U"assets/models/Hangar/Gimmick_Hangar01.obj" };
 	
-	// 汚れた布
-	const Model modelDirtyCloth{ U"assets/models/Cloth/Gimmick_Cloth01.obj" };
+	// // 汚れた布
+	// const Model modelDirtyCloth{ U"assets/models/Cloth/Gimmick_Cloth01.obj" };
 
-	// 手記
-	const Model modelMemo{ U"assets/models/Memo/memo.obj" };
+	// // 手記
+	// const Model modelMemo{ U"assets/models/Memo/memo.obj" };
 
+	// モデルのpath
+	const String modelPath = U"assets/models/Room/EV_Room01.obj";
+	const String modelDoorPath = U"assets/models/Room/Gimmick_FenceDoor01.obj";
+	const String modelKeyPath = U"assets/models/Key/Gimmick_RustedKey01.obj";
+	const String modelIronKeyPath = U"assets/models/Key/Gimmick_IronKey01.obj";
+	const String modelBreadPath = U"assets/models/Bread/Gimmick_bread01.obj";
+	const String modelPokerPath = U"assets/models/Poker/Gimmick_Poker01.obj";
+	const String modelDrawerChainPath = U"assets/models/Drawer/Gimmick_Drawer01_Chain.obj";
+	const String modelDrawerEyePath = U"assets/models/Drawer/Gimmick_Drawer01_Eye.obj";
+	const String modelDrawerFeatherPath = U"assets/models/Drawer/Gimmick_Drawer01_Feather.obj";
+	const String modelDrawerFlowerPath = U"assets/models/Drawer/Gimmick_Drawer01_Flower.obj";
+	const String modelDrawerNonPath = U"assets/models/Drawer/Gimmick_Drawer01_Non.obj";
+	const String modelDrawerSnakePath = U"assets/models/Drawer/Gimmick_Drawer01_Snake.obj";
+	const String modelShelfPath = U"assets/models/Drawer/Gimmick_Shelf01.obj";
+	const String modelExclamationMarkPath = U"assets/models/ExclamationMark/ExclamationMark.obj";
+	const String modelParchmentPath = U"assets/models/Parchment/Gimmick_Parchment01.obj";
+	const String modelHangerPath = U"assets/models/Hangar/Gimmick_Hangar01.obj";
+	const String modelDirtyClothPath = U"assets/models/Cloth/Gimmick_Cloth01.obj";
+	const String modelMemoPath = U"assets/models/Memo/memo.obj";
+
+	// modelの遅延ロード用ポインタ
+	std::unique_ptr<Model> model;
+	std::unique_ptr<Model> modelDoor;
+	std::unique_ptr<Model> modelKey;
+	std::unique_ptr<Model> modelIronKey;
+	std::unique_ptr<Model> modelBread;
+	std::unique_ptr<Model> modelPoker;
+	std::unique_ptr<Model> modelDrawerChain;
+	std::unique_ptr<Model> modelDrawerEye;
+	std::unique_ptr<Model> modelDrawerFeather;
+	std::unique_ptr<Model> modelDrawerFlower;
+	std::unique_ptr<Model> modelDrawerNon;
+	std::unique_ptr<Model> modelDrawerSnake;
+	std::unique_ptr<Model> modelShelf;
+	std::unique_ptr<Model> modelExclamationMark;
+	std::unique_ptr<Model> modelParchment;
+	std::unique_ptr<Model> modelHanger;
+	std::unique_ptr<Model> modelDirtyCloth;
+	std::unique_ptr<Model> modelMemo;
+
+	int modelLoadCount = 0;	// モデルの読み込みカウント
+	bool bModelLoaded = false;	// モデルが読み込まれたかどうかのフラグ
 
 	//==============================
 	// スケーリング
