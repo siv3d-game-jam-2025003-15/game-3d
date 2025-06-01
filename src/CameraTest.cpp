@@ -1267,7 +1267,8 @@ void CameraTest::update()
 			{
 				// 見ている
 				bLockon = b;
-				message = 27;
+				message = 25;
+			//	message = 27;
 
 			//	bBarrel3Lockon = true;
 			}
