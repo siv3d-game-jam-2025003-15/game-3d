@@ -2361,12 +2361,16 @@ void CameraTest::update()
 
 				// TODO 鉄製の鍵のところで使う
 
+
+
+
+
 			}
 			else if (items[selectItem] == Parchment)
 			{
-				// 火が強くなった暖炉の近くで使う
-				if (bFireplaceStrongLockon)
-				{
+				// 火が強くなった暖炉の近くで使う（オミット）
+			//	if (bFireplaceStrongLockon)
+			//	{
 					// 暖炉で羊皮紙を使う 
 					items[selectItem] = ToastedParchment;
 
@@ -2375,7 +2379,7 @@ void CameraTest::update()
 					AudioAsset(U"GET").setVolume(1.0);
 					AudioAsset(U"GET").play();
 					bgmStopCount = 4.00;
-				}
+			//	}
 			}
 			else if (items[selectItem] == ToastedParchment)
 			{

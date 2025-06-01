@@ -671,8 +671,8 @@ private:
 	// 火の弱い暖炉の近くにいる
 	bool bFireplaceWeakLockon = false;
 
-	// 火の強い暖炉の近くにいる
-	bool bFireplaceStrongLockon = false;
+	// 火の強い暖炉の近くにいる（オミット）
+//	bool bFireplaceStrongLockon = false;
 
 	const Font& boldFont = FontAsset(U"Bold");
 
