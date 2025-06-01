@@ -915,7 +915,7 @@ void CameraTest::update()
 		}
 
 		// ドア
-		if (!bLockon)
+		if (!bLockon && bDoorOpen[0] == false)
 		{
 			// 座標の調整
 			Vec3 temp = doorPos;
@@ -962,7 +962,7 @@ void CameraTest::update()
 		}
 
 		// ドア２
-		if (!bLockon)
+		if (!bLockon && bDoorOpen[1] == false)
 		{
 			// 座標の調整
 			Vec3 temp = door2Pos;
