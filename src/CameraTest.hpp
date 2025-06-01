@@ -182,7 +182,7 @@ private:
 	const Model modelKey{ U"assets/models/Key/Gimmick_RustedKey01.obj" };
 
 	// 鉄製の鍵
-	const Model modelIronKey{ U"assets/models/Key/Gimmick_RustedKey02.obj" };
+	const Model modelIronKey{ U"assets/models/Key/Gimmick_IronKey01.obj" };
 
 	// パン
 	const Model modelBread{ U"assets/models/Bread/Gimmick_bread01.obj" };
