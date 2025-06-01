@@ -733,11 +733,6 @@ void CameraTest::update()
 	// アイテムのロックオンフラグ
 	bool bLockon = false;
 
-	if (!bModelLoaded){
-		loadModels();
-		return;
-	}
-
 	if (bStartPlaying == false)
 	{
 		// プロローグ中
@@ -2742,6 +2737,10 @@ void CameraTest::draw() const
 {
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
+
+	if (!bModelLoaded){
+		loadModels();
+	}
 
 	// プロローグ
 	if (bStartPlaying == false)
