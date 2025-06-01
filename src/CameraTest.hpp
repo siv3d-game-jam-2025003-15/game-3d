@@ -863,15 +863,18 @@ private:
 		U"この模様…何を意味しているのだろうか？",	// 34
 		U"",	// 34
 
-		U"",	// 35
+		// プロローグ用
+		U"　　　　壁は冷たい石。窓もない。　　　　",	// 35
 		U"",	// 35
 		U"",	// 35
 
-		U"",	// 36
+		// プロローグ用
+		U"　　　　床には薄汚れたマットレス、隅にはバケツのようなものが置かれている。　　　　",	// 36
 		U"",	// 36
 		U"",	// 36
 
-		U"",	// 37
+		// プロローグ用
+		U"　　　　ここは……牢屋だろうか。　　　　",	// 37
 		U"",	// 37
 		U"",	// 37
 
@@ -1122,16 +1125,12 @@ private:
 		U"　　　　　　　　　　……　　　　　　　　　　",
 	};
 
-		//U"　　　　壁は冷たい石。窓もない。　　　　",
-		//U"　　　　床には薄汚れたマットレス、隅にはバケツのようなものが置かれている。　　　　",
-		//U"　　　　ここは……牢屋だろうか。　　　　",
-
-
 	float prologueCount = 0;
 	float messageCount = 0;
 	int   prologueLength = 0;
-	bool  bPrologueEnd = false;
-	bool bPrologueBGM = false;
+	bool  bPrologueMessageEnd = false;
+//	bool  bPrologue2End = false;
+//	bool bPrologueBGM = false;
 	bool bStartPlaying = false;
 
 	// デバッグ用

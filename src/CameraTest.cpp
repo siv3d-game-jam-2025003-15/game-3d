@@ -270,8 +270,9 @@ void CameraTest::debug()
 	if (KeyTab.down())
 	{
 		// プロローグスキップ
-		bPrologueEnd = true;
-		bPrologueBGM = true;
+		bPrologueMessageEnd = true;
+		//bPrologue2End = true;
+		//bPrologueBGM = true;
 		bStartPlaying = true;
 
 		prologueCount = 9999;
@@ -573,7 +574,10 @@ void CameraTest::update()
 #endif
 
 	// シナリオの進捗によってメッセージを変える
-	message = scenario;
+	if (bStartPlaying)
+	{
+		message = scenario;
+	}
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
 	auto controller = XInput(playerIndex);
@@ -2415,35 +2419,71 @@ void CameraTest::update()
 #endif
 	}
 
-	if (bPrologueEnd == false)
+	if (bPrologueMessageEnd == false)
 	{
 		// プロローグカウンター
 		prologueCount += deltaTime;
 
-		if (prologueCount > 29)
-		{
-			// 2倍速
-			prologueCount += deltaTime;
-		}
+		//if (prologueCount > 29)
+		//{
+		//	// 2倍速
+		//	prologueCount += deltaTime;
+		//}
 
-		if (prologueCount > 47)
+	//	if (prologueCount > 47)
+		if (prologueCount > 30)
 		{
-			bPrologueEnd = true;
+			bPrologueMessageEnd = true;
+
+			message = 35;
 		}
 	}
 
-	if (bPrologueEnd)
+	if (bPrologueMessageEnd == true && bStartPlaying == false)
 	{
-		// メッセージカウンター
+		// プロローグカウンター2
+		
+		// 2倍速
+	//	prologueCount += (deltaTime * 2);
 		messageCount += deltaTime;
 
-		if (messageCount > 5)
+		Print << U"message*MessagePatternMax=" << message * MessagePatternMax;
+		Print << U"Text[message*MessagePatternMax].size()=" << Text[message * MessagePatternMax].size();
+		Print << U"message=" << message;
+
+		if (message == 35 && messageCount > Text[message*MessagePatternMax].size() / 10 + 1)
 		{
-			bPrologueBGM = true;
+			message = 36;
+			messageCount = 0;
+		}
+		else if (message == 36 && messageCount > Text[message * MessagePatternMax].size() / 10 + 1)
+		{
+			message = 37;
+			messageCount = 0;
+		}
+		else if (message == 37 && messageCount > Text[message * MessagePatternMax].size() / 10 + 1)
+		{
+			message = 0;
+			messageCount = 0;
+		}
+		else if (message == 0 && messageCount > Text[message * MessagePatternMax].size() / 10 + 1)
+		{
+			bStartPlaying = true;
 		}
 	}
 
-	if (bPrologueBGM)
+	//if (bPrologue2End)
+	//{
+	//	// メッセージカウンター
+	//	messageCount += deltaTime;
+
+	//	if (messageCount > 5)
+	//	{
+	//		bPrologueBGM = true;
+	//	}
+	//}
+
+	if (bStartPlaying)
 	{
 		// 止まっているBGMを再度鳴らす
 		{
@@ -2468,10 +2508,10 @@ void CameraTest::update()
 		}
 	}
 
-	if (bPrologueBGM && messageCount > 8)
-	{
-		bStartPlaying = true;
-	}
+	//if (bPrologueBGM && messageCount > 0)
+	//{
+	//	bStartPlaying = true;
+	//}
 
 	// 経過時間を取得
 	const double frameTime = stopwatch.sF();
@@ -2490,23 +2530,17 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
-	float prologueBGAlpha = 29 - prologueCount;
-	if (prologueBGAlpha > 1)
-	{
-		prologueBGAlpha = 1;
-	}
-
-	float prologueTextAlpha = 8 - messageCount;
-	if (prologueTextAlpha > 1)
-	{
-		prologueTextAlpha = 1;
-	}
-
 	// プロローグ
-	if (bPrologueEnd == false || messageCount < 10)
+	if (bStartPlaying == false)
 	{
+		float prologueAlpha = 29 - prologueCount;
+		if (prologueAlpha > 1)
+		{
+			prologueAlpha = 1;
+		}
+
 		// 画面全体を黒で描画
-		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueBGAlpha });
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
 
 		// TODO 共通化する
 		double lineSpacing = 96; // 行間（フォントサイズより少し大きめ）
@@ -2551,7 +2585,7 @@ void CameraTest::draw() const
 			boldFont(tmp).drawAt(
 				28,
 				{ x, y },
-				ColorF{ 1, 1, 1, prologueTextAlpha }
+				ColorF{ 1, 1, 1, prologueAlpha }
 			);
 
 			// 半透明文字
