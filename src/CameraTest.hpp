@@ -677,6 +677,9 @@ private:
 	// 鉄製の鍵の前にいる
 	bool bIronKeyLockon = false;
 
+	// 最初の部屋のドアの前にいる
+	bool bDoorLockon = false;
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数

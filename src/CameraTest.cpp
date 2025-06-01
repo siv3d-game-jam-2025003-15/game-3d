@@ -109,6 +109,10 @@ void CameraTest::loadResources()
 	AudioAsset(U"GET").play();
 	AudioAsset(U"GET").stop();
 
+	AudioAsset(U"牢屋の扉を開ける").setVolume(0.0);
+	AudioAsset(U"牢屋の扉を開ける").play();
+	AudioAsset(U"GET").stop();
+
 	// 実際に使用して初回ローディングを済ませる
 	inventorySprite.draw(0, 0);
 	breadMiniSprite.draw(0, 0);
@@ -920,32 +924,41 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z += 0.2;
 
-			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, 1, bWireKey);
+			auto [a, b, c] = doorController.update(temp, camera, m_eyePosition, ray, markPosition, -1, false);
 			// TODO インベントリから開ける
-			if (a == true && bDoorOpen[0] == false && bWireKey)
-			{
-				// ドアを開いた
-				bDoorOpen[0] = true;
-			//	toDoorRotY = 270_deg;	// 回転で開ける
-			//	toDoorPosX = -0.11;	// 移動で開ける
-				toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
-				bgmStopCount = c;
+			//if (a == true && bDoorOpen[0] == false && bWireKey)
+			//{
+			//	// ドアを開いた
+			//	bDoorOpen[0] = true;
+			////	toDoorRotY = 270_deg;	// 回転で開ける
+			////	toDoorPosX = -0.11;	// 移動で開ける
+			//	toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
+			//	bgmStopCount = c;
 
-				scenario = 6;
-			}
+			//	scenario = 6;
+			//}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
-				if (bWireKey)
-				{
-					message = 20;
-				}
-				else
-				{
+			//	if (bWireKey)
+			//	{
+			//		message = 20;
+			//	}
+			//	else
+			//	{
 					message = 10;
-				}
+			//	}
+				bDoorLockon = true;
 			}
+			else
+			{
+				bDoorLockon = false;
+			}
+		}
+		else
+		{
+			bDoorLockon = false;
 		}
 
 		// ドア２
@@ -2350,6 +2363,27 @@ void CameraTest::update()
 					bgmStopCount = 4.00;
 
 					scenario = 5;
+				}
+			}
+			else if (items[selectItem] == WireKey)
+			{
+				if (bDoorLockon)
+				{
+					// ドアの前で使う
+
+					// ドアを開いた
+					bDoorOpen[0] = true;
+					toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
+					scenario = 6;
+
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
+					AudioAsset(U"牢屋の扉を開ける").play();
+
+					bgmStopCount = 4.00;
+
+					inventoryOnOff();
 				}
 			}
 			else if (items[selectItem] == Poker)
