@@ -2490,17 +2490,23 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
-	float prologueAlpha = 8 - messageCount;
-	if (prologueAlpha > 1)
+	float prologueBGAlpha = 29 - prologueCount;
+	if (prologueBGAlpha > 1)
 	{
-		prologueAlpha = 1;
+		prologueBGAlpha = 1;
+	}
+
+	float prologueTextAlpha = 8 - messageCount;
+	if (prologueTextAlpha > 1)
+	{
+		prologueTextAlpha = 1;
 	}
 
 	// プロローグ
 	if (bPrologueEnd == false || messageCount < 10)
 	{
 		// 画面全体を黒で描画
-		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueAlpha });
+		Rect{ 0, 0, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, prologueBGAlpha });
 
 		// TODO 共通化する
 		double lineSpacing = 96; // 行間（フォントサイズより少し大きめ）
@@ -2519,7 +2525,8 @@ void CameraTest::draw() const
 			}
 
 			double x = center.x;
-			double y = center.y + lineSpacing * (i - (int)prologueText.size() / 2) + 38;	// TODO 38は高さ調整のため
+		//	double y = center.y + lineSpacing * (i - (int)prologueText.size() / 2) + 38;	// TODO 38は高さ調整のため
+			double y = center.y + lineSpacing * (i - (int)prologueText.size() / 2);
 
 			int num = 0;
 			int sub = 0;
@@ -2544,7 +2551,7 @@ void CameraTest::draw() const
 			boldFont(tmp).drawAt(
 				28,
 				{ x, y },
-				ColorF{ 1, 1, 1, prologueAlpha }
+				ColorF{ 1, 1, 1, prologueTextAlpha }
 			);
 
 			// 半透明文字
