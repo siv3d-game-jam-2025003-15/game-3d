@@ -1165,25 +1165,26 @@ void CameraTest::update()
 		}
 
 		// 暖炉（火が強い）
-		if (!bLockon && bFireplaceStrong)
-		{
-			auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, markPosition, -1, false);
-			if (b)
-			{
-				// 見ている
-				bLockon = b;
-				message = 21;
-				bFireplaceStrongLockon = true;
-			}
-			else
-			{
-				bFireplaceStrongLockon = false;
-			}
-		}
-		else
-		{
-			bFireplaceStrongLockon = false;
-		}
+		// オミット
+		//if (!bLockon && bFireplaceStrong)
+		//{
+		//	auto [a, b, c] = fireplaceStrongController.update(fireplacePos, camera, m_eyePosition, ray, markPosition, -1, false);
+		//	if (b)
+		//	{
+		//		// 見ている
+		//		bLockon = b;
+		//		message = 21;
+		//		bFireplaceStrongLockon = true;
+		//	}
+		//	else
+		//	{
+		//		bFireplaceStrongLockon = false;
+		//	}
+		//}
+		//else
+		//{
+		//	bFireplaceStrongLockon = false;
+		//}
 
 		// ハンガー
 		if (!bLockon && bHangerHave == false)
@@ -2345,17 +2346,21 @@ void CameraTest::update()
 			else if (items[selectItem] == Poker)
 			{
 				// 火が弱い暖炉の近くで使う
-				if (bFireplaceWeakLockon)
-				{
-					// 暖炉の火を強くする
-					bFireplaceStrong = true;
+				// オミット
+				//if (bFireplaceWeakLockon)
+				//{
+				//	// 暖炉の火を強くする
+				//	bFireplaceStrong = true;
 
-					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"GET").setVolume(1.0);
-					AudioAsset(U"GET").play();
-					bgmStopCount = 4.00;
-				}
+				//	// SEを鳴らす
+				//	AudioAsset(U"BGM").stop();
+				//	AudioAsset(U"GET").setVolume(1.0);
+				//	AudioAsset(U"GET").play();
+				//	bgmStopCount = 4.00;
+				//}
+
+				// TODO 鉄製の鍵のところで使う
+
 			}
 			else if (items[selectItem] == Parchment)
 			{
