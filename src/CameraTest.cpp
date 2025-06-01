@@ -2431,7 +2431,7 @@ void CameraTest::update()
 		//}
 
 	//	if (prologueCount > 47)
-		if (prologueCount > 30)
+		if (prologueCount > prologueTiming)
 		{
 			bPrologueMessageEnd = true;
 
@@ -2451,22 +2451,22 @@ void CameraTest::update()
 		Print << U"Text[message*MessagePatternMax].size()=" << Text[message * MessagePatternMax].size();
 		Print << U"message=" << message;
 
-		if (message == 35 && messageCount > Text[message*MessagePatternMax].size() / 10 + 1)
+		if (message == 35 && messageCount > Text[message*MessagePatternMax].size() / MessageSpeed)
 		{
 			message = 36;
 			messageCount = 0;
 		}
-		else if (message == 36 && messageCount > Text[message * MessagePatternMax].size() / 10 + 1)
+		else if (message == 36 && messageCount > Text[message * MessagePatternMax].size() / MessageSpeed)
 		{
 			message = 37;
 			messageCount = 0;
 		}
-		else if (message == 37 && messageCount > Text[message * MessagePatternMax].size() / 10 + 1)
+		else if (message == 37 && messageCount > Text[message * MessagePatternMax].size() / MessageSpeed)
 		{
 			message = 0;
 			messageCount = 0;
 		}
-		else if (message == 0 && messageCount > Text[message * MessagePatternMax].size() / 10 + 1)
+		else if (message == 0 && messageCount > Text[message * MessagePatternMax].size() / MessageSpeed)
 		{
 			bStartPlaying = true;
 		}
@@ -2533,7 +2533,7 @@ void CameraTest::draw() const
 	// プロローグ
 	if (bStartPlaying == false)
 	{
-		float prologueAlpha = 29 - prologueCount;
+		float prologueAlpha = prologueTiming - prologueCount;
 		if (prologueAlpha > 1)
 		{
 			prologueAlpha = 1;
@@ -2615,10 +2615,23 @@ void CameraTest::draw() const
 		int m = message * MessagePatternMax + messagePattern;
 
 		// 今、表示するための文字数
-		int messageIndex = messageCount * 10;
+		int messageIndex = messageCount * MessageSpeed;
 
 		// テキストのアルファ値
-		float a = messageCount * 10 - (float)messageIndex;
+		float a = messageCount * MessageSpeed - (float)messageIndex;
+
+		// フェードアウト用のアルファ
+		float fadeout = 1;
+		
+		if (bStartPlaying == false && message != 0)
+		{
+			fadeout = (float)Text[m].size() - messageCount * MessageSpeed;
+			fadeout /= 5;	// ゆっくりにしたい
+			if (fadeout > 1)
+			{
+				fadeout = 1;
+			}
+		}
 
 		// ここでのチェックは不要
 		//if (Text[m].isEmpty())
@@ -2657,7 +2670,7 @@ void CameraTest::draw() const
 		boldFont(tmp).drawAt(
 			28,
 			{ x, y },
-			ColorF{ 1, 1, 1, 1 }
+			ColorF{ 1, 1, 1, fadeout }
 		);
 
 		// 半透明文字
@@ -2704,8 +2717,6 @@ void CameraTest::draw() const
 				ColorF{ 1, 1, 1, 1 }
 			);
 		}
-
-
 	}
 
 	if (
