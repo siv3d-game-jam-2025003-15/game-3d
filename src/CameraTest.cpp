@@ -970,21 +970,30 @@ void CameraTest::update()
 			temp.y += 1.2;
 			temp.z -= 0.2;
 
-			auto [a, b, c] = door2Controller.update(temp, camera, m_eyePosition, ray, markPosition, 1, bIronKeyHave);	
+			auto [a, b, c] = door2Controller.update(temp, camera, m_eyePosition, ray, markPosition, -1, false);	
 			// TODO インベントリから開ける
-			if (a == true && bDoorOpen[1] == false)
-			{
-				// ドアを開いた
-				bDoorOpen[1] = true;
-				toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
-				bgmStopCount = c;
-			}
+			//if (a == true && bDoorOpen[1] == false)
+			//{
+			//	// ドアを開いた
+			//	bDoorOpen[1] = true;
+			//	toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
+			//	bgmStopCount = c;
+			//}
 			if (b)
 			{
 				// 見ている
 				bLockon = b;
 				message = 30;
+				bDoor2Lockon = true;
 			}
+			else
+			{
+				bDoor2Lockon = false;
+			}
+		}
+		else
+		{
+			bDoor2Lockon = false;
 		}
 
 		// ドア３（右上のドア）
@@ -2374,7 +2383,27 @@ void CameraTest::update()
 					// ドアを開いた
 					bDoorOpen[0] = true;
 					toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
-					scenario = 6;
+				//	scenario = 6;
+
+					// SEを鳴らす
+					AudioAsset(U"BGM").stop();
+					AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
+					AudioAsset(U"牢屋の扉を開ける").play();
+
+					bgmStopCount = 4.00;
+
+					inventoryOnOff();
+				}
+			}
+			else if (items[selectItem] == IronKey)
+			{
+				if (bDoor2Lockon)
+				{
+					// ドア２の前で使う
+
+					// ドア２を開いた
+					bDoorOpen[1] = true;
+					toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
 
 					// SEを鳴らす
 					AudioAsset(U"BGM").stop();

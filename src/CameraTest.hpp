@@ -680,6 +680,9 @@ private:
 	// 最初の部屋のドアの前にいる
 	bool bDoorLockon = false;
 
+	// 左下の部屋のドアの前にいる
+	bool bDoor2Lockon = false;
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数
