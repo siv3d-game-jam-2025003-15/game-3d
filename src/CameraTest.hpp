@@ -235,7 +235,7 @@ private:
 	const String modelParchmentPath = U"assets/models/Parchment/Gimmick_Parchment01.obj";
 	const String modelHangerPath = U"assets/models/Hangar/Gimmick_Hangar01.obj";
 	const String modelDirtyClothPath = U"assets/models/Cloth/Gimmick_Cloth01.obj";
-	const String modelMemoPath = U"assets/models/Memo/memo.obj";
+	const String modelMemoPath = U"assets/models/Memo/Gimmick_Memo01.obj";
 
 	// modelの遅延ロード用ポインタ
 	std::unique_ptr<Model> model;
