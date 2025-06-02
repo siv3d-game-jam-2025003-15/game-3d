@@ -3,6 +3,7 @@
 #include "PhiController.hpp"
 #include "ObjectController.hpp"
 #include "Collision.hpp"
+#include <memory>
 
 // ポイントライトVer.1
 //struct Light
@@ -92,7 +93,7 @@ private:
 	void loadResources();
 
 	// モデルの読み込み
-	void loadModels();
+	void loadModels() const;
 
 	// ドアの数
 	static const int DoorNum = 4;
@@ -238,27 +239,27 @@ private:
 	const String modelMemoPath = U"assets/models/Memo/Gimmick_Memo01.obj";
 
 	// modelの遅延ロード用ポインタ
-	std::unique_ptr<Model> model;
-	std::unique_ptr<Model> modelDoor;
-	std::unique_ptr<Model> modelKey;
-	std::unique_ptr<Model> modelIronKey;
-	std::unique_ptr<Model> modelBread;
-	std::unique_ptr<Model> modelPoker;
-	std::unique_ptr<Model> modelDrawerChain;
-	std::unique_ptr<Model> modelDrawerEye;
-	std::unique_ptr<Model> modelDrawerFeather;
-	std::unique_ptr<Model> modelDrawerFlower;
-	std::unique_ptr<Model> modelDrawerNon;
-	std::unique_ptr<Model> modelDrawerSnake;
-	std::unique_ptr<Model> modelShelf;
-	std::unique_ptr<Model> modelExclamationMark;
-	std::unique_ptr<Model> modelParchment;
-	std::unique_ptr<Model> modelHanger;
-	std::unique_ptr<Model> modelDirtyCloth;
-	std::unique_ptr<Model> modelMemo;
+	mutable std::unique_ptr<Model> model;
+	mutable std::unique_ptr<Model> modelDoor;
+	mutable std::unique_ptr<Model> modelKey;
+	mutable std::unique_ptr<Model> modelIronKey;
+	mutable std::unique_ptr<Model> modelBread;
+	mutable std::unique_ptr<Model> modelPoker;
+	mutable std::unique_ptr<Model> modelDrawerChain;
+	mutable std::unique_ptr<Model> modelDrawerEye;
+	mutable std::unique_ptr<Model> modelDrawerFeather;
+	mutable std::unique_ptr<Model> modelDrawerFlower;
+	mutable std::unique_ptr<Model> modelDrawerNon;
+	mutable std::unique_ptr<Model> modelDrawerSnake;
+	mutable std::unique_ptr<Model> modelShelf;
+	mutable std::unique_ptr<Model> modelExclamationMark;
+	mutable std::unique_ptr<Model> modelParchment;
+	mutable std::unique_ptr<Model> modelHanger;
+	mutable std::unique_ptr<Model> modelDirtyCloth;
+	mutable std::unique_ptr<Model> modelMemo;
 
-	int modelLoadCount = 0;	// モデルの読み込みカウント
-	bool bModelLoaded = false;	// モデルが読み込まれたかどうかのフラグ
+	mutable int modelLoadCount = 0;	// モデルの読み込みカウント
+	mutable bool bModelLoaded = false;	// モデルが読み込まれたかどうかのフラグ
 
 	//==============================
 	// スケーリング

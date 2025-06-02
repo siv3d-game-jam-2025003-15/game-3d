@@ -164,85 +164,85 @@ void CameraTest::loadResources()
 }
 
 // モデルの読み込み
-void CameraTest::loadModels()
+void CameraTest::loadModels() const
 {
 	switch (modelLoadCount)
 	{
 	case 0:
-		modelPtr = std::make_unique<Model>(modelPath);
+		model = std::make_unique<Model>(modelPath);
 		break;
 	case 1:
-		modelDoorPtr = std::make_unique<Model>(modelDoorPath);
+		modelDoor = std::make_unique<Model>(modelDoorPath);
 		break;
 	case 2:
-		modelKeyPtr = std::make_unique<Model>(modelKeyPath);
+		modelKey = std::make_unique<Model>(modelKeyPath);
 		break;
 	case 3:
-		modelIronKeyPtr = std::make_unique<Model>(modelIronKeyPath);
+		modelIronKey = std::make_unique<Model>(modelIronKeyPath);
 		break;
 	case 4:
-		modelBreadPtr = std::make_unique<Model>(modelBreadPath);
+		modelBread = std::make_unique<Model>(modelBreadPath);
 		break;
 	case 5:
-		modelPokerPtr = std::make_unique<Model>(modelPokerPath);
+		modelPoker = std::make_unique<Model>(modelPokerPath);
 		break;
 	case 6:
-		modelDrawerChainPtr = std::make_unique<Model>(modelDrawerChainPath);
+		modelDrawerChain = std::make_unique<Model>(modelDrawerChainPath);
 		break;
 	case 7:
-		modelDrawerEyePtr = std::make_unique<Model>(modelDrawerEyePath);
+		modelDrawerEye = std::make_unique<Model>(modelDrawerEyePath);
 		break;
 	case 8:
-		modelDrawerFeatherPtr = std::make_unique<Model>(modelDrawerFeatherPath);
+		modelDrawerFeather = std::make_unique<Model>(modelDrawerFeatherPath);
 		break;
 	case 9:
-		modelDrawerFlowerPtr = std::make_unique<Model>(modelDrawerFlowerPath);
+		modelDrawerFlower = std::make_unique<Model>(modelDrawerFlowerPath);
 		break;
 	case 10:
-		modelDrawerNonPtr = std::make_unique<Model>(modelDrawerNonPath);
+		modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
 		break;
 	case 11:
-		modelDrawerSnakePtr = std::make_unique<Model>(modelDrawerSnakePath);
+		modelDrawerSnake = std::make_unique<Model>(modelDrawerSnakePath);
 		break;
 	case 12:
-		modelShelfPtr = std::make_unique<Model>(modelShelfPath);
+		modelShelf = std::make_unique<Model>(modelShelfPath);
 		break;
 	case 13:
-		modelExclamationMarkPtr = std::make_unique<Model>(modelExclamationMarkPath);
+		modelExclamationMark = std::make_unique<Model>(modelExclamationMarkPath);
 		break;
 	case 14:
-		modelParchmentPtr = std::make_unique<Model>(modelParchmentPath);
+		modelParchment = std::make_unique<Model>(modelParchmentPath);
 		break;
 	case 15:
-		modelHangerPtr = std::make_unique<Model>(modelHangerPath);
+		modelHanger = std::make_unique<Model>(modelHangerPath);
 		break;
 	case 16:
-		modelDirtyClothPtr = std::make_unique<Model>(modelDirtyClothPath);
+		modelDirtyCloth = std::make_unique<Model>(modelDirtyClothPath);
 		break;
 	case 17:
-		modelMemoPtr = std::make_unique<Model>(modelMemoPath);
+		modelMemo = std::make_unique<Model>(modelMemoPath);
 		break;
 	default:
 		// モデルに付随するテクスチャをアセット管理に登録
-		Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
-		isModelLoaded = true;
+		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDoor, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelKey, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelIronKey, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelBread, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelPoker, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDrawerChain, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDrawerEye, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDrawerFeather, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDrawerFlower, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDrawerSnake, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelShelf, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelExclamationMark, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelParchment, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelHanger, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelDirtyCloth, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelMemo, TextureDesc::MippedSRGB);
+		bModelLoaded = true;	// モデルが読み込まれた
 		break;
 	}
 	modelLoadCount++;
@@ -1661,7 +1661,7 @@ void CameraTest::update()
 
 		// モデルデータと判定する
 		bool checkCollision = false;
-		for (const auto& object : model.objects())
+		for (const auto& object : model->objects())
 		{
 			const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
 
@@ -1774,7 +1774,8 @@ void CameraTest::update()
 						toCameraPos.z + cameraNormal2.y / 2,
 					};
 
-					for (const auto& object2 : model.objects())
+					const auto& object2Temp = model->objects();
+					for (const auto& object2 : object2Temp)
 					{
 						const std::array<Vec3, 8> cube2 = object2.boundingBox.getCorners();
 
@@ -2018,7 +2019,7 @@ void CameraTest::update()
 		if (bDebugviewModel)
 		{
 			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-			model.draw();
+			model->draw();
 		}
 
 		// ドア
@@ -2026,7 +2027,7 @@ void CameraTest::update()
 			Transformer3D t{
 				Mat4x4::RotateY(doorRot.y).scaled(roomScale).translated(doorPos)
 			};
-			modelDoor.draw();
+			modelDoor->draw();
 		}
 
 		// ドア２
@@ -2034,7 +2035,7 @@ void CameraTest::update()
 			Transformer3D t{
 				Mat4x4::RotateY(door2Rot.y).scaled(roomScale).translated(door2Pos)
 			};
-			modelDoor.draw();
+			modelDoor->draw();
 		}
 
 		// パンの描画
@@ -2044,7 +2045,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(breadPos)
 			};
 
-			modelBread.draw();
+			modelBread->draw();
 		}
 
 		// 錆びた鍵の描画
@@ -2053,7 +2054,7 @@ void CameraTest::update()
 			Transformer3D t{
 				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(keyPos)
 			};
-			modelKey.draw();
+			modelKey->draw();
 		}
 
 		// 鉄製の鍵の描画
@@ -2062,7 +2063,7 @@ void CameraTest::update()
 			Transformer3D t{
 				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(IronkeyPos)
 			};
-			modelIronKey.draw();
+			modelIronKey->draw();
 		}
 
 		// 火かき棒の描画
@@ -2072,7 +2073,7 @@ void CameraTest::update()
 				Mat4x4::RotateZ(75_deg).scaled(0.01).translated(pokerPos)
 			};
 
-			modelPoker.draw();
+			modelPoker->draw();
 		}
 
 		// 引き出し（１段目）
@@ -2081,7 +2082,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*5, drawerPos.z})
 			};
 
-			modelDrawerNon.draw();
+			modelDrawerNon->draw();
 		}
 
 		// 引き出し（２段目）
@@ -2090,7 +2091,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*4, drawerPos.z})
 			};
 
-			modelDrawerFlower.draw();
+			modelDrawerFlower->draw();
 		}
 
 		// 引き出し（３段目）
@@ -2099,7 +2100,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*3, drawerPos.z})
 			};
 
-			modelDrawerChain.draw();
+			modelDrawerChain->draw();
 		}
 
 		// 引き出し（４段目）
@@ -2108,7 +2109,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*2, drawerPos.z})
 			};
 
-			modelDrawerFeather.draw();
+			modelDrawerFeather->draw();
 
 		}
 
@@ -2118,7 +2119,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06+0.16, drawerPos.z})
 			};
 
-			modelDrawerSnake.draw();
+			modelDrawerSnake->draw();
 		}
 
 		// 引き出し（６段目）
@@ -2127,7 +2128,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y+ 0.06, drawerPos.z})
 			};
 
-			modelDrawerEye.draw();
+			modelDrawerEye->draw();
 		}
 
 		// 引き出し
@@ -2136,7 +2137,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerPos)
 			};
 
-			modelShelf.draw();
+			modelShelf->draw();
 		}
 
 		// ビックリマーク
@@ -2163,7 +2164,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(parchmentPos)
 			};
 
-			modelParchment.draw();
+			modelParchment->draw();
 		}
 
 		// ハンガーの描画
@@ -2173,7 +2174,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangerPos)
 			};
 
-			modelHanger.draw();
+			modelHanger->draw();
 		}
 
 		// 汚れた布の描画
@@ -2183,7 +2184,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.01).translated(dirtyClothPos)
 			};
 
-			modelDirtyCloth.draw();
+			modelDirtyCloth->draw();
 		}
 
 		// 汚れた布の描画
@@ -2193,7 +2194,7 @@ void CameraTest::update()
 				Mat4x4::RotateY(0_deg).scaled(0.1).translated(memoPos)
 			};
 
-			modelMemo.draw();
+			modelMemo->draw();
 		}
 
 		// デバッグ表示
@@ -2202,7 +2203,8 @@ void CameraTest::update()
 			// モデルのワイヤーフレーム表示
 			{
 				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-				for (const auto& object : model.objects())
+				const auto& objectTmp = model->objects();
+				for (const auto& object : objectTmp)
 				{
 					if (bDebugViewFrame)
 					{
@@ -2289,7 +2291,7 @@ void CameraTest::update()
 		if (bDebugViewCollision)
 		{
 			Print << U"m_focusPosition" << camera.getFocusPosition();
-			modelExclamationMark.draw(camera.getFocusPosition());
+			modelExclamationMark->draw(camera.getFocusPosition());
 		}
 #endif
 	}
