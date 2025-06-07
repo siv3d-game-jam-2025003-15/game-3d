@@ -111,7 +111,7 @@ void CameraTest::loadResources()
 
 	AudioAsset(U"牢屋の扉を開ける").setVolume(0.0);
 	AudioAsset(U"牢屋の扉を開ける").play();
-	AudioAsset(U"GET").stop();
+	AudioAsset(U"牢屋の扉を開ける").stop();
 
 	// 実際に使用して初回ローディングを済ませる
 //	inventorySprite.draw(0, 0);
@@ -2470,10 +2470,11 @@ void CameraTest::update()
 				scenario = 1;
 
 				// SEを鳴らす
-				AudioAsset(U"BGM").stop();
-				AudioAsset(U"GET").setVolume(1.0);
-				AudioAsset(U"GET").play();
-				bgmStopCount = 4.00;
+				playSE(U"GET");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"GET").setVolume(1.0);
+				//AudioAsset(U"GET").play();
+				//bgmStopCount = 4.00;
 			}
 			else if (items[selectItem] == Memo)
 			{
@@ -2494,10 +2495,11 @@ void CameraTest::update()
 					bWireKey = true;
 
 					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"GET").setVolume(1.0);
-					AudioAsset(U"GET").play();
-					bgmStopCount = 4.00;
+					playSE(U"GET");
+					//AudioAsset(U"BGM").stop();
+					//AudioAsset(U"GET").setVolume(1.0);
+					//AudioAsset(U"GET").play();
+					//bgmStopCount = 4.00;
 
 					scenario = 5;
 				}
@@ -2514,11 +2516,11 @@ void CameraTest::update()
 				//	scenario = 6;
 
 					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
-					AudioAsset(U"牢屋の扉を開ける").play();
-
-					bgmStopCount = 4.00;
+					playSE(U"牢屋の扉を開ける");
+					//AudioAsset(U"BGM").stop();
+					//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
+					//AudioAsset(U"牢屋の扉を開ける").play();
+					//bgmStopCount = 4.00;
 
 					inventoryOnOff();
 				}
@@ -2534,11 +2536,11 @@ void CameraTest::update()
 					toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
 
 					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
-					AudioAsset(U"牢屋の扉を開ける").play();
-
-					bgmStopCount = 4.00;
+					playSE(U"牢屋の扉を開ける");
+					//AudioAsset(U"BGM").stop();
+					//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
+					//AudioAsset(U"牢屋の扉を開ける").play();
+					//bgmStopCount = 4.00;
 
 					inventoryOnOff();
 				}
@@ -2569,10 +2571,11 @@ void CameraTest::update()
 					inventoryOnOff();
 
 					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"GET").setVolume(1.0);
-					AudioAsset(U"GET").play();
-					bgmStopCount = 4.00;
+					playSE(U"GET");
+					//AudioAsset(U"BGM").stop();
+					//AudioAsset(U"GET").setVolume(1.0);
+					//AudioAsset(U"GET").play();
+					//bgmStopCount = 4.00;
 				}
 			}
 			else if (items[selectItem] == Parchment)
@@ -2585,10 +2588,11 @@ void CameraTest::update()
 					items[selectItem] = ToastedParchment;
 
 					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"GET").setVolume(1.0);
-					AudioAsset(U"GET").play();
-					bgmStopCount = 4.00;
+					playSE(U"GET");
+					//AudioAsset(U"BGM").stop();
+					//AudioAsset(U"GET").setVolume(1.0);
+					//AudioAsset(U"GET").play();
+					//bgmStopCount = 4.00;
 				}
 			}
 			else if (items[selectItem] == ToastedParchment)
@@ -2606,10 +2610,11 @@ void CameraTest::update()
 					items[selectItem] = Cloth;
 
 					// SEを鳴らす
-					AudioAsset(U"BGM").stop();
-					AudioAsset(U"GET").setVolume(1.0);
-					AudioAsset(U"GET").play();
-					bgmStopCount = 4.00;
+					playSE(U"GET");
+					//AudioAsset(U"BGM").stop();
+					//AudioAsset(U"GET").setVolume(1.0);
+					//AudioAsset(U"GET").play();
+					//bgmStopCount = 4.00;
 				}
 			}
 			else if (items[selectItem] == Cloth)
@@ -3032,4 +3037,12 @@ void CameraTest::draw() const
 		}
 	}
 
+}
+
+void CameraTest::playSE(String SE)
+{
+	AudioAsset(U"BGM").stop();
+	AudioAsset(SE).setVolume(1.0);
+	AudioAsset(SE).play();
+	bgmStopCount = 4.00;
 }

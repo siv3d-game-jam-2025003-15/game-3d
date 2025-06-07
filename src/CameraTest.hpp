@@ -1194,6 +1194,5 @@ private:
 	const float MessageSpeed = 10;
 //	const float prologueMessageWait = 1;
 
-	// デバッグ用
-	float debugHeight = 0;
+	void playSE(String SE);
 };
