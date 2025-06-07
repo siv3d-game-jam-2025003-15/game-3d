@@ -598,8 +598,7 @@ private:
 	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
 	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
 	const Texture pokerSprite{ U"assets/sprites/UI_Poker01.png" };
-	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
-	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
+	const Texture parchmentSprite{ U"assets/sprites/UI_Parchment01.png" };
 	const Texture hangerSprite{ U"assets/sprites/UI_Hanger01.png" };
 	const Texture wireKeySprite{ U"assets/sprites/UI_WireKey01.png" };
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };

@@ -590,7 +590,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case Parchment:
 		// 羊皮紙
-		parchmentMiniSprite.draw(x, y);
+		parchmentSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case Wire:
 		// 針金
@@ -645,7 +645,7 @@ void CameraTest::drawBigItem(
 		break;
 	case Parchment:
 		// 羊皮紙
-		parchmentBigSprite.draw(x, y);
+		parchmentSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case Wire:
 		// ハンガー
