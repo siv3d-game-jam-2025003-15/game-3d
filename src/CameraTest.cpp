@@ -873,6 +873,7 @@ void CameraTest::update()
 				isWalk = true;
 			}
 
+#ifdef _DEBUG
 			if (KeyR.pressed())
 			{
 				toCameraPos.y += scaledSpeed;
@@ -881,6 +882,7 @@ void CameraTest::update()
 			{
 				toCameraPos.y -= scaledSpeed;
 			}
+#endif
 
 			if (isWalk)
 			{
