@@ -598,6 +598,8 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"door4Pos=" << door4Pos;
+	Print << U"bDrawerMode=" << bDrawerMode;
+	Print << U"bGoldKeyHave=" << bGoldKeyHave;
 
 #endif
 }
@@ -2486,7 +2488,7 @@ void CameraTest::viewInventory()
 				inventoryOnOff();
 
 				// ゲームクリア（仮）
-				changeScene(State::Title);
+				changeScene(State::ToBeContinued);
 			}
 		}
 		else if (items[selectItem] == Poker)
@@ -3478,7 +3480,7 @@ void CameraTest::lockon()
 		temp.y += 0.5;
 		temp.z -= 0.3;
 
-		auto [a, b, c, d] = memoController.update(
+		auto [a, b, c, d] = drawerController.update(
 			temp,
 			camera,
 			curCameraPosition,
@@ -3514,7 +3516,7 @@ void CameraTest::lockon()
 	// 引き出し
 	if (!bLockon && bDrawerMode)
 	{
-		auto [a, b, c, d] = memoController.update(
+		auto [a, b, c, d] = drawerController.update(
 			drawerPos[drawerIndex + 1],
 			camera,
 			curCameraPosition,
@@ -3527,7 +3529,8 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 38 + drawerIndex;
+		//	message = 38 + drawerIndex;
+			message = 38;
 		}
 
 		if (d)

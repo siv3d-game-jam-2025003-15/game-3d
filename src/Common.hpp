@@ -11,6 +11,7 @@ enum class State
     ModelView,
     Result,
     Stage,
+	ToBeContinued,
 };
 
 // 共有するデータ
