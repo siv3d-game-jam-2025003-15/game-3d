@@ -606,8 +606,7 @@ private:
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
 	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };
 	const Texture dirtyClothSprite{ U"assets/sprites/UI_Dirtycloth01.png" };
-	const Texture clothMiniSprite{ U"assets/sprites/Cloth_mini.png" };
-	const Texture clothBigSprite{ U"assets/sprites/Cloth_big.png" };
+	const Texture clothSprite{ U"assets/sprites/UI_Cloth01.png" };
 	const Texture ironKeyMiniSprite{ U"assets/sprites/iron_key_mini.png" };
 	const Texture ironKeyBigSprite{ U"assets/sprites/iron_key_big.png" };
 

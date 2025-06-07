@@ -602,7 +602,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case Cloth:
 		// 布
-		clothMiniSprite.draw(x, y);
+		clothSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
@@ -657,7 +657,7 @@ void CameraTest::drawBigItem(
 		break;
 	case Cloth:
 		// 布
-		clothBigSprite.draw(x, y);
+		clothSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
