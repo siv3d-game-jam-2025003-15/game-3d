@@ -1194,6 +1194,7 @@ private:
 	const float MessageSpeed = 10;
 //	const float prologueMessageWait = 1;
 
+	// SEを鳴らす
 	void playSE(String SE);
 
 	// コリジョンのデバッグ表示
