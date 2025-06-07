@@ -946,7 +946,7 @@ void CameraTest::update()
 			}
 		}
 
-		// オブジェクトを取ることができるか
+		// パン
 		if (!bLockon)
 		{
 			auto [a, b, c] = breadController.update(breadPos, camera, m_eyePosition, ray, markPosition, 0, true);
@@ -957,7 +957,7 @@ void CameraTest::update()
 				bBreadHave = a;
 				bgmStopCount = c;
 
-			//	scenario = 19;
+				scenario = 1;	// パンを取った後
 			}
 			if (b)
 			{
@@ -968,12 +968,8 @@ void CameraTest::update()
 
 		}
 
-		{
-			// アイテム１は手記
-		}
-
 		// 錆びた鍵
-		if (!bLockon && bRustedKeyHave == false)
+		if (!bLockon && bRustedKeyHave == false && bTutorial == false)
 		{
 			auto [a, b, c] = rustedKeyController.update(rustedKeyPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true)
@@ -982,10 +978,7 @@ void CameraTest::update()
 				items << RustedKey;
 				bRustedKeyHave = true;
 				bgmStopCount = c;
-				if (scenario == 1)	// パンを食べた後
-				{
-					scenario = 2;	// なし
-				}
+				scenario = 3;	// なし
 			}
 			if (b)
 			{
@@ -999,13 +992,6 @@ void CameraTest::update()
 		if (!bLockon && bIronKeyHave == false)
 		{
 			auto [a, b, c] = ironkeyController.update(IronkeyPos, camera, m_eyePosition, ray, markPosition, -1, false);
-			//if (a == true)
-			//{
-			//	// アイテムを取った
-			//	items << IronKey;
-			//	bIronKeyHave = true;
-			//	bgmStopCount = c;
-			//}
 			if (b)
 			{
 				// 見ている
@@ -1346,7 +1332,7 @@ void CameraTest::update()
 		//}
 
 		// ハンガー
-		if (!bLockon && bHangerHave == false)
+		if (!bLockon && bHangerHave == false && bTutorial == false)
 		{
 			auto [a, b, c] = hangerController.update(hangerPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true)
@@ -1354,6 +1340,8 @@ void CameraTest::update()
 				// ハンガーを取得
 				bHangerHave = true;
 				items << Hanger;
+
+				scenario = 3;	// なし
 			}
 			if (b)
 			{
@@ -1441,7 +1429,7 @@ void CameraTest::update()
 		}
 
 		// 手記
-		if (!bLockon && bMemoHave == false)
+		if (!bLockon && bMemoHave == false && bTutorial == false)
 		{
 			auto [a, b, c] = memoController.update(memoPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true)
@@ -1449,6 +1437,8 @@ void CameraTest::update()
 				// 手記を取得
 				bMemoHave = true;
 				items << Memo;
+
+				scenario = 3;	// なし
 			}
 			if (b)
 			{
@@ -2899,20 +2889,18 @@ void CameraTest::viewInventory()
 			items.remove_at(selectItem);
 
 			// シナリオを進める
-			scenario = 1;	// パンを食べた後
+			scenario = 2;	// パンを食べた後
 
 			// SEを鳴らす
 			playSE(U"GET");
+
+			// チュートリアル終了
+			bTutorial = false;
 		}
 		else if (items[selectItem] == Memo)
 		{
 			// 手記を使った
 			bMemo = true;
-
-			if (scenario == 1)	// パンを食べた後
-			{
-				scenario = 2;	// なし
-			}
 		}
 		else if (items[selectItem] == Hanger)
 		{
