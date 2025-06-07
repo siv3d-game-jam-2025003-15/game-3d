@@ -2230,34 +2230,27 @@ void CameraTest::viewInventory()
 		{
 			// 錆びた鍵
 
-			// 錆びた鍵→ハンガーを選択の流れですが、いったんオミット（ハンガーがなくなっても有効なため）
-			//if (synthesisIndex == -1)
-			//{
-			//	// カーソルを緑にする
-			//	synthesisIndex = selectItem;
-			//}
-			//else if (items[synthesisIndex] == RustedKey)
-			//{
-			//	// キャンセル
-			//	synthesisIndex = -1;
-			//}
-			//else if (items[synthesisIndex] == Hanger)
-			//{
-			//	// ハンガーを針金製の鍵にする
-			//	items[synthesisIndex] = WireKey;
+			if (synthesisIndex == -1)
+			{
+				// 何もしない
+			}
+			else if (items[synthesisIndex] == Hanger)
+			{
+				// ハンガーを針金製の鍵にする
+				items[synthesisIndex] = WireKey;
 
-			//	bWireKey = true;
+				bWireKey = true;
 
-			//	synthesisIndex = -1;	// 選択を解除
+				synthesisIndex = -1;	// 選択を解除
 
-			//	// SEを鳴らす
-			//	playSE(U"GET");
+				// SEを鳴らす
+				playSE(U"GET");
 
-			//	if (scenario == 1)	// パンを食べた後
-			//	{
-			//		scenario = 2;	// なし
-			//	}
-			//}
+				//if (scenario == 1)	// パンを食べた後
+				//{
+				//	scenario = 2;	// なし
+				//}
+			}
 		}
 		else if (items[selectItem] == Hanger)
 		{
@@ -2272,23 +2265,24 @@ void CameraTest::viewInventory()
 				// キャンセル
 				synthesisIndex = -1;
 			}
-			else if (items[synthesisIndex] == RustedKey)
-			{
-				// ハンガーを針金製の鍵にする
-				items[selectItem] = WireKey;
 
-				bWireKey = true;
+			//else if (items[synthesisIndex] == RustedKey)
+			//{
+			//	// ハンガーを針金製の鍵にする
+			//	items[selectItem] = WireKey;
 
-				synthesisIndex = -1;	// 選択を解除
+			//	bWireKey = true;
 
-				// SEを鳴らす
-				playSE(U"GET");
+			//	synthesisIndex = -1;	// 選択を解除
 
-				if (scenario == 1)	// パンを食べた後
-				{
-					scenario = 2;	// なし
-				}
-			}
+			//	// SEを鳴らす
+			//	playSE(U"GET");
+
+			//	if (scenario == 1)	// パンを食べた後
+			//	{
+			//		scenario = 2;	// なし
+			//	}
+			//}
 
 			// 錆びた鍵を持っているかどうか
 			//if (bRustedKeyHave)
@@ -2316,10 +2310,10 @@ void CameraTest::viewInventory()
 				bDoorOpen[0] = true;
 				toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
 				
-				if (scenario == 1)	// パンを食べた後
-				{
-					scenario = 2;	// なし
-				}
+				//if (scenario == 1)	// パンを食べた後
+				//{
+				//	scenario = 2;	// なし
+				//}
 
 				// SEを鳴らす
 				playSE(U"牢屋の扉を開ける");
