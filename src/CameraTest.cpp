@@ -2473,6 +2473,22 @@ void CameraTest::viewInventory()
 				inventoryOnOff();
 			}
 		}
+		else if (items[selectItem] == GoldKey)
+		{
+			if (bDoor3Lockon)
+			{
+				// ドア３の前で使う
+
+				// SEを鳴らす
+				playSE(U"牢屋の扉を開ける");
+			//	playSE(U"Cancellation");
+
+				inventoryOnOff();
+
+				// ゲームクリア（仮）
+				changeScene(State::Title);
+			}
+		}
 		else if (items[selectItem] == Poker)
 		{
 			// 鉄製の鍵のところで使う
@@ -2955,7 +2971,16 @@ void CameraTest::lockon()
 			// 見ている
 			bLockon = b;
 			message = 30;
+			bDoor3Lockon = true;
 		}
+		else
+		{
+			bDoor3Lockon = false;
+		}
+	}
+	else
+	{
+		bDoor3Lockon = false;
 	}
 
 	// ドア４（右上の部屋）

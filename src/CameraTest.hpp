@@ -745,6 +745,9 @@ private:
 	// 左下の部屋のドアの前にいる
 	bool bDoor2Lockon = false;
 
+	// 奥の部屋のドアの前にいる
+	bool bDoor3Lockon = false;
+
 	// 黄金の鍵を持っている
 	bool bGoldKeyHave = false;
 
