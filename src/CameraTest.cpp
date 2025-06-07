@@ -692,6 +692,9 @@ void CameraTest::inventoryOnOff()
 	bMemo = false;
 	bToastedParchmentRead = false;
 	bClothRead = false;
+
+	// 合成の選択を解除
+	synthesisIndex = -1;
 }
 
 void CameraTest::update()
@@ -2923,21 +2926,65 @@ void CameraTest::viewInventory()
 		else if (items[selectItem] == Memo)
 		{
 			// 手記を使った
-			bMemo = true;
+			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
+			{
+				bMemo = true;
+			}
+		}
+		else if (items[selectItem] == RustedKey)
+		{
+			// 錆びた鍵
+
+			// 錆びた鍵→ハンガーを選択の流れですが、いったんオミット（ハンガーがなくなっても有効なため）
+			//if (synthesisIndex == -1)
+			//{
+			//	// カーソルを緑にする
+			//	synthesisIndex = selectItem;
+			//}
+			//else if (items[synthesisIndex] == RustedKey)
+			//{
+			//	// キャンセル
+			//	synthesisIndex = -1;
+			//}
+			//else if (items[synthesisIndex] == Hanger)
+			//{
+			//	// ハンガーを針金製の鍵にする
+			//	items[synthesisIndex] = WireKey;
+
+			//	bWireKey = true;
+
+			//	synthesisIndex = -1;	// 選択を解除
+
+			//	// SEを鳴らす
+			//	playSE(U"GET");
+
+			//	if (scenario == 1)	// パンを食べた後
+			//	{
+			//		scenario = 2;	// なし
+			//	}
+			//}
 		}
 		else if (items[selectItem] == Hanger)
 		{
 			// ハンガー
-
-			// TODO カーソルを緑にしたい
-			synthesisIndex = selectItem;
-
-			// 錆びた鍵を持っているかどうか
-			if (bRustedKeyHave)
+			if (synthesisIndex == -1)
 			{
-				// 錆びた鍵を持っている状態で針金を使う
+				// カーソルを緑にする
+				synthesisIndex = selectItem;
+			}
+			else if (items[synthesisIndex] == Hanger)
+			{
+				// キャンセル
+				synthesisIndex = -1;
+			}
+			else if (items[synthesisIndex] == RustedKey)
+			{
+				// ハンガーを針金製の鍵にする
 				items[selectItem] = WireKey;
+
 				bWireKey = true;
+
+				synthesisIndex = -1;	// 選択を解除
 
 				// SEを鳴らす
 				playSE(U"GET");
@@ -2947,6 +2994,22 @@ void CameraTest::viewInventory()
 					scenario = 2;	// なし
 				}
 			}
+
+			// 錆びた鍵を持っているかどうか
+			//if (bRustedKeyHave)
+			//{
+			//	// 錆びた鍵を持っている状態で針金を使う
+			//	items[selectItem] = WireKey;
+			//	bWireKey = true;
+
+			//	// SEを鳴らす
+			//	playSE(U"GET");
+
+			//	if (scenario == 1)	// パンを食べた後
+			//	{
+			//		scenario = 2;	// なし
+			//	}
+			//}
 		}
 		else if (items[selectItem] == WireKey)
 		{
@@ -3016,7 +3079,11 @@ void CameraTest::viewInventory()
 		else if (items[selectItem] == ToastedParchment)
 		{
 			// 炙った羊皮紙を使った
-			bToastedParchmentRead = true;
+			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
+			{
+				bToastedParchmentRead = true;
+			}
+
 		}
 		else if (items[selectItem] == DirtyCloth)
 		{
@@ -3034,7 +3101,10 @@ void CameraTest::viewInventory()
 		else if (items[selectItem] == Cloth)
 		{
 			// 布を使った
-			bClothRead = true;
+			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
+			{
+				bClothRead = true;
+			}
 		}
 	}
 }
