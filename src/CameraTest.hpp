@@ -393,7 +393,8 @@ private:
 	Vec3 door3Pos{ 20, 0.9, -0.7 };	// 右上の部屋のドア
 
 	// 錆びた鍵の座標
-	Vec3 rustedKeyPos = { 3.7, 0.01, 3 };
+//	Vec3 rustedKeyPos = { 4, 0.26, 4.14 };
+	Vec3 rustedKeyPos = { 4.05, 0.16, 4.14 };
 
 	// 鉄製の鍵の座標
 	Vec3 IronkeyPos = { -0.48, 0.465, -4.80 };

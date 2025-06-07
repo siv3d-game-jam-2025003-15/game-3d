@@ -449,6 +449,33 @@ void CameraTest::debug()
 	//}
 
 
+	if (KeyZ.down())
+	{
+		rustedKeyPos.x += 0.01;
+	}
+	if (KeyX.down())
+	{
+		rustedKeyPos.x -= 0.01;
+	}
+
+	if (KeyC.down())
+	{
+		rustedKeyPos.y += 0.01;
+	}
+	if (KeyV.down())
+	{
+		rustedKeyPos.y -= 0.01;
+	}
+
+	if (KeyB.down())
+	{
+		rustedKeyPos.z += 0.01;
+	}
+	if (KeyN.down())
+	{
+		rustedKeyPos.z -= 0.01;
+	}
+
 
 	if (mouseDirectionX == 1)
 	{
@@ -547,9 +574,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"drawerIndex=" << drawerIndex;
-	Print << U"drawerOrder=" << drawerOrder;
-	Print << U"drawerCounter=" << drawerCounter;
+	Print << U"rustedKeyPos=" << rustedKeyPos;
 
 #endif
 }
@@ -2524,7 +2549,8 @@ void CameraTest::viewModel()
 	if (bRustedKeyHave == false)
 	{
 		Transformer3D t{
-			Mat4x4::RotateZ(0_deg).scaled(0.015).translated(rustedKeyPos)
+		//	Mat4x4::RotateZ(90_deg).scaled(0.015).translated(rustedKeyPos)
+			Mat4x4::RotateZ(180_deg).scaled(0.015).translated(rustedKeyPos)
 		};
 		modelRustedKey->draw();
 	}
@@ -2678,8 +2704,14 @@ void CameraTest::lockon()
 	// 錆びた鍵
 	if (!bLockon && bRustedKeyHave == false && bTutorial == false)
 	{
+		// 座標の調整
+		Vec3 temp = rustedKeyPos;
+		temp.x -= 0.12;
+		temp.y += 0.2;
+		temp.z += 0.0;
+
 		auto [a, b, c, d] = rustedKeyController.update(
-			rustedKeyPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray, 
@@ -3416,6 +3448,8 @@ void CameraTest::lockon()
 						items << Bread;	// デバッグ
 
 						bGoldKeyHave = true;
+
+						// TODO SE
 					}
 				}
 				else
