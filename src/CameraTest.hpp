@@ -594,8 +594,7 @@ private:
 	const Texture inventorySprite{ U"assets/sprites/BG_Inventory01.png" };
 	const Texture breadMiniSprite{ U"assets/sprites/bread_mini.png" };
 	const Texture breadBigSprite{ U"assets/sprites/bread_big.png" };
-	const Texture memoMiniSprite{ U"assets/sprites/memo_mini.png" };
-	const Texture memoBigSprite{ U"assets/sprites/memo_big.png" };
+	const Texture memoSprite{ U"assets/sprites/UI_notes01.png" };
 	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
 	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
 	const Texture pokerSprite{ U"assets/sprites/UI_Poker01.png" };

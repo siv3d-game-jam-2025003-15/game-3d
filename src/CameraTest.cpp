@@ -578,7 +578,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case Memo:
 		// 手記
-		memoMiniSprite.draw(x, y);
+		memoSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case Key:
 		// 錆びた鍵
@@ -633,7 +633,7 @@ void CameraTest::drawBigItem(
 		break;
 	case Memo:
 		// 手記
-		memoBigSprite.draw(x, y);
+		memoSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case Key:
 		// 錆びた鍵
