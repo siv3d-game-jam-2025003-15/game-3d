@@ -1215,4 +1215,8 @@ private:
 
 	// ロックオン
 	bool bLockon = false;
+
+	// オブジェクトのロックオン
+	void lockon();
+
 };

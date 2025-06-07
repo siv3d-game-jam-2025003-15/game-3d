@@ -13,7 +13,7 @@ public:
 		const Vec3& objPos,
 		const BasicCamera3D& camera,
 		const Vec3& eyePos,
-		Ray ray,
+	//	Ray ray,
 		Vec3& MarkPosition,
 		int bgmNo,
 		bool bHave

@@ -9,7 +9,7 @@ std::tuple<bool, bool, int> ObjectController::update(
 	const Vec3& objPos,
 	const BasicCamera3D& camera,
 	const Vec3& eyePos,
-	Ray ray,
+//	Ray ray,
 	Vec3& MarkPosition,
 	int bgmNo,
 	bool bHave	// 取ることができるかどうか
