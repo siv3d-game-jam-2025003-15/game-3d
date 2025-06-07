@@ -10,19 +10,14 @@ void Title::update()
 {
 	// ボタンの更新
 	{
-		//m_startTransition.update(m_startButton.mouseOver());
-		//m_rankingTransition.update(m_rankingButton.mouseOver());
+		// ゲーム終了ボタン
 		m_exitTransition.update(m_exitButton.mouseOver());
-		m_cameraTestTransition.update(m_cameraTestButton.mouseOver());
-        //m_modelViewTransition.update(m_modelViewButton.mouseOver());
-        //m_stageTransition.update(m_stageButton.mouseOver());
 
-		if (//m_startButton.mouseOver() 
-			m_cameraTestButton.mouseOver()
-		//|| m_rankingButton.mouseOver()
-		|| m_exitButton.mouseOver()
-        //|| m_modelViewButton.mouseOver()
-        //|| m_stageButton.mouseOver()
+		// ゲーム開始ボタン
+		m_cameraTestTransition.update(m_cameraTestButton.mouseOver());
+
+		if (m_cameraTestButton.mouseOver()
+		 || m_exitButton.mouseOver()
 		)
 		{
 			Cursor::RequestStyle(CursorStyle::Hand);
@@ -30,31 +25,19 @@ void Title::update()
 	}
 
 	// ボタンのクリック処理
-//	if (m_startButton.leftClicked()) // ゲームへ
-//	{
-//		changeScene(State::Game);
-//	}
-//	else if (m_rankingButton.leftClicked()) // ランキングへ
-//	{
-//		changeScene(State::Ranking);
-//	}
 	if (m_exitButton.leftClicked()) // 終了
 	{
 		System::Exit();
 	}
-	else if (m_cameraTestButton.leftClicked()) // カメラへ
+	else if (m_cameraTestButton.leftClicked()) // ゲーム開始
 	{
 		AudioAsset(U"牢屋の扉を閉める").play();
 		changeScene(State::CameraTest);
 	}
-    //else if (m_modelViewButton.leftClicked()) // modelviewへ
-    //{
-    //    changeScene(State::ModelView);
-    //}
-    //else if (m_stageButton.leftClicked())
-    //{
-    //    changeScene(State::Stage);
-    //}
+
+	// マウスオーバー
+	gamestartColor = mouseOver(gamestartColor, U"GAME START", m_cameraTestButton.center());
+	exitColor      = mouseOver(exitColor     , U"EXIT"      , m_exitButton.center());
 }
 
 void Title::draw() const
@@ -63,7 +46,6 @@ void Title::draw() const
 
 	// 背景
 	BG.draw(0, 0);
-//	BG.draw(1024, 0);
 
 	// タイトル描画
 	//FontAsset(U"TitleFont")(U"Siv3D脱出ゲーム")
@@ -71,22 +53,21 @@ void Title::draw() const
 
 	// ボタン描画
 	{
-		//m_startButton.draw(ColorF{ 1.0, m_startTransition.value() }).drawFrame(2);
-		m_cameraTestButton.draw(ColorF{ 1.0, m_cameraTestTransition.value() }).drawFrame(2);
-		//m_rankingButton.draw(ColorF{ 1.0, m_rankingTransition.value() }).drawFrame(2);
-		m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);
-		//m_modelViewButton.draw(ColorF{ 1.0, m_cameraTestTransition.value() }).drawFrame(2);
-        //m_stageButton.draw(ColorF{ 1.0, m_cameraTestTransition.value() }).drawFrame(2);
-        
+		// フォント
 		const Font& boldFont = FontAsset(U"Bold");
-		//boldFont(U"PLAY").drawAt(36, m_startButton.center(), ColorF{ 0.1 });
-		boldFont(U"PLAY").drawAt(36, m_cameraTestButton.center(), ColorF{ 0.1 });
-		//boldFont(U"RANKING").drawAt(36, m_rankingButton.center(), ColorF{ 0.1 });
-		boldFont(U"EXIT").drawAt(36, m_exitButton.center(), ColorF{ 0.1 });
-        //boldFont(U"MODEL VIEW").drawAt(36, m_modelViewButton.center(), ColorF{ 0.1 });
-        //boldFont(U"STAGE").drawAt(36, m_stageButton.center(), ColorF{ 0.1 });
+
+		// ゲーム開始ボタン（マウスオーバーの領域を描画）
+	//	m_cameraTestButton.draw(ColorF{ 1.0, m_cameraTestTransition.value() }).drawFrame(2);
+
+		// ゲーム終了ボタン（マウスオーバーの領域を描画）
+	//	m_exitButton.draw(ColorF{ 1.0, m_exitTransition.value() }).drawFrame(2);
+
+		boldFont(U"GAME START").drawAt(fontSize, m_cameraTestButton.center(), ColorF{ gamestartColor });
+
+		boldFont(U"EXIT").drawAt(fontSize, m_exitButton.center(), ColorF{ exitColor });
 	}
 
+	// 操作説明
 	{
 		//const Font& boldFont = FontAsset(U"Bold");
 		//boldFont(U"操作説明").drawAt(36, { 800, 300 }, ColorF{ 1, 1, 1, 1 });
@@ -97,4 +78,27 @@ void Title::draw() const
 		//boldFont(U"右クリック：キャンセル").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
 	}
 
+}
+
+// マウスオーバー処理
+float Title::mouseOver(float color, String text, RoundRect::position_type button)
+{
+	float result;
+	
+	// テキストの矩形領域を取得
+	RectF textRect = boldFont(text).regionAt(button);
+
+	// マウスオーバー判定
+	bool isMouseOver = textRect.mouseOver();
+
+	if (isMouseOver)
+	{
+		result = Math::Lerp(color, maxColor, 0.1);
+	}
+	else
+	{
+		result = Math::Lerp(color, minColor, 0.1);
+	}
+	
+	return result;
 }

@@ -121,8 +121,10 @@ void CameraTest::loadResources()
 	memoBigSprite.draw(0, 0);
 	keyMiniSprite.draw(0, 0);
 	keyBigSprite.draw(0, 0);
-	pokerMiniSprite.draw(0, 0);
-	pokerBigSprite.draw(0, 0);
+//	pokerMiniSprite.draw(0, 0);
+//	pokerBigSprite.draw(0, 0);
+	pokerSprite.resized(inventoryMini, inventoryMini).draw(0, 0);
+	pokerSprite.resized(inventoryBig, inventoryBig).draw(0, 0);
 	parchmentMiniSprite.draw(0, 0);
 	parchmentBigSprite.draw(0, 0);
 	wireMiniSprite.draw(0, 0);
@@ -577,7 +579,8 @@ void CameraTest::drawMiniItem(
 		break;
 	case Poker:
 		// 火かき棒
-		pokerMiniSprite.draw(x, y);
+	//	pokerMiniSprite.draw(x, y);
+		pokerSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case Parchment:
 		// 羊皮紙
@@ -632,7 +635,8 @@ void CameraTest::drawBigItem(
 		break;
 	case Poker:
 		// 火かき棒
-		pokerBigSprite.draw(x, y);
+	//	pokerBigSprite.draw(x, y);
+		pokerSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case Parchment:
 		// 羊皮紙

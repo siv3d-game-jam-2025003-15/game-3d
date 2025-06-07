@@ -585,6 +585,10 @@ private:
 	// 仮想マウス座標
 	Vec2 virtualCursorPos = Vec2{ 0, 0 };
 
+	// インベントリアイテムアイコンのサイズ
+	const int inventoryMini = 60;
+	const int inventoryBig = 140;
+
 	// スプライト
 	const Texture inventorySprite{ U"assets/sprites/BG_Inventory01.png" };
 	const Texture breadMiniSprite{ U"assets/sprites/bread_mini.png" };
@@ -593,8 +597,9 @@ private:
 	const Texture memoBigSprite{ U"assets/sprites/memo_big.png" };
 	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
 	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
-	const Texture pokerMiniSprite{ U"assets/sprites/poker_mini.png" };
-	const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
+	//const Texture pokerMiniSprite{ U"assets/sprites/poker_mini.png" };
+	//const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
+	const Texture pokerSprite{ U"assets/sprites/UI_Poker01.png" };
 	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
 	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
 	const Texture wireMiniSprite{ U"assets/sprites/hanger_mini.png" };
