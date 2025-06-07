@@ -3302,8 +3302,13 @@ void CameraTest::lockon()
 	// 引き出し
 	if (!bLockon)
 	{
+		Vec3 temp = drawerPos;
+		temp.x += 0.0;
+		temp.y += 0.5;
+		temp.z -= 0.3;
+
 		auto [a, b, c, d] = memoController.update(
-			drawerPos,
+			temp,
 			camera,
 			m_eyePosition,
 			markPosition,
@@ -3315,7 +3320,7 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 28;
+			message = 9;
 		}
 
 		if (d)
