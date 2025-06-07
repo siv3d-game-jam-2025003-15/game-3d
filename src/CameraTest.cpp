@@ -2329,7 +2329,8 @@ void CameraTest::viewInventory()
 			scenario = 2;	// パンを食べた後
 
 			// SEを鳴らす
-			playSE(U"GET");
+		//	playSE(U"GET");
+			playSE(U"Item");
 
 			// チュートリアル終了
 			bTutorial = false;
@@ -2340,6 +2341,7 @@ void CameraTest::viewInventory()
 			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
 			{
 				bMemo = true;
+				playSE(U"Paper");
 			}
 		}
 		else if (items[selectItem] == RustedKey)
@@ -2360,7 +2362,8 @@ void CameraTest::viewInventory()
 				synthesisIndex = -1;	// 選択を解除
 
 				// SEを鳴らす
-				playSE(U"GET");
+			//	playSE(U"GET");
+				playSE(U"Item");
 
 				//if (scenario == 1)	// パンを食べた後
 				//{
@@ -2432,7 +2435,8 @@ void CameraTest::viewInventory()
 				//}
 
 				// SEを鳴らす
-				playSE(U"牢屋の扉を開ける");
+			//	playSE(U"牢屋の扉を開ける");
+				playSE(U"Cancellation");
 
 				inventoryOnOff();
 			}
@@ -2448,7 +2452,8 @@ void CameraTest::viewInventory()
 				toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
 
 				// SEを鳴らす
-				playSE(U"牢屋の扉を開ける");
+			//	playSE(U"牢屋の扉を開ける");
+				playSE(U"Cancellation");
 
 				inventoryOnOff();
 			}
@@ -2465,7 +2470,8 @@ void CameraTest::viewInventory()
 				inventoryOnOff();
 
 				// SEを鳴らす
-				playSE(U"GET");
+			//	playSE(U"GET");
+				playSE(U"Item");
 			}
 		}
 		else if (items[selectItem] == Parchment)
@@ -2478,7 +2484,8 @@ void CameraTest::viewInventory()
 				items[selectItem] = ToastedParchment;
 
 				// SEを鳴らす
-				playSE(U"GET");
+			//	playSE(U"GET");
+				playSE(U"Item");
 			}
 		}
 		else if (items[selectItem] == ToastedParchment)
@@ -2487,6 +2494,7 @@ void CameraTest::viewInventory()
 			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
 			{
 				bToastedParchmentRead = true;
+				playSE(U"Paper");
 			}
 
 		}
@@ -2500,7 +2508,8 @@ void CameraTest::viewInventory()
 				items[selectItem] = Cloth;
 
 				// SEを鳴らす
-				playSE(U"GET");
+			//	playSE(U"GET");
+				playSE(U"Water");
 			}
 		}
 		else if (items[selectItem] == Cloth)
@@ -2509,6 +2518,7 @@ void CameraTest::viewInventory()
 			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
 			{
 				bClothRead = true;
+				playSE(U"Item");
 			}
 		}
 	}
@@ -2942,7 +2952,7 @@ void CameraTest::lockon()
 			curCameraPosition, 
 		//	ray,
 			markPosition,
-			0,
+			2,
 			true
 		);
 		if (a == true && bParchmentHave == false)
@@ -3376,7 +3386,7 @@ void CameraTest::lockon()
 			curCameraPosition, 
 		//	ray, 
 			markPosition, 
-			0,
+			2,
 			true
 		);
 		if (a == true)
@@ -3473,7 +3483,7 @@ void CameraTest::lockon()
 
 						bGoldKeyHave = true;
 
-						// TODO SE
+						playSE(U"Item");
 					}
 				}
 				else

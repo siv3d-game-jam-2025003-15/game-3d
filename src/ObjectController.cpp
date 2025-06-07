@@ -65,19 +65,38 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 			{
 				// 取る処理
 				m_isHave = true;
+
+				// BGMの停止
+				if (AudioAsset(U"BGM").isPlaying())
+				{
+					AudioAsset(U"BGM").stop();
+				}
+
+				// SEの再生
 				switch (bgmNo)
 				{
 				case 0:
-					AudioAsset(U"GET").play();
+					AudioAsset(U"Item").setVolume(1.0);
+					AudioAsset(U"Item").play();
 					bgmStopCount = 4.00;
 					break;
 				case 1:
-					AudioAsset(U"牢屋の扉を開ける").play();
-					//	bgmStopCount = 999999.0;
+					AudioAsset(U"Cancellation").setVolume(1.0);
+					AudioAsset(U"Cancellation").play();
+					bgmStopCount = 4.00;
+					break;
+				case 2:
+					AudioAsset(U"Paper").setVolume(1.0);
+					AudioAsset(U"Paper").play();
+					bgmStopCount = 4.00;
+					break;
+				case 3:
+					AudioAsset(U"Water").setVolume(1.0);
+					AudioAsset(U"Water").play();
 					bgmStopCount = 4.00;
 					break;
 				}
-				AudioAsset(U"BGM").stop();
+
 			}
 			else 
 			{
