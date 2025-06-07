@@ -2942,15 +2942,23 @@ void CameraTest::draw() const
 		}
 	}
 
+	// アイテムの名前
 	if (
 		bInventory
 		&& 0 <= itemMessage
 		&& itemMessage < itemText.size()
 		)
 	{
-		// セリフ表示（仮）
+		int fontSize = 28;
+
+		// 長すぎるアイテム名だった場合はフォントサイズを小さくする
+		if (itemNameText[itemMessage].size() > 5)
+		{
+			fontSize = 28 - (itemNameText[itemMessage].size() - 5) * 3;
+		}
+
 		boldFont(itemNameText[itemMessage]).drawAt(
-			28,
+			fontSize,
 		//	{ 805, 236 },
 			{ center.x + 165, center.y -128 },
 			ColorF{ 1, 1, 1, 1 }
