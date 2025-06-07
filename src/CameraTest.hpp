@@ -143,13 +143,13 @@ private:
 	//bool m_padPressed = false;
 
 	// カメラの視点（現在）
-	Vec3 m_eyePosition = Vec3{ 2.5, 1.5, 10 };
+	Vec3 curCameraPosition = Vec3{ 2.5, 1.5, 10 };
 
 	// カメラの視点（次）
-	Vec3 toCameraPos = m_eyePosition;
+	Vec3 toCameraPos = curCameraPosition;
 
 	// カメラの視点（1フレーム前）
-	Vec3 last_eyePosition = Vec3{ 2.5, 1.5, 10 };
+	Vec3 lastCameraPosition = Vec3{ 2.5, 1.5, 10 };
 
 	// カメラの注視点（カメラが「いま見ている」場所のこと）
 	Vec3 m_focusPosition = Vec3{ 0, 0, -1 };
@@ -171,7 +171,7 @@ private:
 	double to_m_focusY = 0;
 
 	// カメラの角度
-	PhiController phiController = PhiController(m_eyePosition, m_focusPosition);
+	PhiController phiController = PhiController(curCameraPosition, m_focusPosition);
 
 	//==============================
 	// モデル

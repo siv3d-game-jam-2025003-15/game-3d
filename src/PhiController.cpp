@@ -1,7 +1,7 @@
 #include "PhiController.hpp"
 
 PhiController::PhiController(const Vec3& eye, const Vec3& focus)
-	: m_eyePosition(eye), m_focusPosition(focus)
+	: m_cameraPosition(eye), m_focusPosition(focus)
 {
 	updatePhi();
 }
@@ -9,8 +9,8 @@ PhiController::PhiController(const Vec3& eye, const Vec3& focus)
 void PhiController::updatePhi()
 {
 	m_phi = std::atan2(
-		(m_focusPosition.z - m_eyePosition.z),
-		(m_focusPosition.x - m_eyePosition.x)
+		(m_focusPosition.z - m_cameraPosition.z),
+		(m_focusPosition.x - m_cameraPosition.x)
 	);
 }
 
@@ -38,12 +38,14 @@ double PhiController::getPhi() const
 	return m_phi;
 }
 
-void PhiController::setEyePosition(const Vec3& eye)
+// 座標
+void PhiController::setCameraPosition(const Vec3& cameraPos)
 {
-	m_eyePosition = eye;
+	m_cameraPosition = cameraPos;
 	updatePhi();
 }
 
+// 視点の向き
 void PhiController::setFocusPosition(const Vec3& focus)
 {
 	m_focusPosition = focus;

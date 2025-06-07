@@ -544,6 +544,7 @@ void CameraTest::debug()
 #ifdef _DEBUG
 
 	Print << U"CameraX=" << toCameraPos.x;
+	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"bDrawerMode=" << bDrawerMode;
@@ -1120,15 +1121,15 @@ void CameraTest::update()
 	if (bCollision && bCollisionDoor)
 	{
 		Vec3 A{
-			last_eyePosition.x,
-			last_eyePosition.y,
-			last_eyePosition.z
+			lastCameraPosition.x,
+			lastCameraPosition.y,
+			lastCameraPosition.z
 		};
 
 		Vec3 cameraNormal = Vec3(
-			toCameraPos.x - last_eyePosition.x,
-			toCameraPos.y - last_eyePosition.y,
-			toCameraPos.z - last_eyePosition.z
+			toCameraPos.x - lastCameraPosition.x,
+			toCameraPos.y - lastCameraPosition.y,
+			toCameraPos.z - lastCameraPosition.z
 		).normalized();
 
 		// 向かっている位置より少し前にコリジョンを持たせる
@@ -1140,9 +1141,9 @@ void CameraTest::update()
 
 		Segment segment = {
 			{
-				last_eyePosition.x,
+				lastCameraPosition.x,
 				0.1,
-				last_eyePosition.z
+				lastCameraPosition.z
 			}
 			, 
 			{
@@ -1154,7 +1155,7 @@ void CameraTest::update()
 
 		const ColorF LineColor = ColorF{ 0.3, 0.2, 0.0 }.removeSRGBCurve();
 
-		Line3D{ Vec3{ last_eyePosition.x, last_eyePosition.y, last_eyePosition.z }, Vec3{ toCameraPos.x, toCameraPos.y, toCameraPos.z } }.draw(LineColor);
+		Line3D{ Vec3{ lastCameraPosition.x, lastCameraPosition.y, lastCameraPosition.z }, Vec3{ toCameraPos.x, toCameraPos.y, toCameraPos.z } }.draw(LineColor);
 
 		// モデルデータと判定する
 		bool checkCollision = false;
@@ -1185,7 +1186,7 @@ void CameraTest::update()
 					checkCollision = true;
 
 					// いったん止める
-					toCameraPos = last_eyePosition;
+					toCameraPos = lastCameraPosition;
 
 					break;
 
@@ -1195,14 +1196,14 @@ void CameraTest::update()
 
 					// プレイヤーの移動速度
 					Vec2 velocity = Vec2(
-						toCameraPos.x - last_eyePosition.x,
-						toCameraPos.z - last_eyePosition.z
+						toCameraPos.x - lastCameraPosition.x,
+						toCameraPos.z - lastCameraPosition.z
 					);
 					double length = velocity.length();
 
 					Vec2 velocityNormal = Vec2(
-						toCameraPos.x - last_eyePosition.x,
-						toCameraPos.z - last_eyePosition.z
+						toCameraPos.x - lastCameraPosition.x,
+						toCameraPos.z - lastCameraPosition.z
 					).normalized();
 
 					// 当たり判定の法線
@@ -1245,7 +1246,7 @@ void CameraTest::update()
 					Print << U"dot " << dot;
 #endif
 					// いったん前の状態に戻す
-					toCameraPos = last_eyePosition;
+					toCameraPos = lastCameraPosition;
 
 					// 壁に沿ってスライド
 					toCameraPos.x += (resultVelocity2.x * length * dot);
@@ -1256,14 +1257,14 @@ void CameraTest::update()
 					
 					// 進んだ先にコリジョンがないかどうか
 					Vec2 AA{
-						last_eyePosition.x,
-						last_eyePosition.z
+						lastCameraPosition.x,
+						lastCameraPosition.z
 					};
 
 					// 向かっている位置より少し前にコリジョンを持たせる TODO これじゃなくて、距離にしたい
 					Vec2 cameraNormal2 = Vec2(
-						toCameraPos.x - last_eyePosition.x,
-						toCameraPos.z - last_eyePosition.z
+						toCameraPos.x - lastCameraPosition.x,
+						toCameraPos.z - lastCameraPosition.z
 					).normalized();
 
 					Vec2 BB{
@@ -1289,7 +1290,7 @@ void CameraTest::update()
 							{
 								// 交差している（ぶつかった）失敗
 								checkCollision = false;
-								toCameraPos = last_eyePosition;
+								toCameraPos = lastCameraPosition;
 								break;
 						
 							}
@@ -1313,6 +1314,12 @@ void CameraTest::update()
 		}
 	}
 
+	// 引き出しモード
+	if (bDrawerMode)
+	{
+
+	}
+
 	// カメラ関係
 	const double to_s = (Math::Cos(phiController.getPhi()));
 	const double to_c = (Math::Sin(phiController.getPhi()));
@@ -1321,9 +1328,10 @@ void CameraTest::update()
 	ccc = Math::Lerp(ccc, to_c, smooth); // 回転もスムーズに
 
 	// ゆっくり移動
-	m_eyePosition = m_eyePosition.lerp(toCameraPos, smooth);
+	curCameraPosition = curCameraPosition.lerp(toCameraPos, smooth);
 
-	last_eyePosition = toCameraPos;
+	// 線分交差の判定用に保存
+	lastCameraPosition = toCameraPos;
 
 	// 回転もスムーズに
 	m_focusY = Math::Lerp(m_focusY, to_m_focusY, smooth); 
@@ -1338,7 +1346,7 @@ void CameraTest::update()
 		m_nearClip
 	);
 
-	camera.setView(m_eyePosition, (m_eyePosition + focusVector), m_upDirection);
+	camera.setView(curCameraPosition, (curCameraPosition + focusVector), m_upDirection);
 
 	Graphics3D::SetCameraTransform(camera);
 
@@ -1375,7 +1383,7 @@ void CameraTest::update()
 	//else
 	//{
 		// ライト位置
-		lightPos = m_eyePosition;
+		lightPos = curCameraPosition;
 		//lightPos = lightPosList[lightArea];
 		//switch (lightArea)
 		//{
@@ -2612,7 +2620,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = breadController.update(
 			breadPos,
 			camera,
-			m_eyePosition, 
+			curCameraPosition, 
 		//	ray,
 			markPosition,
 			0,
@@ -2641,7 +2649,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = rustedKeyController.update(
 			rustedKeyPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray, 
 			markPosition,
 			0, 
@@ -2669,7 +2677,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = ironkeyController.update(
 			IronkeyPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2698,7 +2706,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = pokerController.update(
 			pokerPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray, 
 			markPosition,
 			0,
@@ -2732,7 +2740,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = doorController.update(
 			temp,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2786,7 +2794,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = door2Controller.update(
 			temp,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2823,7 +2831,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = door3Controller.update(
 			door3Pos, 
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2843,7 +2851,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = parchmentController.update(
 			parchmentPos,
 			camera,
-			m_eyePosition, 
+			curCameraPosition, 
 		//	ray,
 			markPosition,
 			0,
@@ -2870,7 +2878,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = bedController.update(
 			bedPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2890,7 +2898,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = bed2Controller.update(
 			bed2Pos,
 			camera,
-			m_eyePosition, 
+			curCameraPosition, 
 		//	ray,
 			markPosition,
 			-1,
@@ -2910,7 +2918,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = bed3Controller.update(
 			bed3Pos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray, 
 			markPosition,
 			-1,
@@ -2930,7 +2938,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = bed4Controller.update(
 			bed4Pos, 
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2950,7 +2958,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = oldBedController.update(
 			oldBedPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1, 
@@ -2970,7 +2978,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = toiletController.update(
 			toiletPos, 
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -2990,7 +2998,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = toiletController.update(
 			toilet2Pos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -3019,7 +3027,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = shelfController.update(
 			shelfPos,
 			camera, 
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1, 
@@ -3076,7 +3084,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = fireplaceController.update(
 			fireplacePos,
 			camera, 
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			0,
@@ -3132,7 +3140,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = hangerController.update(
 			hangerPos, 
 			camera,
-			m_eyePosition, 
+			curCameraPosition, 
 		//	ray,
 			markPosition, 
 			0, 
@@ -3160,7 +3168,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = barrelController.update(
 			barrelPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -3180,7 +3188,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = barrelController.update(
 			barrel2Pos,
 			camera, 
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1,
@@ -3200,7 +3208,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = barrelController.update(
 			barrel3Pos,
 			camera, 
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1, 
@@ -3231,7 +3239,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = barrelController.update(
 			emblemPos,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 		//	ray,
 			markPosition,
 			-1, 
@@ -3251,7 +3259,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = dirtyClothController.update(
 			dirtyClothPos, 
 			camera,
-			m_eyePosition, 
+			curCameraPosition, 
 		//	ray, 
 			markPosition,
 			0,
@@ -3277,7 +3285,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = memoController.update(
 			memoPos,
 			camera, 
-			m_eyePosition, 
+			curCameraPosition, 
 		//	ray, 
 			markPosition, 
 			0,
@@ -3300,7 +3308,7 @@ void CameraTest::lockon()
 	}
 
 	// 引き出し
-	if (!bLockon)
+	if (!bLockon && bDrawerMode == false)
 	{
 		Vec3 temp = drawerPos;
 		temp.x += 0.0;
@@ -3310,7 +3318,7 @@ void CameraTest::lockon()
 		auto [a, b, c, d] = memoController.update(
 			temp,
 			camera,
-			m_eyePosition,
+			curCameraPosition,
 			markPosition,
 			0,
 			false
@@ -3327,6 +3335,15 @@ void CameraTest::lockon()
 		{
 			// クリックした
 			bDrawerMode = true;
+
+			// カメラの座標と向きを調整
+			toCameraPos.x = 16.3;
+			toCameraPos.y = 0.65;
+			toCameraPos.z = 0.3;
+
+			to_m_focusY = 0;
+			phiController.setCameraPosition(toCameraPos);
+			phiController.setFocusPosition(drawerPos);
 		}
 	}
 }

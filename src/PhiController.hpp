@@ -4,7 +4,7 @@
 class PhiController
 {
 private:
-	Vec3 m_eyePosition;
+	Vec3 m_cameraPosition;
 	Vec3 m_focusPosition;
 	double m_phi = 0.0;
 
@@ -21,7 +21,7 @@ public:
 
 	double getPhi() const;
 
-	void setEyePosition(const Vec3& eye);
+	void setCameraPosition(const Vec3& eye);
 
 	void setFocusPosition(const Vec3& focus);
 };
