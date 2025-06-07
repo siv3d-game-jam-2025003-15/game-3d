@@ -474,6 +474,7 @@ private:
 	ObjectController barrelController;
 	ObjectController dirtyClothController;
 	ObjectController memoController;
+	ObjectController drawerController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -1219,4 +1220,6 @@ private:
 	// オブジェクトのロックオン
 	void lockon();
 
+	// 引き出しモード
+	bool bDrawerMode = false;
 };

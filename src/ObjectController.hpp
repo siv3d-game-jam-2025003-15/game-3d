@@ -9,7 +9,7 @@ private:
 public:
 	ObjectController();
 
-	std::tuple<bool, bool, int> update(
+	std::tuple<bool, bool, int, bool> update(
 		const Vec3& objPos,
 		const BasicCamera3D& camera,
 		const Vec3& eyePos,

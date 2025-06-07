@@ -5,7 +5,7 @@ ObjectController::ObjectController()
 	m_isHave = false;
 }
 
-std::tuple<bool, bool, int> ObjectController::update(
+std::tuple<bool, bool, int, bool> ObjectController::update(
 	const Vec3& objPos,
 	const BasicCamera3D& camera,
 	const Vec3& eyePos,
@@ -16,11 +16,12 @@ std::tuple<bool, bool, int> ObjectController::update(
 )
 {
 	bool isLockon = false;
+	bool isClick = false;
 	int bgmStopCount = 4.0;
 
 	if (m_isHave)
 	{
-		return { m_isHave,isLockon, bgmStopCount };
+		return { m_isHave,isLockon, bgmStopCount, isClick };
 	}
 
 	Vec3 screenPos = camera.worldToScreenPoint(objPos);
@@ -56,26 +57,35 @@ std::tuple<bool, bool, int> ObjectController::update(
 		|| (
 		//	box.intersects(ray) &&	// Rayで取れるようにするのをやめてみる
 			MouseL.down()
-			&& bHave
 			)
 		)
 		{
-			m_isHave = true;
-			switch (bgmNo)
+			// 取れるオブジェクトかどうか
+			if (bHave)
 			{
-			case 0:
-				AudioAsset(U"GET").play();
-				bgmStopCount = 4.00;
-				break;
-			case 1:
-				AudioAsset(U"牢屋の扉を開ける").play();
-			//	bgmStopCount = 999999.0;
-				bgmStopCount = 4.00;
-				break;
+				// 取る処理
+				m_isHave = true;
+				switch (bgmNo)
+				{
+				case 0:
+					AudioAsset(U"GET").play();
+					bgmStopCount = 4.00;
+					break;
+				case 1:
+					AudioAsset(U"牢屋の扉を開ける").play();
+					//	bgmStopCount = 999999.0;
+					bgmStopCount = 4.00;
+					break;
+				}
+				AudioAsset(U"BGM").stop();
 			}
-			AudioAsset(U"BGM").stop();
+			else 
+			{
+				// クリックしたかどうか
+				isClick = true;
+			}
 		}
 	}
 
-	return { m_isHave, isLockon, bgmStopCount };
+	return { m_isHave, isLockon, bgmStopCount, isClick };
 }
