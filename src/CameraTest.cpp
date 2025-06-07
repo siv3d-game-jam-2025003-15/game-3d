@@ -547,7 +547,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"bDrawerMode=" << bDrawerMode;
+	Print << U"drawerIndex=" << drawerIndex;
 
 #endif
 }
@@ -784,38 +784,66 @@ void CameraTest::update()
 		}
 
 
-
 		// プレイヤーの移動
-		if (KeyLeft.pressed())
+		if (bDrawerMode)
 		{
-			phiController.rotate(60_deg, deltaTime, 1.0);
+			// 引き出しモード中は操作できない
+		}
+		else
+		{
+			if (KeyLeft.pressed())
+			{
+				phiController.rotate(60_deg, deltaTime, 1.0);
+			}
+
+			if (controller.rightThumbX < -0.1)
+			{
+				phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
+			}
+
+			if (diffMousePosX < -0.1)
+			{
+				phiController.rotate(60_deg, deltaTime, -diffMousePosX);
+			}
+
+			if (KeyRight.pressed())
+			{
+				phiController.rotate(-60_deg, deltaTime, 1.0);
+			}
+
+			if (controller.rightThumbX > 0.1)
+			{
+				phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
+			}
+
+			if (diffMousePosX > 0.1)
+			{
+				phiController.rotate(-60_deg, deltaTime, diffMousePosX);
+			}
 		}
 
-		if (controller.rightThumbX < -0.1)
+		if (bDrawerMode)
 		{
-			phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
-		}
+			// 引き出しモード中
 
-		if (diffMousePosX < -0.1)
-		{
-			phiController.rotate(60_deg, deltaTime, -diffMousePosX);
+			if (KeyW.down())
+			{
+				drawerIndex--;
+				if (drawerIndex < 0)
+				{
+					drawerIndex = 0;
+				}
+			}
+			if (KeyS.down())
+			{
+				drawerIndex++;
+				if (drawerIndex > 5)
+				{
+					drawerIndex = 5;
+				}
+			}			
 		}
-
-		if (KeyRight.pressed())
-		{
-			phiController.rotate(-60_deg, deltaTime, 1.0);
-		}
-
-		if (controller.rightThumbX > 0.1)
-		{
-			phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
-		}
-
-		if (diffMousePosX > 0.1)
-		{
-			phiController.rotate(-60_deg, deltaTime, diffMousePosX);
-		}
-
+		else
 		{
 			const double xr = (scaledSpeed * sss);
 			const double zr = (scaledSpeed * ccc);
@@ -900,6 +928,11 @@ void CameraTest::update()
 			}
 		}
 
+		if (bDrawerMode)
+		{
+			// 引き出しモード中は操作できない
+		}
+		else
 		{
 			const double yDelta = deltaTime;
 
@@ -1319,6 +1352,12 @@ void CameraTest::update()
 	// 引き出しモード
 	if (bDrawerMode)
 	{
+		toCameraPos.y = 0.9 - drawerIndex * 0.16;
+
+		for (int i = 1; i < 7; i++)
+		{
+			drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
+		}
 
 	}
 
@@ -2481,68 +2520,37 @@ void CameraTest::viewModel()
 		modelPoker->draw();
 	}
 
-	// 引き出し（１段目）
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 5, drawerPos.z})
-		};
-
-		modelDrawerNon->draw();
-	}
-
-	// 引き出し（２段目）
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 4, drawerPos.z})
-		};
-
-		modelDrawerFlower->draw();
-	}
-
-	// 引き出し（３段目）
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 3, drawerPos.z})
-		};
-
-		modelDrawerChain->draw();
-	}
-
-	// 引き出し（４段目）
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 2, drawerPos.z})
-		};
-
-		modelDrawerFeather->draw();
-
-	}
-
-	// 引き出し（５段目）
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16, drawerPos.z})
-		};
-
-		modelDrawerSnake->draw();
-	}
-
-	// 引き出し（６段目）
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06, drawerPos.z})
-		};
-
-		modelDrawerEye->draw();
-	}
-
 	// 引き出し
+	for (int i = 0; i < 7; i++) 
 	{
 		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerPos)
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos[i].x, drawerPos[i].y, drawerPos[i].z})
 		};
 
-		modelShelf->draw();
+		switch (i)
+		{
+		case 0:
+			modelShelf->draw();
+			break;
+		case 1:
+			modelDrawerNon->draw();
+			break;
+		case 2:
+			modelDrawerFlower->draw();
+			break;
+		case 3:
+			modelDrawerChain->draw();
+			break;
+		case 4:
+			modelDrawerFeather->draw();
+			break;
+		case 5:
+			modelDrawerSnake->draw();
+			break;
+		case 6:
+			modelDrawerEye->draw();
+			break;
+		}
 	}
 
 	// 羊皮紙の描画
@@ -3303,10 +3311,10 @@ void CameraTest::lockon()
 		}
 	}
 
-	// 引き出し
+	// 引き出し（本体）
 	if (!bLockon && bDrawerMode == false)
 	{
-		Vec3 temp = drawerPos;
+		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
 		temp.y += 0.5;
 		temp.z -= 0.3;
@@ -3335,11 +3343,42 @@ void CameraTest::lockon()
 			// カメラの座標と向きを調整
 			toCameraPos.x = 16.3;
 			toCameraPos.y = 0.65;
-			toCameraPos.z = 0.3;
+		//	toCameraPos.z = 0.3;
+			toCameraPos.z = 1.2;
 
 			to_m_focusY = 0;
 			phiController.setCameraPosition(toCameraPos);
-			phiController.setFocusPosition(drawerPos);
+			phiController.setFocusPosition(drawerPos[0]);
+		}
+	}
+
+	// 引き出し
+	if (!bLockon && bDrawerMode)
+	{
+		auto [a, b, c, d] = memoController.update(
+			drawerPos[drawerIndex + 1],
+			camera,
+			curCameraPosition,
+			markPosition,
+			0,
+			false
+		);
+
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 9;
+		}
+
+		if (d)
+		{
+			// クリックした
+			if (drawerPull[drawerIndex] == false)
+			{
+				toDrawerPos[drawerIndex + 1].z -= 0.1;
+				drawerPull[drawerIndex] = true;
+			}
 		}
 	}
 }

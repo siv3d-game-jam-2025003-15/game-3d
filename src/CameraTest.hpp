@@ -404,7 +404,18 @@ private:
 	Vec3 pokerPos = { 20, 0.45, -6.2 };
 
 	// 引き出し
-	Vec3 drawerPos = { 16.3, 0, 1.6 };
+	Array<Vec3> drawerPos = {
+		{ 16.3, 0, 1.6 },
+		{ 16.3, 0 + 0.06 + 0.16 * 5, 1.6 },
+		{ 16.3, 0 + 0.06 + 0.16 * 4, 1.6 },
+		{ 16.3, 0 + 0.06 + 0.16 * 3, 1.6 },
+		{ 16.3, 0 + 0.06 + 0.16 * 2, 1.6 },
+		{ 16.3, 0 + 0.06 + 0.16 * 1, 1.6 },
+		{ 16.3, 0 + 0.06 + 0.16 * 0, 1.6 }
+	};
+
+	Array<Vec3> toDrawerPos = drawerPos;
+
 	double debugDrawerY = 0;
 
 	// 羊皮紙
@@ -1223,4 +1234,19 @@ private:
 
 	// 引き出しモード
 	bool bDrawerMode = false;
+
+	// 引き出しのインデックス番号
+	int drawerIndex = 3;
+
+	// 引き出しの順番
+	int drawerOrder = 0;
+
+	bool drawerPull[6] = {
+		false,
+		false,
+		false,
+		false,
+		false,
+		false,
+	};
 };
