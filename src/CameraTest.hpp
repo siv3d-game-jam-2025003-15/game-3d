@@ -1200,4 +1200,6 @@ private:
 	// コリジョンのデバッグ表示
 	void debugViewCollision();
 
+	// インベントリ表示
+	void viewInventory();
 };

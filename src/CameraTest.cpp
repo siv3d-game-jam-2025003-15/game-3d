@@ -2274,262 +2274,8 @@ void CameraTest::update()
 	// UI
 	if (bInventory)
 	{
-		// インベントリ
-		int itemX = center.x - inventoryWidth / 2;
-		int itemY = center.y - inventoryHeight / 2;
-		inventorySprite.scaled(0.5).draw(itemX, itemY);
-
-		int selectItem = -1;
-
-		// 初期化
-		itemMessage = -1;
-
-		// インベントリ全体
-		{
-			Rect rect(itemX, itemY, inventoryWidth, inventoryHeight);
-			if (rect.mouseOver())
-			{
-				//Print << U"インベントリ内";
-			}
-			else
-			{
-				//Print << U"インベントリ外";
-				if (MouseL.down())
-				{
-					// インベントリを非表示にする
-					inventoryOnOff();
-				}
-			}
-		}
-
-		// アイテム
-		for (int i = 0; i < items.size(); i++)
-		{
-			int itemMiniX = center.x - itemMiniWidth / 2 + (i % 4 * 82) - 194;
-			int itemMiniY = center.y - itemMiniHeight / 2 + (i / 4 * 82) - 104;
-
-			drawMiniItem(items[i], itemMiniX, itemMiniY);
-
-			if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
-			{
-				// 選択できないようにする
-				continue;
-			}
-
-			Rect rect(itemMiniX, itemMiniY, itemMiniWidth, itemMiniHeight);
-
-			if (rect.mouseOver())
-			{
-				// 枠線
-				rect.drawFrame(
-					2,		// 枠線の太さ
-					Palette::Skyblue	// 空色で描画
-				);
-
-				selectItem = i;
-
-				// コメント
-				itemMessage = items[i];
-			}
-			else
-			{
-				// 枠線
-				rect.drawFrame(
-					1,				// 枠線の太さ
-					Palette::Black	// 黒で描画
-				);
-			}
-
-		}
-
-		//現在選択中のアイテム
-		if (selectItem >= 0)
-		{
-			int itemBigX = center.x - itemBigWidth / 2 + 166;
-			int itemBigY = center.y - itemBigHeight / 2 - 35;
-
-			drawBigItem(items[selectItem], itemBigX, itemBigY);
-		}
-
-		if (MouseL.down())
-		{
-			// アイテムを使う
-			if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
-			{
-				// メッセージが表示されていたら閉じる
-				bMemo = false;
-				bToastedParchmentRead = false;
-				bClothRead = false;
-			}
-			else if (items.size() <= selectItem)
-			{
-				// 処理しない
-			}
-			else if (items[selectItem] == Bread)
-			{
-				// パンを食べる
-
-				// 手記を手に入れる（←オミット）
-				//items[selectItem] = Memo;
-				items.remove_at(selectItem);
-
-				// シナリオを進める
-				scenario = 1;
-
-				// SEを鳴らす
-				playSE(U"GET");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"GET").setVolume(1.0);
-				//AudioAsset(U"GET").play();
-				//bgmStopCount = 4.00;
-			}
-			else if (items[selectItem] == Memo)
-			{
-				// 手記を使った
-				bMemo = true;
-
-				if (scenario == 1)
-				{
-					scenario = 2;
-				}
-			}
-			else if (items[selectItem] == Wire)
-			{
-				if (bKeyHave)
-				{
-					// 錆びた鍵を持っている状態で針金を使う
-					items[selectItem] = WireKey;
-					bWireKey = true;
-
-					// SEを鳴らす
-					playSE(U"GET");
-					//AudioAsset(U"BGM").stop();
-					//AudioAsset(U"GET").setVolume(1.0);
-					//AudioAsset(U"GET").play();
-					//bgmStopCount = 4.00;
-
-					scenario = 5;
-				}
-			}
-			else if (items[selectItem] == WireKey)
-			{
-				if (bDoorLockon)
-				{
-					// ドアの前で使う
-
-					// ドアを開いた
-					bDoorOpen[0] = true;
-					toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
-				//	scenario = 6;
-
-					// SEを鳴らす
-					playSE(U"牢屋の扉を開ける");
-					//AudioAsset(U"BGM").stop();
-					//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
-					//AudioAsset(U"牢屋の扉を開ける").play();
-					//bgmStopCount = 4.00;
-
-					inventoryOnOff();
-				}
-			}
-			else if (items[selectItem] == IronKey)
-			{
-				if (bDoor2Lockon)
-				{
-					// ドア２の前で使う
-
-					// ドア２を開いた
-					bDoorOpen[1] = true;
-					toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
-
-					// SEを鳴らす
-					playSE(U"牢屋の扉を開ける");
-					//AudioAsset(U"BGM").stop();
-					//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
-					//AudioAsset(U"牢屋の扉を開ける").play();
-					//bgmStopCount = 4.00;
-
-					inventoryOnOff();
-				}
-			}
-			else if (items[selectItem] == Poker)
-			{
-				// 火が弱い暖炉の近くで使う
-				// オミット
-				//if (bFireplaceWeakLockon)
-				//{
-				//	// 暖炉の火を強くする
-				//	bFireplaceStrong = true;
-
-				//	// SEを鳴らす
-				//	AudioAsset(U"BGM").stop();
-				//	AudioAsset(U"GET").setVolume(1.0);
-				//	AudioAsset(U"GET").play();
-				//	bgmStopCount = 4.00;
-				//}
-
-				// 鉄製の鍵のところで使う
-				if (bIronKeyLockon)
-				{
-					// 鉄製の鍵を入手
-					items << IronKey;
-					bIronKeyHave = true;
-
-					inventoryOnOff();
-
-					// SEを鳴らす
-					playSE(U"GET");
-					//AudioAsset(U"BGM").stop();
-					//AudioAsset(U"GET").setVolume(1.0);
-					//AudioAsset(U"GET").play();
-					//bgmStopCount = 4.00;
-				}
-			}
-			else if (items[selectItem] == Parchment)
-			{
-				// 火が強くなった暖炉の近くで使う（オミット）
-				// 暖炉で使う
-				if (bFireplaceLockon)
-				{
-					// 暖炉で羊皮紙を使う 
-					items[selectItem] = ToastedParchment;
-
-					// SEを鳴らす
-					playSE(U"GET");
-					//AudioAsset(U"BGM").stop();
-					//AudioAsset(U"GET").setVolume(1.0);
-					//AudioAsset(U"GET").play();
-					//bgmStopCount = 4.00;
-				}
-			}
-			else if (items[selectItem] == ToastedParchment)
-			{
-				// 炙った羊皮紙を使った
-				bToastedParchmentRead = true;
-			}
-			else if (items[selectItem] == DirtyCloth)
-			{
-				// 汚れた布
-
-				// トイレの近くで使う
-				if (bToilet2Lockon)
-				{
-					items[selectItem] = Cloth;
-
-					// SEを鳴らす
-					playSE(U"GET");
-					//AudioAsset(U"BGM").stop();
-					//AudioAsset(U"GET").setVolume(1.0);
-					//AudioAsset(U"GET").play();
-					//bgmStopCount = 4.00;
-				}
-			}
-			else if (items[selectItem] == Cloth)
-			{
-				// 布を使った
-				bClothRead = true;
-			}
-		}
+		// インベントリ表示
+		viewInventory();
 	}
 	else
 	{
@@ -2946,6 +2692,7 @@ void CameraTest::draw() const
 
 }
 
+// SEを鳴らす
 void CameraTest::playSE(String SE)
 {
 	AudioAsset(U"BGM").stop();
@@ -3048,4 +2795,264 @@ void CameraTest::debugViewCollision()
 	Print << U"m_focusPosition" << camera.getFocusPosition();
 	modelExclamationMark->draw(camera.getFocusPosition());
 
+}
+
+// インベントリ表示
+void CameraTest::viewInventory()
+{
+	int itemX = center.x - inventoryWidth / 2;
+	int itemY = center.y - inventoryHeight / 2;
+	inventorySprite.scaled(0.5).draw(itemX, itemY);
+
+	int selectItem = -1;
+
+	// 初期化
+	itemMessage = -1;
+
+	// インベントリ全体
+	{
+		Rect rect(itemX, itemY, inventoryWidth, inventoryHeight);
+		if (rect.mouseOver())
+		{
+			//Print << U"インベントリ内";
+		}
+		else
+		{
+			//Print << U"インベントリ外";
+			if (MouseL.down())
+			{
+				// インベントリを非表示にする
+				inventoryOnOff();
+			}
+		}
+	}
+
+	// アイテム
+	for (int i = 0; i < items.size(); i++)
+	{
+		int itemMiniX = center.x - itemMiniWidth / 2 + (i % 4 * 82) - 194;
+		int itemMiniY = center.y - itemMiniHeight / 2 + (i / 4 * 82) - 104;
+
+		drawMiniItem(items[i], itemMiniX, itemMiniY);
+
+		if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
+		{
+			// 選択できないようにする
+			continue;
+		}
+
+		Rect rect(itemMiniX, itemMiniY, itemMiniWidth, itemMiniHeight);
+
+		if (rect.mouseOver())
+		{
+			// 枠線
+			rect.drawFrame(
+				2,		// 枠線の太さ
+				Palette::Skyblue	// 空色で描画
+			);
+
+			selectItem = i;
+
+			// コメント
+			itemMessage = items[i];
+		}
+		else
+		{
+			// 枠線
+			rect.drawFrame(
+				1,				// 枠線の太さ
+				Palette::Black	// 黒で描画
+			);
+		}
+
+	}
+
+	//現在選択中のアイテム
+	if (selectItem >= 0)
+	{
+		int itemBigX = center.x - itemBigWidth / 2 + 166;
+		int itemBigY = center.y - itemBigHeight / 2 - 35;
+
+		drawBigItem(items[selectItem], itemBigX, itemBigY);
+	}
+
+	if (MouseL.down())
+	{
+		// アイテムを使う
+		if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
+		{
+			// メッセージが表示されていたら閉じる
+			bMemo = false;
+			bToastedParchmentRead = false;
+			bClothRead = false;
+		}
+		else if (items.size() <= selectItem)
+		{
+			// 処理しない
+		}
+		else if (items[selectItem] == Bread)
+		{
+			// パンを食べる
+
+			// 手記を手に入れる（←オミット）
+			//items[selectItem] = Memo;
+			items.remove_at(selectItem);
+
+			// シナリオを進める
+			scenario = 1;
+
+			// SEを鳴らす
+			playSE(U"GET");
+			//AudioAsset(U"BGM").stop();
+			//AudioAsset(U"GET").setVolume(1.0);
+			//AudioAsset(U"GET").play();
+			//bgmStopCount = 4.00;
+		}
+		else if (items[selectItem] == Memo)
+		{
+			// 手記を使った
+			bMemo = true;
+
+			if (scenario == 1)
+			{
+				scenario = 2;
+			}
+		}
+		else if (items[selectItem] == Wire)
+		{
+			if (bKeyHave)
+			{
+				// 錆びた鍵を持っている状態で針金を使う
+				items[selectItem] = WireKey;
+				bWireKey = true;
+
+				// SEを鳴らす
+				playSE(U"GET");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"GET").setVolume(1.0);
+				//AudioAsset(U"GET").play();
+				//bgmStopCount = 4.00;
+
+				scenario = 5;
+			}
+		}
+		else if (items[selectItem] == WireKey)
+		{
+			if (bDoorLockon)
+			{
+				// ドアの前で使う
+
+				// ドアを開いた
+				bDoorOpen[0] = true;
+				toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
+				//	scenario = 6;
+
+					// SEを鳴らす
+				playSE(U"牢屋の扉を開ける");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
+				//AudioAsset(U"牢屋の扉を開ける").play();
+				//bgmStopCount = 4.00;
+
+				inventoryOnOff();
+			}
+		}
+		else if (items[selectItem] == IronKey)
+		{
+			if (bDoor2Lockon)
+			{
+				// ドア２の前で使う
+
+				// ドア２を開いた
+				bDoorOpen[1] = true;
+				toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
+
+				// SEを鳴らす
+				playSE(U"牢屋の扉を開ける");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
+				//AudioAsset(U"牢屋の扉を開ける").play();
+				//bgmStopCount = 4.00;
+
+				inventoryOnOff();
+			}
+		}
+		else if (items[selectItem] == Poker)
+		{
+			// 火が弱い暖炉の近くで使う
+			// オミット
+			//if (bFireplaceWeakLockon)
+			//{
+			//	// 暖炉の火を強くする
+			//	bFireplaceStrong = true;
+
+			//	// SEを鳴らす
+			//	AudioAsset(U"BGM").stop();
+			//	AudioAsset(U"GET").setVolume(1.0);
+			//	AudioAsset(U"GET").play();
+			//	bgmStopCount = 4.00;
+			//}
+
+			// 鉄製の鍵のところで使う
+			if (bIronKeyLockon)
+			{
+				// 鉄製の鍵を入手
+				items << IronKey;
+				bIronKeyHave = true;
+
+				inventoryOnOff();
+
+				// SEを鳴らす
+				playSE(U"GET");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"GET").setVolume(1.0);
+				//AudioAsset(U"GET").play();
+				//bgmStopCount = 4.00;
+			}
+		}
+		else if (items[selectItem] == Parchment)
+		{
+			// 火が強くなった暖炉の近くで使う（オミット）
+			// 暖炉で使う
+			if (bFireplaceLockon)
+			{
+				// 暖炉で羊皮紙を使う 
+				items[selectItem] = ToastedParchment;
+
+				// SEを鳴らす
+				playSE(U"GET");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"GET").setVolume(1.0);
+				//AudioAsset(U"GET").play();
+				//bgmStopCount = 4.00;
+			}
+		}
+		else if (items[selectItem] == ToastedParchment)
+		{
+			// 炙った羊皮紙を使った
+			bToastedParchmentRead = true;
+		}
+		else if (items[selectItem] == DirtyCloth)
+		{
+			// 汚れた布
+
+			// トイレの近くで使う
+			if (bToilet2Lockon)
+			{
+				items[selectItem] = Cloth;
+
+				// SEを鳴らす
+				playSE(U"GET");
+				//AudioAsset(U"BGM").stop();
+				//AudioAsset(U"GET").setVolume(1.0);
+				//AudioAsset(U"GET").play();
+				//bgmStopCount = 4.00;
+			}
+		}
+		else if (items[selectItem] == Cloth)
+		{
+			// 布を使った
+			bClothRead = true;
+		}
+	}
 }
