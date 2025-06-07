@@ -606,7 +606,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
-		toastedParchmentMiniSprite.draw(x, y);
+		toastedParchmentSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case WireKey:
 		// 針金の鍵
@@ -661,7 +661,7 @@ void CameraTest::drawBigItem(
 		break;
 	case ToastedParchment:
 		// 炙った羊皮紙
-		toastedParchmentBigSprite.draw(x, y);
+		toastedParchmentSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case WireKey:
 		// 針金の鍵
