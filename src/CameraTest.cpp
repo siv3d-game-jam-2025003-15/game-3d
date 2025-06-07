@@ -2014,7 +2014,7 @@ void CameraTest::update()
 
 		// 点光源を設定する
 		constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
-		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ fireplaceR, fireplaceG, fireplaceB }, Periodic::Sine0_1(2s)* fireplaceSin + fireplaceStrong);
+		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ fireplaceR, fireplaceG, fireplaceB }, Periodic::Sine0_1(2s) * fireplaceSin + fireplaceStrong);
 
 		const ScopedCustomShader3D shader(vs3D, ps3D);
 
@@ -2088,7 +2088,7 @@ void CameraTest::update()
 		// 引き出し（１段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*5, drawerPos.z})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 5, drawerPos.z})
 			};
 
 			modelDrawerNon->draw();
@@ -2097,7 +2097,7 @@ void CameraTest::update()
 		// 引き出し（２段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*4, drawerPos.z})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 4, drawerPos.z})
 			};
 
 			modelDrawerFlower->draw();
@@ -2106,7 +2106,7 @@ void CameraTest::update()
 		// 引き出し（３段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*3, drawerPos.z})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 3, drawerPos.z})
 			};
 
 			modelDrawerChain->draw();
@@ -2115,7 +2115,7 @@ void CameraTest::update()
 		// 引き出し（４段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16*2, drawerPos.z})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 2, drawerPos.z})
 			};
 
 			modelDrawerFeather->draw();
@@ -2125,7 +2125,7 @@ void CameraTest::update()
 		// 引き出し（５段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06+0.16, drawerPos.z})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16, drawerPos.z})
 			};
 
 			modelDrawerSnake->draw();
@@ -2134,7 +2134,7 @@ void CameraTest::update()
 		// 引き出し（６段目）
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y+ 0.06, drawerPos.z})
+				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06, drawerPos.z})
 			};
 
 			modelDrawerEye->draw();
@@ -2150,7 +2150,7 @@ void CameraTest::update()
 		}
 
 		// ビックリマーク
-		if(bLockon)
+		if (bLockon)
 		{
 			// 少し上にする
 			markPosition.y += markHigh;
@@ -2207,101 +2207,8 @@ void CameraTest::update()
 		}
 
 		// デバッグ表示
-		if (bDebugViewCollision)
-		{
-			// モデルのワイヤーフレーム表示
-			{
-				Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-				const auto& objectTmp = model->objects();
-				for (const auto& object : objectTmp)
-				{
-					if (bDebugViewFrame)
-					{
-						// ワイヤーフレーム
-						//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
-
-						// 三角形
-						const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
-
-						ColorF color{ 1, 1, 1, 1 };
-
-						for (int i = 0; i < 12; i++)
-						{
-							Line3D{ cube[collisionTriangle[i][0]], cube[collisionTriangle[i][1]] }.draw(color);
-							Line3D{ cube[collisionTriangle[i][1]], cube[collisionTriangle[i][2]] }.draw(color);
-							Line3D{ cube[collisionTriangle[i][2]], cube[collisionTriangle[i][0]] }.draw(color);
-						}
-					}
-					else
-					{
-						// 塗りつぶし
-						object.boundingBox.draw(ColorF{ 1, 1, 1, 1 });
-					}
-				}
-			}
-
-			// コリジョンなし
-			for (int i = 0; i < DoorNum; i++)
-			{
-				if (bDoorOpen[i] == false)
-				{
-					continue;
-				}
-
-				ColorF color{ 0.0, 0.0, 1, 1 };
-
-				// 縦
-				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][3]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
-
-				// 下
-				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 0, collisionNone[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][3]}, Vec3{collisionNone[i][1], 0, collisionNone[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][0], 0, collisionNone[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 0, collisionNone[i][3]} }.draw(color);
-
-				// 上
-				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][2]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
-				Line3D{ Vec3{collisionNone[i][1], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
-			}
-
-			// ライトの判定
-			//for (auto& row : collisionLight)
-			//{
-			//	ColorF color{ 1.0, 1.0, 0.0, 1 };
-
-			//	// 縦
-			//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 3, row[2]} }.draw(color);
-			//	Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
-			//	Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[0], 3, row[3]} }.draw(color);
-			//	Line3D{ Vec3{row[1], 0, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
-
-			//	// 下
-			//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[1], 0, row[2]} }.draw(color);
-			//	Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[1], 0, row[3]} }.draw(color);
-			//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 0, row[3]} }.draw(color);
-			//	Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 0, row[3]} }.draw(color);
-
-			//	// 上
-			//	Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
-			//	Line3D{ Vec3{row[0], 3, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
-			//	Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[0], 3, row[3]} }.draw(color);
-			//	Line3D{ Vec3{row[1], 3, row[2]}, Vec3{row[1], 3, row[3]} }.draw(color);
-			//}
-
-		}
-
 #if _DEBUG
-		// デバッグ表示
-		if (bDebugViewCollision)
-		{
-			Print << U"m_focusPosition" << camera.getFocusPosition();
-			modelExclamationMark->draw(camera.getFocusPosition());
-		}
+		debugViewCollision();
 #endif
 	}
 
@@ -3045,4 +2952,99 @@ void CameraTest::playSE(String SE)
 	AudioAsset(SE).setVolume(1.0);
 	AudioAsset(SE).play();
 	bgmStopCount = 4.00;
+}
+
+// コリジョンのデバッグ表示
+void CameraTest::debugViewCollision()
+{
+	if (bDebugViewCollision)
+	{
+		// モデルのワイヤーフレーム表示
+		{
+			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+			const auto& objectTmp = model->objects();
+			for (const auto& object : objectTmp)
+			{
+				if (bDebugViewFrame)
+				{
+					// ワイヤーフレーム
+					//object.boundingBox.drawFrame(ColorF{ 1, 1, 1, 1 });
+
+					// 三角形
+					const std::array<Vec3, 8> cube = object.boundingBox.getCorners();
+
+					ColorF color{ 1, 1, 1, 1 };
+
+					for (int i = 0; i < 12; i++)
+					{
+						Line3D{ cube[collisionTriangle[i][0]], cube[collisionTriangle[i][1]] }.draw(color);
+						Line3D{ cube[collisionTriangle[i][1]], cube[collisionTriangle[i][2]] }.draw(color);
+						Line3D{ cube[collisionTriangle[i][2]], cube[collisionTriangle[i][0]] }.draw(color);
+					}
+				}
+				else
+				{
+					// 塗りつぶし
+					object.boundingBox.draw(ColorF{ 1, 1, 1, 1 });
+				}
+			}
+		}
+
+		// コリジョンなし
+		for (int i = 0; i < DoorNum; i++)
+		{
+			if (bDoorOpen[i] == false)
+			{
+				continue;
+			}
+
+			ColorF color{ 0.0, 0.0, 1, 1 };
+
+			// 縦
+			Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][2]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][2]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][3]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
+
+			// 下
+			Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 0, collisionNone[i][2]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][3]}, Vec3{collisionNone[i][1], 0, collisionNone[i][3]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][0], 0, collisionNone[i][2]}, Vec3{collisionNone[i][0], 0, collisionNone[i][3]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][1], 0, collisionNone[i][2]}, Vec3{collisionNone[i][1], 0, collisionNone[i][3]} }.draw(color);
+
+			// 上
+			Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][2]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][3]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][0], 3, collisionNone[i][2]}, Vec3{collisionNone[i][0], 3, collisionNone[i][3]} }.draw(color);
+			Line3D{ Vec3{collisionNone[i][1], 3, collisionNone[i][2]}, Vec3{collisionNone[i][1], 3, collisionNone[i][3]} }.draw(color);
+		}
+
+		// ライトの判定
+		//for (auto& row : collisionLight)
+		//{
+		//	ColorF color{ 1.0, 1.0, 0.0, 1 };
+
+		//	// 縦
+		//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 3, row[2]} }.draw(color);
+		//	Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
+		//	Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[0], 3, row[3]} }.draw(color);
+		//	Line3D{ Vec3{row[1], 0, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
+
+		//	// 下
+		//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[1], 0, row[2]} }.draw(color);
+		//	Line3D{ Vec3{row[0], 0, row[3]}, Vec3{row[1], 0, row[3]} }.draw(color);
+		//	Line3D{ Vec3{row[0], 0, row[2]}, Vec3{row[0], 0, row[3]} }.draw(color);
+		//	Line3D{ Vec3{row[1], 0, row[2]}, Vec3{row[1], 0, row[3]} }.draw(color);
+
+		//	// 上
+		//	Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[1], 3, row[2]} }.draw(color);
+		//	Line3D{ Vec3{row[0], 3, row[3]}, Vec3{row[1], 3, row[3]} }.draw(color);
+		//	Line3D{ Vec3{row[0], 3, row[2]}, Vec3{row[0], 3, row[3]} }.draw(color);
+		//	Line3D{ Vec3{row[1], 3, row[2]}, Vec3{row[1], 3, row[3]} }.draw(color);
+		//}
+
+		Print << U"m_focusPosition" << camera.getFocusPosition();
+		modelExclamationMark->draw(camera.getFocusPosition());
+	}
+
 }

@@ -1195,4 +1195,8 @@ private:
 //	const float prologueMessageWait = 1;
 
 	void playSE(String SE);
+
+	// コリジョンのデバッグ表示
+	void debugViewCollision();
+
 };
