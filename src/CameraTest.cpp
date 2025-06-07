@@ -500,6 +500,15 @@ void CameraTest::debug()
 		rustedKeyPos.z -= 0.01;
 	}
 
+	if (KeyN.down())
+	{
+		debugHeight += 1;
+	}
+	if (KeyM.down())
+	{
+		debugHeight -= 1;
+	}
+	
 
 	if (mouseDirectionX == 1)
 	{
@@ -598,7 +607,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"bgmStopCount=" << bgmStopCount;
+	Print << U"debugHeight=" << debugHeight;
 
 #endif
 }
@@ -661,6 +670,10 @@ void CameraTest::drawMiniItem(
 		// 鉄製の鍵
 		ironKeyMiniSprite.draw(x, y);
 		break;
+	case GoldKey:
+		// 黄金の鍵
+		goldKeySprite.resized(inventoryMini, inventoryMini).draw(x, y);
+		break;
 	}
 }
 
@@ -715,6 +728,10 @@ void CameraTest::drawBigItem(
 	case IronKey:
 		// 鉄製の鍵
 		ironKeyBigSprite.draw(x, y);
+		break;
+	case GoldKey:
+		// 黄金の鍵
+		goldKeySprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	}
 }
@@ -2004,7 +2021,8 @@ void CameraTest::draw() const
 		for (int i = 0; i < itemText[itemMessage].size(); ++i)
 		{
 			double x = center.x;
-			double y = center.y + 345 + lineSpacing * (i - (int)itemText.size() / 2);
+		//	double y = center.y + 345 + lineSpacing * (i - (int)itemText.size() / 2);
+			double y = center.y + 145 + lineSpacing * i;
 
 			boldFont(itemText[itemMessage][i]).drawAt(
 				28,
@@ -3488,8 +3506,7 @@ void CameraTest::lockon()
 						toDrawerPos[drawerIndex + 1].z -= 0.1;
 						drawerPull[drawerIndex] = true;
 
-					//	items << GoldKey;
-						items << Bread;	// デバッグ
+						items << GoldKey;
 
 						bGoldKeyHave = true;
 

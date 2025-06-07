@@ -619,6 +619,8 @@ private:
 	const Texture clothSprite{ U"assets/sprites/UI_Cloth01.png" };
 	const Texture ironKeyMiniSprite{ U"assets/sprites/iron_key_mini.png" };
 	const Texture ironKeyBigSprite{ U"assets/sprites/iron_key_big.png" };
+	const Texture goldKeySprite{ U"assets/sprites/gold_key.png" };
+	
 
 	// ビルボード用
 	const Texture uvChecker{ U"assets/sprites/ExclamationMark.png", TextureDesc::MippedSRGB };
@@ -1122,6 +1124,13 @@ private:
 			U"　　　　　　　　　　　　　　　　　",
 			U"　　　　　　　　　　　　　　　　　",
 		},
+
+		// 11 黄金の鍵
+		{
+			U"黄金の鍵だ。　　　　　　　　　　　",
+			U"　　　　　　　　　　　　　　　　　",
+			U"　　　　　　　　　　　　　　　　　",
+		},
 	};
 
 	// インベントリ用のテキスト（アイテム名）
@@ -1139,7 +1148,7 @@ private:
 		U"炙った羊皮紙",	// 8
 		U"針金製の鍵",	// 9
 		U"鉄製の鍵",	// 10
-
+		U"黄金の鍵",	// 11
 	};
 
 	// 手記
@@ -1261,4 +1270,6 @@ private:
 		false,
 		false,
 	};
+
+	float debugHeight = 200;
 };
