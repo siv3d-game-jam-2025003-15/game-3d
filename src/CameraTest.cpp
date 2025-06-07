@@ -2543,7 +2543,7 @@ void CameraTest::viewInventory()
 			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
 			{
 				bClothRead = true;
-				playSE(U"Item");
+			//	playSE(U"Item");
 			}
 		}
 	}
