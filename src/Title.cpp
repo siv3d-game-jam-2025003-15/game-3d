@@ -31,7 +31,8 @@ void Title::update()
 	}
 	else if (m_cameraTestButton.leftClicked()) // ゲーム開始
 	{
-		AudioAsset(U"牢屋の扉を閉める").play();
+	//	AudioAsset(U"牢屋の扉を閉める").play();
+		AudioAsset(U"Title").play();
 		changeScene(State::CameraTest);
 	}
 

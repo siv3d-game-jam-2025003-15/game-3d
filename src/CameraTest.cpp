@@ -113,6 +113,30 @@ void CameraTest::loadResources()
 	AudioAsset(U"牢屋の扉を開ける").play();
 	AudioAsset(U"牢屋の扉を開ける").stop();
 
+	AudioAsset(U"牢屋の扉を閉める").setVolume(0.0);
+	AudioAsset(U"牢屋の扉を閉める").play();
+	AudioAsset(U"牢屋の扉を閉める").stop();
+
+	AudioAsset(U"Cancellation").setVolume(0.0);
+	AudioAsset(U"Cancellation").play();
+	AudioAsset(U"Cancellation").stop();
+
+	AudioAsset(U"Item").setVolume(0.0);
+	AudioAsset(U"Item").play();
+	AudioAsset(U"Item").stop();
+
+	AudioAsset(U"Paper").setVolume(0.0);
+	AudioAsset(U"Paper").play();
+	AudioAsset(U"Paper").stop();
+
+	AudioAsset(U"Title").setVolume(0.0);
+	AudioAsset(U"Title").play();
+	AudioAsset(U"Title").stop();
+
+	AudioAsset(U"Water").setVolume(0.0);
+	AudioAsset(U"Water").play();
+	AudioAsset(U"Water").stop();
+
 	// 実際に使用して初回ローディングを済ませる
 //	inventorySprite.draw(0, 0);
 //	breadMiniSprite.draw(0, 0);

@@ -31,8 +31,14 @@ void Main()
 	AudioAsset::Register(U"足音45秒のループ", U"assets/sound/se/足音45秒のループ.wav", true);
     AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
     AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
-    AudioAsset::Register(U"GET", U"assets/sound/bgm/GET.wav");
-    AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3", Loop::Yes);
+	AudioAsset::Register(U"GET", U"assets/sound/se/GET.wav");
+	AudioAsset::Register(U"Cancellation", U"assets/sound/se/SE_Cancellation01.mp3");
+	AudioAsset::Register(U"Item", U"assets/sound/se/SE_Item01.mp3");
+	AudioAsset::Register(U"Paper", U"assets/sound/se/SE_Paper01.mp3");
+	AudioAsset::Register(U"Title", U"assets/sound/se/SE_Title01.mp3");
+	AudioAsset::Register(U"Water", U"assets/sound/se/SE_Water01.mp3");
+//	AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3", Loop::Yes);
+	AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM_Map01.mp3", Loop::Yes);
 
     App manager;
 	manager.add<Title>(State::Title);
