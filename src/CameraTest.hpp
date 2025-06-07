@@ -71,6 +71,7 @@ enum ItemID
 	ToastedParchment,	// 8 炙った羊皮紙
 	WireKey, // 9 針金製の鍵
 	IronKey,	// 10 鉄製の鍵
+	GoldKey,	// 11 黄金の鍵（仮）
 	ItemIdMAX,
 };
 
@@ -740,6 +741,10 @@ private:
 	// 左下の部屋のドアの前にいる
 	bool bDoor2Lockon = false;
 
+	// 黄金の鍵を持っている
+	bool bGoldKeyHave = false;
+
+
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数
@@ -1242,6 +1247,9 @@ private:
 
 	// 引き出しの順番
 	int drawerOrder = 0;
+
+	// 引き出しのカウンター
+	int drawerCounter= 0;
 
 	bool drawerPull[6] = {
 		false,

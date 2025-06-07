@@ -548,6 +548,8 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"drawerIndex=" << drawerIndex;
+	Print << U"drawerOrder=" << drawerOrder;
+	Print << U"drawerCounter=" << drawerCounter;
 
 #endif
 }
@@ -1363,10 +1365,16 @@ void CameraTest::update()
 
 			to_m_focusY = -0.3;
 
-			for (int i = 0; i < 6; i++)
+			if (bGoldKeyHave == false)
 			{
-				toDrawerPos[i+1].z = 1.6;
-				drawerPull[i] = false;
+				for (int i = 0; i < 6; i++)
+				{
+					toDrawerPos[i + 1].z = 1.6;
+					drawerPull[i] = false;
+				}
+
+				drawerCounter = 0;
+				drawerOrder = 0;
 			}
 		}
 		else
@@ -3332,7 +3340,7 @@ void CameraTest::lockon()
 	}
 
 	// 引き出し（本体）
-	if (!bLockon && bDrawerMode == false)
+	if (!bLockon && bDrawerMode == false && bGoldKeyHave == false)
 	{
 		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
@@ -3396,8 +3404,29 @@ void CameraTest::lockon()
 			// クリックした
 			if (drawerPull[drawerIndex] == false)
 			{
-				toDrawerPos[drawerIndex + 1].z -= 0.1;
-				drawerPull[drawerIndex] = true;
+				if (drawerIndex == 0)
+				{
+					// 一番上の引き出し
+					if (drawerOrder == 51432)
+					{
+						toDrawerPos[drawerIndex + 1].z -= 0.1;
+						drawerPull[drawerIndex] = true;
+
+					//	items << GoldKey;
+						items << Bread;	// デバッグ
+
+						bGoldKeyHave = true;
+					}
+				}
+				else
+				{
+					// それ以外の引き出し
+					toDrawerPos[drawerIndex + 1].z -= 0.1;
+					drawerPull[drawerIndex] = true;
+
+					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
+					drawerCounter++;
+				}
 			}
 		}
 	}
