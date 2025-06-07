@@ -598,7 +598,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case DirtyCloth:
 		// 汚れた布
-		dirtyClothMiniSprite.draw(x, y);
+		dirtyClothSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case Cloth:
 		// 布
@@ -653,7 +653,7 @@ void CameraTest::drawBigItem(
 		break;
 	case DirtyCloth:
 		// 汚れた布
-		dirtyClothBigSprite.draw(x, y);
+		dirtyClothSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case Cloth:
 		// 布
