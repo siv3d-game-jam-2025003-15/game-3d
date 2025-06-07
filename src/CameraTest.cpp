@@ -475,40 +475,30 @@ void CameraTest::debug()
 
 	if (KeyZ.down())
 	{
-		rustedKeyPos.x += 0.01;
+		door4Pos.x += 0.01;
 	}
 	if (KeyX.down())
 	{
-		rustedKeyPos.x -= 0.01;
+		door4Pos.x -= 0.01;
 	}
 
 	if (KeyC.down())
 	{
-		rustedKeyPos.y += 0.01;
+		door4Pos.y += 0.01;
 	}
 	if (KeyV.down())
 	{
-		rustedKeyPos.y -= 0.01;
+		door4Pos.y -= 0.01;
 	}
 
 	if (KeyB.down())
 	{
-		rustedKeyPos.z += 0.01;
+		door4Pos.z += 0.01;
 	}
 	if (KeyN.down())
 	{
-		rustedKeyPos.z -= 0.01;
-	}
-
-	if (KeyN.down())
-	{
-		debugHeight += 1;
-	}
-	if (KeyM.down())
-	{
-		debugHeight -= 1;
-	}
-	
+		door4Pos.z -= 0.01;
+	}	
 
 	if (mouseDirectionX == 1)
 	{
@@ -607,7 +597,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"debugHeight=" << debugHeight;
+	Print << U"door4Pos=" << door4Pos;
 
 #endif
 }
@@ -2967,6 +2957,28 @@ void CameraTest::lockon()
 			message = 30;
 		}
 	}
+
+	// ドア４（右上の部屋）
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = door2Controller.update(
+			door4Pos,
+			camera,
+			curCameraPosition,
+			//	ray,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 33;
+		}
+	}
+
+
 
 	// 羊皮紙
 	if (!bLockon)
