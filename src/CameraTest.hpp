@@ -598,15 +598,10 @@ private:
 	const Texture memoBigSprite{ U"assets/sprites/memo_big.png" };
 	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
 	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
-	//const Texture pokerMiniSprite{ U"assets/sprites/poker_mini.png" };
-	//const Texture pokerBigSprite{ U"assets/sprites/poker_big.png" };
 	const Texture pokerSprite{ U"assets/sprites/UI_Poker01.png" };
 	const Texture parchmentMiniSprite{ U"assets/sprites/Parchment_mini.png" };
 	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
-	const Texture wireMiniSprite{ U"assets/sprites/hanger_mini.png" };
-	const Texture wireBigSprite{ U"assets/sprites/hanger_big.png" };
-	//const Texture wireKeyMiniSprite{ U"assets/sprites/UI_WireKey_mini.png" };
-	//const Texture wireKeyBigSprite{ U"assets/sprites/UI_WireKey_big.png" };
+	const Texture hangerSprite{ U"assets/sprites/UI_Hanger01.png" };
 	const Texture wireKeySprite{ U"assets/sprites/UI_WireKey01.png" };
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
 	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };

@@ -594,7 +594,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case Wire:
 		// 針金
-		wireMiniSprite.draw(x, y);
+		hangerSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case DirtyCloth:
 		// 汚れた布
@@ -648,8 +648,8 @@ void CameraTest::drawBigItem(
 		parchmentBigSprite.draw(x, y);
 		break;
 	case Wire:
-		// 針金
-		wireBigSprite.draw(x, y);
+		// ハンガー
+		hangerSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case DirtyCloth:
 		// 汚れた布
