@@ -1209,4 +1209,7 @@ private:
 
 	// 合成アイテム番号
 	int synthesisIndex = -1;
+
+	// モデルの表示
+	void viewModel();
 };

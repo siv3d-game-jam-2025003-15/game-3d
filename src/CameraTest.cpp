@@ -1998,214 +1998,26 @@ void CameraTest::update()
 	// 太陽光をオフにする
 	Graphics3D::SetSunColor(ColorF{ sunColor });
 
-	// スポットライト
+	// モデルの表示
+	viewModel();
+
+	// ビックリマークのビルボード
+	if (bLockon)
 	{
+		// 少し上にする
+		markPosition.y += markHigh;
+
+		// 3Dのビックリマーク
+		//Transformer3D t{
+		//	Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
+		//};
+		//modelExclamationMark.draw();
+
+		// ビルボードの表示
 		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
-
-		// ライトの位置（ポイントライトVer.1）
-		//ConstantBuffer<Light> cb;
-		//cb->g_pointLightPos = lightPos;
-		//cb->g_pointLightStrong = lightStrong;
-		//Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
-
-		// 点光源を設定する
-		constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
-		constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ fireplaceR, fireplaceG, fireplaceB }, Periodic::Sine0_1(2s) * fireplaceSin + fireplaceStrong);
-
 		const ScopedCustomShader3D shader(vs3D, ps3D);
-
-		// ピクセルシェーダに定数バッファを渡す
-		Graphics3D::SetPSConstantBuffer(4, constantBuffer);
-
-		constantBuffer->drawPointLightAsEmissiveSphere(0, 0);
-		constantBuffer->drawPointLightAsEmissiveSphere(1, 0.1);
-
-		// モデルを描画
-		if (bDebugviewModel)
-		{
-			Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
-			model->draw();
-		}
-
-		// ドア
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(doorRot.y).scaled(roomScale).translated(doorPos)
-			};
-			modelDoor->draw();
-		}
-
-		// ドア２
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(door2Rot.y).scaled(roomScale).translated(door2Pos)
-			};
-			modelDoor->draw();
-		}
-
-		// パンの描画
-		if (bBreadHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(breadPos)
-			};
-
-			modelBread->draw();
-		}
-
-		// 錆びた鍵の描画
-		if (bRustedKeyHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(rustedKeyPos)
-			};
-			modelRustedKey->draw();
-		}
-
-		// 鉄製の鍵の描画
-		if (bIronKeyHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(IronkeyPos)
-			};
-			modelIronKey->draw();
-		}
-
-		// 火かき棒の描画
-		if (bPokerHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateZ(75_deg).scaled(0.01).translated(pokerPos)
-			};
-
-			modelPoker->draw();
-		}
-
-		// 引き出し（１段目）
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 5, drawerPos.z})
-			};
-
-			modelDrawerNon->draw();
-		}
-
-		// 引き出し（２段目）
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 4, drawerPos.z})
-			};
-
-			modelDrawerFlower->draw();
-		}
-
-		// 引き出し（３段目）
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 3, drawerPos.z})
-			};
-
-			modelDrawerChain->draw();
-		}
-
-		// 引き出し（４段目）
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 2, drawerPos.z})
-			};
-
-			modelDrawerFeather->draw();
-
-		}
-
-		// 引き出し（５段目）
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16, drawerPos.z})
-			};
-
-			modelDrawerSnake->draw();
-		}
-
-		// 引き出し（６段目）
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06, drawerPos.z})
-			};
-
-			modelDrawerEye->draw();
-		}
-
-		// 引き出し
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerPos)
-			};
-
-			modelShelf->draw();
-		}
-
-		// ビックリマーク
-		if (bLockon)
-		{
-			// 少し上にする
-			markPosition.y += markHigh;
-
-			// 3Dのビックリマーク
-			//Transformer3D t{
-			//	Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
-			//};
-			//modelExclamationMark.draw();
-
-			// ビルボード
-			const Mat4x4 billboardMat = camera.getInvView();
-			billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
-		}
-
-		// 羊皮紙の描画
-		if (bParchmentHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(parchmentPos)
-			};
-
-			modelParchment->draw();
-		}
-
-		// ハンガーの描画
-		if (bHangerHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangerPos)
-			};
-
-			modelHanger->draw();
-		}
-
-		// 汚れた布の描画
-		if (bDirtyClothHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.01).translated(dirtyClothPos)
-			};
-
-			modelDirtyCloth->draw();
-		}
-
-		// 汚れた布の描画
-		if (bMemoHave == false)
-		{
-			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.03).translated(memoPos)
-			};
-
-			modelMemo->draw();
-		}
-
-		// デバッグ表示
-#if _DEBUG
-		debugViewCollision();
-#endif
+		const Mat4x4 billboardMat = camera.getInvView();
+		billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
 	}
 
 	// [RenderTexture を 2D シーンに描画]
@@ -3107,4 +2919,197 @@ void CameraTest::viewInventory()
 			}
 		}
 	}
+}
+
+void CameraTest::viewModel()
+{
+	const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
+
+	// ライトの位置（ポイントライトVer.1）
+	//ConstantBuffer<Light> cb;
+	//cb->g_pointLightPos = lightPos;
+	//cb->g_pointLightStrong = lightStrong;
+	//Graphics3D::SetConstantBuffer(ShaderStage::Pixel, 2, cb);
+
+	// 点光源を設定する
+	constantBuffer->setPointLight(0, lightPos, ColorF{ 1.0, 1.0, 1.0 }, lightStrong);
+	constantBuffer->setPointLight(1, fireplaceLightPos, ColorF{ fireplaceR, fireplaceG, fireplaceB }, Periodic::Sine0_1(2s) * fireplaceSin + fireplaceStrong);
+
+	const ScopedCustomShader3D shader(vs3D, ps3D);
+
+	// ピクセルシェーダに定数バッファを渡す
+	Graphics3D::SetPSConstantBuffer(4, constantBuffer);
+
+	constantBuffer->drawPointLightAsEmissiveSphere(0, 0);
+	constantBuffer->drawPointLightAsEmissiveSphere(1, 0.1);
+
+	// モデルを描画
+	if (bDebugviewModel)
+	{
+		Transformer3D t{ Mat4x4::RotateY(0_deg).scaled(roomScale).translated(roomPos) };
+		model->draw();
+	}
+
+	// ドア
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(doorRot.y).scaled(roomScale).translated(doorPos)
+		};
+		modelDoor->draw();
+	}
+
+	// ドア２
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(door2Rot.y).scaled(roomScale).translated(door2Pos)
+		};
+		modelDoor->draw();
+	}
+
+	// パンの描画
+	if (bBreadHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(breadPos)
+		};
+
+		modelBread->draw();
+	}
+
+	// 錆びた鍵の描画
+	if (bRustedKeyHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateZ(0_deg).scaled(0.015).translated(rustedKeyPos)
+		};
+		modelRustedKey->draw();
+	}
+
+	// 鉄製の鍵の描画
+	if (bIronKeyHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateZ(0_deg).scaled(0.015).translated(IronkeyPos)
+		};
+		modelIronKey->draw();
+	}
+
+	// 火かき棒の描画
+	if (bPokerHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateZ(75_deg).scaled(0.01).translated(pokerPos)
+		};
+
+		modelPoker->draw();
+	}
+
+	// 引き出し（１段目）
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 5, drawerPos.z})
+		};
+
+		modelDrawerNon->draw();
+	}
+
+	// 引き出し（２段目）
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 4, drawerPos.z})
+		};
+
+		modelDrawerFlower->draw();
+	}
+
+	// 引き出し（３段目）
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 3, drawerPos.z})
+		};
+
+		modelDrawerChain->draw();
+	}
+
+	// 引き出し（４段目）
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16 * 2, drawerPos.z})
+		};
+
+		modelDrawerFeather->draw();
+
+	}
+
+	// 引き出し（５段目）
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06 + 0.16, drawerPos.z})
+		};
+
+		modelDrawerSnake->draw();
+	}
+
+	// 引き出し（６段目）
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos.x, drawerPos.y + 0.06, drawerPos.z})
+		};
+
+		modelDrawerEye->draw();
+	}
+
+	// 引き出し
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerPos)
+		};
+
+		modelShelf->draw();
+	}
+
+	// 羊皮紙の描画
+	if (bParchmentHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(parchmentPos)
+		};
+
+		modelParchment->draw();
+	}
+
+	// ハンガーの描画
+	if (bHangerHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(hangerRot.y).scaled(0.01).translated(hangerPos)
+		};
+
+		modelHanger->draw();
+	}
+
+	// 汚れた布の描画
+	if (bDirtyClothHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(dirtyClothPos)
+		};
+
+		modelDirtyCloth->draw();
+	}
+
+	// 汚れた布の描画
+	if (bMemoHave == false)
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.03).translated(memoPos)
+		};
+
+		modelMemo->draw();
+	}
+
+	// デバッグ表示
+#if _DEBUG
+	debugViewCollision();
+#endif
 }
