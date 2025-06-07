@@ -114,31 +114,38 @@ void CameraTest::loadResources()
 	AudioAsset(U"GET").stop();
 
 	// 実際に使用して初回ローディングを済ませる
-	inventorySprite.draw(0, 0);
-	breadMiniSprite.draw(0, 0);
-	breadBigSprite.draw(0, 0);
-	memoMiniSprite.draw(0, 0);
-	memoBigSprite.draw(0, 0);
-	keyMiniSprite.draw(0, 0);
-	keyBigSprite.draw(0, 0);
-//	pokerMiniSprite.draw(0, 0);
-//	pokerBigSprite.draw(0, 0);
-	pokerSprite.resized(inventoryMini, inventoryMini).draw(0, 0);
-	pokerSprite.resized(inventoryBig, inventoryBig).draw(0, 0);
-	parchmentMiniSprite.draw(0, 0);
-	parchmentBigSprite.draw(0, 0);
-	wireMiniSprite.draw(0, 0);
-	wireBigSprite.draw(0, 0);
-	wireKeyMiniSprite.draw(0, 0);
-	wireKeyBigSprite.draw(0, 0);
-	toastedParchmentMiniSprite.draw(0, 0);
-	toastedParchmentBigSprite.draw(0, 0);
-	dirtyClothMiniSprite.draw(0, 0);
-	dirtyClothBigSprite.draw(0, 0);
-	clothMiniSprite.draw(0, 0);
-	clothBigSprite.draw(0, 0);
-	ironKeyMiniSprite.draw(0, 0);
-	ironKeyBigSprite.draw(0, 0);
+//	inventorySprite.draw(0, 0);
+//	breadMiniSprite.draw(0, 0);
+//	breadBigSprite.draw(0, 0);
+//	memoMiniSprite.draw(0, 0);
+//	memoBigSprite.draw(0, 0);
+//	keyMiniSprite.draw(0, 0);
+//	keyBigSprite.draw(0, 0);
+//	//pokerMiniSprite.draw(0, 0);
+//	//pokerBigSprite.draw(0, 0);
+//	pokerSprite.resized(inventoryMini, inventoryMini).draw(0, 0);
+//	pokerSprite.resized(inventoryBig, inventoryBig).draw(0, 0);
+//	parchmentMiniSprite.draw(0, 0);
+//	parchmentBigSprite.draw(0, 0);
+//	wireMiniSprite.draw(0, 0);
+//	wireBigSprite.draw(0, 0);
+//	//wireKeyMiniSprite.draw(0, 0);
+//	//wireKeyBigSprite.draw(0, 0);
+//	wireKeySprite.resized(inventoryMini, inventoryMini).draw(0, 0);
+//	wireKeySprite.resized(inventoryBig, inventoryBig).draw(0, 0);
+//	toastedParchmentMiniSprite.draw(0, 0);
+//	toastedParchmentBigSprite.draw(0, 0);
+//	dirtyClothMiniSprite.draw(0, 0);
+//	dirtyClothBigSprite.draw(0, 0);
+//	clothMiniSprite.draw(0, 0);
+//	clothBigSprite.draw(0, 0);
+//	ironKeyMiniSprite.draw(0, 0);
+//	ironKeyBigSprite.draw(0, 0);
+	for (int itemId = 0; itemId < ItemIdMAX; itemId++)
+	{
+		drawMiniItem(itemId, 0, 0);
+		drawBigItem(itemId, 0, 0);
+	}
 
 	billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
 
@@ -579,7 +586,6 @@ void CameraTest::drawMiniItem(
 		break;
 	case Poker:
 		// 火かき棒
-	//	pokerMiniSprite.draw(x, y);
 		pokerSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case Parchment:
@@ -604,7 +610,7 @@ void CameraTest::drawMiniItem(
 		break;
 	case WireKey:
 		// 針金の鍵
-		wireKeyMiniSprite.draw(x, y);
+		wireKeySprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case IronKey:
 		// 鉄製の鍵
@@ -635,7 +641,6 @@ void CameraTest::drawBigItem(
 		break;
 	case Poker:
 		// 火かき棒
-	//	pokerBigSprite.draw(x, y);
 		pokerSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case Parchment:
@@ -660,7 +665,7 @@ void CameraTest::drawBigItem(
 		break;
 	case WireKey:
 		// 針金の鍵
-		wireKeyBigSprite.draw(x, y);
+		wireKeySprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case IronKey:
 		// 鉄製の鍵

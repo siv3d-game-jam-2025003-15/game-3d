@@ -71,6 +71,7 @@ enum ItemID
 	ToastedParchment,	// 8 炙った羊皮紙
 	WireKey, // 9 針金製の鍵
 	IronKey,	// 10 鉄製の鍵
+	ItemIdMAX,
 };
 
 // カメラの実験
@@ -604,8 +605,9 @@ private:
 	const Texture parchmentBigSprite{ U"assets/sprites/Parchment_big.png" };
 	const Texture wireMiniSprite{ U"assets/sprites/hanger_mini.png" };
 	const Texture wireBigSprite{ U"assets/sprites/hanger_big.png" };
-	const Texture wireKeyMiniSprite{ U"assets/sprites/UI_WireKey_mini.png" };
-	const Texture wireKeyBigSprite{ U"assets/sprites/UI_WireKey_big.png" };
+	//const Texture wireKeyMiniSprite{ U"assets/sprites/UI_WireKey_mini.png" };
+	//const Texture wireKeyBigSprite{ U"assets/sprites/UI_WireKey_big.png" };
+	const Texture wireKeySprite{ U"assets/sprites/UI_WireKey01.png" };
 	const Texture toastedParchmentMiniSprite{ U"assets/sprites/ToastedParchment_mini.png" };
 	const Texture toastedParchmentBigSprite{ U"assets/sprites/ToastedParchment_big.png" };
 	const Texture dirtyClothMiniSprite{ U"assets/sprites/DirtyCloth_mini.png" };
