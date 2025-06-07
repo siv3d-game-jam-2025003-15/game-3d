@@ -62,10 +62,10 @@ enum ItemID
 {
 	Bread,	// 0 パン
 	Memo,	// 1 手記
-	Key,	// 2 錆びた鍵
+	RustedKey,	// 2 錆びた鍵
 	Poker,	// 3 火かき棒
 	Parchment, // 4 羊皮紙
-	Wire, // 5 針金（ハンガー）
+	Hanger, // 5 ハンガー
 	DirtyCloth,	// 6 汚れた布
 	Cloth,	// 7 布
 	ToastedParchment,	// 8 炙った羊皮紙
@@ -222,7 +222,7 @@ private:
 	// モデルのpath
 	const String modelPath = U"assets/models/Room/EV_Room01.obj";
 	const String modelDoorPath = U"assets/models/Room/Gimmick_FenceDoor01.obj";
-	const String modelKeyPath = U"assets/models/Key/Gimmick_RustedKey01.obj";
+	const String modelRustedKeyPath = U"assets/models/Key/Gimmick_RustedKey01.obj";
 	const String modelIronKeyPath = U"assets/models/Key/Gimmick_IronKey01.obj";
 	const String modelBreadPath = U"assets/models/Bread/Gimmick_bread01.obj";
 	const String modelPokerPath = U"assets/models/Poker/Gimmick_Poker01.obj";
@@ -242,7 +242,7 @@ private:
 	// modelの遅延ロード用ポインタ
 	mutable std::unique_ptr<Model> model;
 	mutable std::unique_ptr<Model> modelDoor;
-	mutable std::unique_ptr<Model> modelKey;
+	mutable std::unique_ptr<Model> modelRustedKey;
 	mutable std::unique_ptr<Model> modelIronKey;
 	mutable std::unique_ptr<Model> modelBread;
 	mutable std::unique_ptr<Model> modelPoker;
@@ -392,7 +392,7 @@ private:
 	Vec3 door3Pos{ 20, 0.9, -0.7 };	// 右上の部屋のドア
 
 	// 錆びた鍵の座標
-	Vec3 keyPos = { 3.7, 0.01, 3 };
+	Vec3 rustedKeyPos = { 3.7, 0.01, 3 };
 
 	// 鉄製の鍵の座標
 	Vec3 IronkeyPos = { -0.48, 0.465, -4.80 };
@@ -453,7 +453,7 @@ private:
 
 	// オブジェクトクラス
 	ObjectController breadController;
-	ObjectController keyController;
+	ObjectController rustedKeyController;
 	ObjectController ironkeyController;
 	ObjectController pokerController;
 	ObjectController doorController;
@@ -595,8 +595,7 @@ private:
 	const Texture breadMiniSprite{ U"assets/sprites/bread_mini.png" };
 	const Texture breadBigSprite{ U"assets/sprites/bread_big.png" };
 	const Texture memoSprite{ U"assets/sprites/UI_notes01.png" };
-	const Texture keyMiniSprite{ U"assets/sprites/key_mini.png" };
-	const Texture keyBigSprite{ U"assets/sprites/key_big.png" };
+	const Texture rustedKeySprite{ U"assets/sprites/key_big.png" };
 	const Texture pokerSprite{ U"assets/sprites/UI_Poker01.png" };
 	const Texture parchmentSprite{ U"assets/sprites/UI_Parchment01.png" };
 	const Texture hangerSprite{ U"assets/sprites/UI_Hanger01.png" };
@@ -658,7 +657,7 @@ private:
 	int scenario = 0;
 
 	// 錆びた鍵を持っている
-	bool bKeyHave = false;
+	bool bRustedKeyHave = false;
 
 	// パンを持っている
 	bool bBreadHave = false;
@@ -758,7 +757,8 @@ private:
 		
 		// 2 手記を読んだ後
 		//U"ベッド脇の壁を調べてみよう。",	// 2
-		U"この手記は何かのヒントだろうか…。",	// 2
+		//U"この手記は何かのヒントだろうか…。",	// 2
+		U"",	// 2
 		U"",	// 2
 		U"",	// 2
 

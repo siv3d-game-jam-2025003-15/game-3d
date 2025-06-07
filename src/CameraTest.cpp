@@ -184,7 +184,7 @@ void CameraTest::loadModels() const
 		modelDoor = std::make_unique<Model>(modelDoorPath);
 		break;
 	case 2:
-		modelKey = std::make_unique<Model>(modelKeyPath);
+		modelRustedKey = std::make_unique<Model>(modelRustedKeyPath);
 		break;
 	case 3:
 		modelIronKey = std::make_unique<Model>(modelIronKeyPath);
@@ -235,7 +235,7 @@ void CameraTest::loadModels() const
 		// モデルに付随するテクスチャをアセット管理に登録
 		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
 		Model::RegisterDiffuseTextures(*modelDoor, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelKey, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelRustedKey, TextureDesc::MippedSRGB);
 		Model::RegisterDiffuseTextures(*modelIronKey, TextureDesc::MippedSRGB);
 		Model::RegisterDiffuseTextures(*modelBread, TextureDesc::MippedSRGB);
 		Model::RegisterDiffuseTextures(*modelPoker, TextureDesc::MippedSRGB);
@@ -580,9 +580,9 @@ void CameraTest::drawMiniItem(
 		// 手記
 		memoSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
-	case Key:
+	case RustedKey:
 		// 錆びた鍵
-		keyMiniSprite.draw(x, y);
+		rustedKeySprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
 	case Poker:
 		// 火かき棒
@@ -592,7 +592,7 @@ void CameraTest::drawMiniItem(
 		// 羊皮紙
 		parchmentSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
-	case Wire:
+	case Hanger:
 		// 針金
 		hangerSprite.resized(inventoryMini, inventoryMini).draw(x, y);
 		break;
@@ -635,9 +635,9 @@ void CameraTest::drawBigItem(
 		// 手記
 		memoSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
-	case Key:
+	case RustedKey:
 		// 錆びた鍵
-		keyBigSprite.draw(x, y);
+		rustedKeySprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
 	case Poker:
 		// 火かき棒
@@ -647,7 +647,7 @@ void CameraTest::drawBigItem(
 		// 羊皮紙
 		parchmentSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
-	case Wire:
+	case Hanger:
 		// ハンガー
 		hangerSprite.resized(inventoryBig, inventoryBig).draw(x, y);
 		break;
@@ -957,7 +957,7 @@ void CameraTest::update()
 				bBreadHave = a;
 				bgmStopCount = c;
 
-				scenario = 19;
+			//	scenario = 19;
 			}
 			if (b)
 			{
@@ -973,16 +973,19 @@ void CameraTest::update()
 		}
 
 		// 錆びた鍵
-		if (!bLockon && bKeyHave == false)
+		if (!bLockon && bRustedKeyHave == false)
 		{
-			auto [a, b, c] = keyController.update(keyPos, camera, m_eyePosition, ray, markPosition, 0, true);
+			auto [a, b, c] = rustedKeyController.update(rustedKeyPos, camera, m_eyePosition, ray, markPosition, 0, true);
 			if (a == true)
 			{
 				// アイテムを取った
-				items << Key;
-				bKeyHave = true;
+				items << RustedKey;
+				bRustedKeyHave = true;
 				bgmStopCount = c;
-				scenario = 3;
+				if (scenario == 1)	// パンを食べた後
+				{
+					scenario = 2;	// なし
+				}
 			}
 			if (b)
 			{
@@ -1350,7 +1353,7 @@ void CameraTest::update()
 			{
 				// ハンガーを取得
 				bHangerHave = true;
-				items << Wire;
+				items << Hanger;
 			}
 			if (b)
 			{
@@ -2058,12 +2061,12 @@ void CameraTest::update()
 		}
 
 		// 錆びた鍵の描画
-		if (bKeyHave == false)
+		if (bRustedKeyHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(keyPos)
+				Mat4x4::RotateZ(0_deg).scaled(0.015).translated(rustedKeyPos)
 			};
-			modelKey->draw();
+			modelRustedKey->draw();
 		}
 
 		// 鉄製の鍵の描画
@@ -2881,46 +2884,42 @@ void CameraTest::viewInventory()
 		// アイテムを使う
 		if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
 		{
-			// メッセージが表示されていたら閉じる
+			// メッセージが表示されていたら閉じる系
 			bMemo = false;
 			bToastedParchmentRead = false;
 			bClothRead = false;
 		}
 		else if (items.size() <= selectItem)
 		{
-			// 処理しない
+			// アイテムのない場所は処理しない
 		}
 		else if (items[selectItem] == Bread)
 		{
 			// パンを食べる
-
-			// 手記を手に入れる（←オミット）
-			//items[selectItem] = Memo;
 			items.remove_at(selectItem);
 
 			// シナリオを進める
-			scenario = 1;
+			scenario = 1;	// パンを食べた後
 
 			// SEを鳴らす
 			playSE(U"GET");
-			//AudioAsset(U"BGM").stop();
-			//AudioAsset(U"GET").setVolume(1.0);
-			//AudioAsset(U"GET").play();
-			//bgmStopCount = 4.00;
 		}
 		else if (items[selectItem] == Memo)
 		{
 			// 手記を使った
 			bMemo = true;
 
-			if (scenario == 1)
+			if (scenario == 1)	// パンを食べた後
 			{
-				scenario = 2;
+				scenario = 2;	// なし
 			}
 		}
-		else if (items[selectItem] == Wire)
+		else if (items[selectItem] == Hanger)
 		{
-			if (bKeyHave)
+			// ハンガー
+
+			// 錆びた鍵を持っているかどうか
+			if (bRustedKeyHave)
 			{
 				// 錆びた鍵を持っている状態で針金を使う
 				items[selectItem] = WireKey;
@@ -2928,12 +2927,11 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 				playSE(U"GET");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"GET").setVolume(1.0);
-				//AudioAsset(U"GET").play();
-				//bgmStopCount = 4.00;
 
-				scenario = 5;
+				if (scenario == 1)	// パンを食べた後
+				{
+					scenario = 2;	// なし
+				}
 			}
 		}
 		else if (items[selectItem] == WireKey)
@@ -2945,14 +2943,14 @@ void CameraTest::viewInventory()
 				// ドアを開いた
 				bDoorOpen[0] = true;
 				toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
-				//	scenario = 6;
+				
+				if (scenario == 1)	// パンを食べた後
+				{
+					scenario = 2;	// なし
+				}
 
-					// SEを鳴らす
+				// SEを鳴らす
 				playSE(U"牢屋の扉を開ける");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
-				//AudioAsset(U"牢屋の扉を開ける").play();
-				//bgmStopCount = 4.00;
 
 				inventoryOnOff();
 			}
@@ -2969,30 +2967,12 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 				playSE(U"牢屋の扉を開ける");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"牢屋の扉を開ける").setVolume(1.0);
-				//AudioAsset(U"牢屋の扉を開ける").play();
-				//bgmStopCount = 4.00;
 
 				inventoryOnOff();
 			}
 		}
 		else if (items[selectItem] == Poker)
 		{
-			// 火が弱い暖炉の近くで使う
-			// オミット
-			//if (bFireplaceWeakLockon)
-			//{
-			//	// 暖炉の火を強くする
-			//	bFireplaceStrong = true;
-
-			//	// SEを鳴らす
-			//	AudioAsset(U"BGM").stop();
-			//	AudioAsset(U"GET").setVolume(1.0);
-			//	AudioAsset(U"GET").play();
-			//	bgmStopCount = 4.00;
-			//}
-
 			// 鉄製の鍵のところで使う
 			if (bIronKeyLockon)
 			{
@@ -3004,10 +2984,6 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 				playSE(U"GET");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"GET").setVolume(1.0);
-				//AudioAsset(U"GET").play();
-				//bgmStopCount = 4.00;
 			}
 		}
 		else if (items[selectItem] == Parchment)
@@ -3021,10 +2997,6 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 				playSE(U"GET");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"GET").setVolume(1.0);
-				//AudioAsset(U"GET").play();
-				//bgmStopCount = 4.00;
 			}
 		}
 		else if (items[selectItem] == ToastedParchment)
@@ -3043,10 +3015,6 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 				playSE(U"GET");
-				//AudioAsset(U"BGM").stop();
-				//AudioAsset(U"GET").setVolume(1.0);
-				//AudioAsset(U"GET").play();
-				//bgmStopCount = 4.00;
 			}
 		}
 		else if (items[selectItem] == Cloth)
