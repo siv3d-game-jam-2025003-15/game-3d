@@ -598,7 +598,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"rustedKeyPos=" << rustedKeyPos;
+	Print << U"bgmStopCount=" << bgmStopCount;
 
 #endif
 }
@@ -1771,13 +1771,20 @@ void CameraTest::update()
 	{
 		// 止まっているBGMを再度鳴らす
 		{
-			// BGMの再開
 			if (bgmStopCount <= 0.0f)
 			{
-				if (!AudioAsset(U"BGM").isPlaying())
+				if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
 				{
-					AudioAsset(U"BGM").setVolume(1.0);
-					AudioAsset(U"BGM").play();
+					// 文章を呼んでいるときは、BGMを再開させない
+				}
+				else
+				{
+					// BGMの再開
+					if (!AudioAsset(U"BGM").isPlaying())
+					{
+						AudioAsset(U"BGM").setVolume(1.0);
+						AudioAsset(U"BGM").play();
+					}
 				}
 			}
 			else {
@@ -2075,7 +2082,7 @@ void CameraTest::draw() const
 		}
 	}
 
-	// 羊皮紙
+	// 布
 	if (bInventory && bClothRead)
 	{
 		// 半透明の黒い画像
@@ -3249,6 +3256,7 @@ void CameraTest::lockon()
 			// ハンガーを取得
 			bHangerHave = true;
 			items << Hanger;
+			bgmStopCount = c;
 
 			scenario = 3;	// なし
 		}
@@ -3368,6 +3376,7 @@ void CameraTest::lockon()
 			// 汚れた布を取得
 			bDirtyClothHave = true;
 			items << DirtyCloth;
+			bgmStopCount = c;
 		}
 		if (b)
 		{
@@ -3394,6 +3403,7 @@ void CameraTest::lockon()
 			// 手記を取得
 			bMemoHave = true;
 			items << Memo;
+			bgmStopCount = c;
 
 			scenario = 3;	// なし
 		}
