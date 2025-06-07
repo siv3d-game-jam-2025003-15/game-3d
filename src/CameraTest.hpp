@@ -1206,4 +1206,7 @@ private:
 
 	// チュートリアルフラグ（パン入手から使うまで。使ったらfalseになる）
 	bool bTutorial = true;
+
+	// 合成アイテム番号
+	int synthesisIndex = -1;
 };

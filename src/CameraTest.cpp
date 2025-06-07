@@ -2834,30 +2834,53 @@ void CameraTest::viewInventory()
 			continue;
 		}
 
+		// 現在選択中のアイテムに枠を表示
 		Rect rect(itemMiniX, itemMiniY, itemMiniWidth, itemMiniHeight);
 
 		if (rect.mouseOver())
 		{
-			// 枠線
-			rect.drawFrame(
-				2,		// 枠線の太さ
-				Palette::Skyblue	// 空色で描画
-			);
-
 			selectItem = i;
 
+			Color rectColor = Palette::Skyblue;
+
+			// 合成中なら色を変える
+			if (synthesisIndex >= 0)
+			{
+				if (synthesisIndex == i)
+				{
+					// 合成元
+					rectColor = Palette::Greenyellow;
+				}
+				else
+				{
+					// 合成先
+					rectColor = Palette::Yellow;
+				}
+			}
+		
+			// 枠線
+			rect.drawFrame(2, rectColor);
+
 			// コメント
-			itemMessage = items[i];
+			itemMessage = items[selectItem];
 		}
 		else
 		{
-			// 枠線
-			rect.drawFrame(
-				1,				// 枠線の太さ
-				Palette::Black	// 黒で描画
-			);
-		}
+			Color rectColor = Palette::Black;
 
+			// 合成中なら色を変える
+			if (synthesisIndex >= 0)
+			{
+				if (synthesisIndex == i)
+				{
+					// 合成元
+					rectColor = Palette::Greenyellow;
+				}
+			}
+
+			// 枠線
+			rect.drawFrame( 1, rectColor);
+		}
 	}
 
 	//現在選択中のアイテム
@@ -2905,6 +2928,9 @@ void CameraTest::viewInventory()
 		else if (items[selectItem] == Hanger)
 		{
 			// ハンガー
+
+			// TODO カーソルを緑にしたい
+			synthesisIndex = selectItem;
 
 			// 錆びた鍵を持っているかどうか
 			if (bRustedKeyHave)
