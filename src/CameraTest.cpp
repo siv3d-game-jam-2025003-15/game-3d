@@ -742,8 +742,8 @@ void CameraTest::update()
 	double diffMousePosX = 0.0f;
 	double diffMousePosY = 0.0f;
 
-	// アイテムのロックオンフラグ
-	bool bLockon = false;
+	// アイテムのロックオンフラグのリセット
+	bLockon = false;
 
 	if (bStartPlaying == false)
 	{
@@ -2001,25 +2001,6 @@ void CameraTest::update()
 	// モデルの表示
 	viewModel();
 
-	// ビックリマークのビルボード
-	if (bLockon)
-	{
-		// 少し上にする
-		markPosition.y += markHigh;
-
-		// 3Dのビックリマーク
-		//Transformer3D t{
-		//	Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
-		//};
-		//modelExclamationMark.draw();
-
-		// ビルボードの表示
-		const ScopedRenderTarget3D target{ renderTexture.clear(backgroundColor) };
-		const ScopedCustomShader3D shader(vs3D, ps3D);
-		const Mat4x4 billboardMat = camera.getInvView();
-		billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
-	}
-
 	// [RenderTexture を 2D シーンに描画]
 	{
 		Graphics3D::Flush();
@@ -3106,6 +3087,23 @@ void CameraTest::viewModel()
 		};
 
 		modelMemo->draw();
+	}
+
+	// ビックリマークのビルボード
+	if (bLockon)
+	{
+		// 少し上にする
+		markPosition.y += markHigh;
+
+		// 3Dのビックリマーク
+		//Transformer3D t{
+		//	Mat4x4::RotateY(0_deg).scaled(1).translated(MarkPosition)
+		//};
+		//modelExclamationMark.draw();
+
+		// ビルボードの表示
+		const Mat4x4 billboardMat = camera.getInvView();
+		billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
 	}
 
 	// デバッグ表示

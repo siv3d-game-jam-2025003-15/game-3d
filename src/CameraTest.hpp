@@ -1212,4 +1212,7 @@ private:
 
 	// モデルの表示
 	void viewModel();
+
+	// ロックオン
+	bool bLockon = false;
 };
