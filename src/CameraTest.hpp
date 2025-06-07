@@ -449,7 +449,7 @@ private:
 	Vec3 dirtyClothPos = { 11.522, 0.458, 10.29 };
 
 	// 手記
-	Vec3 memoPos = { -3.6, 0, 10.6 };
+	Vec3 memoPos = { -3.0, 0.01, 10.6 };
 
 	// オブジェクトクラス
 	ObjectController breadController;

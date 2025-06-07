@@ -2200,7 +2200,7 @@ void CameraTest::update()
 		if (bMemoHave == false)
 		{
 			Transformer3D t{
-				Mat4x4::RotateY(0_deg).scaled(0.1).translated(memoPos)
+				Mat4x4::RotateY(0_deg).scaled(0.03).translated(memoPos)
 			};
 
 			modelMemo->draw();
