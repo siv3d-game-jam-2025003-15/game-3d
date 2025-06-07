@@ -1352,13 +1352,33 @@ void CameraTest::update()
 	// 引き出しモード
 	if (bDrawerMode)
 	{
-		toCameraPos.y = 0.9 - drawerIndex * 0.16;
-
-		for (int i = 1; i < 7; i++)
+		if (MouseR.down())
 		{
-			drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
-		}
+			// 引き出しモード解除
+			bDrawerMode = false;
 
+			toCameraPos.x = drawerPos[0].x;
+			toCameraPos.y = 1.5;
+			toCameraPos.z = drawerPos[0].z - 2.0;
+
+			to_m_focusY = -0.3;
+
+			for (int i = 0; i < 6; i++)
+			{
+				toDrawerPos[i+1].z = 1.6;
+				drawerPull[i] = false;
+			}
+		}
+		else
+		{
+			toCameraPos.y = 0.9 - drawerIndex * 0.16;
+		}
+	}
+
+	// 引き出しの移動
+	for (int i = 1; i < 7; i++)
+	{
+		drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
 	}
 
 	// カメラ関係
@@ -3368,7 +3388,7 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 9;
+			message = 38 + drawerIndex;
 		}
 
 		if (d)
