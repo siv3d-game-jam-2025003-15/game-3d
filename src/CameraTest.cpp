@@ -1056,7 +1056,7 @@ void CameraTest::update()
 		}
 		else
 		{
-			if (MouseL.down())
+			if (MouseL.down() || controller.buttonA.down())
 			{
 				messagePattern++;
 				messagePattern %= 3;
@@ -1154,7 +1154,9 @@ void CameraTest::update()
 	}
 
 	// インベントリの表示・非表示
-	if (KeyI.down())
+	if (KeyI.down()
+	 || controller.buttonY.down()
+	)
 	{
 		inventoryOnOff();
 	}
