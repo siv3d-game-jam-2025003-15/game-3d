@@ -19,6 +19,14 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 	bool isClick = false;
 	int bgmStopCount = 4.0;
 
+	size_t playerIndex = 0;
+
+	auto controller = XInput(playerIndex);
+	controller.setLeftTriggerDeadZone();
+	controller.setRightTriggerDeadZone();
+	controller.setLeftThumbDeadZone();
+	controller.setRightThumbDeadZone();
+
 	if (m_isHave)
 	{
 		return { m_isHave,isLockon, bgmStopCount, isClick };
@@ -57,6 +65,7 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 		|| (
 		//	box.intersects(ray) &&	// Rayで取れるようにするのをやめてみる
 			MouseL.down()
+			|| controller.buttonA.down()
 			)
 		)
 		{
