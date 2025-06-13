@@ -475,29 +475,29 @@ void CameraTest::debug()
 
 	if (KeyZ.down())
 	{
-		door4Pos.x += 0.01;
+		breadPos.x += 0.01;
 	}
 	if (KeyX.down())
 	{
-		door4Pos.x -= 0.01;
+		breadPos.x -= 0.01;
 	}
 
 	if (KeyC.down())
 	{
-		door4Pos.y += 0.01;
+		breadPos.y += 0.01;
 	}
 	if (KeyV.down())
 	{
-		door4Pos.y -= 0.01;
+		breadPos.y -= 0.01;
 	}
 
 	if (KeyB.down())
 	{
-		door4Pos.z += 0.01;
+		breadPos.z += 0.01;
 	}
 	if (KeyN.down())
 	{
-		door4Pos.z -= 0.01;
+		breadPos.z -= 0.01;
 	}	
 
 	if (mouseDirectionX == 1)
@@ -597,9 +597,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"door4Pos=" << door4Pos;
-	Print << U"bDrawerMode=" << bDrawerMode;
-	Print << U"bGoldKeyHave=" << bGoldKeyHave;
+	Print << U"breadPos=" << breadPos;
 
 #endif
 }

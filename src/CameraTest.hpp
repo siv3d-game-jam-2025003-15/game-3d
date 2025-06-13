@@ -401,7 +401,7 @@ private:
 	Vec3 IronkeyPos = { -0.48, 0.465, -4.80 };
 
 	// パンの座標
-	Vec3 breadPos = { 0, 0.75, 7 };
+	Vec3 breadPos = { -0.13, 0.75, 6.53 };
 
 	// 火かき棒の座標
 	Vec3 pokerPos = { 20, 0.45, -6.2 };
