@@ -1152,8 +1152,9 @@ void CameraTest::update()
 	}
 
 	// インベントリの表示・非表示
-	if (KeyI.down()
-	 || controller.buttonY.down()
+//	if (KeyI.down()
+	if (KeySpace.down()
+		|| controller.buttonY.down()
 	)
 	{
 		inventoryOnOff();
