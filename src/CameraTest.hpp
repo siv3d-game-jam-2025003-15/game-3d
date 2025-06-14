@@ -1290,4 +1290,6 @@ private:
 	float footcount = 0;
 
 	bool bMouseL = false;
+
+	float drawerPullCount = 0;
 };

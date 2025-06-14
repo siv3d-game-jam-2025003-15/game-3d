@@ -1493,6 +1493,7 @@ void CameraTest::update()
 			// いっかいマウスを離してから有効にする
 			bMouseL = true;
 		}
+
 		if (MouseL.down() && bMouseL)
 		{
 			// クリックした
@@ -1541,20 +1542,56 @@ void CameraTest::update()
 				else
 				{
 					// それ以外の引き出し
-					toDrawerPos[drawerIndex + 1].z -= 0.1;
+					toDrawerPos[drawerIndex + 1].z -= 0.2;
 					drawerPull[drawerIndex] = true;
+					drawerPullCount = 1.0;
 
 					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
 					drawerCounter++;
+
+					if (!AudioAsset(U"drawer_open").isPlaying())
+					{
+						AudioAsset(U"drawer_open").setLoop(false);
+						AudioAsset(U"drawer_open").setVolume(1.0);
+						AudioAsset(U"drawer_open").play();
+					}
+				}
+			}
+		}
+
+		if (drawerPullCount > 0) 
+		{
+			drawerPullCount -= deltaTime;
+
+			if (drawerPullCount <= 0)
+			{
+				// 閉じる
+				for (int i = 0; i < 6; i++)
+				{
+					if (drawerPull[drawerIndex] == true)
+					{
+						toDrawerPos[drawerIndex + 1].z += 0.2;
+						if (!AudioAsset(U"drawer_close").isPlaying())
+						{
+							AudioAsset(U"drawer_close").setLoop(false);
+							AudioAsset(U"drawer_close").setVolume(1.0);
+							AudioAsset(U"drawer_close").play();
+						}
+						drawerPull[drawerIndex] = false;
+					}
 				}
 			}
 		}
 	}
 
+	Print << U"Loop=" << AudioAsset(U"drawer_open").isLoop();
+
+
 	// 引き出しの移動
 	for (int i = 1; i < 7; i++)
 	{
-		drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
+	//	drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
+		drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.06);
 	}
 
 	// カメラ関係
