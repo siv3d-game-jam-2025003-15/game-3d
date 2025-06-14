@@ -115,6 +115,7 @@ Game::Game(const InitData& init)
     Point activeVoxelXZ{ -1, -1 };
     
     AudioAsset(U"BGM").play();
+    AudioAsset(U"bonfire").play();
 }
 
 void Game::update()
@@ -122,6 +123,7 @@ void Game::update()
     if (resultButton.leftClicked()) // リザルトへ
     {
         AudioAsset(U"BGM").stop();
+        AudioAsset(U"bonfire").stop();
         changeScene(State::Result);
     }
     if (walk45SecLoopButton.leftClicked()) // リザルトへ

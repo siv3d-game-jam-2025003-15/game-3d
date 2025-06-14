@@ -1,5 +1,12 @@
 ﻿#include "CameraTest.hpp"
 
+double GetDistance(const Vec2& a, const Vec2& b)
+{
+	double dx = b.x - a.x;
+	double dy = b.y - a.y;
+	return std::sqrt(dx * dx + dy * dy);
+}
+
 // コンストラクタ
 CameraTest::CameraTest(const InitData& init)
 	: IScene{ init }
@@ -101,6 +108,10 @@ void CameraTest::loadResources()
 	AudioAsset(U"BGM").play();
 	AudioAsset(U"BGM").stop();
 
+	AudioAsset(U"bonfire").setVolume(0.0);
+	AudioAsset(U"bonfire").play();
+	AudioAsset(U"bonfire").stop();
+
 	AudioAsset(U"footsteps1").setVolume(0.0);
 	AudioAsset(U"footsteps1").play();
 	AudioAsset(U"footsteps1").stop();
@@ -108,6 +119,14 @@ void CameraTest::loadResources()
 	AudioAsset(U"footsteps2").setVolume(0.0);
 	AudioAsset(U"footsteps2").play();
 	AudioAsset(U"footsteps2").stop();
+
+	AudioAsset(U"drawer_open").setVolume(0.0);
+	AudioAsset(U"drawer_open").play();
+	AudioAsset(U"drawer_open").stop();
+
+	AudioAsset(U"drawer_close").setVolume(0.0);
+	AudioAsset(U"drawer_close").play();
+	AudioAsset(U"drawer_close").stop();
 
 	AudioAsset(U"GET").setVolume(0.0);
 	AudioAsset(U"GET").play();
@@ -979,9 +998,8 @@ void CameraTest::update()
 
 			if (isWalk)
 			{
-				footcount++;
-				footcount += addSpeed / 2;
-				if (footcount > 30)
+				footcount += deltaTime * ((float)addSpeed / 2);
+				if (footcount > 0.4)
 				{
 					// 足音ストップ
 					// TODO 共通化
@@ -1020,6 +1038,7 @@ void CameraTest::update()
 					AudioAsset(U"footsteps2").stop();
 					footpattern++;
 				}
+				footcount = 0;
 
 				stopwatch.restart();
 			}
@@ -1834,6 +1853,12 @@ void CameraTest::update()
 						AudioAsset(U"BGM").setVolume(1.0);
 						AudioAsset(U"BGM").play();
 					}
+
+					if (!AudioAsset(U"bonfire").isPlaying())
+					{
+						AudioAsset(U"bonfire").setVolume(0.0);
+						AudioAsset(U"bonfire").play();
+					}
 				}
 			}
 			else {
@@ -1846,6 +1871,26 @@ void CameraTest::update()
 				//}
 			}
 		}
+	}
+
+	// 暖炉のBGMの音量
+	{
+		double d = GetDistance(
+			Vec2{ toCameraPos.x, toCameraPos.z },
+			Vec2{ fireplacePos.x, fireplacePos.z }
+		);
+
+		Print << U"GetDistance=" << d;
+
+		double Volume = 3 - d;
+		if (Volume < 0)
+		{
+			Volume = 0;
+		}
+		// ノーマライズ
+		Volume /= 3;
+
+		AudioAsset(U"bonfire").setVolume(Volume);
 	}
 
 	//if (bPrologueBGM && messageCount > 0)
@@ -2160,6 +2205,7 @@ void CameraTest::draw() const
 void CameraTest::playSE(String SE)
 {
 	AudioAsset(U"BGM").stop();
+	AudioAsset(U"bonfire").stop();
 	AudioAsset(SE).setVolume(1.0);
 	AudioAsset(SE).play();
 	bgmStopCount = 4.00;

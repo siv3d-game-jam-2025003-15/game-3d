@@ -1277,5 +1277,5 @@ private:
 	float debugHeight = 200;
 
 	int footpattern = 0;
-	int footcount = 0;
+	float footcount = 0;
 };
