@@ -1275,4 +1275,7 @@ private:
 	};
 
 	float debugHeight = 200;
+
+	int footpattern = 0;
+	int footcount = 0;
 };

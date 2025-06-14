@@ -101,9 +101,13 @@ void CameraTest::loadResources()
 	AudioAsset(U"BGM").play();
 	AudioAsset(U"BGM").stop();
 
-	AudioAsset(U"足音45秒のループ").setVolume(0.0);
-	AudioAsset(U"足音45秒のループ").play();
-	AudioAsset(U"足音45秒のループ").stop();
+	AudioAsset(U"footsteps1").setVolume(0.0);
+	AudioAsset(U"footsteps1").play();
+	AudioAsset(U"footsteps1").stop();
+
+	AudioAsset(U"footsteps2").setVolume(0.0);
+	AudioAsset(U"footsteps2").play();
+	AudioAsset(U"footsteps2").stop();
 
 	AudioAsset(U"GET").setVolume(0.0);
 	AudioAsset(U"GET").play();
@@ -598,6 +602,9 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"breadPos=" << breadPos;
+	Print << U"footpattern=" << footpattern;
+	Print << U"footcount=" << footcount;
+
 
 #endif
 }
@@ -972,14 +979,46 @@ void CameraTest::update()
 
 			if (isWalk)
 			{
-				if (!AudioAsset(U"足音45秒のループ").isPlaying()) {
-					AudioAsset(U"足音45秒のループ").setVolume(1.0);
-					AudioAsset(U"足音45秒のループ").play();
+				footcount++;
+				footcount += addSpeed / 2;
+				if (footcount > 30)
+				{
+					// 足音ストップ
+					// TODO 共通化
+					if (AudioAsset(U"footsteps1").isPlaying()) {
+						AudioAsset(U"footsteps1").stop();
+						footpattern++;
+					}
+					if (AudioAsset(U"footsteps2").isPlaying()) {
+						AudioAsset(U"footsteps2").stop();
+						footpattern++;
+					}
+					footcount = 0;
+				}
+
+				if (footpattern % 2 == 0)
+				{
+					if (!AudioAsset(U"footsteps1").isPlaying()) {
+						AudioAsset(U"footsteps1").setVolume(1.0);
+						AudioAsset(U"footsteps1").play();
+					}
+				}
+				else
+				{
+					if (!AudioAsset(U"footsteps2").isPlaying()) {
+						AudioAsset(U"footsteps2").setVolume(1.0);
+						AudioAsset(U"footsteps2").play();
+					}
 				}
 			}
 			else {
-				if (AudioAsset(U"足音45秒のループ").isPlaying()) {
-					AudioAsset(U"足音45秒のループ").stop();
+				if (AudioAsset(U"footsteps1").isPlaying()) {
+					AudioAsset(U"footsteps1").stop();
+					footpattern++;
+				}
+				if (AudioAsset(U"footsteps2").isPlaying()) {
+					AudioAsset(U"footsteps2").stop();
+					footpattern++;
 				}
 
 				stopwatch.restart();
@@ -1105,8 +1144,8 @@ void CameraTest::update()
 		// インベントリを表示している
 
 		// 足音の削除
-		if (AudioAsset(U"足音45秒のループ").isPlaying()) {
-			AudioAsset(U"足音45秒のループ").stop();
+		if (AudioAsset(U"footsteps1").isPlaying()) {
+			AudioAsset(U"footsteps1").stop();
 		}
 
 		if (KeyUp.down())

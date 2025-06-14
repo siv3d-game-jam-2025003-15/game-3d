@@ -31,8 +31,10 @@ void Main()
 //	FontAsset::Register(U"Bold", FontMethod::MSDF, 48, Typeface::Bold);
 //	FontAsset::Register(U"Bold", FontMethod::MSDF, 48, U"assets/font/SoukouMincho-Font/SoukouMincho.ttf");
 	FontAsset::Register(U"Bold", FontMethod::MSDF, 48, U"assets/font/07鉄瓶ゴシック.otf");
-	AudioAsset::Register(U"足音45秒のループ", U"assets/sound/se/足音45秒のループ.wav", true);
-    AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
+//	AudioAsset::Register(U"足音45秒のループ", U"assets/sound/se/足音45秒のループ.wav", true);
+	AudioAsset::Register(U"footsteps1", U"assets/sound/se/se_footsteps_concrete-01.wav", false);
+	AudioAsset::Register(U"footsteps2", U"assets/sound/se/se_footsteps_concrete-02.wav", false);
+	AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
     AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
 	AudioAsset::Register(U"GET", U"assets/sound/se/GET.wav");
 	AudioAsset::Register(U"Cancellation", U"assets/sound/se/SE_Cancellation01.mp3");
