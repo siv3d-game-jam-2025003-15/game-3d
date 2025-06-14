@@ -1274,8 +1274,11 @@ private:
 		false,
 	};
 
-	float debugHeight = 200;
+	float debugHeight = 1.58;
+	float debugDis = 0.55;
+	float debugRot = -0.53;
 
+	// 足音変数
 	int footpattern = 0;
 	float footcount = 0;
 };

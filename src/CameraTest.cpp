@@ -496,31 +496,31 @@ void CameraTest::debug()
 	//}
 
 
-	if (KeyZ.down())
+	if (KeyZ.pressed())
 	{
-		breadPos.x += 0.01;
+		debugHeight += 0.01;
 	}
-	if (KeyX.down())
+	if (KeyX.pressed())
 	{
-		breadPos.x -= 0.01;
-	}
-
-	if (KeyC.down())
-	{
-		breadPos.y += 0.01;
-	}
-	if (KeyV.down())
-	{
-		breadPos.y -= 0.01;
+		debugHeight -= 0.01;
 	}
 
-	if (KeyB.down())
+	if (KeyC.pressed())
 	{
-		breadPos.z += 0.01;
+		debugDis += 0.01;
 	}
-	if (KeyN.down())
+	if (KeyV.pressed())
 	{
-		breadPos.z -= 0.01;
+		debugDis -= 0.01;
+	}
+
+	if (KeyB.pressed())
+	{
+		debugRot += 0.01;
+	}
+	if (KeyN.pressed())
+	{
+		debugRot -= 0.01;
 	}	
 
 	if (mouseDirectionX == 1)
@@ -620,11 +620,10 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"breadPos=" << breadPos;
-	Print << U"footpattern=" << footpattern;
-	Print << U"footcount=" << footcount;
-
-
+	Print << U"debugHeight=" << debugHeight;
+	Print << U"debugDis=" << debugDis;
+	Print << U"debugRot=" << debugRot;
+	
 #endif
 }
 
@@ -1496,7 +1495,12 @@ void CameraTest::update()
 		}
 		else
 		{
-			toCameraPos.y = 0.9 - drawerIndex * 0.16;
+		//	toCameraPos.y = 0.9 - drawerIndex * 0.16;
+			toCameraPos.y = 1.58 - drawerIndex * 0.16;
+
+			// デバッグ
+		//	toCameraPos.z = debugDis;
+		//	to_m_focusY = debugRot;
 		}
 	}
 
@@ -1879,9 +1883,9 @@ void CameraTest::update()
 			Vec2{ toCameraPos.x, toCameraPos.z },
 			Vec2{ fireplacePos.x, fireplacePos.z }
 		);
-
+#if _DEBUG
 		Print << U"GetDistance=" << d;
-
+#endif
 		double Volume = 3 - d;
 		if (Volume < 0)
 		{
@@ -3589,11 +3593,14 @@ void CameraTest::lockon()
 
 			// カメラの座標と向きを調整
 			toCameraPos.x = 16.3;
-			toCameraPos.y = 0.65;
+		//	toCameraPos.y = 0.65;
+			toCameraPos.y = 1.58;
 		//	toCameraPos.z = 0.3;
-			toCameraPos.z = 1.2;
+		//	toCameraPos.z = 1.2;
+			toCameraPos.z = 0.55;
 
-			to_m_focusY = 0;
+		//	to_m_focusY = 0;
+			to_m_focusY = -0.53;
 			phiController.setCameraPosition(toCameraPos);
 			phiController.setFocusPosition(drawerPos[0]);
 		}
