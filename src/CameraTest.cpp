@@ -620,9 +620,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"debugHeight=" << debugHeight;
-	Print << U"debugDis=" << debugDis;
-	Print << U"debugRot=" << debugRot;
+	Print << U"drawerIndex=" << drawerIndex;
 	
 #endif
 }
@@ -909,7 +907,24 @@ void CameraTest::update()
 		{
 			// 引き出しモード中
 
-			if (KeyW.down())
+			//if (KeyW.down())
+			//{
+			//	drawerIndex--;
+			//	if (drawerIndex < 0)
+			//	{
+			//		drawerIndex = 0;
+			//	}
+			//}
+			//if (KeyS.down())
+			//{
+			//	drawerIndex++;
+			//	if (drawerIndex > 5)
+			//	{
+			//		drawerIndex = 5;
+			//	}
+			//}
+
+			if (KeyA.down())
 			{
 				drawerIndex--;
 				if (drawerIndex < 0)
@@ -917,14 +932,17 @@ void CameraTest::update()
 					drawerIndex = 0;
 				}
 			}
-			if (KeyS.down())
+			if (KeyD.down())
 			{
 				drawerIndex++;
-				if (drawerIndex > 5)
+				if (drawerIndex > 6)
 				{
-					drawerIndex = 5;
+					drawerIndex = 6;
 				}
-			}			
+			}
+
+			message = 38 + drawerIndex;
+
 		}
 		else
 		{
@@ -1470,37 +1488,66 @@ void CameraTest::update()
 	// 引き出しモード
 	if (bDrawerMode)
 	{
-		if (MouseR.down())
+		if (MouseL.up())
 		{
-			// 引き出しモード解除
-			bDrawerMode = false;
-
-			toCameraPos.x = drawerPos[0].x;
-			toCameraPos.y = 1.5;
-			toCameraPos.z = drawerPos[0].z - 2.0;
-
-			to_m_focusY = -0.3;
-
-			if (bGoldKeyHave == false)
+			// いっかいマウスを離してから有効にする
+			bMouseL = true;
+		}
+		if (MouseL.down() && bMouseL)
+		{
+			// クリックした
+			if (drawerIndex == 6)
 			{
-				for (int i = 0; i < 6; i++)
+				// 引き出しモード解除
+				bDrawerMode = false;
+
+				toCameraPos.x = drawerPos[0].x;
+				toCameraPos.y = 1.5;
+				toCameraPos.z = drawerPos[0].z - 2.0;
+
+				to_m_focusY = -0.3;
+
+				if (bGoldKeyHave == false)
 				{
-					toDrawerPos[i + 1].z = 1.6;
-					drawerPull[i] = false;
+					for (int i = 0; i < 6; i++)
+					{
+						toDrawerPos[i + 1].z = 1.6;
+						drawerPull[i] = false;
+					}
+
+					drawerCounter = 0;
+					drawerOrder = 0;
 				}
 
-				drawerCounter = 0;
-				drawerOrder = 0;
+				bMouseL = false;
 			}
-		}
-		else
-		{
-		//	toCameraPos.y = 0.9 - drawerIndex * 0.16;
-			toCameraPos.y = 1.58 - drawerIndex * 0.16;
+			else if (drawerPull[drawerIndex] == false)
+			{
+				if (drawerIndex == 0)
+				{
+					// 一番上の引き出し
+					if (drawerOrder == 51432)
+					{
+						toDrawerPos[drawerIndex + 1].z -= 0.1;
+						drawerPull[drawerIndex] = true;
 
-			// デバッグ
-		//	toCameraPos.z = debugDis;
-		//	to_m_focusY = debugRot;
+						items << GoldKey;
+
+						bGoldKeyHave = true;
+
+						playSE(U"Item");
+					}
+				}
+				else
+				{
+					// それ以外の引き出し
+					toDrawerPos[drawerIndex + 1].z -= 0.1;
+					drawerPull[drawerIndex] = true;
+
+					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
+					drawerCounter++;
+				}
+			}
 		}
 	}
 
@@ -3594,7 +3641,8 @@ void CameraTest::lockon()
 			// カメラの座標と向きを調整
 			toCameraPos.x = 16.3;
 		//	toCameraPos.y = 0.65;
-			toCameraPos.y = 1.58;
+		//	toCameraPos.y = 1.58;
+			toCameraPos.y = 1.1;
 		//	toCameraPos.z = 0.3;
 		//	toCameraPos.z = 1.2;
 			toCameraPos.z = 0.55;
@@ -3606,56 +3654,4 @@ void CameraTest::lockon()
 		}
 	}
 
-	// 引き出し
-	if (!bLockon && bDrawerMode)
-	{
-		auto [a, b, c, d] = drawerController.update(
-			drawerPos[drawerIndex + 1],
-			camera,
-			curCameraPosition,
-			markPosition,
-			0,
-			false
-		);
-
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-		//	message = 38 + drawerIndex;
-			message = 38;
-		}
-
-		if (d)
-		{
-			// クリックした
-			if (drawerPull[drawerIndex] == false)
-			{
-				if (drawerIndex == 0)
-				{
-					// 一番上の引き出し
-					if (drawerOrder == 51432)
-					{
-						toDrawerPos[drawerIndex + 1].z -= 0.1;
-						drawerPull[drawerIndex] = true;
-
-						items << GoldKey;
-
-						bGoldKeyHave = true;
-
-						playSE(U"Item");
-					}
-				}
-				else
-				{
-					// それ以外の引き出し
-					toDrawerPos[drawerIndex + 1].z -= 0.1;
-					drawerPull[drawerIndex] = true;
-
-					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
-					drawerCounter++;
-				}
-			}
-		}
-	}
 }
