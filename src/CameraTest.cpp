@@ -372,97 +372,97 @@ void CameraTest::debug()
 		// キャラライトの明るさ
 		lightStrong -= 0.1;
 	}
-	if (Key9.down())
-	{
-		// 暖炉の明るさ
-		fireplaceStrong += 0.1;
-	}
-	if (Key0.down())
-	{
-		// 暖炉の明るさ
-		fireplaceStrong -= 0.1;
-	}
-	if (KeyT.down())
-	{
-		// 環境光の明るさ
-		globalAmbientColor += 0.01;
-	}
-	if (KeyY.down())
-	{
-		// 環境光の明るさ
-		globalAmbientColor -= 0.01;
-	}
-	if (KeyO.down())
-	{
-		// 太陽光の明るさ
-		sunColor += 0.01;
-	}
-	if (KeyP.down())
-	{
-		// 太陽光の明るさ
-		sunColor -= 0.01;
-	}
-	if (KeyK.down())
-	{
-		// 暖炉の明るさ（揺らぎ）
-		fireplaceSin += 0.1;
-	}
-	if (KeyL.down())
-	{
-		// 暖炉の明るさ（揺らぎ）
-		fireplaceSin -= 0.1;
-	}
+	//if (Key9.down())
+	//{
+	//	// 暖炉の明るさ
+	//	fireplaceStrong += 0.1;
+	//}
+	//if (Key0.down())
+	//{
+	//	// 暖炉の明るさ
+	//	fireplaceStrong -= 0.1;
+	//}
+	//if (KeyT.down())
+	//{
+	//	// 環境光の明るさ
+	//	globalAmbientColor += 0.01;
+	//}
+	//if (KeyY.down())
+	//{
+	//	// 環境光の明るさ
+	//	globalAmbientColor -= 0.01;
+	//}
+	//if (KeyO.down())
+	//{
+	//	// 太陽光の明るさ
+	//	sunColor += 0.01;
+	//}
+	//if (KeyP.down())
+	//{
+	//	// 太陽光の明るさ
+	//	sunColor -= 0.01;
+	//}
+	//if (KeyK.down())
+	//{
+	//	// 暖炉の明るさ（揺らぎ）
+	//	fireplaceSin += 0.1;
+	//}
+	//if (KeyL.down())
+	//{
+	//	// 暖炉の明るさ（揺らぎ）
+	//	fireplaceSin -= 0.1;
+	//}
 
-	if (KeyZ.down())
-	{
-		fireplaceR += 0.01;
-	}
-	if (KeyX.down())
-	{
-		fireplaceR -= 0.01;
-	}
-	if (fireplaceR > 1)
-	{
-		fireplaceR = 1;
-	}
-	if (fireplaceR < 0)
-	{
-		fireplaceR = 0;
-	}
+	//if (KeyZ.down())
+	//{
+	//	fireplaceR += 0.01;
+	//}
+	//if (KeyX.down())
+	//{
+	//	fireplaceR -= 0.01;
+	//}
+	//if (fireplaceR > 1)
+	//{
+	//	fireplaceR = 1;
+	//}
+	//if (fireplaceR < 0)
+	//{
+	//	fireplaceR = 0;
+	//}
 
-	if (KeyC.down())
-	{
-		fireplaceG += 0.01;
-	}
-	if (KeyV.down())
-	{
-		fireplaceG -= 0.01;
-	}
-	if (fireplaceG > 1)
-	{
-		fireplaceG = 1;
-	}
-	if (fireplaceG < 0)
-	{
-		fireplaceG = 0;
-	}
+	//if (KeyC.down())
+	//{
+	//	fireplaceG += 0.01;
+	//}
+	//if (KeyV.down())
+	//{
+	//	fireplaceG -= 0.01;
+	//}
+	//if (fireplaceG > 1)
+	//{
+	//	fireplaceG = 1;
+	//}
+	//if (fireplaceG < 0)
+	//{
+	//	fireplaceG = 0;
+	//}
 
-	if (KeyB.down())
-	{
-		fireplaceB += 0.01;
-	}
-	if (KeyN.down())
-	{
-		fireplaceB -= 0.01;
-	}
-	if (fireplaceB > 1)
-	{
-		fireplaceB = 1;
-	}
-	if (fireplaceB < 0)
-	{
-		fireplaceB = 0;
-	}
+	//if (KeyB.down())
+	//{
+	//	fireplaceB += 0.01;
+	//}
+	//if (KeyN.down())
+	//{
+	//	fireplaceB -= 0.01;
+	//}
+	//if (fireplaceB > 1)
+	//{
+	//	fireplaceB = 1;
+	//}
+	//if (fireplaceB < 0)
+	//{
+	//	fireplaceB = 0;
+	//}
 
 	if (KeyTab.down())
 	{
@@ -578,13 +578,13 @@ void CameraTest::debug()
 	}
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
-	Print << U"[9][0]暖炉の明るさ（最小値）：" << fireplaceStrong;
-	Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong + fireplaceSin;
-	Print << U"[Z][X]暖炉のR：" << fireplaceR;
-	Print << U"[C][V]暖炉のG：" << fireplaceG;
-	Print << U"[B][N]暖炉のB：" << fireplaceB;
-	Print << U"[T][Y]環境光の明るさ：" << globalAmbientColor;
-	Print << U"[O][P]太陽光の明るさ：" << sunColor;
+	//Print << U"[9][0]暖炉の明るさ（最小値）：" << fireplaceStrong;
+	//Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong + fireplaceSin;
+	//Print << U"[Z][X]暖炉のR：" << fireplaceR;
+	//Print << U"[C][V]暖炉のG：" << fireplaceG;
+	//Print << U"[B][N]暖炉のB：" << fireplaceB;
+	//Print << U"[T][Y]環境光の明るさ：" << globalAmbientColor;
+	//Print << U"[O][P]太陽光の明るさ：" << sunColor;
 
 	Print << U"[TAB]プロローグスキップ";
 
