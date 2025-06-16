@@ -2917,11 +2917,11 @@ void CameraTest::viewModel()
 		modelDirtyCloth->draw();
 	}
 
-	// 汚れた布の描画
+	// 手記の描画
 	if (bMemoHave == false)
 	{
 		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.03).translated(memoPos)
+			Mat4x4::RotateY(memoRot.y).scaled(0.03).translated(memoPos)
 		};
 
 		modelMemo->draw();

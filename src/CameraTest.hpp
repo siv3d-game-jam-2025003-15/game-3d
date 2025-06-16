@@ -450,7 +450,7 @@ private:
 
 	// ハンガー
 	Vec3 hangerPos = { 0, 1.03, 11.8 };
-	Vec3 hangerRot{ 0, 90_deg, 0 };
+	Vec3 hangerRot = { 0, 90_deg, 0 };
 
 	// 樽
 	Vec3 barrelPos = { -3.55, 0.965, 0.185 };
@@ -465,6 +465,7 @@ private:
 
 	// 手記
 	Vec3 memoPos = { -3.0, 0.01, 10.6 };
+	Vec3 memoRot = { 0, 30_deg, 0 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
