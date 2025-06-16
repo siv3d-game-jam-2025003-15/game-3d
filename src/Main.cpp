@@ -42,12 +42,14 @@ void Main()
 	AudioAsset::Register(U"drawer_close", U"assets/sound/se/drawer_close.mp3");
 
 	// SE 牢屋の扉
-	AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
-    AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
+//	AudioAsset::Register(U"牢屋の扉を閉める", U"assets/sound/se/牢屋の扉を閉める.wav");
+//	AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
+//	AudioAsset::Register(U"Cancellation", U"assets/sound/se/SE_Cancellation01.mp3");
+	AudioAsset::Register(U"IronDoor_Close", U"assets/sound/se/SE_IronDoor_Close01.mp3");
+	AudioAsset::Register(U"WoodDoor_Close", U"assets/sound/se/SE_WoodDoor_Close01.mp3");
 
 	// SE
 	AudioAsset::Register(U"GET", U"assets/sound/se/GET.wav");
-	AudioAsset::Register(U"Cancellation", U"assets/sound/se/SE_Cancellation01.mp3");
 	AudioAsset::Register(U"Item", U"assets/sound/se/SE_Item01.mp3");
 	AudioAsset::Register(U"Paper", U"assets/sound/se/SE_Paper01.mp3");
 	AudioAsset::Register(U"Title", U"assets/sound/se/SE_Title01.mp3");

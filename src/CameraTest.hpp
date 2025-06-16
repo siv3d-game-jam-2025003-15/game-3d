@@ -1237,7 +1237,7 @@ private:
 //	const float prologueMessageWait = 1;
 
 	// SEを鳴らす
-	void playSE(String SE);
+	void playSEandBGMStop(String SE);
 
 	// コリジョンのデバッグ表示
 	void debugViewCollision();

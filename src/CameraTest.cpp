@@ -132,17 +132,25 @@ void CameraTest::loadResources()
 	AudioAsset(U"GET").play();
 	AudioAsset(U"GET").stop();
 
-	AudioAsset(U"牢屋の扉を開ける").setVolume(0.0);
-	AudioAsset(U"牢屋の扉を開ける").play();
-	AudioAsset(U"牢屋の扉を開ける").stop();
+	//AudioAsset(U"牢屋の扉を開ける").setVolume(0.0);
+	//AudioAsset(U"牢屋の扉を開ける").play();
+	//AudioAsset(U"牢屋の扉を開ける").stop();
 
-	AudioAsset(U"牢屋の扉を閉める").setVolume(0.0);
-	AudioAsset(U"牢屋の扉を閉める").play();
-	AudioAsset(U"牢屋の扉を閉める").stop();
+	//AudioAsset(U"牢屋の扉を閉める").setVolume(0.0);
+	//AudioAsset(U"牢屋の扉を閉める").play();
+	//AudioAsset(U"牢屋の扉を閉める").stop();
 
-	AudioAsset(U"Cancellation").setVolume(0.0);
-	AudioAsset(U"Cancellation").play();
-	AudioAsset(U"Cancellation").stop();
+	//AudioAsset(U"Cancellation").setVolume(0.0);
+	//AudioAsset(U"Cancellation").play();
+	//AudioAsset(U"Cancellation").stop();
+
+	AudioAsset(U"IronDoor_Close").setVolume(0.0);
+	AudioAsset(U"IronDoor_Close").play();
+	AudioAsset(U"IronDoor_Close").stop();
+
+	AudioAsset(U"WoodDoor_Close").setVolume(0.0);
+	AudioAsset(U"WoodDoor_Close").play();
+	AudioAsset(U"WoodDoor_Close").stop();
 
 	AudioAsset(U"Item").setVolume(0.0);
 	AudioAsset(U"Item").play();
@@ -159,6 +167,10 @@ void CameraTest::loadResources()
 	AudioAsset(U"Water").setVolume(0.0);
 	AudioAsset(U"Water").play();
 	AudioAsset(U"Water").stop();
+
+	AudioAsset(U"Inventory").setVolume(0.0);
+	AudioAsset(U"Inventory").play();
+	AudioAsset(U"Inventory").stop();
 
 	// 実際に使用して初回ローディングを済ませる
 //	inventorySprite.draw(0, 0);
@@ -1545,7 +1557,7 @@ void CameraTest::update()
 
 						bGoldKeyHave = true;
 
-						playSE(U"Item");
+						playSEandBGMStop(U"Item");
 					}
 				}
 				else
@@ -2296,7 +2308,7 @@ void CameraTest::draw() const
 }
 
 // SEを鳴らす
-void CameraTest::playSE(String SE)
+void CameraTest::playSEandBGMStop(String SE)
 {
 	AudioAsset(U"BGM").stop();
 	AudioAsset(U"bonfire").stop();
@@ -2527,7 +2539,7 @@ void CameraTest::viewInventory()
 
 			// SEを鳴らす
 		//	playSE(U"GET");
-			playSE(U"Item");
+			playSEandBGMStop(U"Item");
 
 			// チュートリアル終了
 			bTutorial = false;
@@ -2538,7 +2550,7 @@ void CameraTest::viewInventory()
 			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
 			{
 				bMemo = true;
-				playSE(U"Paper");
+				playSEandBGMStop(U"Paper");
 			}
 		}
 		else if (items[selectItem] == RustedKey)
@@ -2560,7 +2572,7 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"GET");
-				playSE(U"Item");
+				playSEandBGMStop(U"Item");
 
 				//if (scenario == 1)	// パンを食べた後
 				//{
@@ -2633,7 +2645,8 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"牢屋の扉を開ける");
-				playSE(U"Cancellation");
+			//	playSEandBGMStop(U"Cancellation");
+				playSEandBGMStop(U"IronDoor_Close");
 
 				inventoryOnOff();
 			}
@@ -2650,7 +2663,8 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"牢屋の扉を開ける");
-				playSE(U"Cancellation");
+			//	playSEandBGMStop(U"Cancellation");
+				playSEandBGMStop(U"IronDoor_Close");
 
 				inventoryOnOff();
 			}
@@ -2662,8 +2676,9 @@ void CameraTest::viewInventory()
 				// ドア３の前で使う
 
 				// SEを鳴らす
-				playSE(U"牢屋の扉を開ける");
-			//	playSE(U"Cancellation");
+				//playSE(U"牢屋の扉を開ける");
+				//playSE(U"Cancellation");
+				playSEandBGMStop(U"WoodDoor_Close");
 
 				inventoryOnOff();
 
@@ -2684,7 +2699,7 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"GET");
-				playSE(U"Item");
+				playSEandBGMStop(U"Item");
 			}
 		}
 		else if (items[selectItem] == Parchment)
@@ -2698,7 +2713,7 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"GET");
-				playSE(U"Item");
+				playSEandBGMStop(U"Item");
 			}
 		}
 		else if (items[selectItem] == ToastedParchment)
@@ -2707,7 +2722,7 @@ void CameraTest::viewInventory()
 			if (synthesisIndex == -1)	// 合成アイテムを選択していない状態
 			{
 				bToastedParchmentRead = true;
-				playSE(U"Paper");
+				playSEandBGMStop(U"Paper");
 			}
 
 		}
@@ -2722,7 +2737,7 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"GET");
-				playSE(U"Water");
+				playSEandBGMStop(U"Water");
 			}
 		}
 		else if (items[selectItem] == Cloth)
