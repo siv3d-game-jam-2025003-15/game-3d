@@ -770,7 +770,16 @@ void CameraTest::inventoryOnOff()
 
 	// 合成の選択を解除
 	synthesisIndex = -1;
+
+	// SE
+	if (AudioAsset(U"Inventory").isPlaying())
+	{
+		AudioAsset(U"Inventory").stop();
+	}
+	AudioAsset(U"Inventory").setVolume(1.0);
+	AudioAsset(U"Inventory").play();
 }
+
 
 void CameraTest::update()
 {
