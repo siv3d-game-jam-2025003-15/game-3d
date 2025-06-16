@@ -1292,4 +1292,6 @@ private:
 	bool bMouseL = false;
 
 	float drawerPullCount = 0;
+
+	const float BGMVolume = 0.8;
 };

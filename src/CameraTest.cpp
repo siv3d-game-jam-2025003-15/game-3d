@@ -1956,7 +1956,7 @@ void CameraTest::update()
 					// BGMの再開
 					if (!AudioAsset(U"BGM").isPlaying())
 					{
-						AudioAsset(U"BGM").setVolume(1.0);
+						AudioAsset(U"BGM").setVolume(BGMVolume);
 						AudioAsset(U"BGM").play();
 					}
 
