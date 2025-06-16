@@ -1238,6 +1238,7 @@ private:
 
 	// SEを鳴らす
 	void playSEandBGMStop(String SE);
+	void playSE(String SE);
 
 	// コリジョンのデバッグ表示
 	void debugViewCollision();

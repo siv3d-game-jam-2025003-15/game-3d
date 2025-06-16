@@ -784,12 +784,13 @@ void CameraTest::inventoryOnOff()
 	synthesisIndex = -1;
 
 	// SE
-	if (AudioAsset(U"Inventory").isPlaying())
-	{
-		AudioAsset(U"Inventory").stop();
-	}
-	AudioAsset(U"Inventory").setVolume(1.0);
-	AudioAsset(U"Inventory").play();
+	//if (AudioAsset(U"Inventory").isPlaying())
+	//{
+	//	AudioAsset(U"Inventory").stop();
+	//}
+	//AudioAsset(U"Inventory").setVolume(1.0);
+	//AudioAsset(U"Inventory").play();
+	playSE(U"Inventory");
 }
 
 
@@ -1570,12 +1571,13 @@ void CameraTest::update()
 					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
 					drawerCounter++;
 
-					if (!AudioAsset(U"drawer_open").isPlaying())
-					{
-						AudioAsset(U"drawer_open").setLoop(false);
-						AudioAsset(U"drawer_open").setVolume(1.0);
-						AudioAsset(U"drawer_open").play();
-					}
+					//if (!AudioAsset(U"drawer_open").isPlaying())
+					//{
+					//	AudioAsset(U"drawer_open").setLoop(false);
+					//	AudioAsset(U"drawer_open").setVolume(1.0);
+					//	AudioAsset(U"drawer_open").play();
+					//}
+					playSE(U"drawer_open");
 				}
 			}
 		}
@@ -1592,12 +1594,13 @@ void CameraTest::update()
 					if (drawerPull[drawerIndex] == true)
 					{
 						toDrawerPos[drawerIndex + 1].z += 0.2;
-						if (!AudioAsset(U"drawer_close").isPlaying())
-						{
-							AudioAsset(U"drawer_close").setLoop(false);
-							AudioAsset(U"drawer_close").setVolume(1.0);
-							AudioAsset(U"drawer_close").play();
-						}
+						//if (!AudioAsset(U"drawer_close").isPlaying())
+						//{
+						//	AudioAsset(U"drawer_close").setLoop(false);
+						//	AudioAsset(U"drawer_close").setVolume(1.0);
+						//	AudioAsset(U"drawer_close").play();
+						//}
+						playSE(U"drawer_close");
 						drawerPull[drawerIndex] = false;
 					}
 				}
@@ -2307,14 +2310,29 @@ void CameraTest::draw() const
 
 }
 
-// SEを鳴らす
+// SEを鳴らす＆BGMをストップ
 void CameraTest::playSEandBGMStop(String SE)
 {
 	AudioAsset(U"BGM").stop();
 	AudioAsset(U"bonfire").stop();
+	if (AudioAsset(SE).isPlaying())
+	{
+		AudioAsset(SE).stop();
+	}
 	AudioAsset(SE).setVolume(1.0);
 	AudioAsset(SE).play();
 	bgmStopCount = 4.00;
+}
+
+// SEを鳴らす（BGMは鳴らしたまま）
+void CameraTest::playSE(String SE)
+{
+	if (AudioAsset(SE).isPlaying())
+	{
+		AudioAsset(SE).stop();
+	}
+	AudioAsset(SE).setVolume(1.0);
+	AudioAsset(SE).play();
 }
 
 // コリジョンのデバッグ表示

@@ -75,7 +75,7 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 				// 取る処理
 				m_isHave = true;
 
-				// BGMの停止
+				// BGMの停止 TODO ここでやらない方がよさそう
 				if (AudioAsset(U"BGM").isPlaying())
 				{
 					AudioAsset(U"BGM").stop();
@@ -85,27 +85,31 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 					AudioAsset(U"bonfire").stop();
 				}
 
-				// SEの再生
+				// SEの再生 TODO ここでやらない方がよさそう
 				switch (bgmNo)
 				{
 				case 0:
-					AudioAsset(U"Item").setVolume(1.0);
-					AudioAsset(U"Item").play();
+					//AudioAsset(U"Item").setVolume(1.0);
+					//AudioAsset(U"Item").play();
+					playSE(U"Item");
 					bgmStopCount = 4.00;
 					break;
 				case 1:
-					AudioAsset(U"Cancellation").setVolume(1.0);
-					AudioAsset(U"Cancellation").play();
+					//AudioAsset(U"Cancellation").setVolume(1.0);
+					//AudioAsset(U"Cancellation").play();
+					playSE(U"Cancellation");
 					bgmStopCount = 4.00;
 					break;
 				case 2:
-					AudioAsset(U"Paper").setVolume(1.0);
-					AudioAsset(U"Paper").play();
+					//AudioAsset(U"Paper").setVolume(1.0);
+					//AudioAsset(U"Paper").play();
+					playSE(U"Paper");
 					bgmStopCount = 4.00;
 					break;
 				case 3:
-					AudioAsset(U"Water").setVolume(1.0);
-					AudioAsset(U"Water").play();
+					//AudioAsset(U"Water").setVolume(1.0);
+					//AudioAsset(U"Water").play();
+					playSE(U"Water");
 					bgmStopCount = 4.00;
 					break;
 				}
@@ -120,4 +124,15 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 	}
 
 	return { m_isHave, isLockon, bgmStopCount, isClick };
+}
+
+// TODO 共通化
+void ObjectController::playSE(String SE)
+{
+	if (AudioAsset(SE).isPlaying())
+	{
+		AudioAsset(SE).stop();
+	}
+	AudioAsset(SE).setVolume(1.0);
+	AudioAsset(SE).play();
 }

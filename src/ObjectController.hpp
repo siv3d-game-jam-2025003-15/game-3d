@@ -3,9 +3,6 @@
 
 class ObjectController
 {
-private:
-	bool m_isHave;
-
 public:
 	ObjectController();
 
@@ -18,5 +15,10 @@ public:
 		int bgmNo,
 		bool bHave
 	);
+
+private:
+	bool m_isHave;
+
+	void playSE(String SE);
 
 };
