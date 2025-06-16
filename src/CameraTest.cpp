@@ -3681,7 +3681,7 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 28;
+			message = 51;
 		}
 	}
 
