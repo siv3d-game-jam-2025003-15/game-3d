@@ -1584,9 +1584,6 @@ void CameraTest::update()
 		}
 	}
 
-	Print << U"Loop=" << AudioAsset(U"drawer_open").isLoop();
-
-
 	// 引き出しの移動
 	for (int i = 1; i < 7; i++)
 	{
