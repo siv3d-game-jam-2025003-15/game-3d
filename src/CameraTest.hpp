@@ -239,6 +239,13 @@ private:
 	const String modelHangerPath = U"assets/models/Hangar/Gimmick_Hangar01.obj";
 	const String modelDirtyClothPath = U"assets/models/Cloth/Gimmick_Cloth01.obj";
 	const String modelMemoPath = U"assets/models/Memo/Gimmick_Memo01.obj";
+	
+	// 石板
+	const String modelStoneBasePath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Base01.obj";
+	const String modelStoneBluePath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Blue.obj";
+	const String modelStoneGreenPath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Green01.obj";
+	const String modelStoneRedPath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Red.obj";
+	const String modelStoneYellowPath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Yellow01.obj";
 
 	// modelの遅延ロード用ポインタ
 	mutable std::unique_ptr<Model> model;
@@ -259,6 +266,11 @@ private:
 	mutable std::unique_ptr<Model> modelHanger;
 	mutable std::unique_ptr<Model> modelDirtyCloth;
 	mutable std::unique_ptr<Model> modelMemo;
+	mutable std::unique_ptr<Model> modelStoneBase;
+	mutable std::unique_ptr<Model> modelStoneBlue;
+	mutable std::unique_ptr<Model> modelStoneGreen;
+	mutable std::unique_ptr<Model> modelStoneRed;
+	mutable std::unique_ptr<Model> modelStoneYellow;
 
 	mutable int modelLoadCount = 0;	// モデルの読み込みカウント
 	mutable bool bModelLoaded = false;	// モデルが読み込まれたかどうかのフラグ
@@ -466,6 +478,19 @@ private:
 	// 手記
 	Vec3 memoPos = { -3.0, 0.01, 10.6 };
 	Vec3 memoRot = { 0, 30_deg, 0 };
+
+	// 石板
+//	Vec3 stonePos = { 20.18, 1.5, -2.5 };
+	Array<Vec3> stonePos = {
+		{ 20.18, 0.5, -2.5 },	// BASE
+		{ 20.18, 0.5, -2.5 + 0.19 - 0.127 * 0 },	// 1
+		{ 20.18, 0.5, -2.5 + 0.19 - 0.127 * 1 },	// 2
+		{ 20.18, 0.5, -2.5 + 0.19 - 0.127 * 2 },	// 3
+		{ 20.18, 0.5, -2.5 + 0.19 - 0.127 * 3 },	// 4
+		{ 0, 0, 0 }	// ダミー
+	};
+
+	Vec3 stoneRot = { 0, 90_deg, 0 };
 
 	// オブジェクトクラス
 	ObjectController breadController;

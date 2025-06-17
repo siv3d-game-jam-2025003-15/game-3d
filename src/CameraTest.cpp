@@ -290,6 +290,21 @@ void CameraTest::loadModels() const
 	case 17:
 		modelMemo = std::make_unique<Model>(modelMemoPath);
 		break;
+	case 18:
+		modelStoneBase = std::make_unique<Model>(modelStoneBasePath);
+		break;
+	case 19:
+		modelStoneBlue = std::make_unique<Model>(modelStoneBluePath);
+		break;
+	case 20:
+		modelStoneGreen = std::make_unique<Model>(modelStoneGreenPath);
+		break;
+	case 21:
+		modelStoneRed = std::make_unique<Model>(modelStoneRedPath);
+		break;
+	case 22:
+		modelStoneYellow = std::make_unique<Model>(modelStoneYellowPath);
+		break;
 	default:
 		// モデルに付随するテクスチャをアセット管理に登録
 		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
@@ -310,6 +325,11 @@ void CameraTest::loadModels() const
 		Model::RegisterDiffuseTextures(*modelHanger, TextureDesc::MippedSRGB);
 		Model::RegisterDiffuseTextures(*modelDirtyCloth, TextureDesc::MippedSRGB);
 		Model::RegisterDiffuseTextures(*modelMemo, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelStoneBase, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelStoneBlue, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelStoneGreen, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelStoneRed, TextureDesc::MippedSRGB);
+		Model::RegisterDiffuseTextures(*modelStoneYellow, TextureDesc::MippedSRGB);
 		bModelLoaded = true;	// モデルが読み込まれた
 		break;
 	}
@@ -510,30 +530,30 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		debugHeight += 0.01;
+		stonePos[2].x += 0.001;
 	}
 	if (KeyX.pressed())
 	{
-		debugHeight -= 0.01;
+		stonePos[2].x -= 0.001;
 	}
 
 	if (KeyC.pressed())
 	{
-		debugDis += 0.01;
+		stonePos[2].y += 0.001;
 	}
 	if (KeyV.pressed())
 	{
-		debugDis -= 0.01;
+		stonePos[2].y -= 0.001;
 	}
 
 	if (KeyB.pressed())
 	{
-		debugRot += 0.01;
+		stonePos[2].z += 0.001;
 	}
 	if (KeyN.pressed())
 	{
-		debugRot -= 0.01;
-	}	
+		stonePos[2].z -= 0.001;
+	}
 
 	if (mouseDirectionX == 1)
 	{
@@ -632,7 +652,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"drawerIndex=" << drawerIndex;
+	Print << U"stonePos=" << stonePos[2];
 	
 #endif
 }
@@ -2858,7 +2878,8 @@ void CameraTest::viewModel()
 	for (int i = 0; i < 7; i++) 
 	{
 		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos[i].x, drawerPos[i].y, drawerPos[i].z})
+		//	Mat4x4::RotateY(0_deg).scaled(0.01).translated(Vec3{drawerPos[i].x, drawerPos[i].y, drawerPos[i].z})
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerPos[i])
 		};
 
 		switch (i)
@@ -2925,6 +2946,35 @@ void CameraTest::viewModel()
 		};
 
 		modelMemo->draw();
+	}
+
+	// 石板の描画
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			Transformer3D t{
+				Mat4x4::RotateY(stoneRot.y).scaled(0.01).translated(stonePos[i])
+			};
+
+			switch (i)
+			{
+			case 0:
+				modelStoneBase->draw();
+				break;
+			case 1:
+				modelStoneBlue->draw();
+				break;
+			case 2:
+				modelStoneGreen->draw();
+				break;
+			case 3:
+				modelStoneRed->draw();
+				break;
+			case 4:
+				modelStoneYellow->draw();
+				break;
+			}
+		}
 	}
 
 	// ビックリマークのビルボード
