@@ -530,29 +530,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		stonePos[1].x += 0.001;
+		stonePos[0].x += 0.001;
 	}
 	if (KeyX.pressed())
 	{
-		stonePos[1].x -= 0.001;
+		stonePos[0].x -= 0.001;
 	}
 
 	if (KeyC.pressed())
 	{
-		stonePos[1].y += 0.001;
+		stonePos[0].y += 0.001;
 	}
 	if (KeyV.pressed())
 	{
-		stonePos[1].y -= 0.001;
+		stonePos[0].y -= 0.001;
 	}
 
 	if (KeyB.pressed())
 	{
-		stonePos[1].z += 0.001;
+		stonePos[0].z += 0.001;
 	}
 	if (KeyN.pressed())
 	{
-		stonePos[1].z -= 0.001;
+		stonePos[0].z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -652,7 +652,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"stonePos=" << stonePos[1];
+	Print << U"stonePos=" << stonePos[0];
 	
 #endif
 }
