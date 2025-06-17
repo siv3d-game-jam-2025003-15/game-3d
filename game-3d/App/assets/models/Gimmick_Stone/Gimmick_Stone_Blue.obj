@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib BlueGimmick_Stone_Blue.mtl
+mtllib Gimmick_Stone_Blue.mtl
 g default
 v -5.000000 -5.000000 9.442285
 v 5.000000 -5.000000 9.442285
