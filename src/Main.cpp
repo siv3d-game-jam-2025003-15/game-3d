@@ -48,7 +48,10 @@ void Main()
 	AudioAsset::Register(U"IronDoor_Close", U"assets/sound/se/SE_IronDoor_Close01.mp3");
 	AudioAsset::Register(U"WoodDoor_Close", U"assets/sound/se/SE_WoodDoor_Close01.mp3");
 
-	// SE
+	// SE 石板
+	AudioAsset::Register(U"Stone", U"assets/sound/se/SE_Stone01.mp3");
+
+	// SE アイテム
 	AudioAsset::Register(U"GET", U"assets/sound/se/GET.wav");
 	AudioAsset::Register(U"Item", U"assets/sound/se/SE_Item01.mp3");
 	AudioAsset::Register(U"Paper", U"assets/sound/se/SE_Paper01.mp3");
