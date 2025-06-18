@@ -1594,7 +1594,7 @@ void CameraTest::update()
 					// 一番上の引き出し
 					if (drawerOrder == 51432)
 					{
-						toDrawerPos[drawerIndex + 1].z -= 0.1;
+						toDrawerPos[drawerIndex + 1].z -= 0.2;
 						drawerPull[drawerIndex] = true;
 
 						items << GoldKey;
