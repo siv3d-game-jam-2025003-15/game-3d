@@ -1081,7 +1081,7 @@ void CameraTest::update()
 			if (isWalk)
 			{
 				footcount += deltaTime * ((float)addSpeed / 2);
-				if (footcount > 0.4)
+				if (footcount > 0.3)
 				{
 					// 足音ストップ
 					// TODO 共通化
