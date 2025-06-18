@@ -430,6 +430,7 @@ private:
 		{ 0, 0, 0 }	// ダミー
 	};
 
+	// 引き出しの移動先
 	Array<Vec3> toDrawerPos = drawerPos;
 
 	double debugDrawerY = 0;
@@ -490,6 +491,10 @@ private:
 		{ 0, 0, 0 }	// ダミー
 	};
 
+	// 石板の移動先
+	Array<Vec3> toStonePos = stonePos;
+
+
 	Vec3 stoneRot = { 0, 90_deg, 0 };
 
 	// オブジェクトクラス
@@ -516,6 +521,7 @@ private:
 	ObjectController dirtyClothController;
 	ObjectController memoController;
 	ObjectController drawerController;
+	ObjectController stoneController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -1085,6 +1091,36 @@ private:
 		U"",	// 58
 		U"",	// 58
 
+		// 59 引き出し
+		U"この石板は何だろう。",
+		U"",
+		U"",
+
+		// 60
+		U"▶青　緑　赤　黄　戻る",
+		U"",
+		U"",
+
+		// 61
+		U"　青▶緑　赤　黄　戻る",
+		U"",
+		U"",
+
+		// 62
+		U"　青　緑▶赤　黄　戻る",
+		U"",
+		U"",
+
+		// 63
+		U"　青　緑　赤▶黄　戻る",
+		U"",
+		U"",
+
+		// 64
+		U"　青　緑　赤　黄▶戻る",
+		U"",
+		U"",
+
 	};
 
 	// インベントリ用のテキスト
@@ -1217,12 +1253,16 @@ private:
 	{
 		U"ちぎれた輪が、\n",
 		U"空の底へと沈む。\n",
+		U"\n",
 		U"白い欠片が、\n",
 		U"風に踊り、やがて落ちる。\n",
+		U"\n",
 		U"絡みつくものが、\n",
 		U"静かに喉元へ這う。\n",
+		U"\n",
 		U"枯れた夢が、\n",
 		U"黒ずんだ土に崩れ落ちる。\n",
+		U"\n",
 		U"見開かれたそれが、\n",
 		U"すべてを呪うように、夜を睨む。\n",
 	};
@@ -1232,10 +1272,13 @@ private:
 	{
 		U"其れは命の源を吐き出し、\n",
 		U"大地に茂る其れにより、人の営みは始まった。\n",
+		U"\n",
 		U"そして、進化の糧を手にした者は、\n",
 		U"夜を追いやった。\n",
+		U"\n",
 		U"されど、其れが無きところに命はなく、\n",
 		U"人は僅か三日と耐えられぬ。\n",
+		U"\n",
 		U"やがて陽は昇り、\n",
 		U"光は全てを照らした。\n",
 		U"感謝と共に、我らは遠き創世を想う。\n",
@@ -1304,9 +1347,33 @@ private:
 	// 引き出しのカウンター
 	int drawerCounter= 0;
 
+	// 引き出しフラグ
 	bool drawerPull[6] = {
 		false,
 		false,
+		false,
+		false,
+		false,
+		false,
+	};
+
+	// 引き出しアニメーション用のカウンター
+	float drawerPullCount = 0;
+
+	// 石板モード
+	bool bStoneMode = false;
+
+	// 石板のインデックス番号
+	int stoneIndex = 0;
+
+	// 石板の順番
+	int stoneOrder = 0;
+
+	// 石板のカウンター
+	int stoneCounter = 0;
+
+	// 石板フラグ
+	bool stonePull[4] = {
 		false,
 		false,
 		false,
@@ -1322,8 +1389,6 @@ private:
 	float footcount = 0;
 
 	bool bMouseL = false;
-
-	float drawerPullCount = 0;
 
 	const float BGMVolume = 0.8;
 };

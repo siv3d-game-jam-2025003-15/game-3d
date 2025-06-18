@@ -986,6 +986,29 @@ void CameraTest::update()
 			message = 38 + drawerIndex;
 
 		}
+		else if (bStoneMode)
+		{
+			// 石板モード中
+
+			if (KeyA.down())
+			{
+				stoneIndex--;
+				if (stoneIndex < 0)
+				{
+					stoneIndex = 0;
+				}
+			}
+			if (KeyD.down())
+			{
+				stoneIndex++;
+				if (stoneIndex > 4)
+				{
+					stoneIndex = 4;
+				}
+			}
+
+			message = 60 + stoneIndex;
+		}
 		else
 		{
 			const double xr = (scaledSpeed * sss);
@@ -1103,9 +1126,9 @@ void CameraTest::update()
 			}
 		}
 
-		if (bDrawerMode)
+		if (bDrawerMode || bStoneMode)	// TODO
 		{
-			// 引き出しモード中は操作できない
+			// 引き出しモード中、石板モード中は操作できない
 		}
 		else
 		{
@@ -1628,11 +1651,87 @@ void CameraTest::update()
 		}
 	}
 
+	// 石板モード
+	if (bStoneMode)
+	{
+		if (MouseL.up())
+		{
+			// いっかいマウスを離してから有効にする
+			bMouseL = true;
+		}
+
+		if (MouseL.down() && bMouseL)
+		{
+			// クリックした
+
+			if (stoneIndex == 4)	// 戻るを選択
+			{
+				// 石板モード解除
+				bStoneMode = false;
+
+				toCameraPos.x = drawerPos[0].x;
+				toCameraPos.y = 1.5;
+				toCameraPos.z = drawerPos[0].z - 2.0;
+
+				to_m_focusY = -0.3;
+
+				if (bGoldKeyHave == false)	// TODO
+				{
+					for (int i = 0; i < 4; i++)
+					{
+						toStonePos[i + 1].z = 1.6;
+						stonePull[i] = false;
+					}
+
+					stoneCounter = 0;
+					stoneOrder = 0;
+				}
+
+				bMouseL = false;
+			}
+			else if (stonePull[stoneIndex] == false)
+			{
+				if (stoneIndex == 3)
+				{
+					// 最後の石板
+					if (stoneOrder == 132)
+					{
+						toDrawerPos[stoneIndex + 1].z -= 0.1;
+						stonePull[stoneIndex] = true;
+
+						items << GoldKey;
+
+						bGoldKeyHave = true;
+
+						playSEandBGMStop(U"Item");
+					}
+				}
+				else
+				{
+					// それ以外の石板
+					toStonePos[stoneIndex + 1].z -= 0.2;
+					stonePull[stoneIndex] = true;
+
+					stoneOrder += (stoneIndex+1) * std::pow(10, stoneCounter);
+					stoneCounter++;
+
+					playSE(U"Stone");
+				}
+			}
+		}
+	}
+
 	// 引き出しの移動
 	for (int i = 1; i < 7; i++)
 	{
 	//	drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
 		drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.06);
+	}
+
+	// 石板の移動
+	for (int i = 1; i < 4; i++)
+	{
+		stonePos[i].z = Math::Lerp(stonePos[i].z, toStonePos[i].z, 0.06);
 	}
 
 	// カメラ関係
@@ -3779,5 +3878,47 @@ void CameraTest::lockon()
 			phiController.setFocusPosition(drawerPos[0]);
 		}
 	}
+
+	// 石板（本体）
+	if (!bLockon && bStoneMode == false)
+	{
+		Vec3 temp = stonePos[0];
+		temp.x -= 0.15;
+	//	temp.y += 0.5;
+	//	temp.z -= 0.3;
+
+		auto [a, b, c, d] = stoneController.update(
+			temp,
+			camera,
+			curCameraPosition,
+			markPosition,
+			0,
+			false
+		);
+
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 59;
+		}
+
+		if (d)
+		{
+			// クリックした
+			bStoneMode = true;
+
+			// カメラの座標と向きを調整
+			toCameraPos.x = 16.3;
+			toCameraPos.y = 1.1;
+			toCameraPos.z = 0.55;
+
+			to_m_focusY = -0.53;
+
+			phiController.setCameraPosition(toCameraPos);
+			phiController.setFocusPosition(stonePos[0]);
+		}
+	}
+
 
 }
