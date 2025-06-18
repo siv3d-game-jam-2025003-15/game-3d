@@ -1691,20 +1691,17 @@ void CameraTest::update()
 			}
 			else if (stonePull[stoneIndex] == false)
 			{
-				if (stoneIndex == 3)
+				// 最後の石板
+				if (stoneIndex == 3 && stoneOrder == 132)
 				{
-					// 最後の石板
-					if (stoneOrder == 132)
-					{
-						toDrawerPos[stoneIndex + 1].z -= 0.1;
-						stonePull[stoneIndex] = true;
+					toDrawerPos[stoneIndex + 1].z -= 0.2;
+					stonePull[stoneIndex] = true;
 
-						items << GoldKey;
+					items << GoldKey;
 
-						bGoldKeyHave = true;
+					bGoldKeyHave = true;
 
-						playSEandBGMStop(U"Item");
-					}
+					playSEandBGMStop(U"Item");
 				}
 				else
 				{
@@ -1712,7 +1709,7 @@ void CameraTest::update()
 					toStonePos[stoneIndex + 1].z -= 0.2;
 					stonePull[stoneIndex] = true;
 
-					stoneOrder += (stoneIndex+1) * std::pow(10, stoneCounter);
+					stoneOrder += (stoneIndex + 1) * std::pow(10, stoneCounter);
 					stoneCounter++;
 
 					playSE(U"Stone");
