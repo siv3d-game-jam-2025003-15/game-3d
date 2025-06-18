@@ -433,6 +433,9 @@ private:
 	// 引き出しの移動先
 	Array<Vec3> toDrawerPos = drawerPos;
 
+	// 
+	bool bDrawerPullNow = false;
+
 	double debugDrawerY = 0;
 
 	// 羊皮紙

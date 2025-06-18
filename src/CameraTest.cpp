@@ -652,7 +652,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"stoneOrder=" << stoneOrder;
+	Print << U"drawerOrder=" << drawerOrder;
+	Print << U"drawerCounter=" << drawerCounter;
 	
 #endif
 }
@@ -966,20 +967,25 @@ void CameraTest::update()
 			//	}
 			//}
 
-			if (KeyA.down())
+			if (bDrawerPullNow == false)
 			{
-				drawerIndex--;
-				if (drawerIndex < 0)
+				// 引き出しを開け閉めしていない時だけ操作可能
+
+				if (KeyA.down())
 				{
-					drawerIndex = 0;
+					drawerIndex--;
+					if (drawerIndex < 0)
+					{
+						drawerIndex = 0;
+					}
 				}
-			}
-			if (KeyD.down())
-			{
-				drawerIndex++;
-				if (drawerIndex > 6)
+				if (KeyD.down())
 				{
-					drawerIndex = 6;
+					drawerIndex++;
+					if (drawerIndex > 6)
+					{
+						drawerIndex = 6;
+					}
 				}
 			}
 
@@ -1575,6 +1581,7 @@ void CameraTest::update()
 
 				if (bGoldKeyHave == false)
 				{
+					// 各引き出しを元の位置に戻す
 					for (int i = 0; i < 6; i++)
 					{
 						toDrawerPos[i + 1].z = 1.6;
@@ -1611,8 +1618,17 @@ void CameraTest::update()
 					drawerPull[drawerIndex] = true;
 					drawerPullCount = 1.0;
 
+					if (drawerIndex == 2)
+					{
+						// いったんリセット
+						drawerOrder = 0;
+						drawerCounter = 0;
+					}
+
 					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
 					drawerCounter++;
+
+					bDrawerPullNow = true;
 
 					//if (!AudioAsset(U"drawer_open").isPlaying())
 					//{
@@ -1645,6 +1661,7 @@ void CameraTest::update()
 						//}
 						playSE(U"drawer_close");
 						drawerPull[drawerIndex] = false;
+						bDrawerPullNow = false;
 					}
 				}
 			}
@@ -3830,7 +3847,7 @@ void CameraTest::lockon()
 	}
 
 	// 引き出し（本体）
-	if (!bLockon && bDrawerMode == false && bGoldKeyHave == false)
+	if (!bLockon && bDrawerMode == false)
 	{
 		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
