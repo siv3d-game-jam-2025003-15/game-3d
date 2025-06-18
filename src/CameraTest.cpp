@@ -652,7 +652,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"stonePos=" << stonePos[0];
+	Print << U"stoneOrder=" << stoneOrder;
 	
 #endif
 }
@@ -908,9 +908,9 @@ void CameraTest::update()
 
 
 		// プレイヤーの移動
-		if (bDrawerMode)
+		if (bDrawerMode || bStoneMode)
 		{
-			// 引き出しモード中は操作できない
+			// 引き出し、石板モード中は操作できない
 		}
 		else
 		{
@@ -1669,9 +1669,9 @@ void CameraTest::update()
 				// 石板モード解除
 				bStoneMode = false;
 
-				toCameraPos.x = drawerPos[0].x;
+				toCameraPos.x = stonePos[0].x - 2.0;
 				toCameraPos.y = 1.5;
-				toCameraPos.z = drawerPos[0].z - 2.0;
+				toCameraPos.z = stonePos[0].z;
 
 				to_m_focusY = -0.3;
 
@@ -1679,7 +1679,7 @@ void CameraTest::update()
 				{
 					for (int i = 0; i < 4; i++)
 					{
-						toStonePos[i + 1].z = 1.6;
+						toStonePos[i + 1].x = 20.18;
 						stonePull[i] = false;
 					}
 
@@ -1691,12 +1691,16 @@ void CameraTest::update()
 			}
 			else if (stonePull[stoneIndex] == false)
 			{
-				// 最後の石板
-				if (stoneIndex == 3 && stoneOrder == 132)
-				{
-					toDrawerPos[stoneIndex + 1].z -= 0.2;
-					stonePull[stoneIndex] = true;
+				// 石板の移動
+				toStonePos[stoneIndex + 1].x += 0.02;
+				stonePull[stoneIndex] = true;
 
+				stoneOrder += (stoneIndex + 1) * std::pow(10, stoneCounter);
+				stoneCounter++;
+
+				// 最後の石板
+				if (stoneOrder == 4132)
+				{
 					items << GoldKey;
 
 					bGoldKeyHave = true;
@@ -1706,12 +1710,6 @@ void CameraTest::update()
 				else
 				{
 					// それ以外の石板
-					toStonePos[stoneIndex + 1].z -= 0.2;
-					stonePull[stoneIndex] = true;
-
-					stoneOrder += (stoneIndex + 1) * std::pow(10, stoneCounter);
-					stoneCounter++;
-
 					playSE(U"Stone");
 				}
 			}
@@ -1726,9 +1724,9 @@ void CameraTest::update()
 	}
 
 	// 石板の移動
-	for (int i = 1; i < 4; i++)
+	for (int i = 1; i < 5; i++)
 	{
-		stonePos[i].z = Math::Lerp(stonePos[i].z, toStonePos[i].z, 0.06);
+		stonePos[i].x = Math::Lerp(stonePos[i].x, toStonePos[i].x, 0.06);
 	}
 
 	// カメラ関係
@@ -3906,9 +3904,9 @@ void CameraTest::lockon()
 			bStoneMode = true;
 
 			// カメラの座標と向きを調整
-			toCameraPos.x = 16.3;
-			toCameraPos.y = 1.1;
-			toCameraPos.z = 0.55;
+			toCameraPos.x = 19.25;
+			toCameraPos.y = 1.5;
+			toCameraPos.z = -2.18;
 
 			to_m_focusY = -0.53;
 
