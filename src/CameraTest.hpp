@@ -512,6 +512,8 @@ private:
 
 	// 木箱
 	Vec3 woodenBoxPos = { 19.76, 1.14, 1.37 };
+	Vec3 woodenBox2Pos = { -3.57, 0.76, -3.16 };
+	Vec3 woodenBox3Pos = { 14.1, 0.79, -6.56 };
 
 	// オブジェクトクラス
 	ObjectController breadController;

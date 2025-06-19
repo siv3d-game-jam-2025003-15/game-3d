@@ -530,29 +530,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		woodenBoxPos.x += 0.01;
+		woodenBox3Pos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		woodenBoxPos.x -= 0.01;
+		woodenBox3Pos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		woodenBoxPos.y += 0.01;
+		woodenBox3Pos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		woodenBoxPos.y -= 0.01;
+		woodenBox3Pos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		woodenBoxPos.z += 0.01;
+		woodenBox3Pos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		woodenBoxPos.z -= 0.01;
+		woodenBox3Pos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -653,7 +653,9 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"woodenBoxPos=" << woodenBoxPos;
-	
+	Print << U"woodenBox2Pos=" << woodenBox2Pos;
+	Print << U"woodenBox3Pos=" << woodenBox3Pos;
+
 #endif
 }
 
@@ -4041,6 +4043,44 @@ void CameraTest::lockon()
 	{
 		auto [a, b, c, d] = chairController.update(
 			woodenBoxPos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 67;
+		}
+	}
+
+	// 木箱2
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = chairController.update(
+			woodenBox2Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 67;
+		}
+	}
+
+	// 木箱3
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = chairController.update(
+			woodenBox3Pos,
 			camera,
 			curCameraPosition,
 			markPosition,
