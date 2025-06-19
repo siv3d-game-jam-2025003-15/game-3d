@@ -52,7 +52,7 @@ struct PSLighting
 		phong.diffuseColor = ColorF{ 0.0 };
 		phong.emissionColor = diffuse;
 #ifdef _DEBUG
-		Sphere{ pos, r }.draw(phong);
+	//	Sphere{ pos, r }.draw(phong);
 #endif
 	}
 };
@@ -497,8 +497,12 @@ private:
 	// 石板の移動先
 	Array<Vec3> toStonePos = stonePos;
 
-
+	// 石板の向き
 	Vec3 stoneRot = { 0, 90_deg, 0 };
+
+	// 詰所の壁際の椅子
+	Vec3 chairPos = { 19.88, 0.72, -4.05 };
+	Vec3 chair2Pos = { 19.88, 0.72, -4.70 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
@@ -525,6 +529,7 @@ private:
 	ObjectController memoController;
 	ObjectController drawerController;
 	ObjectController stoneController;
+	ObjectController chairController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -1124,6 +1129,21 @@ private:
 		// 64
 		U"　青　緑　赤　黄▶戻る",
 		U"",
+		U"",
+
+		// 65 詰所の壁際の椅子
+		U"年季の入った木製の椅子だ",
+		U"座面が擦り減っている。長く使われていたようだ",
+		U"",
+
+		// 66 詰所のテーブル
+		U"厚い木板で作られたテーブルだ。紋章が刻まれている",
+		U"汚れと傷が目立つ。誰かがここで作業していたのかもしれない",
+		U"",
+
+		// 67 木箱
+		U"中身は空のようだ",
+		U"蓋の隙間から埃が舞い上がった。しばらく開けられていないようだ",
 		U"",
 
 	};

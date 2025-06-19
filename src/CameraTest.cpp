@@ -530,29 +530,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		stonePos[0].x += 0.001;
+		chairPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		stonePos[0].x -= 0.001;
+		chairPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		stonePos[0].y += 0.001;
+		chairPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		stonePos[0].y -= 0.001;
+		chairPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		stonePos[0].z += 0.001;
+		chairPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		stonePos[0].z -= 0.001;
+		chairPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -652,8 +652,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"footpattern=" << footpattern;
-	Print << U"footcount=" << footcount;
+	Print << U"chairPos=" << chairPos;
+	Print << U"chair2Pos=" << chair2Pos;
 	
 #endif
 }
@@ -3939,6 +3939,44 @@ void CameraTest::lockon()
 
 			phiController.setCameraPosition(toCameraPos);
 			phiController.setFocusPosition(stonePos[0]);
+		}
+	}
+
+	// 詰所の壁際の椅子1
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = chairController.update(
+			chairPos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 65;
+		}
+	}
+
+	// 詰所の壁際の椅子2
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = chairController.update(
+			chair2Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 65;
 		}
 	}
 
