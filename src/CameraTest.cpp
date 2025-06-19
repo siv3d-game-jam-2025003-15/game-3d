@@ -1700,7 +1700,7 @@ void CameraTest::update()
 
 				to_m_focusY = -0.3;
 
-				if (bGoldKeyHave == false)	// TODO
+				if (bStoneclear == false)	// TODO
 				{
 					for (int i = 0; i < 4; i++)
 					{
@@ -1726,9 +1726,11 @@ void CameraTest::update()
 				// 最後の石板
 				if (stoneOrder == 4132)
 				{
-					items << GoldKey;
+				//	items << GoldKey;
 
-					bGoldKeyHave = true;
+				//	bGoldKeyHave = true;
+
+					bStoneclear = true;
 
 					playSEandBGMStop(U"Item");
 				}
@@ -3855,7 +3857,7 @@ void CameraTest::lockon()
 	}
 
 	// 引き出し（本体）
-	if (!bLockon && bDrawerMode == false)
+	if (!bLockon && bDrawerMode == false && bGoldKeyHave == false)
 	{
 		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
@@ -3900,7 +3902,7 @@ void CameraTest::lockon()
 	}
 
 	// 石板（本体）
-	if (!bLockon && bStoneMode == false)
+	if (!bLockon && bStoneMode == false && bStoneclear == false)
 	{
 		Vec3 temp = stonePos[0];
 		temp.x -= 0.15;

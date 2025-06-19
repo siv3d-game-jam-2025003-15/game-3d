@@ -787,6 +787,8 @@ private:
 	// 黄金の鍵を持っている
 	bool bGoldKeyHave = false;
 
+	// （仮）石板クリアフラグ
+	bool bStoneclear = false;
 
 	const Font& boldFont = FontAsset(U"Bold");
 
