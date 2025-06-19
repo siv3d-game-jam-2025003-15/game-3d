@@ -530,29 +530,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		tablePos.x += 0.01;
+		chair3Pos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		tablePos.x -= 0.01;
+		chair3Pos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		tablePos.y += 0.01;
+		chair3Pos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		tablePos.y -= 0.01;
+		chair3Pos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		tablePos.z += 0.01;
+		chair3Pos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		tablePos.z -= 0.01;
+		chair3Pos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -652,7 +652,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"tablePos=" << tablePos;
+	Print << U"chair3Pos=" << chair3Pos;
 	
 #endif
 }
@@ -3965,6 +3965,44 @@ void CameraTest::lockon()
 	{
 		auto [a, b, c, d] = chairController.update(
 			chair2Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 65;
+		}
+	}
+
+	// 詰所の壁際の椅子3
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = chairController.update(
+			chair3Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 65;
+		}
+	}
+
+	// 詰所の壁際の椅子4
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = chairController.update(
+			chair4Pos,
 			camera,
 			curCameraPosition,
 			markPosition,
