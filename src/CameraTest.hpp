@@ -505,6 +505,9 @@ private:
 	Vec3 chairPos = { 19.88, 0.72, -4.05 };
 	Vec3 chair2Pos = { 19.88, 0.72, -4.70 };
 
+	// 詰所のテーブル
+	Vec3 tablePos = { 16.25, 0.75, -2.92 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController rustedKeyController;
