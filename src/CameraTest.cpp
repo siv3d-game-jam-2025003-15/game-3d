@@ -652,8 +652,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"drawerOrder=" << drawerOrder;
-	Print << U"drawerCounter=" << drawerCounter;
+	Print << U"footpattern=" << footpattern;
+	Print << U"footcount=" << footcount;
 	
 #endif
 }
@@ -1084,51 +1084,59 @@ void CameraTest::update()
 			}
 #endif
 
+			footcount += deltaTime * ((float)addSpeed / 2);
+
 			if (isWalk)
 			{
-				footcount += deltaTime * ((float)addSpeed / 2);
+				
 				if (footcount > 0.3)
 				{
-					// 足音ストップ
-					// TODO 共通化
-					if (AudioAsset(U"footsteps1").isPlaying()) {
-						AudioAsset(U"footsteps1").stop();
-						footpattern++;
-					}
-					if (AudioAsset(U"footsteps2").isPlaying()) {
-						AudioAsset(U"footsteps2").stop();
-						footpattern++;
-					}
-					footcount = 0;
-				}
-
-				if (footpattern % 2 == 0)
-				{
-					if (!AudioAsset(U"footsteps1").isPlaying()) {
+					// 鳴らす
+					if (footpattern % 2 == 0)
+					{
+						if (AudioAsset(U"footsteps1").isPlaying())
+						{
+							AudioAsset(U"footsteps1").stop();
+						}
 						AudioAsset(U"footsteps1").setVolume(1.0);
 						AudioAsset(U"footsteps1").play();
 					}
-				}
-				else
-				{
-					if (!AudioAsset(U"footsteps2").isPlaying()) {
+					else
+					{
+						if (AudioAsset(U"footsteps2").isPlaying())
+						{
+							AudioAsset(U"footsteps2").stop();
+						}
 						AudioAsset(U"footsteps2").setVolume(1.0);
 						AudioAsset(U"footsteps2").play();
 					}
+
+					// 足音ストップ
+					// TODO 共通化
+				//	if (AudioAsset(U"footsteps1").isPlaying()) {
+				//		AudioAsset(U"footsteps1").stop();
+				//		footpattern++;
+				//	}
+				//	if (AudioAsset(U"footsteps2").isPlaying()) {
+				//		AudioAsset(U"footsteps2").stop();
+				//		footpattern++;
+				//	}
+					footpattern++;
+					footcount = 0;
 				}
 			}
 			else {
-				if (AudioAsset(U"footsteps1").isPlaying()) {
-					AudioAsset(U"footsteps1").stop();
-					footpattern++;
-				}
-				if (AudioAsset(U"footsteps2").isPlaying()) {
-					AudioAsset(U"footsteps2").stop();
-					footpattern++;
-				}
-				footcount = 0;
+				//if (AudioAsset(U"footsteps1").isPlaying()) {
+				//	AudioAsset(U"footsteps1").stop();
+				//	footpattern++;
+				//}
+				//if (AudioAsset(U"footsteps2").isPlaying()) {
+				//	AudioAsset(U"footsteps2").stop();
+				//	footpattern++;
+				//}
+				//footcount = 0;
 
-				stopwatch.restart();
+				//stopwatch.restart();
 			}
 		}
 

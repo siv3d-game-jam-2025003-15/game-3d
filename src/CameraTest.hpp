@@ -1389,7 +1389,7 @@ private:
 
 	// 足音変数
 	int footpattern = 0;
-	float footcount = 0;
+	float footcount = 1;
 
 	bool bMouseL = false;
 
