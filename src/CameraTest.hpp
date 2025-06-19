@@ -510,6 +510,9 @@ private:
 	// 詰所のテーブル
 	Vec3 tablePos = { 16.25, 0.75, -2.92 };
 
+	// 木箱
+	Vec3 woodenBoxPos = { 19.76, 1.14, 1.37 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController rustedKeyController;
