@@ -530,29 +530,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		chairPos.x += 0.01;
+		parchmentPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		chairPos.x -= 0.01;
+		parchmentPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		chairPos.y += 0.01;
+		parchmentPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		chairPos.y -= 0.01;
+		parchmentPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		chairPos.z += 0.01;
+		parchmentPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		chairPos.z -= 0.01;
+		parchmentPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -652,8 +652,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"chairPos=" << chairPos;
-	Print << U"chair2Pos=" << chair2Pos;
+	Print << U"parchmentPos=" << parchmentPos;
 	
 #endif
 }
@@ -3033,7 +3032,7 @@ void CameraTest::viewModel()
 	if (bParchmentHave == false)
 	{
 		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(parchmentPos)
+			Mat4x4::RotateY(parchmentRot.y).scaled(0.01).translated(parchmentPos)
 		};
 
 		modelParchment->draw();
