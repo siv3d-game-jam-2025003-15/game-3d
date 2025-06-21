@@ -163,9 +163,10 @@ void CameraTest::loadResources()
 	AudioAsset(U"Paper").play();
 	AudioAsset(U"Paper").stop();
 
-	AudioAsset(U"Title").setVolume(0.0);
-	AudioAsset(U"Title").play();
-	AudioAsset(U"Title").stop();
+	// これは鳴らしているのでやらない
+	//AudioAsset(U"Title").setVolume(0.0);
+	//AudioAsset(U"Title").play();
+	//AudioAsset(U"Title").stop();
 
 	AudioAsset(U"Water").setVolume(0.0);
 	AudioAsset(U"Water").play();

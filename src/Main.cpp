@@ -69,12 +69,12 @@ void Main()
 
     App manager;
 	manager.add<Title>(State::Title);
-	manager.add<Game>(State::Game);
-	manager.add<Ranking>(State::Ranking);
+//	manager.add<Game>(State::Game);
+//	manager.add<Ranking>(State::Ranking);
 	manager.add<CameraTest>(State::CameraTest);
-    manager.add<ModelView>(State::ModelView);
-    manager.add<Result>(State::Result);
-	manager.add<Stage>(State::Stage);
+//    manager.add<ModelView>(State::ModelView);
+//    manager.add<Result>(State::Result);
+//	manager.add<Stage>(State::Stage);
 	manager.add<ToBeContinued>(State::ToBeContinued);
 
 	while (System::Update())
