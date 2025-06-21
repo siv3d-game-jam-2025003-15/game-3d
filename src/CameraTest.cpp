@@ -775,9 +775,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"fireBillboardPos=" << fireBillboardPos;
-	Print << U"fireBillboardScale=" << fireBillboardScale;
-	Print << U"fireBillboardColor=" << fireBillboardColor;
+	Print << U"message=" << message;
 
 #endif
 }
@@ -924,6 +922,7 @@ void CameraTest::inventoryOnOff()
 	bMemo = false;
 	bToastedParchmentRead = false;
 	bClothRead = false;
+	bRustedKeyUse = false;
 
 	// 合成の選択を解除
 	synthesisIndex = -1;
@@ -956,7 +955,15 @@ void CameraTest::update()
 	// シナリオの進捗によってメッセージを変える
 	if (bStartPlaying)
 	{
-		message = scenario;
+		if (bRustedKeyUse)
+		{
+			// 例外
+			messagePattern = 0;
+		}
+		else
+		{
+			message = scenario;
+		}
 	}
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
@@ -2830,6 +2837,17 @@ void CameraTest::viewInventory()
 		int itemBigY = center.y - itemBigHeight / 2 - 35;
 
 		drawBigItem(items[selectItem], itemBigX, itemBigY);
+
+		if (items[selectItem] != RustedKey)
+		{
+			// 錆びた鍵を使ったフラグをリセット
+			bRustedKeyUse = false;
+		}
+	}
+	else
+	{
+		// 錆びた鍵を使ったフラグをリセット
+		bRustedKeyUse = false;
 	}
 
 	if (MouseL.down())
@@ -2876,7 +2894,12 @@ void CameraTest::viewInventory()
 
 			if (synthesisIndex == -1)
 			{
-				// 何もしない
+				if (bDoorLockon)
+				{
+					// ドアの前で使う
+					message = 69;
+					bRustedKeyUse = true;
+				}
 			}
 			else if (items[synthesisIndex] == Hanger)
 			{

@@ -1169,6 +1169,10 @@ private:
 		U"",
 		U"",
 
+		// 69 錆びた鍵を扉の前で使う
+		U"錆びていて使えそうもない。何か代用できるものはないだろうか？",
+		U"",
+		U"",
 	};
 
 	// インベントリ用のテキスト
@@ -1448,4 +1452,6 @@ private:
 	bool bDrawerNone = false;
 	int lastDrawerIndex = 0;
 	bool bDrawerOpen = false;
+
+	bool bRustedKeyUse = false;
 };
