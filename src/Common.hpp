@@ -44,3 +44,8 @@ const int SCENE_WIDTH = 1280;
 const int SCENE_HEIGHT = 720;
 //const int SCENE_WIDTH = 1920;
 //const int SCENE_HEIGHT = 1080;
+
+// フォーカスエリア
+const int focusWidth = 160;
+const int focusHeight = 160;
+const float focusDistance = 1.5;

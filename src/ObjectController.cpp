@@ -36,17 +36,17 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 	//double distance = eyePos.distanceFrom(objPos);
 
 	Vec3 focus = camera.getFocusPosition();
-	double focusDistance = focus.distanceFrom(objPos);
+	double distance = focus.distanceFrom(objPos);
 
 	//Print << U"focusDistance=" << focusDistance;
 
 	if (
-		screenPos.x >= (WINDOW_WIDTH / 2 - 200)
-		&& screenPos.x <= (WINDOW_WIDTH / 2 + 200)
-		&& screenPos.y >= (WINDOW_HEIGHT / 2 - 200)
-		&& screenPos.y <= (WINDOW_HEIGHT / 2 + 200)
+		screenPos.x >= (WINDOW_WIDTH / 2 - focusWidth)
+		&& screenPos.x <= (WINDOW_WIDTH / 2 + focusWidth)
+		&& screenPos.y >= (WINDOW_HEIGHT / 2 - focusHeight)
+		&& screenPos.y <= (WINDOW_HEIGHT / 2 + focusHeight)
 		//&& distance < 3.5
-		&& focusDistance < 1.5
+		&& distance < focusDistance
 	)
 	{
 #ifdef _DEBUG

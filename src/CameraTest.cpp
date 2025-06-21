@@ -337,111 +337,6 @@ void CameraTest::loadResources() const
 //	System::Update();
 }
 
-// モデルの読み込み
-//void CameraTest::loadModels() const
-//{
-//	switch (loadCount)
-//	{
-//	case 0:
-//		model = std::make_unique<Model>(modelPath);
-//		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
-//		break;
-//	case 1:
-//		modelDoor = std::make_unique<Model>(modelDoorPath);
-//		Model::RegisterDiffuseTextures(*modelDoor, TextureDesc::MippedSRGB);
-//		break;
-//	case 2:
-//		modelRustedKey = std::make_unique<Model>(modelRustedKeyPath);
-//		Model::RegisterDiffuseTextures(*modelRustedKey, TextureDesc::MippedSRGB);
-//		break;
-//	case 3:
-//		modelIronKey = std::make_unique<Model>(modelIronKeyPath);
-//		Model::RegisterDiffuseTextures(*modelIronKey, TextureDesc::MippedSRGB);
-//		break;
-//	case 4:
-//		modelBread = std::make_unique<Model>(modelBreadPath);
-//		Model::RegisterDiffuseTextures(*modelBread, TextureDesc::MippedSRGB);
-//		break;
-//	case 5:
-//		modelPoker = std::make_unique<Model>(modelPokerPath);
-//		Model::RegisterDiffuseTextures(*modelPoker, TextureDesc::MippedSRGB);
-//		break;
-//	case 6:
-//		modelDrawerChain = std::make_unique<Model>(modelDrawerChainPath);
-//		Model::RegisterDiffuseTextures(*modelDrawerChain, TextureDesc::MippedSRGB);
-//		break;
-//	case 7:
-//		modelDrawerEye = std::make_unique<Model>(modelDrawerEyePath);
-//		Model::RegisterDiffuseTextures(*modelDrawerEye, TextureDesc::MippedSRGB);
-//		break;
-//	case 8:
-//		modelDrawerFeather = std::make_unique<Model>(modelDrawerFeatherPath);
-//		Model::RegisterDiffuseTextures(*modelDrawerFeather, TextureDesc::MippedSRGB);
-//		break;
-//	case 9:
-//		modelDrawerFlower = std::make_unique<Model>(modelDrawerFlowerPath);
-//		Model::RegisterDiffuseTextures(*modelDrawerFlower, TextureDesc::MippedSRGB);
-//		break;
-//	case 10:
-//		modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
-//		Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
-//		break;
-//	case 11:
-//		modelDrawerSnake = std::make_unique<Model>(modelDrawerSnakePath);
-//		Model::RegisterDiffuseTextures(*modelDrawerSnake, TextureDesc::MippedSRGB);
-//		break;
-//	case 12:
-//		modelShelf = std::make_unique<Model>(modelShelfPath);
-//		Model::RegisterDiffuseTextures(*modelShelf, TextureDesc::MippedSRGB);
-//		break;
-//	case 13:
-//		modelExclamationMark = std::make_unique<Model>(modelExclamationMarkPath);
-//		Model::RegisterDiffuseTextures(*modelExclamationMark, TextureDesc::MippedSRGB);
-//		break;
-//	case 14:
-//		modelParchment = std::make_unique<Model>(modelParchmentPath);
-//		Model::RegisterDiffuseTextures(*modelParchment, TextureDesc::MippedSRGB);
-//		break;
-//	case 15:
-//		modelHanger = std::make_unique<Model>(modelHangerPath);
-//		Model::RegisterDiffuseTextures(*modelHanger, TextureDesc::MippedSRGB);
-//		break;
-//	case 16:
-//		modelDirtyCloth = std::make_unique<Model>(modelDirtyClothPath);
-//		Model::RegisterDiffuseTextures(*modelDirtyCloth, TextureDesc::MippedSRGB);
-//		break;
-//	case 17:
-//		modelMemo = std::make_unique<Model>(modelMemoPath);
-//		Model::RegisterDiffuseTextures(*modelMemo, TextureDesc::MippedSRGB);
-//		break;
-//	case 18:
-//		modelStoneBase = std::make_unique<Model>(modelStoneBasePath);
-//		Model::RegisterDiffuseTextures(*modelStoneBase, TextureDesc::MippedSRGB);
-//		break;
-//	case 19:
-//		modelStoneBlue = std::make_unique<Model>(modelStoneBluePath);
-//		Model::RegisterDiffuseTextures(*modelStoneBlue, TextureDesc::MippedSRGB);
-//		break;
-//	case 20:
-//		modelStoneGreen = std::make_unique<Model>(modelStoneGreenPath);
-//		Model::RegisterDiffuseTextures(*modelStoneGreen, TextureDesc::MippedSRGB);
-//		break;
-//	case 21:
-//		modelStoneRed = std::make_unique<Model>(modelStoneRedPath);
-//		Model::RegisterDiffuseTextures(*modelStoneRed, TextureDesc::MippedSRGB);
-//		break;
-//	case 22:
-//		modelStoneYellow = std::make_unique<Model>(modelStoneYellowPath);
-//		Model::RegisterDiffuseTextures(*modelStoneYellow, TextureDesc::MippedSRGB);
-//		break;
-//	default:
-//		bLoaded = true;	// モデルが読み込まれた
-//		break;
-//	}
-//	loadCount++;
-//}
-	
-
 // テキストメッセージを先に読み込んでおく
 void CameraTest::dummyTextView(Array<String> text) const
 {
@@ -509,137 +404,26 @@ void CameraTest::debug()
 		// キャラライトの明るさ
 		lightStrong -= 0.1;
 	}
-	//if (Key9.down())
-	//{
-	//	// 暖炉の明るさ
-	//	fireplaceStrong += 0.1;
-	//}
-	//if (Key0.down())
-	//{
-	//	// 暖炉の明るさ
-	//	fireplaceStrong -= 0.1;
-	//}
-	//if (KeyT.down())
-	//{
-	//	// 環境光の明るさ
-	//	globalAmbientColor += 0.01;
-	//}
-	//if (KeyY.down())
-	//{
-	//	// 環境光の明るさ
-	//	globalAmbientColor -= 0.01;
-	//}
-	//if (KeyO.down())
-	//{
-	//	// 太陽光の明るさ
-	//	sunColor += 0.01;
-	//}
-	//if (KeyP.down())
-	//{
-	//	// 太陽光の明るさ
-	//	sunColor -= 0.01;
-	//}
-	//if (KeyK.down())
-	//{
-	//	// 暖炉の明るさ（揺らぎ）
-	//	fireplaceSin += 0.1;
-	//}
-	//if (KeyL.down())
-	//{
-	//	// 暖炉の明るさ（揺らぎ）
-	//	fireplaceSin -= 0.1;
-	//}
-
-	//if (KeyZ.down())
-	//{
-	//	fireplaceR += 0.01;
-	//}
-	//if (KeyX.down())
-	//{
-	//	fireplaceR -= 0.01;
-	//}
-	//if (fireplaceR > 1)
-	//{
-	//	fireplaceR = 1;
-	//}
-	//if (fireplaceR < 0)
-	//{
-	//	fireplaceR = 0;
-	//}
-
-	//if (KeyC.down())
-	//{
-	//	fireplaceG += 0.01;
-	//}
-	//if (KeyV.down())
-	//{
-	//	fireplaceG -= 0.01;
-	//}
-	//if (fireplaceG > 1)
-	//{
-	//	fireplaceG = 1;
-	//}
-	//if (fireplaceG < 0)
-	//{
-	//	fireplaceG = 0;
-	//}
-
-	//if (KeyB.down())
-	//{
-	//	fireplaceB += 0.01;
-	//}
-	//if (KeyN.down())
-	//{
-	//	fireplaceB -= 0.01;
-	//}
-	//if (fireplaceB > 1)
-	//{
-	//	fireplaceB = 1;
-	//}
-	//if (fireplaceB < 0)
-	//{
-	//	fireplaceB = 0;
-	//}
 
 	if (KeyTab.down())
 	{
 		// プロローグスキップ
 		bPrologueMessageEnd = true;
-		//bPrologue2End = true;
-		//bPrologueBGM = true;
 		bStartPlaying = true;
 
 		prologueCount = 9999;
 		messageCount = 9999;
 	}
 
-	//if (Key7.down())
-	//{
-	//	// ライトの点滅あり
-	//	bDebugFlashingLight == true ? bDebugFlashingLight = false : bDebugFlashingLight = true;
-	//}
-	//if (Key8.down())
-	//{
-	//	// シェーダーあり
-	//	bDebugShader == true ? bDebugShader = false : bDebugShader = true;
-	//}
-	//if (Key9.pressed())
-	//{
-	//	lightPosList[lightArea].x += 0.001;
-	//}
-	//if (Key0.pressed())
-	//{
-	//	lightPosList[lightArea].x -= 0.001;
-	//}
 
 
 	if (KeyZ.pressed())
 	{
-		fireBillboardPos.x += 0.01;
+	//	focusDistance += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		fireBillboardPos.x -= 0.01;
+	//	focusDistance -= 0.01;
 	}
 
 	if (KeyC.pressed())
@@ -775,7 +559,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"message=" << message;
+	Print << U"focusDistance=" << focusDistance;
 
 #endif
 }
@@ -2172,10 +1956,10 @@ void CameraTest::update()
 		{
 			// フォーカスエリア
 			Rect rect(
-				WINDOW_WIDTH / 2 - 200,
-				WINDOW_HEIGHT / 2 - 200,
-				400,
-				400
+				WINDOW_WIDTH / 2 - focusWidth,
+				WINDOW_HEIGHT / 2 - focusHeight,
+				focusWidth*2,
+				focusHeight*2
 			);
 
 			rect.drawFrame(2, Palette::Red);
@@ -3373,6 +3157,64 @@ void CameraTest::lockon()
 		}
 	}
 
+	// 手記
+	if (!bLockon && bMemoHave == false && bTutorial == false)
+	{
+		auto [a, b, c, d] = memoController.update(
+			memoPos,
+			camera,
+			curCameraPosition,
+			//	ray, 
+			markPosition,
+			2,
+			true
+		);
+		if (a == true)
+		{
+			// 手記を取得
+			bMemoHave = true;
+			items << Memo;
+			bgmStopCount = c;
+
+			scenario = 3;	// なし
+		}
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 51;
+		}
+	}
+
+	// ハンガー
+	if (!bLockon && bHangerHave == false && bTutorial == false)
+	{
+		auto [a, b, c, d] = hangerController.update(
+			hangerPos,
+			camera,
+			curCameraPosition,
+			//	ray,
+			markPosition,
+			0,
+			true
+		);
+		if (a == true)
+		{
+			// ハンガーを取得
+			bHangerHave = true;
+			items << Hanger;
+			bgmStopCount = c;
+
+			scenario = 3;	// なし
+		}
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 22;
+		}
+	}
+
 	// 鉄製の鍵
 	if (!bLockon && bIronKeyHave == false)
 	{
@@ -3576,8 +3418,6 @@ void CameraTest::lockon()
 		}
 	}
 
-
-
 	// 羊皮紙
 	if (!bLockon)
 	{
@@ -3604,6 +3444,187 @@ void CameraTest::lockon()
 			message = 54;
 		}
 	}
+
+	// トイレ２（左上の部屋）
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = toiletController.update(
+			toilet2Pos,
+			camera,
+			curCameraPosition,
+			//	ray,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 32;
+			bToilet2Lockon = true;
+		}
+		else
+		{
+			bToilet2Lockon = false;
+		}
+	}
+	else
+	{
+		bToilet2Lockon = false;
+	}
+
+	// 暖炉（火が弱い）
+	if (!bLockon && bFireplaceStrong == false)
+	{
+		//	auto [a, b, c, d] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
+		auto [a, b, c, d] = fireplaceController.update(
+			fireplacePos,
+			camera,
+			curCameraPosition,
+			//	ray,
+			markPosition,
+			0,
+			false
+		);
+		//if (a == true)
+		//{
+		//	// 火が強くなった
+		//	bFireplaceStrong = true;
+		//}
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 18;
+			bFireplaceLockon = true;
+		}
+		else
+		{
+			bFireplaceLockon = false;
+		}
+	}
+	else
+	{
+		bFireplaceLockon = false;
+	}
+
+	// 汚れた布
+	if (!bLockon && bDirtyClothHave == false)
+	{
+		auto [a, b, c, d] = dirtyClothController.update(
+			dirtyClothPos,
+			camera,
+			curCameraPosition,
+			//	ray, 
+			markPosition,
+			0,
+			true
+		);
+		if (a == true)
+		{
+			// 汚れた布を取得
+			bDirtyClothHave = true;
+			items << DirtyCloth;
+			bgmStopCount = c;
+		}
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 26;
+		}
+	}
+
+	// 引き出し（本体）
+	if (!bLockon && bDrawerMode == false && bGoldKeyHave == false)
+	{
+		Vec3 temp = drawerPos[0];
+		temp.x += 0.0;
+		temp.y += 0.5;
+		temp.z -= 0.3;
+
+		auto [a, b, c, d] = drawerController.update(
+			temp,
+			camera,
+			curCameraPosition,
+			markPosition,
+			0,
+			false
+		);
+
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 9;
+		}
+
+		if (d)
+		{
+			// クリックした
+			bDrawerMode = true;
+
+			// カメラの座標と向きを調整
+			toCameraPos.x = 16.3;
+			//	toCameraPos.y = 0.65;
+			//	toCameraPos.y = 1.58;
+			toCameraPos.y = 1.1;
+			//	toCameraPos.z = 0.3;
+			//	toCameraPos.z = 1.2;
+			toCameraPos.z = 0.55;
+
+			//	to_m_focusY = 0;
+			to_m_focusY = -0.53;
+			phiController.setCameraPosition(toCameraPos);
+			phiController.setFocusPosition(drawerPos[0]);
+		}
+	}
+
+	// 石板（本体）
+	if (!bLockon && bStoneMode == false && bStoneclear == false)
+	{
+		Vec3 temp = stonePos[0];
+		temp.x -= 0.15;
+		//	temp.y += 0.5;
+		//	temp.z -= 0.3;
+
+		auto [a, b, c, d] = stoneController.update(
+			temp,
+			camera,
+			curCameraPosition,
+			markPosition,
+			0,
+			false
+		);
+
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 59;
+		}
+
+		if (d)
+		{
+			// クリックした
+			bStoneMode = true;
+
+			// カメラの座標と向きを調整
+			toCameraPos.x = 19.25;
+			toCameraPos.y = 1.5;
+			toCameraPos.z = -2.18;
+
+			to_m_focusY = -0.53;
+
+			phiController.setCameraPosition(toCameraPos);
+			phiController.setFocusPosition(stonePos[0]);
+		}
+	}
+
+	//=======================
+	// ↓優先度低め
+	//=======================
 
 	// 自分のベッド
 	if (!bLockon)
@@ -3725,35 +3746,6 @@ void CameraTest::lockon()
 		}
 	}
 
-	// トイレ２（左上の部屋）
-	if (!bLockon)
-	{
-		auto [a, b, c, d] = toiletController.update(
-			toilet2Pos,
-			camera,
-			curCameraPosition,
-		//	ray,
-			markPosition,
-			-1,
-			false
-		);
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 32;
-			bToilet2Lockon = true;
-		}
-		else
-		{
-			bToilet2Lockon = false;
-		}
-	}
-	else
-	{
-		bToilet2Lockon = false;
-	}
-
 	// 棚
 	if (!bLockon)
 	{
@@ -3810,41 +3802,6 @@ void CameraTest::lockon()
 	//	}
 	//}
 
-	// 暖炉（火が弱い）
-	if (!bLockon && bFireplaceStrong == false)
-	{
-		//	auto [a, b, c, d] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
-		auto [a, b, c, d] = fireplaceController.update(
-			fireplacePos,
-			camera, 
-			curCameraPosition,
-		//	ray,
-			markPosition,
-			0,
-			false
-		);
-		//if (a == true)
-		//{
-		//	// 火が強くなった
-		//	bFireplaceStrong = true;
-		//}
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 18;
-			bFireplaceLockon = true;
-		}
-		else
-		{
-			bFireplaceLockon = false;
-		}
-	}
-	else
-	{
-		bFireplaceLockon = false;
-	}
-
 	// 暖炉（火が強い）
 	// オミット
 	//if (!bLockon && bFireplaceStrong)
@@ -3866,35 +3823,6 @@ void CameraTest::lockon()
 	//{
 	//	bFireplaceStrongLockon = false;
 	//}
-
-	// ハンガー
-	if (!bLockon && bHangerHave == false && bTutorial == false)
-	{
-		auto [a, b, c, d] = hangerController.update(
-			hangerPos, 
-			camera,
-			curCameraPosition, 
-		//	ray,
-			markPosition, 
-			0, 
-			true
-		);
-		if (a == true)
-		{
-			// ハンガーを取得
-			bHangerHave = true;
-			items << Hanger;
-			bgmStopCount = c;
-
-			scenario = 3;	// なし
-		}
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 22;
-		}
-	}
 
 	// 樽
 	if (!bLockon)
@@ -3984,148 +3912,6 @@ void CameraTest::lockon()
 			// 見ている
 			bLockon = b;
 			message = 23;
-		}
-	}
-
-	// 汚れた布
-	if (!bLockon && bDirtyClothHave == false)
-	{
-		auto [a, b, c, d] = dirtyClothController.update(
-			dirtyClothPos, 
-			camera,
-			curCameraPosition, 
-		//	ray, 
-			markPosition,
-			0,
-			true
-		);
-		if (a == true)
-		{
-			// 汚れた布を取得
-			bDirtyClothHave = true;
-			items << DirtyCloth;
-			bgmStopCount = c;
-		}
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 26;
-		}
-	}
-
-	// 手記
-	if (!bLockon && bMemoHave == false && bTutorial == false)
-	{
-		auto [a, b, c, d] = memoController.update(
-			memoPos,
-			camera, 
-			curCameraPosition, 
-		//	ray, 
-			markPosition, 
-			2,
-			true
-		);
-		if (a == true)
-		{
-			// 手記を取得
-			bMemoHave = true;
-			items << Memo;
-			bgmStopCount = c;
-
-			scenario = 3;	// なし
-		}
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 51;
-		}
-	}
-
-	// 引き出し（本体）
-	if (!bLockon && bDrawerMode == false && bGoldKeyHave == false)
-	{
-		Vec3 temp = drawerPos[0];
-		temp.x += 0.0;
-		temp.y += 0.5;
-		temp.z -= 0.3;
-
-		auto [a, b, c, d] = drawerController.update(
-			temp,
-			camera,
-			curCameraPosition,
-			markPosition,
-			0,
-			false
-		);
-
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 9;
-		}
-
-		if (d)
-		{
-			// クリックした
-			bDrawerMode = true;
-
-			// カメラの座標と向きを調整
-			toCameraPos.x = 16.3;
-		//	toCameraPos.y = 0.65;
-		//	toCameraPos.y = 1.58;
-			toCameraPos.y = 1.1;
-		//	toCameraPos.z = 0.3;
-		//	toCameraPos.z = 1.2;
-			toCameraPos.z = 0.55;
-
-		//	to_m_focusY = 0;
-			to_m_focusY = -0.53;
-			phiController.setCameraPosition(toCameraPos);
-			phiController.setFocusPosition(drawerPos[0]);
-		}
-	}
-
-	// 石板（本体）
-	if (!bLockon && bStoneMode == false && bStoneclear == false)
-	{
-		Vec3 temp = stonePos[0];
-		temp.x -= 0.15;
-	//	temp.y += 0.5;
-	//	temp.z -= 0.3;
-
-		auto [a, b, c, d] = stoneController.update(
-			temp,
-			camera,
-			curCameraPosition,
-			markPosition,
-			0,
-			false
-		);
-
-		if (b)
-		{
-			// 見ている
-			bLockon = b;
-			message = 59;
-		}
-
-		if (d)
-		{
-			// クリックした
-			bStoneMode = true;
-
-			// カメラの座標と向きを調整
-			toCameraPos.x = 19.25;
-			toCameraPos.y = 1.5;
-			toCameraPos.z = -2.18;
-
-			to_m_focusY = -0.53;
-
-			phiController.setCameraPosition(toCameraPos);
-			phiController.setFocusPosition(stonePos[0]);
 		}
 	}
 
