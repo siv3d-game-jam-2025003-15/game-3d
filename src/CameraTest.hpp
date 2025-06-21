@@ -830,7 +830,7 @@ private:
 		// シナリオ系
 
 		// 0 最初
-		U"　　　　　　　　　　腹が減った。まずは食事をしなければ…。　　　　　　　　　　",	// 0
+		U"　　　　腹が減った。まずは食事をしなければ…。　　　　",	// 0
 		U"",	// 0
 		U"",	// 0
 
@@ -1006,17 +1006,18 @@ private:
 		U"",	// 34
 
 		// 35 プロローグ用
-		U"　　　　　　　　　　壁は冷たい石。窓もない。　　　　　　　　　　",	// 35
+	//	U"　　　　　　　　　　壁は冷たい石。窓もない。　　　　　　　　　　",	// 35
+		U"　　　　壁は冷たい石。窓もない。　　　　",	// 35
 		U"",	// 35
 		U"",	// 35
 
 		// 36 プロローグ用
-		U"　　　　　　　　　　床には薄汚れたマットレス、隅にはバケツのようなものが置かれている。　　　　　　　　　　",	// 36
+		U"　　　　床には薄汚れたマットレス、隅にはバケツのようなものが置かれている。　　　　",	// 36
 		U"",	// 36
 		U"",	// 36
 
 		// 37 プロローグ用
-		U"　　　　　　　　　　ここは……牢屋だろうか。　　　　　　　　　　",	// 37
+		U"　　　　ここは……牢屋だろうか。　　　　",	// 37
 		U"",	// 37
 		U"",	// 37
 
@@ -1359,7 +1360,8 @@ private:
 	
 	const float prologueTiming = 30;
 	const float prologueMessageSpeed = 5;
-	const float MessageSpeed = 10;
+	const float MessageSpeed = 5;
+//	const float MessageSpeed = 10;	// 2倍速
 //	const float prologueMessageWait = 1;
 
 	// SEを鳴らす

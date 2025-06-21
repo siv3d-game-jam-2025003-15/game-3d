@@ -559,7 +559,10 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"focusDistance=" << focusDistance;
+	Print << U"bPrologueMessageEnd=" << bPrologueMessageEnd;
+	Print << U"bStartPlaying=" << bStartPlaying;
+	Print << U"prologueCount=" << prologueCount;
+	Print << U"messageCount=" << messageCount;
 
 #endif
 }
@@ -2017,6 +2020,7 @@ void CameraTest::update()
 		else if (message == 0 && messageCount > Text[message * MessagePatternMax].size() / MessageSpeed)
 		{
 			bStartPlaying = true;
+			messageCount = 9999;
 		}
 	}
 
@@ -2214,7 +2218,8 @@ void CameraTest::draw() const
 		if (bStartPlaying == false && message != 0)
 		{
 			fadeout = (float)Text[m].size() - messageCount * MessageSpeed;
-			fadeout /= 5;	// ゆっくりにしたい
+		//	fadeout /= 5;	// ゆっくりにしたい
+			fadeout /= 2.5;	// ゆっくりにしたい
 			if (fadeout > 1)
 			{
 				fadeout = 1;
