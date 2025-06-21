@@ -2146,7 +2146,8 @@ void CameraTest::draw() const
 	if (bLoaded == false)
 	{
 	//	nowLoadingSprite.draw(SCENE_WIDTH - 520, SCENE_HEIGHT - 140);
-		nowLoadingSprite.resized(256, 64).draw(SCENE_WIDTH - 256-10, SCENE_HEIGHT - 64-10);
+	//	nowLoadingSprite.resized(384, 96).draw(SCENE_WIDTH - 384 - 10, SCENE_HEIGHT - 96 - 10);
+		nowLoadingSprite.resized(256, 64).draw(SCENE_WIDTH - 256 - 10, SCENE_HEIGHT - 64 - 10);
 		loadResources();
 		return;
 	}

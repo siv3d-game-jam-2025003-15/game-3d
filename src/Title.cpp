@@ -8,6 +8,9 @@ Title::Title(const InitData& init)
 
 void Title::update()
 {
+	// デバッグ
+//	changeScene(State::ToBeContinued);
+
 	// ボタンの更新
 	{
 		// ゲーム終了ボタン
