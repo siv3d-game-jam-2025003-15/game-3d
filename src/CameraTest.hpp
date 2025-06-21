@@ -1,9 +1,10 @@
 ﻿# pragma once
+#include <memory>
 #include "Common.hpp"
 #include "PhiController.hpp"
 #include "ObjectController.hpp"
 #include "Collision.hpp"
-#include <memory>
+#include "AnimeDraw.hpp"
 
 // ポイントライトVer.1
 //struct Light
@@ -464,6 +465,11 @@ private:
 	// 暖炉
 	Vec3 fireplacePos = { 16.3, 0.5, -6.5 };
 	Vec3 fireplaceLightPos = { 16.3, 0.7, -6.5 };
+
+	// 暖炉の炎
+	Vec3 fireBillboardPos = { 16.43, 0.58, -7.10 };
+	float fireBillboardScale = 0.7;
+	float fireBillboardColor = 0.7;
 
 	// ハンガー
 	Vec3 hangerPos = { 0, 1.03, 11.8 };
@@ -1427,4 +1433,6 @@ private:
 	bool bMouseL = false;
 
 	const float BGMVolume = 0.8;
+
+	animeDraw fireBillboard;
 };

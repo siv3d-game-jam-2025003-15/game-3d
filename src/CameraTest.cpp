@@ -65,6 +65,9 @@ CameraTest::CameraTest(const InitData& init)
 	// リソースの読み込み
 	loadResources();
 
+	// 暖炉のビルボード
+	fireBillboard.startDraw(1000, Texture(U"assets/sprites/EF_Fire02.png"), 8u, 1u);
+
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
 }
@@ -530,29 +533,47 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		woodenBox3Pos.x += 0.01;
+		fireBillboardPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		woodenBox3Pos.x -= 0.01;
+		fireBillboardPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		woodenBox3Pos.y += 0.01;
+		fireBillboardPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		woodenBox3Pos.y -= 0.01;
+		fireBillboardPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		woodenBox3Pos.z += 0.01;
+		fireBillboardPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		woodenBox3Pos.z -= 0.01;
+		fireBillboardPos.z -= 0.01;
+	}
+
+	if (KeyM.pressed())
+	{
+		fireBillboardScale += 0.1;
+	}
+	if (KeyL.pressed())
+	{
+		fireBillboardScale -= 0.1;
+	}
+
+	if (KeyJ.pressed())
+	{
+		fireBillboardColor += 0.1;
+	}
+	if (KeyK.pressed())
+	{
+		fireBillboardColor -= 0.1;
 	}
 
 	if (mouseDirectionX == 1)
@@ -652,9 +673,9 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"woodenBoxPos=" << woodenBoxPos;
-	Print << U"woodenBox2Pos=" << woodenBox2Pos;
-	Print << U"woodenBox3Pos=" << woodenBox3Pos;
+	Print << U"fireBillboardPos=" << fireBillboardPos;
+	Print << U"fireBillboardScale=" << fireBillboardScale;
+	Print << U"fireBillboardColor=" << fireBillboardColor;
 
 #endif
 }
@@ -3114,6 +3135,12 @@ void CameraTest::viewModel()
 		// ビルボードの表示
 		const Mat4x4 billboardMat = camera.getInvView();
 		billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
+	}
+
+	// 暖炉の炎
+	{
+		const ScopedRenderStates3D blend{ BlendState::Additive };
+		fireBillboard.draw(camera, fireBillboardPos, fireBillboardScale, fireBillboardColor);
 	}
 
 	// デバッグ表示

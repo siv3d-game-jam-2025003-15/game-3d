@@ -176,6 +176,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\AnimeDraw.cpp" />
     <ClCompile Include="..\src\CameraTest.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
@@ -398,6 +399,7 @@
     <Xml Include="App\example\xml\test.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\AnimeDraw.hpp" />
     <ClInclude Include="..\src\CameraTest.hpp" />
     <ClInclude Include="..\src\Collision.hpp" />
     <ClInclude Include="..\src\Common.hpp" />
