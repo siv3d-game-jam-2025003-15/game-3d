@@ -279,6 +279,9 @@ void CameraTest::loadResources() const
 		AudioAsset(U"牢屋の扉を開ける").play();
 		AudioAsset(U"牢屋の扉を開ける").stop();
 		break;
+	case 46:
+		dummyTextView(clothText);
+		break;
 	default:
 		bLoaded = true;	// リソースが読み込まれた
 		break;
