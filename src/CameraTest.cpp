@@ -562,8 +562,10 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"lastCheckCollision=" << lastCheckCollision;
-	
+	Print << U"fireBillboardPos=" << fireBillboardPos;
+	Print << U"fireBillboardScale=" << fireBillboardScale;
+	Print << U"fireBillboardColor=" << fireBillboardColor;
+
 #endif
 }
 
@@ -2143,7 +2145,8 @@ void CameraTest::draw() const
 
 	if (bLoaded == false)
 	{
-		nowLoadingSprite.draw(SCENE_WIDTH - 520, SCENE_HEIGHT - 140);
+	//	nowLoadingSprite.draw(SCENE_WIDTH - 520, SCENE_HEIGHT - 140);
+		nowLoadingSprite.resized(256, 64).draw(SCENE_WIDTH - 256-10, SCENE_HEIGHT - 64-10);
 		loadResources();
 		return;
 	}

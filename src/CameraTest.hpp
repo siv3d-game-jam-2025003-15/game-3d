@@ -467,8 +467,8 @@ private:
 	Vec3 fireplaceLightPos = { 16.3, 0.7, -6.5 };
 
 	// 暖炉の炎
-	Vec3 fireBillboardPos = { 16.43, 0.58, -7.10 };
-	float fireBillboardScale = 0.7;
+	Vec3 fireBillboardPos = { 16.43, 0.43, -7.10 };
+	float fireBillboardScale = 0.35;
 	float fireBillboardColor = 0.7;
 
 	// ハンガー
