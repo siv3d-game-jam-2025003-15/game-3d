@@ -1981,6 +1981,28 @@ void CameraTest::update()
 		//	prologueCount += deltaTime;
 		//}
 
+		if (MouseL.down())
+		{
+			float prologueIndex = prologueCount * 5;
+			prologueCount = 0;
+
+#if _DEBUG
+			Print << U"prologueIndex=" << prologueIndex;
+#endif
+			for (int i = 0; i < prologueText.size(); ++i)
+			{
+#if _DEBUG
+				Print << U"prologueText[" << i << U"].size() = " << prologueText[i].size();
+#endif
+				prologueCount += (float)prologueText[i].size() / 5.0f;
+				prologueIndex -= prologueText[i].size();
+				if (prologueIndex <= 0)
+				{
+					break;
+				}
+			}
+		}
+
 	//	if (prologueCount > 47)
 		if (prologueCount > prologueTiming)
 		{
@@ -2002,7 +2024,12 @@ void CameraTest::update()
 		Print << U"Text[message*MessagePatternMax].size()=" << Text[message * MessagePatternMax].size();
 		Print << U"message=" << message;
 #endif
-		if (message == 35 && messageCount > Text[message*MessagePatternMax].size() / MessageSpeed)
+		//if (MouseL.down())
+		//{
+		//	messageCount = Text[message * MessagePatternMax].size() / MessageSpeed;
+		//}
+
+		if (message == 35 && messageCount > Text[message * MessagePatternMax].size() / MessageSpeed)
 		{
 			message = 36;
 			messageCount = 0;
