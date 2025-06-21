@@ -1752,7 +1752,8 @@ void CameraTest::update()
 				if (drawerIndex == 0)
 				{
 					// 一番上の引き出し
-					if (drawerOrder == 51432)
+				//	if (drawerOrder == 51432)
+					if (bDrawerOpen == true)
 					{
 						// 開けた
 						toDrawerPos[drawerIndex + 1].z -= 0.2;
@@ -1776,6 +1777,7 @@ void CameraTest::update()
 					toDrawerPos[drawerIndex + 1].z -= 0.2;
 					drawerPull[drawerIndex] = true;
 					drawerPullCount = 1.0;
+					bDrawerPullNow = true;
 
 					if (drawerIndex == 2)
 					{
@@ -1788,8 +1790,6 @@ void CameraTest::update()
 					{
 						drawerOrder += drawerIndex * std::pow(10, drawerCounter);
 						drawerCounter++;
-
-						bDrawerPullNow = true;
 
 						if (drawerIndex == 5 && drawerOrder == 51432 && bDrawerOpen == false)
 						{
