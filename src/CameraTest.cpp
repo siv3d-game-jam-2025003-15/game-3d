@@ -1107,6 +1107,7 @@ void CameraTest::update()
 					{
 						drawerIndex = 0;
 					}
+					bDrawerNone = false;
 				}
 				if (KeyD.down())
 				{
@@ -1115,10 +1116,18 @@ void CameraTest::update()
 					{
 						drawerIndex = 6;
 					}
+
+					bDrawerNone = false;
 				}
 			}
 
 			message = 38 + drawerIndex;
+
+			// 「無」をクリックした
+			if (bDrawerNone)
+			{
+				message = 68;
+			}
 
 		}
 		else if (bStoneMode)
@@ -1738,6 +1747,7 @@ void CameraTest::update()
 					// 一番上の引き出し
 					if (drawerOrder == 51432)
 					{
+						// 開けた
 						toDrawerPos[drawerIndex + 1].z -= 0.2;
 						drawerPull[drawerIndex] = true;
 
@@ -1746,6 +1756,11 @@ void CameraTest::update()
 						bGoldKeyHave = true;
 
 						playSEandBGMStop(U"Item");
+					}
+					else
+					{
+						// しまっている
+						bDrawerNone = bDrawerNone ? false : true;
 					}
 				}
 				else
@@ -1762,26 +1777,29 @@ void CameraTest::update()
 						drawerCounter = 0;
 					}
 
-					drawerOrder += drawerIndex * std::pow(10, drawerCounter);
-					drawerCounter++;
-
-					bDrawerPullNow = true;
-
-					//if (!AudioAsset(U"drawer_open").isPlaying())
-					//{
-					//	AudioAsset(U"drawer_open").setLoop(false);
-					//	AudioAsset(U"drawer_open").setVolume(1.0);
-					//	AudioAsset(U"drawer_open").play();
-					//}
-
-					if (drawerIndex == 5 && drawerOrder == 51432)
+					if (lastDrawerIndex != drawerIndex)
 					{
-						playSE(U"牢屋の扉を開ける");
+						drawerOrder += drawerIndex * std::pow(10, drawerCounter);
+						drawerCounter++;
+
+						bDrawerPullNow = true;
+
+						if (drawerIndex == 5 && drawerOrder == 51432 && bDrawerOpen == false)
+						{
+							playSE(U"牢屋の扉を開ける");
+							bDrawerOpen = true;
+						}
+						else
+						{
+							playSE(U"drawer_open");
+						}
 					}
 					else
 					{
 						playSE(U"drawer_open");
 					}
+
+					lastDrawerIndex = drawerIndex;
 				}
 			}
 		}

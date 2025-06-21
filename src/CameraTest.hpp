@@ -1164,6 +1164,11 @@ private:
 		U"蓋の隙間から埃が舞い上がった。しばらく開けられていないようだ",
 		U"",
 
+		// 68 引き出しの「無」
+		U"鍵がかかっている",
+		U"",
+		U"",
+
 	};
 
 	// インベントリ用のテキスト
@@ -1439,4 +1444,8 @@ private:
 
 //	float nowLoadingTime = 0;
 //	bool bNowLoadingEnd = false;
+
+	bool bDrawerNone = false;
+	int lastDrawerIndex = 0;
+	bool bDrawerOpen = false;
 };
