@@ -263,6 +263,7 @@ void CameraTest::loadResources() const
 		AudioAsset(U"Inventory").setVolume(0.0);
 		AudioAsset(U"Inventory").play();
 		AudioAsset(U"Inventory").stop();
+		break;
 	case 43:
 		//for (int itemId = 0; itemId < ItemIdMAX; itemId++)
 		//{
@@ -272,6 +273,11 @@ void CameraTest::loadResources() const
 		break;
 	case 44:
 	//	billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
+		break;
+	case 45:
+		AudioAsset(U"牢屋の扉を開ける").setVolume(0.0);
+		AudioAsset(U"牢屋の扉を開ける").play();
+		AudioAsset(U"牢屋の扉を開ける").stop();
 		break;
 	default:
 		bLoaded = true;	// リソースが読み込まれた
@@ -1767,7 +1773,15 @@ void CameraTest::update()
 					//	AudioAsset(U"drawer_open").setVolume(1.0);
 					//	AudioAsset(U"drawer_open").play();
 					//}
-					playSE(U"drawer_open");
+
+					if (drawerIndex == 5 && drawerOrder == 51432)
+					{
+						playSE(U"牢屋の扉を開ける");
+					}
+					else
+					{
+						playSE(U"drawer_open");
+					}
 				}
 			}
 		}
