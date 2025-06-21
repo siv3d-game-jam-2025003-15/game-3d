@@ -1985,15 +1985,8 @@ void CameraTest::update()
 		{
 			float prologueIndex = prologueCount * 5;
 			prologueCount = 0;
-
-#if _DEBUG
-			Print << U"prologueIndex=" << prologueIndex;
-#endif
 			for (int i = 0; i < prologueText.size(); ++i)
 			{
-#if _DEBUG
-				Print << U"prologueText[" << i << U"].size() = " << prologueText[i].size();
-#endif
 				prologueCount += (float)prologueText[i].size() / 5.0f;
 				prologueIndex -= prologueText[i].size();
 				if (prologueIndex <= 0)
@@ -2024,10 +2017,13 @@ void CameraTest::update()
 		Print << U"Text[message*MessagePatternMax].size()=" << Text[message * MessagePatternMax].size();
 		Print << U"message=" << message;
 #endif
-		//if (MouseL.down())
-		//{
-		//	messageCount = Text[message * MessagePatternMax].size() / MessageSpeed;
-		//}
+		if (MouseL.down())
+		{
+			if (messageCount < Text[message * MessagePatternMax].size() / MessageSpeed - 0.8)
+			{
+				messageCount = Text[message * MessagePatternMax].size() / MessageSpeed - 0.8;
+			}
+		}
 
 		if (message == 35 && messageCount > Text[message * MessagePatternMax].size() / MessageSpeed)
 		{
