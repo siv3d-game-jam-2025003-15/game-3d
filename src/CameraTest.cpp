@@ -1500,7 +1500,7 @@ void CameraTest::update()
 	}
 
 	// 引き出しモード
-	if (bDrawerMode)
+	if (bDrawerMode && bInventory == false)
 	{
 		if (MouseL.up())
 		{
@@ -1629,7 +1629,7 @@ void CameraTest::update()
 	}
 
 	// 石板モード
-	if (bStoneMode)
+	if (bStoneMode && bInventory == false)
 	{
 		if (MouseL.up())
 		{
