@@ -562,11 +562,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"bPrologueMessageEnd=" << bPrologueMessageEnd;
-	Print << U"bStartPlaying=" << bStartPlaying;
-	Print << U"prologueCount=" << prologueCount;
-	Print << U"messageCount=" << messageCount;
-
+	Print << U"lastCheckCollision=" << lastCheckCollision;
+	
 #endif
 }
 
@@ -1024,7 +1021,7 @@ void CameraTest::update()
 			if (isWalk)
 			{
 				
-				if (footcount > 0.3)
+				if (footcount > 0.3 && lastCheckCollision == false)
 				{
 					// 鳴らす
 					if (footpattern % 2 == 0)
@@ -1343,6 +1340,7 @@ void CameraTest::update()
 		Line3D{ Vec3{ lastCameraPosition.x, lastCameraPosition.y, lastCameraPosition.z }, Vec3{ toCameraPos.x, toCameraPos.y, toCameraPos.z } }.draw(LineColor);
 
 		// モデルデータと判定する
+		lastCheckCollision = false;
 		bool checkCollision = false;
 		for (const auto& object : model->objects())
 		{
@@ -1494,6 +1492,7 @@ void CameraTest::update()
 			if (checkCollision)
 			{
 				// 正しいコリジョン
+				lastCheckCollision = true;
 				break;
 			}
 		}

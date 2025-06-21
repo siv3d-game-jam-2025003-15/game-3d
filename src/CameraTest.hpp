@@ -1456,4 +1456,7 @@ private:
 	bool bDrawerOpen = false;
 
 	bool bRustedKeyUse = false;
+
+	// 前のフレームでぶつかっているか
+	bool lastCheckCollision = false;
 };
