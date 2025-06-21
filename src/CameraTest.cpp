@@ -1981,7 +1981,7 @@ void CameraTest::update()
 		//	prologueCount += deltaTime;
 		//}
 
-		if (MouseL.down())
+		if (MouseL.down() && prologueCount < 28)
 		{
 			float prologueIndex = prologueCount * 5;
 			prologueCount = 0;
@@ -1989,6 +1989,7 @@ void CameraTest::update()
 			{
 				prologueCount += (float)prologueText[i].size() / 5.0f;
 				prologueIndex -= prologueText[i].size();
+
 				if (prologueIndex <= 0)
 				{
 					break;
