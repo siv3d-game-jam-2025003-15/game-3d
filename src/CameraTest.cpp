@@ -63,118 +63,221 @@ CameraTest::CameraTest(const InitData& init)
 	}
 
 	// リソースの読み込み
-	loadResources();
+//	loadResources();
 
 	// 暖炉のビルボード
 	fireBillboard.startDraw(1000, Texture(U"assets/sprites/EF_Fire02.png"), 8u, 1u);
+
+	// Now Loading 関連
+//	nowLoadingTime = 0;
+//	bNowLoadingEnd = false;
 
 	// ストップウォッチ（なるべく最後に実行する）
 	Stopwatch stopwatch{ StartImmediately::Yes };
 }
 
-void CameraTest::loadResources()
+void CameraTest::loadResources() const
 {
 	// ローディング画面でリソース読み込み
 
-	// フォント
-	dummyTextView(Text);
-	dummyTextView(itemText);
-	dummyTextView(itemNameText);
-	dummyTextView(memoText);
-	dummyTextView(toastedParchmentText);
-	dummyTextView(prologueText);
-
-	// テクスチャ
-	
-	// // モデルに付随するテクスチャをアセット管理に登録
-	// Model::RegisterDiffuseTextures(model, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDoor, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelKey, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelIronKey, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelBread, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelPoker, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDrawerChain, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDrawerEye, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDrawerFeather, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDrawerFlower, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDrawerNon, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDrawerSnake, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelShelf, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelExclamationMark, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelParchment, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelHanger, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelDirtyCloth, TextureDesc::MippedSRGB);
-	// Model::RegisterDiffuseTextures(modelMemo, TextureDesc::MippedSRGB);
-
-	// BGMの読み込み
-	AudioAsset(U"BGM").setVolume(0.0);
-	AudioAsset(U"BGM").play();
-	AudioAsset(U"BGM").stop();
-
-	AudioAsset(U"bonfire").setVolume(0.0);
-	AudioAsset(U"bonfire").play();
-	AudioAsset(U"bonfire").stop();
-
-	AudioAsset(U"footsteps1").setVolume(0.0);
-	AudioAsset(U"footsteps1").play();
-	AudioAsset(U"footsteps1").stop();
-
-	AudioAsset(U"footsteps2").setVolume(0.0);
-	AudioAsset(U"footsteps2").play();
-	AudioAsset(U"footsteps2").stop();
-
-	AudioAsset(U"drawer_open").setVolume(0.0);
-	AudioAsset(U"drawer_open").play();
-	AudioAsset(U"drawer_open").stop();
-
-	AudioAsset(U"drawer_close").setVolume(0.0);
-	AudioAsset(U"drawer_close").play();
-	AudioAsset(U"drawer_close").stop();
-
-	AudioAsset(U"GET").setVolume(0.0);
-	AudioAsset(U"GET").play();
-	AudioAsset(U"GET").stop();
-
-	//AudioAsset(U"牢屋の扉を開ける").setVolume(0.0);
-	//AudioAsset(U"牢屋の扉を開ける").play();
-	//AudioAsset(U"牢屋の扉を開ける").stop();
-
-	//AudioAsset(U"牢屋の扉を閉める").setVolume(0.0);
-	//AudioAsset(U"牢屋の扉を閉める").play();
-	//AudioAsset(U"牢屋の扉を閉める").stop();
-
-	//AudioAsset(U"Cancellation").setVolume(0.0);
-	//AudioAsset(U"Cancellation").play();
-	//AudioAsset(U"Cancellation").stop();
-
-	AudioAsset(U"IronDoor_Close").setVolume(0.0);
-	AudioAsset(U"IronDoor_Close").play();
-	AudioAsset(U"IronDoor_Close").stop();
-
-	AudioAsset(U"WoodDoor_Close").setVolume(0.0);
-	AudioAsset(U"WoodDoor_Close").play();
-	AudioAsset(U"WoodDoor_Close").stop();
-
-	AudioAsset(U"Item").setVolume(0.0);
-	AudioAsset(U"Item").play();
-	AudioAsset(U"Item").stop();
-
-	AudioAsset(U"Paper").setVolume(0.0);
-	AudioAsset(U"Paper").play();
-	AudioAsset(U"Paper").stop();
-
-	// これは鳴らしているのでやらない
-	//AudioAsset(U"Title").setVolume(0.0);
-	//AudioAsset(U"Title").play();
-	//AudioAsset(U"Title").stop();
-
-	AudioAsset(U"Water").setVolume(0.0);
-	AudioAsset(U"Water").play();
-	AudioAsset(U"Water").stop();
-
-	AudioAsset(U"Inventory").setVolume(0.0);
-	AudioAsset(U"Inventory").play();
-	AudioAsset(U"Inventory").stop();
+	switch (loadCount)
+	{
+	case 0:
+		model = std::make_unique<Model>(modelPath);
+		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
+		break;
+	case 1:
+		modelDoor = std::make_unique<Model>(modelDoorPath);
+		Model::RegisterDiffuseTextures(*modelDoor, TextureDesc::MippedSRGB);
+		break;
+	case 2:
+		modelRustedKey = std::make_unique<Model>(modelRustedKeyPath);
+		Model::RegisterDiffuseTextures(*modelRustedKey, TextureDesc::MippedSRGB);
+		break;
+	case 3:
+		modelIronKey = std::make_unique<Model>(modelIronKeyPath);
+		Model::RegisterDiffuseTextures(*modelIronKey, TextureDesc::MippedSRGB);
+		break;
+	case 4:
+		modelBread = std::make_unique<Model>(modelBreadPath);
+		Model::RegisterDiffuseTextures(*modelBread, TextureDesc::MippedSRGB);
+		break;
+	case 5:
+		modelPoker = std::make_unique<Model>(modelPokerPath);
+		Model::RegisterDiffuseTextures(*modelPoker, TextureDesc::MippedSRGB);
+		break;
+	case 6:
+		modelDrawerChain = std::make_unique<Model>(modelDrawerChainPath);
+		Model::RegisterDiffuseTextures(*modelDrawerChain, TextureDesc::MippedSRGB);
+		break;
+	case 7:
+		modelDrawerEye = std::make_unique<Model>(modelDrawerEyePath);
+		Model::RegisterDiffuseTextures(*modelDrawerEye, TextureDesc::MippedSRGB);
+		break;
+	case 8:
+		modelDrawerFeather = std::make_unique<Model>(modelDrawerFeatherPath);
+		Model::RegisterDiffuseTextures(*modelDrawerFeather, TextureDesc::MippedSRGB);
+		break;
+	case 9:
+		modelDrawerFlower = std::make_unique<Model>(modelDrawerFlowerPath);
+		Model::RegisterDiffuseTextures(*modelDrawerFlower, TextureDesc::MippedSRGB);
+		break;
+	case 10:
+		modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
+		Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
+		break;
+	case 11:
+		modelDrawerSnake = std::make_unique<Model>(modelDrawerSnakePath);
+		Model::RegisterDiffuseTextures(*modelDrawerSnake, TextureDesc::MippedSRGB);
+		break;
+	case 12:
+		modelShelf = std::make_unique<Model>(modelShelfPath);
+		Model::RegisterDiffuseTextures(*modelShelf, TextureDesc::MippedSRGB);
+		break;
+	case 13:
+		modelExclamationMark = std::make_unique<Model>(modelExclamationMarkPath);
+		Model::RegisterDiffuseTextures(*modelExclamationMark, TextureDesc::MippedSRGB);
+		break;
+	case 14:
+		modelParchment = std::make_unique<Model>(modelParchmentPath);
+		Model::RegisterDiffuseTextures(*modelParchment, TextureDesc::MippedSRGB);
+		break;
+	case 15:
+		modelHanger = std::make_unique<Model>(modelHangerPath);
+		Model::RegisterDiffuseTextures(*modelHanger, TextureDesc::MippedSRGB);
+		break;
+	case 16:
+		modelDirtyCloth = std::make_unique<Model>(modelDirtyClothPath);
+		Model::RegisterDiffuseTextures(*modelDirtyCloth, TextureDesc::MippedSRGB);
+		break;
+	case 17:
+		modelMemo = std::make_unique<Model>(modelMemoPath);
+		Model::RegisterDiffuseTextures(*modelMemo, TextureDesc::MippedSRGB);
+		break;
+	case 18:
+		modelStoneBase = std::make_unique<Model>(modelStoneBasePath);
+		Model::RegisterDiffuseTextures(*modelStoneBase, TextureDesc::MippedSRGB);
+		break;
+	case 19:
+		modelStoneBlue = std::make_unique<Model>(modelStoneBluePath);
+		Model::RegisterDiffuseTextures(*modelStoneBlue, TextureDesc::MippedSRGB);
+		break;
+	case 20:
+		modelStoneGreen = std::make_unique<Model>(modelStoneGreenPath);
+		Model::RegisterDiffuseTextures(*modelStoneGreen, TextureDesc::MippedSRGB);
+		break;
+	case 21:
+		modelStoneRed = std::make_unique<Model>(modelStoneRedPath);
+		Model::RegisterDiffuseTextures(*modelStoneRed, TextureDesc::MippedSRGB);
+		break;
+	case 22:
+		modelStoneYellow = std::make_unique<Model>(modelStoneYellowPath);
+		Model::RegisterDiffuseTextures(*modelStoneYellow, TextureDesc::MippedSRGB);
+		break;
+	case 23:
+		dummyTextView(Text);
+		break;
+	case 24:
+		dummyTextView(itemText);
+		break;
+	case 25:
+		dummyTextView(itemNameText);
+		break;
+	case 26:
+		dummyTextView(memoText);
+		break;
+	case 27:
+		dummyTextView(toastedParchmentText);
+		break;
+	case 28:
+		dummyTextView(prologueText);
+		break;
+	case 29:
+		// BGMの読み込み
+		AudioAsset(U"BGM").setVolume(0.0);
+		AudioAsset(U"BGM").play();
+		AudioAsset(U"BGM").stop();
+		break;
+	case 30:
+		AudioAsset(U"bonfire").setVolume(0.0);
+		AudioAsset(U"bonfire").play();
+		AudioAsset(U"bonfire").stop();
+		break;
+	case 31:
+		AudioAsset(U"footsteps1").setVolume(0.0);
+		AudioAsset(U"footsteps1").play();
+		AudioAsset(U"footsteps1").stop();
+		break;
+	case 32:
+		AudioAsset(U"footsteps2").setVolume(0.0);
+		AudioAsset(U"footsteps2").play();
+		AudioAsset(U"footsteps2").stop();
+		break;
+	case 33:
+		AudioAsset(U"drawer_open").setVolume(0.0);
+		AudioAsset(U"drawer_open").play();
+		AudioAsset(U"drawer_open").stop();
+		break;
+	case 34:
+		AudioAsset(U"drawer_close").setVolume(0.0);
+		AudioAsset(U"drawer_close").play();
+		AudioAsset(U"drawer_close").stop();
+		break;
+	case 35:
+		AudioAsset(U"GET").setVolume(0.0);
+		AudioAsset(U"GET").play();
+		AudioAsset(U"GET").stop();
+		break;
+	case 36:
+		AudioAsset(U"IronDoor_Close").setVolume(0.0);
+		AudioAsset(U"IronDoor_Close").play();
+		AudioAsset(U"IronDoor_Close").stop();
+		break;
+	case 37:
+		AudioAsset(U"WoodDoor_Close").setVolume(0.0);
+		AudioAsset(U"WoodDoor_Close").play();
+		AudioAsset(U"WoodDoor_Close").stop();
+		break;
+	case 38:
+		AudioAsset(U"Item").setVolume(0.0);
+		AudioAsset(U"Item").play();
+		AudioAsset(U"Item").stop();
+		break;
+	case 39:
+		AudioAsset(U"Paper").setVolume(0.0);
+		AudioAsset(U"Paper").play();
+		AudioAsset(U"Paper").stop();
+		break;
+	case 40:
+		// これは鳴らしているのでやらない
+		//AudioAsset(U"Title").setVolume(0.0);
+		//AudioAsset(U"Title").play();
+		//AudioAsset(U"Title").stop();
+		break;
+	case 41:
+		AudioAsset(U"Water").setVolume(0.0);
+		AudioAsset(U"Water").play();
+		AudioAsset(U"Water").stop();
+		break;
+	case 42:
+		AudioAsset(U"Inventory").setVolume(0.0);
+		AudioAsset(U"Inventory").play();
+		AudioAsset(U"Inventory").stop();
+	case 43:
+		//for (int itemId = 0; itemId < ItemIdMAX; itemId++)
+		//{
+		//	drawMiniItem(itemId, 0, 0);
+		//	drawBigItem(itemId, 0, 0);
+		//}
+		break;
+	case 44:
+	//	billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
+		break;
+	default:
+		bLoaded = true;	// リソースが読み込まれた
+		break;
+	}
+	loadCount++;
 
 	// 実際に使用して初回ローディングを済ませる
 //	inventorySprite.draw(0, 0);
@@ -204,13 +307,6 @@ void CameraTest::loadResources()
 //	clothBigSprite.draw(0, 0);
 //	ironKeyMiniSprite.draw(0, 0);
 //	ironKeyBigSprite.draw(0, 0);
-	for (int itemId = 0; itemId < ItemIdMAX; itemId++)
-	{
-		drawMiniItem(itemId, 0, 0);
-		drawBigItem(itemId, 0, 0);
-	}
-
-	billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
 
 	// model.draw();
 	// modelDoor.draw();
@@ -236,125 +332,124 @@ void CameraTest::loadResources()
 }
 
 // モデルの読み込み
-void CameraTest::loadModels() const
-{
-	switch (modelLoadCount)
-	{
-	case 0:
-		model = std::make_unique<Model>(modelPath);
-		break;
-	case 1:
-		modelDoor = std::make_unique<Model>(modelDoorPath);
-		break;
-	case 2:
-		modelRustedKey = std::make_unique<Model>(modelRustedKeyPath);
-		break;
-	case 3:
-		modelIronKey = std::make_unique<Model>(modelIronKeyPath);
-		break;
-	case 4:
-		modelBread = std::make_unique<Model>(modelBreadPath);
-		break;
-	case 5:
-		modelPoker = std::make_unique<Model>(modelPokerPath);
-		break;
-	case 6:
-		modelDrawerChain = std::make_unique<Model>(modelDrawerChainPath);
-		break;
-	case 7:
-		modelDrawerEye = std::make_unique<Model>(modelDrawerEyePath);
-		break;
-	case 8:
-		modelDrawerFeather = std::make_unique<Model>(modelDrawerFeatherPath);
-		break;
-	case 9:
-		modelDrawerFlower = std::make_unique<Model>(modelDrawerFlowerPath);
-		break;
-	case 10:
-		modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
-		break;
-	case 11:
-		modelDrawerSnake = std::make_unique<Model>(modelDrawerSnakePath);
-		break;
-	case 12:
-		modelShelf = std::make_unique<Model>(modelShelfPath);
-		break;
-	case 13:
-		modelExclamationMark = std::make_unique<Model>(modelExclamationMarkPath);
-		break;
-	case 14:
-		modelParchment = std::make_unique<Model>(modelParchmentPath);
-		break;
-	case 15:
-		modelHanger = std::make_unique<Model>(modelHangerPath);
-		break;
-	case 16:
-		modelDirtyCloth = std::make_unique<Model>(modelDirtyClothPath);
-		break;
-	case 17:
-		modelMemo = std::make_unique<Model>(modelMemoPath);
-		break;
-	case 18:
-		modelStoneBase = std::make_unique<Model>(modelStoneBasePath);
-		break;
-	case 19:
-		modelStoneBlue = std::make_unique<Model>(modelStoneBluePath);
-		break;
-	case 20:
-		modelStoneGreen = std::make_unique<Model>(modelStoneGreenPath);
-		break;
-	case 21:
-		modelStoneRed = std::make_unique<Model>(modelStoneRedPath);
-		break;
-	case 22:
-		modelStoneYellow = std::make_unique<Model>(modelStoneYellowPath);
-		break;
-	default:
-		// モデルに付随するテクスチャをアセット管理に登録
-		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDoor, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelRustedKey, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelIronKey, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelBread, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelPoker, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDrawerChain, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDrawerEye, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDrawerFeather, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDrawerFlower, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDrawerSnake, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelShelf, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelExclamationMark, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelParchment, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelHanger, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelDirtyCloth, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelMemo, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelStoneBase, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelStoneBlue, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelStoneGreen, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelStoneRed, TextureDesc::MippedSRGB);
-		Model::RegisterDiffuseTextures(*modelStoneYellow, TextureDesc::MippedSRGB);
-		bModelLoaded = true;	// モデルが読み込まれた
-		break;
-	}
-	modelLoadCount++;
-}
+//void CameraTest::loadModels() const
+//{
+//	switch (loadCount)
+//	{
+//	case 0:
+//		model = std::make_unique<Model>(modelPath);
+//		Model::RegisterDiffuseTextures(*model, TextureDesc::MippedSRGB);
+//		break;
+//	case 1:
+//		modelDoor = std::make_unique<Model>(modelDoorPath);
+//		Model::RegisterDiffuseTextures(*modelDoor, TextureDesc::MippedSRGB);
+//		break;
+//	case 2:
+//		modelRustedKey = std::make_unique<Model>(modelRustedKeyPath);
+//		Model::RegisterDiffuseTextures(*modelRustedKey, TextureDesc::MippedSRGB);
+//		break;
+//	case 3:
+//		modelIronKey = std::make_unique<Model>(modelIronKeyPath);
+//		Model::RegisterDiffuseTextures(*modelIronKey, TextureDesc::MippedSRGB);
+//		break;
+//	case 4:
+//		modelBread = std::make_unique<Model>(modelBreadPath);
+//		Model::RegisterDiffuseTextures(*modelBread, TextureDesc::MippedSRGB);
+//		break;
+//	case 5:
+//		modelPoker = std::make_unique<Model>(modelPokerPath);
+//		Model::RegisterDiffuseTextures(*modelPoker, TextureDesc::MippedSRGB);
+//		break;
+//	case 6:
+//		modelDrawerChain = std::make_unique<Model>(modelDrawerChainPath);
+//		Model::RegisterDiffuseTextures(*modelDrawerChain, TextureDesc::MippedSRGB);
+//		break;
+//	case 7:
+//		modelDrawerEye = std::make_unique<Model>(modelDrawerEyePath);
+//		Model::RegisterDiffuseTextures(*modelDrawerEye, TextureDesc::MippedSRGB);
+//		break;
+//	case 8:
+//		modelDrawerFeather = std::make_unique<Model>(modelDrawerFeatherPath);
+//		Model::RegisterDiffuseTextures(*modelDrawerFeather, TextureDesc::MippedSRGB);
+//		break;
+//	case 9:
+//		modelDrawerFlower = std::make_unique<Model>(modelDrawerFlowerPath);
+//		Model::RegisterDiffuseTextures(*modelDrawerFlower, TextureDesc::MippedSRGB);
+//		break;
+//	case 10:
+//		modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
+//		Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
+//		break;
+//	case 11:
+//		modelDrawerSnake = std::make_unique<Model>(modelDrawerSnakePath);
+//		Model::RegisterDiffuseTextures(*modelDrawerSnake, TextureDesc::MippedSRGB);
+//		break;
+//	case 12:
+//		modelShelf = std::make_unique<Model>(modelShelfPath);
+//		Model::RegisterDiffuseTextures(*modelShelf, TextureDesc::MippedSRGB);
+//		break;
+//	case 13:
+//		modelExclamationMark = std::make_unique<Model>(modelExclamationMarkPath);
+//		Model::RegisterDiffuseTextures(*modelExclamationMark, TextureDesc::MippedSRGB);
+//		break;
+//	case 14:
+//		modelParchment = std::make_unique<Model>(modelParchmentPath);
+//		Model::RegisterDiffuseTextures(*modelParchment, TextureDesc::MippedSRGB);
+//		break;
+//	case 15:
+//		modelHanger = std::make_unique<Model>(modelHangerPath);
+//		Model::RegisterDiffuseTextures(*modelHanger, TextureDesc::MippedSRGB);
+//		break;
+//	case 16:
+//		modelDirtyCloth = std::make_unique<Model>(modelDirtyClothPath);
+//		Model::RegisterDiffuseTextures(*modelDirtyCloth, TextureDesc::MippedSRGB);
+//		break;
+//	case 17:
+//		modelMemo = std::make_unique<Model>(modelMemoPath);
+//		Model::RegisterDiffuseTextures(*modelMemo, TextureDesc::MippedSRGB);
+//		break;
+//	case 18:
+//		modelStoneBase = std::make_unique<Model>(modelStoneBasePath);
+//		Model::RegisterDiffuseTextures(*modelStoneBase, TextureDesc::MippedSRGB);
+//		break;
+//	case 19:
+//		modelStoneBlue = std::make_unique<Model>(modelStoneBluePath);
+//		Model::RegisterDiffuseTextures(*modelStoneBlue, TextureDesc::MippedSRGB);
+//		break;
+//	case 20:
+//		modelStoneGreen = std::make_unique<Model>(modelStoneGreenPath);
+//		Model::RegisterDiffuseTextures(*modelStoneGreen, TextureDesc::MippedSRGB);
+//		break;
+//	case 21:
+//		modelStoneRed = std::make_unique<Model>(modelStoneRedPath);
+//		Model::RegisterDiffuseTextures(*modelStoneRed, TextureDesc::MippedSRGB);
+//		break;
+//	case 22:
+//		modelStoneYellow = std::make_unique<Model>(modelStoneYellowPath);
+//		Model::RegisterDiffuseTextures(*modelStoneYellow, TextureDesc::MippedSRGB);
+//		break;
+//	default:
+//		bLoaded = true;	// モデルが読み込まれた
+//		break;
+//	}
+//	loadCount++;
+//}
 	
 
 // テキストメッセージを先に読み込んでおく
-void CameraTest::dummyTextView(Array<String> text)
+void CameraTest::dummyTextView(Array<String> text) const
 {
 	for (int i = 0; i < text.size(); ++i)
 	{
 		boldFont(text[i]).drawAt(
 			28,
 			{ center.x, center.y },
-			ColorF{ 1, 1, 1, 1 }
+			ColorF{ 1, 1, 1, 0 }
 		);
 	}
 }
 
-void CameraTest::dummyTextView(Array<Array<String>> text)
+void CameraTest::dummyTextView(Array<Array<String>> text) const
 {
 	for (int i = 0; i < text.size(); ++i)
 	{
@@ -841,6 +936,11 @@ void CameraTest::inventoryOnOff()
 void CameraTest::update()
 {
 	const double deltaTime = Scene::DeltaTime();
+	
+	if (bLoaded == false)
+	{
+		return;
+	}
 
 #ifdef _DEBUG
 	// デバッグ表示
@@ -2188,8 +2288,11 @@ void CameraTest::draw() const
 	// 背景色
 	Scene::SetBackground(ColorF{ 0, 0, 0 });
 
-	if (!bModelLoaded){
-		loadModels();
+	if (bLoaded == false)
+	{
+		nowLoadingSprite.draw(SCENE_WIDTH - 520, SCENE_HEIGHT - 140);
+		loadResources();
+		return;
 	}
 
 	// プロローグ

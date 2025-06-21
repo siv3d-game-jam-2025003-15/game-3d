@@ -93,10 +93,10 @@ public:
 private:
 
 	// リソースを読み込む
-	void loadResources();
+	void loadResources() const;
 
 	// モデルの読み込み
-	void loadModels() const;
+//	void loadModels() const;
 
 	// ドアの数
 	static const int DoorNum = 4;
@@ -273,8 +273,8 @@ private:
 	mutable std::unique_ptr<Model> modelStoneRed;
 	mutable std::unique_ptr<Model> modelStoneYellow;
 
-	mutable int modelLoadCount = 0;	// モデルの読み込みカウント
-	mutable bool bModelLoaded = false;	// モデルが読み込まれたかどうかのフラグ
+	mutable int loadCount = 0;	// リソースの読み込みカウント
+	mutable bool bLoaded = false;	// リソースが読み込まれたかどうかのフラグ
 
 	//==============================
 	// スケーリング
@@ -679,7 +679,8 @@ private:
 	const Texture ironKeyMiniSprite{ U"assets/sprites/iron_key_mini.png" };
 	const Texture ironKeyBigSprite{ U"assets/sprites/iron_key_big.png" };
 	const Texture goldKeySprite{ U"assets/sprites/gold_key.png" };
-	
+	const Texture nowLoadingSprite{ U"assets/sprites/UI_Now_Loading01.png" };
+
 
 	// ビルボード用
 	const Texture uvChecker{ U"assets/sprites/ExclamationMark.png", TextureDesc::MippedSRGB };
@@ -815,8 +816,8 @@ private:
 	const Font& boldFont = FontAsset(U"Bold");
 
 	// テキストを事前に読み込むための関数
-	void dummyTextView(Array<String> text);
-	void dummyTextView(Array<Array<String>> text);
+	void dummyTextView(Array<String> text) const;
+	void dummyTextView(Array<Array<String>> text) const;
 
 	// メッセージのパターン数
 	const int MessagePatternMax = 3;
@@ -1435,4 +1436,7 @@ private:
 	const float BGMVolume = 0.8;
 
 	animeDraw fireBillboard;
+
+//	float nowLoadingTime = 0;
+//	bool bNowLoadingEnd = false;
 };
