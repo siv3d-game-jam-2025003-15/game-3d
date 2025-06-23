@@ -680,7 +680,7 @@ private:
 	const Texture ironKeyBigSprite{ U"assets/sprites/iron_key_big.png" };
 	const Texture goldKeySprite{ U"assets/sprites/gold_key.png" };
 	const Texture nowLoadingSprite{ U"assets/sprites/UI_Now_Loading01.png" };
-	const Texture cursorSprite{ U"assets/sprites/UI_Cursor01.png" };
+
 
 	// ビルボード用
 	const Texture uvChecker{ U"assets/sprites/ExclamationMark.png", TextureDesc::MippedSRGB };
@@ -1459,6 +1459,4 @@ private:
 
 	// 前のフレームでぶつかっているか
 	bool lastCheckCollision = false;
-
-	int cursorSize = 128;
 };

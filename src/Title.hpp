@@ -47,8 +47,4 @@ private:
 	const float maxColor = 1.0;
 	float gamestartColor = minColor;
 	float exitColor = minColor;
-
-	// TODO common.hppに移動する
-	const Texture cursorSprite{ U"assets/sprites/UI_Cursor01.png" };
-	int cursorSize = 128;
 };
