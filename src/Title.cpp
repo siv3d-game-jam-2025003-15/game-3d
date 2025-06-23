@@ -82,6 +82,11 @@ void Title::draw() const
 		//boldFont(U"右クリック：キャンセル").drawAt(36, { 800, 600 }, ColorF{ 1, 1, 1, 1 });
 	}
 
+	// マウスカーソルの変更
+	Cursor::RequestStyle(CursorStyle::Hidden);
+	const Vec2 pos = Cursor::PosF() - Vec2{ cursorSize / 2, cursorSize / 2 };
+	cursorSprite.resized(cursorSize, cursorSize).draw(pos);
+
 }
 
 // マウスオーバー処理

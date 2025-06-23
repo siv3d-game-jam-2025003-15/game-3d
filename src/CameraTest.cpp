@@ -80,6 +80,9 @@ void CameraTest::loadResources() const
 {
 	// ローディング画面でリソース読み込み
 
+	// マウスカーソルはとりあえず消しておく
+	Cursor::RequestStyle(CursorStyle::Hidden);
+
 	switch (loadCount)
 	{
 	case 0:
@@ -407,6 +410,16 @@ void CameraTest::debug()
 		// キャラライトの明るさ
 		lightStrong -= 0.1;
 	}
+	if (Key9.down())
+	{
+		// マウスカーソルのサイズ
+		cursorSize += 1;
+	}
+	if (Key0.down())
+	{
+		// マウスカーソルのサイズ
+		cursorSize -= 1;
+	}
 
 	if (KeyTab.down())
 	{
@@ -520,6 +533,7 @@ void CameraTest::debug()
 	}
 
 	Print << U"[7][8]キャラライトの明るさ：" << lightStrong;
+	Print << U"[9][0]マウスカーソルの大きさ：" << cursorSize;
 	//Print << U"[9][0]暖炉の明るさ（最小値）：" << fireplaceStrong;
 	//Print << U"[K][L]暖炉の明るさ（最大値）：" << fireplaceStrong + fireplaceSin;
 	//Print << U"[Z][X]暖炉のR：" << fireplaceR;
@@ -1234,9 +1248,6 @@ void CameraTest::update()
 				itemIndex -= 12;
 			}
 		}
-
-
-
 	}
 
 	// インベントリの表示・非表示
@@ -2909,6 +2920,11 @@ void CameraTest::viewInventory()
 			}
 		}
 	}
+
+	// マウスカーソル
+	Cursor::RequestStyle(CursorStyle::Hidden);
+	const Vec2 pos = Cursor::PosF() - Vec2{ cursorSize/2, cursorSize /2};
+	cursorSprite.resized(cursorSize, cursorSize).draw(pos);
 }
 
 void CameraTest::viewModel()
