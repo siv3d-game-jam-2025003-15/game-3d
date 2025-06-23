@@ -248,6 +248,9 @@ private:
 	const String modelStoneRedPath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Red.obj";
 	const String modelStoneYellowPath = U"assets/models/Gimmick_Stone/Gimmick_Stone_Yellow01.obj";
 
+	// テスト用の引き出し
+	const String modelDrawerTestPath = U"assets/models/Drawer/Gimmick_Drawer_Test.obj";
+
 	// modelの遅延ロード用ポインタ
 	mutable std::unique_ptr<Model> model;
 	mutable std::unique_ptr<Model> modelDoor;
@@ -272,6 +275,7 @@ private:
 	mutable std::unique_ptr<Model> modelStoneGreen;
 	mutable std::unique_ptr<Model> modelStoneRed;
 	mutable std::unique_ptr<Model> modelStoneYellow;
+	mutable std::unique_ptr<Model> modelDrawerTest;
 
 	mutable int loadCount = 0;	// リソースの読み込みカウント
 	mutable bool bLoaded = false;	// リソースが読み込まれたかどうかのフラグ
@@ -433,6 +437,9 @@ private:
 
 	// 引き出しの移動先
 	Array<Vec3> toDrawerPos = drawerPos;
+
+	// 引き出しテスト用
+	Vec3 drawerTestPos = { 14.61, 0, 1.45 };
 
 	// 
 	bool bDrawerPullNow = false;

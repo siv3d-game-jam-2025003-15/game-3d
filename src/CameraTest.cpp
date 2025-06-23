@@ -282,6 +282,10 @@ void CameraTest::loadResources() const
 	case 46:
 		dummyTextView(clothText);
 		break;
+	case 47:
+		modelDrawerTest = std::make_unique<Model>(modelDrawerTestPath);
+		Model::RegisterDiffuseTextures(*modelDrawerTest, TextureDesc::MippedSRGB);
+		break;
 	default:
 		bLoaded = true;	// リソースが読み込まれた
 		break;
@@ -422,47 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-	//	focusDistance += 0.01;
+		drawerTestPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-	//	focusDistance -= 0.01;
+		drawerTestPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		fireBillboardPos.y += 0.01;
+		drawerTestPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		fireBillboardPos.y -= 0.01;
+		drawerTestPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		fireBillboardPos.z += 0.01;
+		drawerTestPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		fireBillboardPos.z -= 0.01;
-	}
-
-	if (KeyM.pressed())
-	{
-		fireBillboardScale += 0.1;
-	}
-	if (KeyL.pressed())
-	{
-		fireBillboardScale -= 0.1;
-	}
-
-	if (KeyJ.pressed())
-	{
-		fireBillboardColor += 0.1;
-	}
-	if (KeyK.pressed())
-	{
-		fireBillboardColor -= 0.1;
+		drawerTestPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -562,9 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"fireBillboardPos=" << fireBillboardPos;
-	Print << U"fireBillboardScale=" << fireBillboardScale;
-	Print << U"fireBillboardColor=" << fireBillboardColor;
+	Print << U"drawerTestPos=" << drawerTestPos;
 
 #endif
 }
@@ -3027,6 +3011,14 @@ void CameraTest::viewModel()
 			modelDrawerEye->draw();
 			break;
 		}
+	}
+
+	// 引き出しテスト
+	{
+		Transformer3D t{
+			Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerTestPos)
+		};
+		modelDrawerTest->draw();
 	}
 
 	// 羊皮紙の描画
