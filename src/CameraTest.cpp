@@ -426,29 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		drawerTestPos.x += 0.01;
+		hangerPos.x += 0.001;
 	}
 	if (KeyX.pressed())
 	{
-		drawerTestPos.x -= 0.01;
+		hangerPos.x -= 0.001;
 	}
 
 	if (KeyC.pressed())
 	{
-		drawerTestPos.y += 0.01;
+		hangerPos.y += 0.001;
 	}
 	if (KeyV.pressed())
 	{
-		drawerTestPos.y -= 0.01;
+		hangerPos.y -= 0.001;
 	}
 
 	if (KeyB.pressed())
 	{
-		drawerTestPos.z += 0.01;
+		hangerPos.z += 0.001;
 	}
 	if (KeyN.pressed())
 	{
-		drawerTestPos.z -= 0.01;
+		hangerPos.z -= 0.001;
 	}
 
 	if (mouseDirectionX == 1)
@@ -548,7 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"drawerTestPos=" << drawerTestPos;
+	Print << U"hangerPos=" << hangerPos;
 
 #endif
 }

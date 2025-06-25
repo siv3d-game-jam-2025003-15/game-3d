@@ -237,7 +237,7 @@ private:
 	const String modelShelfPath = U"assets/models/Drawer/Gimmick_Shelf01.obj";
 	const String modelExclamationMarkPath = U"assets/models/ExclamationMark/ExclamationMark.obj";
 	const String modelParchmentPath = U"assets/models/Parchment/Gimmick_Parchment01.obj";
-	const String modelHangerPath = U"assets/models/Hangar/Gimmick_Hangar01.obj";
+	const String modelHangerPath = U"assets/models/Hangar/Gimmick_Hanger01.obj";
 	const String modelDirtyClothPath = U"assets/models/Cloth/Gimmick_Cloth01.obj";
 	const String modelMemoPath = U"assets/models/Memo/Gimmick_Memo01.obj";
 	
@@ -479,8 +479,8 @@ private:
 	float fireBillboardColor = 0.7;
 
 	// ハンガー
-	Vec3 hangerPos = { 0, 1.03, 11.8 };
-	Vec3 hangerRot = { 0, 90_deg, 0 };
+	Vec3 hangerPos = { 0, 1.018, 11.88 };
+	Vec3 hangerRot = { 0, 0_deg, 0 };
 
 	// 樽
 	Vec3 barrelPos = { -3.55, 0.965, 0.185 };
