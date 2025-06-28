@@ -1530,7 +1530,7 @@ void CameraTest::update()
 				//	if (drawerOrder == 51432)
 					if (bDrawerOpen == true)
 					{
-						// 開けた
+						// 開けた（クリア）
 						toDrawerPos[drawerIndex + 1].z -= 0.2;
 						drawerPull[drawerIndex] = true;
 
@@ -1539,6 +1539,9 @@ void CameraTest::update()
 						bGoldKeyHave = true;
 
 						playSEandBGMStop(U"Item");
+
+						// ゲーム画面に戻るためのカウントとして使う
+						drawerPullCount = 1.0;
 					}
 					else
 					{
@@ -1585,30 +1588,41 @@ void CameraTest::update()
 				}
 			}
 		}
+	}
 
-		if (drawerPullCount > 0) 
+	// 引き出しを閉める処理
+	if (drawerPullCount > 0)
+	{
+		drawerPullCount -= deltaTime;
+
+		if (drawerPullCount <= 0)
 		{
-			drawerPullCount -= deltaTime;
-
-			if (drawerPullCount <= 0)
+			// 閉じる
+			for (int i = 1; i < 6; i++)
 			{
-				// 閉じる
-				for (int i = 0; i < 6; i++)
+				if (drawerPull[i] == true)
 				{
-					if (drawerPull[drawerIndex] == true)
-					{
-						toDrawerPos[drawerIndex + 1].z += 0.2;
-						//if (!AudioAsset(U"drawer_close").isPlaying())
-						//{
-						//	AudioAsset(U"drawer_close").setLoop(false);
-						//	AudioAsset(U"drawer_close").setVolume(1.0);
-						//	AudioAsset(U"drawer_close").play();
-						//}
-						playSE(U"drawer_close");
-						drawerPull[drawerIndex] = false;
-						bDrawerPullNow = false;
-					}
+					toDrawerPos[i + 1].z += 0.2;
+					//if (!AudioAsset(U"drawer_close").isPlaying())
+					//{
+					//	AudioAsset(U"drawer_close").setLoop(false);
+					//	AudioAsset(U"drawer_close").setVolume(1.0);
+					//	AudioAsset(U"drawer_close").play();
+					//}
+					playSE(U"drawer_close");
+					drawerPull[i] = false;
+					bDrawerPullNow = false;
 				}
+			}
+
+			if (bDrawerOpen && bGoldKeyHave && bDrawerMode)
+			{
+				// 引き出しモード解除
+				bDrawerMode = false;
+
+				toCameraPos.x = drawerPos[0].x;
+				toCameraPos.y = 1.5;
+				toCameraPos.z = drawerPos[0].z - 2.0;
 			}
 		}
 	}
