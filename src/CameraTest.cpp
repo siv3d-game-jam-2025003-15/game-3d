@@ -1617,12 +1617,14 @@ void CameraTest::update()
 
 			if (bDrawerOpen && bGoldKeyHave && bDrawerMode)
 			{
-				// 引き出しモード解除
+				// 引き出しモード解除 TODO 共通化
 				bDrawerMode = false;
 
 				toCameraPos.x = drawerPos[0].x;
 				toCameraPos.y = 1.5;
 				toCameraPos.z = drawerPos[0].z - 2.0;
+
+				to_m_focusY = -0.3;
 			}
 		}
 	}
@@ -1684,6 +1686,8 @@ void CameraTest::update()
 					bStoneclear = true;
 
 					playSEandBGMStop(U"Item");
+
+					stonePushCount = 1.0;
 				}
 				else
 				{
@@ -1691,6 +1695,24 @@ void CameraTest::update()
 					playSE(U"Stone");
 				}
 			}
+		}
+	}
+
+	// 石板からゲーム画面に自動で戻る処理
+	if (stonePushCount > 0)
+	{
+		stonePushCount -= deltaTime;
+
+		if (stonePushCount <= 0)
+		{
+			// 石板モード解除 TODO 共通化
+			bStoneMode = false;
+
+			toCameraPos.x = stonePos[0].x - 2.0;
+			toCameraPos.y = 1.5;
+			toCameraPos.z = stonePos[0].z;
+
+			to_m_focusY = -0.3;
 		}
 	}
 

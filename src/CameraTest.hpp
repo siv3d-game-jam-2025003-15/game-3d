@@ -1446,6 +1446,9 @@ private:
 		false,
 	};
 
+	// 石板：クリア後にゲーム画面に戻るためのカウンター
+	float stonePushCount = 0;
+
 	float debugHeight = 1.58;
 	float debugDis = 0.55;
 	float debugRot = -0.53;
