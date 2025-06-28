@@ -2878,7 +2878,8 @@ void CameraTest::viewInventory()
 
 				// SEを鳴らす
 			//	playSE(U"GET");
-				playSEandBGMStop(U"Item");
+			//	playSEandBGMStop(U"Item");
+				playSEandBGMStop(U"KeyGimmick01");
 			}
 		}
 		else if (items[selectItem] == Parchment)

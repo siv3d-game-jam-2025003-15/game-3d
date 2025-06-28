@@ -60,6 +60,9 @@ void Main()
 	AudioAsset::Register(U"Water", U"assets/sound/se/SE_Water01.mp3");
 	AudioAsset::Register(U"Inventory", U"assets/sound/se/SE_Inventory_Open01.mp3");
 
+	// SE 火かき棒入手
+	AudioAsset::Register(U"KeyGimmick01", U"assets/sound/se/SE_KeyGimmick01.mp3");
+
 	// BGM メイン
 //	AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3", Loop::Yes);
 	AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM_Map01.mp3", Loop::Yes);

@@ -112,6 +112,10 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 					playSE(U"Water");
 					bgmStopCount = 4.00;
 					break;
+				case 4:
+					playSE(U"KeyGimmick01");
+					bgmStopCount = 4.00;
+					break;
 				}
 
 			}
