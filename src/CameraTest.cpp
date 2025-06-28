@@ -3600,7 +3600,7 @@ void CameraTest::lockon()
 	}
 
 	// 引き出し（本体）
-	if (!bLockon && bDrawerMode == false && bGoldKeyHave == false)
+	if (!bLockon && bDrawerMode == false)
 	{
 		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
@@ -3620,10 +3620,20 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 9;
+
+			if (bGoldKeyHave == false)
+			{
+				// 鍵を持っていない
+				message = 9;
+			}
+			else
+			{
+				// 鍵を持っている
+				message = 70;
+			}
 		}
 
-		if (d)
+		if (d && bGoldKeyHave == false)
 		{
 			// クリックした
 			bDrawerMode = true;
@@ -3645,7 +3655,7 @@ void CameraTest::lockon()
 	}
 
 	// 石板（本体）
-	if (!bLockon && bStoneMode == false && bStoneclear == false)
+	if (!bLockon && bStoneMode == false)
 	{
 		Vec3 temp = stonePos[0];
 		temp.x -= 0.15;
@@ -3665,10 +3675,19 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 59;
+			if (bStoneclear == false)
+			{
+				// クリアしていない
+				message = 59;
+			}
+			else
+			{
+				// クリアしている
+				message = 70;
+			}
 		}
 
-		if (d)
+		if (d && bStoneclear == false)
 		{
 			// クリックした
 			bStoneMode = true;
