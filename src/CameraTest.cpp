@@ -730,8 +730,14 @@ void CameraTest::update()
 	{
 		if (bRustedKeyUse)
 		{
-			// 例外
+			// 例外：錆びた鍵を使ったとき
 			messagePattern = 0;
+		}
+		else if (pokerMessageCount > 0)
+		{
+			// 例外：火かき棒を使って鍵を取ったとき
+			message = 71;
+			pokerMessageCount -= deltaTime;
 		}
 		else
 		{
@@ -2880,6 +2886,9 @@ void CameraTest::viewInventory()
 			//	playSE(U"GET");
 			//	playSEandBGMStop(U"Item");
 				playSEandBGMStop(U"KeyGimmick01");
+
+				// 火かき棒で鍵をとった時のメッセージを表示する時間
+				pokerMessageCount = 4.0;
 			}
 		}
 		else if (items[selectItem] == Parchment)

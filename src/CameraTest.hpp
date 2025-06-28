@@ -748,6 +748,9 @@ private:
 	// 火かき棒を持っている
 	bool bPokerHave = false;
 
+	// 火かき棒で鍵をとった時のメッセージを表示する時間
+	float pokerMessageCount = 0;
+
 	// 羊皮紙を持っている
 	bool bParchmentHave = false;
 
@@ -1185,6 +1188,11 @@ private:
 		// 70 特に何もない
 		U"特に何もない",
 		U"もう用はない",
+		U"",
+
+		// 71 特に何もない
+		U"火かき棒で鍵を引き寄せた",
+		U"",
 		U"",
 	};
 
