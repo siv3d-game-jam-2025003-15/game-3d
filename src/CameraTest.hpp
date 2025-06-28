@@ -1482,4 +1482,6 @@ private:
 
 	// 前のフレームでぶつかっているか
 	bool lastCheckCollision = false;
+
+	float breathCount = 0;
 };

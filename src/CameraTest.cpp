@@ -548,7 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"hangerPos=" << hangerPos;
+//	Print << U"breathCount=" << breathCount;
 
 #endif
 }
@@ -1048,6 +1048,33 @@ void CameraTest::update()
 					footpattern++;
 					footcount = 0;
 				}
+
+				// はぁはぁ
+				if (addSpeed >= 2.0 && lastCheckCollision == false)
+				{
+					breathCount += deltaTime * addSpeed;
+
+					if (breathCount >= 15)
+					{
+						// はぁはぁのSE
+						if (AudioAsset(U"breath_pant").isPlaying() == false)
+						{
+							// 鳴ってなかったら鳴らす
+							AudioAsset(U"breath_pant").setVolume(1.0);
+							AudioAsset(U"breath_pant").play();
+						}
+					}
+				}
+				else
+				{
+					// 歩いているとき（走っていない）
+					
+					// はぁはぁリセット
+					if (breathCount > 0)
+					{
+						breathCount -= deltaTime * 3;
+					}
+				}
 			}
 			else {
 				//if (AudioAsset(U"footsteps1").isPlaying()) {
@@ -1061,6 +1088,21 @@ void CameraTest::update()
 				//footcount = 0;
 
 				//stopwatch.restart();
+
+				if (breathCount >= 30)
+				{
+					AudioAsset(U"breath_pant").stop();
+					if (AudioAsset(U"breath_deep").isPlaying() == false)
+					{
+						AudioAsset(U"breath_deep").setVolume(1.0);
+						AudioAsset(U"breath_deep").play();
+					}
+				}
+				// はぁはぁリセット
+				if (breathCount > 0)
+				{
+					breathCount -= deltaTime * 5;
+				}
 			}
 		}
 

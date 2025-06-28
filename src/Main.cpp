@@ -62,6 +62,10 @@ void Main()
 
 	// SE 火かき棒入手
 	AudioAsset::Register(U"KeyGimmick01", U"assets/sound/se/SE_KeyGimmick01.mp3");
+	
+	// SE はぁはぁ
+	AudioAsset::Register(U"breath_pant", U"assets/sound/se/se_breath_pant.wav");
+	AudioAsset::Register(U"breath_deep", U"assets/sound/se/se_breath_deep.wav");
 
 	// BGM メイン
 //	AudioAsset::Register(U"BGM", U"assets/sound/bgm/BGM.mp3", Loop::Yes);
