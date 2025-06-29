@@ -426,29 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		hangerPos.x += 0.001;
+		handcuffsPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		hangerPos.x -= 0.001;
+		handcuffsPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		hangerPos.y += 0.001;
+		handcuffsPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		hangerPos.y -= 0.001;
+		handcuffsPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		hangerPos.z += 0.001;
+		handcuffsPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		hangerPos.z -= 0.001;
+		handcuffsPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -548,7 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-//	Print << U"breathCount=" << breathCount;
+	Print << U"handcuffsPos=" << handcuffsPos;
 
 #endif
 }
@@ -4198,6 +4198,45 @@ void CameraTest::lockon()
 			// 見ている
 			bLockon = b;
 			message = 67;
+		}
+	}
+
+	// 手錠1
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = handcuffsController.update(
+			handcuffsPos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 72;
+		}
+	}
+
+
+	// 手錠2
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = handcuffsController.update(
+			handcuffs2Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 72;
 		}
 	}
 
