@@ -536,7 +536,7 @@ private:
 	Vec3 paintingPos = { 20.05, 1.45, -5.76 };
 
 	// 小さい棚
-	Vec3 smallShelfPos = { -3.7, 2, -0.93 };
+	Vec3 smallShelfPos = { -3.79, 2, -0.93 };
 	Vec3 smallShelf2Pos = { 12.56, 2, -5.17 };
 	Vec3 smallShelf3Pos = { 18.81, 2, -7.19 };
 
