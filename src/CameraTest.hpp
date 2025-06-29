@@ -525,7 +525,7 @@ private:
 
 	// 木箱
 	Vec3 woodenBoxPos = { 19.76, 1.14, 1.37 };
-	Vec3 woodenBox2Pos = { -3.57, 0.76, -3.16 };
+	Vec3 woodenBox2Pos = { -3.57, 0.86, -3.16 };
 	Vec3 woodenBox3Pos = { 14.1, 0.79, -6.56 };
 
 	// 手錠
@@ -536,8 +536,9 @@ private:
 	Vec3 paintingPos = { 20.05, 1.45, -5.76 };
 
 	// 小さい棚
-	Vec3 smallShelfPos = { 12.56, 2, -5.17 };
-	Vec3 smallShelf2Pos = { 18.81, 2, -7.19 };
+	Vec3 smallShelfPos = { -3.7, 2, -0.93 };
+	Vec3 smallShelf2Pos = { 12.56, 2, -5.17 };
+	Vec3 smallShelf3Pos = { 18.81, 2, -7.19 };
 
 	// オブジェクトクラス
 	ObjectController breadController;

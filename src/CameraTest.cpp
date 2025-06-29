@@ -4296,4 +4296,23 @@ void CameraTest::lockon()
 		}
 	}
 
+	// 小さい棚3
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = smallShelfController.update(
+			smallShelf3Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 74;
+		}
+	}
+
 }
