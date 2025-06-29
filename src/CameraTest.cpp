@@ -426,29 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		paintingPos.x += 0.01;
+		smallShelfPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		paintingPos.x -= 0.01;
+		smallShelfPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		paintingPos.y += 0.01;
+		smallShelfPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		paintingPos.y -= 0.01;
+		smallShelfPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		paintingPos.z += 0.01;
+		smallShelfPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		paintingPos.z -= 0.01;
+		smallShelfPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -548,7 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"paintingPos=" << paintingPos;
+	Print << U"smallShelfPos=" << smallShelfPos;
 
 #endif
 }
@@ -4257,4 +4257,43 @@ void CameraTest::lockon()
 			message = 73;
 		}
 	}
+
+	// 小さい棚
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = smallShelfController.update(
+			smallShelfPos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 74;
+		}
+	}
+
+	// 小さい棚2
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = smallShelfController.update(
+			smallShelf2Pos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 74;
+		}
+	}
+
 }

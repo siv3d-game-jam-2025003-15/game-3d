@@ -535,6 +535,10 @@ private:
 	// 絵画
 	Vec3 paintingPos = { 20.05, 1.45, -5.76 };
 
+	// 小さい棚
+	Vec3 smallShelfPos = { 12.56, 2, -5.17 };
+	Vec3 smallShelf2Pos = { 18.81, 2, -7.19 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController rustedKeyController;
@@ -563,6 +567,7 @@ private:
 	ObjectController chairController;
 	ObjectController handcuffsController;
 	ObjectController paintingController;
+	ObjectController smallShelfController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
