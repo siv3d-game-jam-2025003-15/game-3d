@@ -426,29 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		handcuffsPos.x += 0.01;
+		paintingPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		handcuffsPos.x -= 0.01;
+		paintingPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		handcuffsPos.y += 0.01;
+		paintingPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		handcuffsPos.y -= 0.01;
+		paintingPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		handcuffsPos.z += 0.01;
+		paintingPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		handcuffsPos.z -= 0.01;
+		paintingPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -548,7 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"handcuffsPos=" << handcuffsPos;
+	Print << U"paintingPos=" << paintingPos;
 
 #endif
 }
@@ -4220,7 +4220,6 @@ void CameraTest::lockon()
 		}
 	}
 
-
 	// 手錠2
 	if (!bLockon)
 	{
@@ -4240,5 +4239,22 @@ void CameraTest::lockon()
 		}
 	}
 
-
+	// 絵画
+	if (!bLockon)
+	{
+		auto [a, b, c, d] = paintingController.update(
+			paintingPos,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			message = 73;
+		}
+	}
 }

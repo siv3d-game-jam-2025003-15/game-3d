@@ -532,6 +532,9 @@ private:
 	Vec3 handcuffsPos = { 14.35, 1.23, 1.75 };
 	Vec3 handcuffs2Pos = { 13.11, 1.23, 1.75 };
 
+	// 絵画
+	Vec3 paintingPos = { 20.05, 1.45, -5.76 };
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController rustedKeyController;
@@ -559,6 +562,7 @@ private:
 	ObjectController stoneController;
 	ObjectController chairController;
 	ObjectController handcuffsController;
+	ObjectController paintingController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
