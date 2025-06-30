@@ -548,7 +548,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"smallShelfPos=" << smallShelfPos;
+	Print << U"bookingMessage=" << bookingMessage;
+	Print << U"message=" << message;
 
 #endif
 }
@@ -700,6 +701,9 @@ void CameraTest::inventoryOnOff()
 	// 合成の選択を解除
 	synthesisIndex = -1;
 
+	// ロックオンをオフ
+	bLockon = false;
+
 	// SE
 	//if (AudioAsset(U"Inventory").isPlaying())
 	//{
@@ -739,6 +743,15 @@ void CameraTest::update()
 			message = 71;
 			pokerMessageCount -= deltaTime;
 		}
+		else if (bLockon)
+		{
+			// 何か見ているときは更新しない
+			if (bookingMessage != message)
+			{
+				// 違うオブジェクトにカーソルが移動したら、いったんメッセージを非表示にする
+				message = 3;
+			}
+		}
 		else
 		{
 			message = scenario;
@@ -774,9 +787,6 @@ void CameraTest::update()
 	// マウスの座標を取得
 	double diffMousePosX = 0.0f;
 	double diffMousePosY = 0.0f;
-
-	// アイテムのロックオンフラグのリセット
-	bLockon = false;
 
 	if (bStartPlaying == false)
 	{
@@ -3213,6 +3223,9 @@ void CameraTest::viewModel()
 
 void CameraTest::lockon()
 {
+	// アイテムのロックオンフラグのリセット
+	bLockon = false;
+
 	// パン
 	if (!bLockon)
 	{
@@ -3238,11 +3251,11 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			//message = 50;
+			bookingMessage = 50;
 		}
 		if (d)
 		{
-			message = 50;	// パンをとってしまうので、使われない？
+			message = 50;	// パンをとってしまうので、使われない
 		}
 	}
 
@@ -3276,7 +3289,11 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 52;
+			bookingMessage = 52;
+		}
+		if (d)
+		{
+			message = 52;	// とってしまうので、使われない
 		}
 	}
 
@@ -3305,7 +3322,11 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 51;
+			bookingMessage = 51;
+		}
+		if (d)
+		{
+			message = 51;	// とってしまうので、使われない
 		}
 	}
 
@@ -3334,7 +3355,11 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 22;
+			bookingMessage = 22;
+		}
+		if (d)
+		{
+			message = 22;	// とってしまうので、使われない
 		}
 	}
 
@@ -3354,12 +3379,16 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 31;
+			bookingMessage = 31;
 			bIronKeyLockon = true;
 		}
 		else
 		{
 			bIronKeyLockon = false;
+		}
+		if (d)
+		{
+			message = 31;
 		}
 	}
 	else
@@ -3390,6 +3419,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 53;
+		}
+		if (d)
+		{
 			message = 53;
 		}
 	}
@@ -3435,13 +3468,17 @@ void CameraTest::lockon()
 			//	}
 			//	else
 			//	{
-			message = 10;
+			bookingMessage = 10;
 			//	}
 			bDoorLockon = true;
 		}
 		else
 		{
 			bDoorLockon = false;
+		}
+		if (d)
+		{
+			message = 10;
 		}
 	}
 	else
@@ -3479,12 +3516,16 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 33;
+			bookingMessage = 33;
 			bDoor2Lockon = true;
 		}
 		else
 		{
 			bDoor2Lockon = false;
+		}
+		if (d)
+		{
+			message = 33;
 		}
 	}
 	else
@@ -3511,17 +3552,17 @@ void CameraTest::lockon()
 			if (bStoneclear && bDrawerClear == false)
 			{
 				// 石板だけクリア
-				message = 75;
+				bookingMessage = 75;
 			}
 			else if (bStoneclear == false && bDrawerClear)
 			{
 				// 引き出しだけクリア
-				message = 76;
+				bookingMessage = 76;
 			}
 			else
 			{
 				// 何もクリアしていない
-				message = 30;
+				bookingMessage = 30;
 			}
 			bDoor3Lockon = true;
 		}
@@ -3533,6 +3574,7 @@ void CameraTest::lockon()
 		{
 			if (bStoneclear && bDrawerClear)
 			{
+				// メッセージを消す
 				message = 3;
 
 				playSEandBGMStop(U"WoodDoor_Close");
@@ -3541,6 +3583,21 @@ void CameraTest::lockon()
 
 				// ゲームクリア（仮）
 				changeScene(State::ToBeContinued);
+			}
+			else if (bStoneclear && bDrawerClear == false)
+			{
+				// 石板だけクリア
+				message = 75;
+			}
+			else if (bStoneclear == false && bDrawerClear)
+			{
+				// 引き出しだけクリア
+				message = 76;
+			}
+			else
+			{
+				// 何もクリアしていない
+				message = 30;
 			}
 		}
 	}
@@ -3565,6 +3622,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 33;
+		}
+		if (d)
+		{
 			message = 33;
 		}
 	}
@@ -3592,6 +3653,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 54;
+		}
+		if (d)
+		{
 			message = 54;
 		}
 	}
@@ -3612,12 +3677,16 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 32;
+			bookingMessage = 32;
 			bToilet2Lockon = true;
 		}
 		else
 		{
 			bToilet2Lockon = false;
+		}
+		if (d)
+		{
+			message = 32;
 		}
 	}
 	else
@@ -3647,12 +3716,16 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 18;
+			bookingMessage = 18;
 			bFireplaceLockon = true;
 		}
 		else
 		{
 			bFireplaceLockon = false;
+		}
+		if (d)
+		{
+			message = 18;
 		}
 	}
 	else
@@ -3683,6 +3756,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 26;
+		}
+		if (d)
+		{
 			message = 26;
 		}
 	}
@@ -3711,34 +3788,42 @@ void CameraTest::lockon()
 
 			if (bDrawerClear == false)
 			{
-				// 鍵を持っていない
-				message = 9;
+				// クリアしていない
+				bookingMessage = 9;
 			}
 			else
 			{
-				// 鍵を持っている
-				message = 70;
+				// クリアしている
+				bookingMessage = 70;
 			}
 		}
 
-		if (d && bDrawerClear == false)
+		if (d)
 		{
-			// クリックした
-			bDrawerMode = true;
+			if (bDrawerClear == false)
+			{
+				// クリックした
+				bDrawerMode = true;
 
-			// カメラの座標と向きを調整
-			toCameraPos.x = 16.3;
-			//	toCameraPos.y = 0.65;
-			//	toCameraPos.y = 1.58;
-			toCameraPos.y = 1.1;
-			//	toCameraPos.z = 0.3;
-			//	toCameraPos.z = 1.2;
-			toCameraPos.z = 0.55;
+				// カメラの座標と向きを調整
+				toCameraPos.x = 16.3;
+				//	toCameraPos.y = 0.65;
+				//	toCameraPos.y = 1.58;
+				toCameraPos.y = 1.1;
+				//	toCameraPos.z = 0.3;
+				//	toCameraPos.z = 1.2;
+				toCameraPos.z = 0.55;
 
-			//	to_m_focusY = 0;
-			to_m_focusY = -0.53;
-			phiController.setCameraPosition(toCameraPos);
-			phiController.setFocusPosition(drawerPos[0]);
+				//	to_m_focusY = 0;
+				to_m_focusY = -0.53;
+				phiController.setCameraPosition(toCameraPos);
+				phiController.setFocusPosition(drawerPos[0]);
+			}
+			else
+			{
+				// クリア後
+				message = 70;
+			}
 		}
 	}
 
@@ -3766,29 +3851,48 @@ void CameraTest::lockon()
 			if (bStoneclear == false)
 			{
 				// クリアしていない
-				message = 59;
+				bookingMessage = 59;
 			}
 			else
 			{
 				// クリアしている
-				message = 70;
+				bookingMessage = 70;
 			}
 		}
 
-		if (d && bStoneclear == false)
+		if (d)
 		{
-			// クリックした
-			bStoneMode = true;
+			if (bStoneclear == false)
+			{
+				// クリアしていない
 
-			// カメラの座標と向きを調整
-			toCameraPos.x = 19.25;
-			toCameraPos.y = 1.5;
-			toCameraPos.z = -2.18;
+				// クリックした
+				bStoneMode = true;
 
-			to_m_focusY = -0.53;
+				// カメラの座標と向きを調整
+				toCameraPos.x = 19.25;
+				toCameraPos.y = 1.5;
+				toCameraPos.z = -2.18;
 
-			phiController.setCameraPosition(toCameraPos);
-			phiController.setFocusPosition(stonePos[0]);
+				to_m_focusY = -0.53;
+
+				phiController.setCameraPosition(toCameraPos);
+				phiController.setFocusPosition(stonePos[0]);
+			}
+			else
+			{
+				// クリアしている
+				//if (bStoneclear == false)
+				//{
+				//	// クリアしていない
+				//	message = 59;
+				//}
+				//else
+				//{
+					// クリアしている
+					message = 70;
+				//}
+			}
 		}
 	}
 
@@ -3812,6 +3916,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 11;
+		}
+		if (d)
+		{
 			message = 11;
 		}
 	}
@@ -3832,6 +3940,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 14;
+		}
+		if (d)
+		{
 			message = 14;
 		}
 	}
@@ -3852,6 +3964,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 14;
+		}
+		if (d)
+		{
 			message = 14;
 		}
 	}
@@ -3872,6 +3988,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 14;
+		}
+		if (d)
+		{
 			message = 14;
 		}
 	}
@@ -3892,6 +4012,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 15;
+		}
+		if (d)
+		{
 			message = 15;
 		}
 	}
@@ -3912,6 +4036,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 12;
+		}
+		if (d)
+		{
 			message = 12;
 		}
 	}
@@ -3949,8 +4077,12 @@ void CameraTest::lockon()
 			//else
 			//{
 				// 鍵を持っていない
-			message = 13;
+			bookingMessage = 13;
 			//}
+		}
+		if (d)
+		{
+			message = 13;
 		}
 	}
 
@@ -4010,6 +4142,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 25;
+		}
+		if (d)
+		{
 			message = 25;
 		}
 	}
@@ -4030,6 +4166,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 25;
+		}
+		if (d)
+		{
 			message = 25;
 		}
 	}
@@ -4050,7 +4190,7 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 25;
+			bookingMessage = 25;
 			//	message = 27;
 
 			//	bBarrel3Lockon = true;
@@ -4058,6 +4198,10 @@ void CameraTest::lockon()
 		else
 		{
 			//	bBarrel3Lockon = false;
+		}
+		if (d)
+		{
+			message = 25;
 		}
 	}
 	else
@@ -4081,6 +4225,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 23;
+		}
+		if (d)
+		{
 			message = 23;
 		}
 	}
@@ -4100,6 +4248,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 65;
+		}
+		if (d)
+		{
 			message = 65;
 		}
 	}
@@ -4119,6 +4271,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 65;
+		}
+		if (d)
+		{
 			message = 65;
 		}
 	}
@@ -4138,6 +4294,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 65;
+		}
+		if (d)
+		{
 			message = 65;
 		}
 	}
@@ -4157,6 +4317,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 65;
+		}
+		if (d)
+		{
 			message = 65;
 		}
 	}
@@ -4176,6 +4340,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 66;
+		}
+		if (d)
+		{
 			message = 66;
 		}
 	}
@@ -4195,6 +4363,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 67;
+		}
+		if (d)
+		{
 			message = 67;
 		}
 	}
@@ -4214,6 +4386,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 67;
+		}
+		if (d)
+		{
 			message = 67;
 		}
 	}
@@ -4233,6 +4409,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 67;
+		}
+		if (d)
+		{
 			message = 67;
 		}
 	}
@@ -4252,6 +4432,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 72;
+		}
+		if (d)
+		{
 			message = 72;
 		}
 	}
@@ -4271,6 +4455,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 72;
+		}
+		if (d)
+		{
 			message = 72;
 		}
 	}
@@ -4290,6 +4478,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 73;
+		}
+		if (d)
+		{
 			message = 73;
 		}
 	}
@@ -4309,6 +4501,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 74;
+		}
+		if (d)
+		{
 			message = 74;
 		}
 	}
@@ -4328,6 +4524,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 74;
+		}
+		if (d)
+		{
 			message = 74;
 		}
 	}
@@ -4347,6 +4547,10 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
+			bookingMessage = 74;
+		}
+		if (d)
+		{
 			message = 74;
 		}
 	}

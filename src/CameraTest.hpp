@@ -1525,5 +1525,5 @@ private:
 
 	float breathCount = 0;
 
-
+	int bookingMessage = 0;
 };
