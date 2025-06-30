@@ -1524,4 +1524,6 @@ private:
 	bool lastCheckCollision = false;
 
 	float breathCount = 0;
+
+
 };

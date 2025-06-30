@@ -3238,7 +3238,11 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 50;
+			//message = 50;
+		}
+		if (d)
+		{
+			message = 50;	// パンをとってしまうので、使われない？
 		}
 	}
 
