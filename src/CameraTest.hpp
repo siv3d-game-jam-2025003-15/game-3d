@@ -833,7 +833,7 @@ private:
 	bool bDoor3Lockon = false;
 
 	// 黄金の鍵を持っている
-	bool bGoldKeyHave = false;
+	bool bDrawerClear = false;
 
 	// （仮）石板クリアフラグ
 	bool bStoneclear = false;

@@ -1555,7 +1555,7 @@ void CameraTest::update()
 
 				to_m_focusY = -0.3;
 
-				if (bGoldKeyHave == false)
+				if (bDrawerClear == false)
 				{
 					// 各引き出しを元の位置に戻す
 					for (int i = 0; i < 6; i++)
@@ -1582,9 +1582,9 @@ void CameraTest::update()
 						toDrawerPos[drawerIndex + 1].z -= 0.2;
 						drawerPull[drawerIndex] = true;
 
-						items << GoldKey;
+					//	items << GoldKey;
 
-						bGoldKeyHave = true;
+						bDrawerClear = true;
 
 						playSEandBGMStop(U"Item");
 
@@ -1663,7 +1663,7 @@ void CameraTest::update()
 				}
 			}
 
-			if (bDrawerOpen && bGoldKeyHave && bDrawerMode)
+			if (bDrawerOpen && bDrawerClear && bDrawerMode)
 			{
 				// 引き出しモード解除 TODO 共通化
 				bDrawerMode = false;
@@ -1701,7 +1701,7 @@ void CameraTest::update()
 
 				to_m_focusY = -0.3;
 
-				if (bStoneclear == false)	// TODO
+				if (bStoneclear == false)
 				{
 					for (int i = 0; i < 4; i++)
 					{
@@ -2896,23 +2896,21 @@ void CameraTest::viewInventory()
 				inventoryOnOff();
 			}
 		}
-		else if (items[selectItem] == GoldKey)
-		{
-			if (bDoor3Lockon)
-			{
-				// ドア３の前で使う
+		//else if (items[selectItem] == GoldKey)
+		//{
+		//	if (bDoor3Lockon)
+		//	{
+		//		// ドア３の前で使う
 
-				// SEを鳴らす
-				//playSE(U"牢屋の扉を開ける");
-				//playSE(U"Cancellation");
-				playSEandBGMStop(U"WoodDoor_Close");
+		//		// SEを鳴らす
+		//		playSEandBGMStop(U"WoodDoor_Close");
 
-				inventoryOnOff();
+		//		inventoryOnOff();
 
-				// ゲームクリア（仮）
-				changeScene(State::ToBeContinued);
-			}
-		}
+		//		// ゲームクリア（仮）
+		//		changeScene(State::ToBeContinued);
+		//	}
+		//}
 		else if (items[selectItem] == Poker)
 		{
 			// 鉄製の鍵のところで使う
@@ -3507,6 +3505,18 @@ void CameraTest::lockon()
 		{
 			bDoor3Lockon = false;
 		}
+		if (d)
+		{
+			if (bStoneclear && bDrawerClear)
+			{
+				playSEandBGMStop(U"WoodDoor_Close");
+
+				inventoryOnOff();
+
+				// ゲームクリア（仮）
+				changeScene(State::ToBeContinued);
+			}
+		}
 	}
 	else
 	{
@@ -3673,7 +3683,7 @@ void CameraTest::lockon()
 			// 見ている
 			bLockon = b;
 
-			if (bGoldKeyHave == false)
+			if (bDrawerClear == false)
 			{
 				// 鍵を持っていない
 				message = 9;
@@ -3685,7 +3695,7 @@ void CameraTest::lockon()
 			}
 		}
 
-		if (d && bGoldKeyHave == false)
+		if (d && bDrawerClear == false)
 		{
 			// クリックした
 			bDrawerMode = true;
