@@ -3488,7 +3488,7 @@ void CameraTest::lockon()
 		bDoor2Lockon = false;
 	}
 
-	// ドア３（奥のドア）
+	// ドア３（木のドア）
 	if (!bLockon)
 	{
 		auto [a, b, c, d] = door3Controller.update(
@@ -3504,7 +3504,21 @@ void CameraTest::lockon()
 		{
 			// 見ている
 			bLockon = b;
-			message = 30;
+			if (bStoneclear && bDrawerClear == false)
+			{
+				// 石板だけクリア
+				message = 75;
+			}
+			else if (bStoneclear == false && bDrawerClear)
+			{
+				// 引き出しだけクリア
+				message = 76;
+			}
+			else
+			{
+				// 何もクリアしていない
+				message = 30;
+			}
 			bDoor3Lockon = true;
 		}
 		else
