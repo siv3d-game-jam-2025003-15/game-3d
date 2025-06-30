@@ -1590,6 +1590,8 @@ void CameraTest::update()
 
 						// ゲーム画面に戻るためのカウントとして使う
 						drawerPullCount = 1.0;
+
+						bMouseL = false;
 					}
 					else
 					{
@@ -1673,6 +1675,8 @@ void CameraTest::update()
 				toCameraPos.z = drawerPos[0].z - 2.0;
 
 				to_m_focusY = -0.3;
+
+				bMouseL = false;
 			}
 		}
 	}
@@ -1736,6 +1740,8 @@ void CameraTest::update()
 					playSEandBGMStop(U"Item");
 
 					stonePushCount = 1.0;
+
+					bMouseL = false;
 				}
 				else
 				{
