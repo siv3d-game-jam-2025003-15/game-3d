@@ -3509,6 +3509,8 @@ void CameraTest::lockon()
 		{
 			if (bStoneclear && bDrawerClear)
 			{
+				message = 3;
+
 				playSEandBGMStop(U"WoodDoor_Close");
 
 				inventoryOnOff();
