@@ -3280,6 +3280,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 50;	// パンをとってしまうので、使われない
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3321,6 +3322,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 52;	// とってしまうので、使われない
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3357,6 +3359,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 51;	// とってしまうので、使われない
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3393,6 +3396,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 22;	// とってしまうので、使われない
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3422,6 +3426,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 31;
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -3460,6 +3465,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 53;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3515,6 +3521,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 10;
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -3562,6 +3569,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 33;
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -3635,6 +3643,7 @@ void CameraTest::lockon()
 				// 何もクリアしていない
 				message = 30;
 			}
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -3663,6 +3672,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 33;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3697,6 +3707,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 54;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3726,6 +3737,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 32;
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -3765,6 +3777,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 18;
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -3803,6 +3816,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 26;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3865,6 +3879,7 @@ void CameraTest::lockon()
 			{
 				// クリア後
 				message = 70;
+				priorityMessageCount = 0;
 			}
 		}
 	}
@@ -3924,16 +3939,8 @@ void CameraTest::lockon()
 			else
 			{
 				// クリアしている
-				//if (bStoneclear == false)
-				//{
-				//	// クリアしていない
-				//	message = 59;
-				//}
-				//else
-				//{
-					// クリアしている
-					message = 70;
-				//}
+				message = 70;
+				priorityMessageCount = 0;
 			}
 		}
 	}
@@ -3963,6 +3970,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 11;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -3987,6 +3995,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 14;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4011,6 +4020,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 14;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4035,6 +4045,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 14;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4059,6 +4070,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 15;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4083,6 +4095,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 12;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4125,6 +4138,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 13;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4189,6 +4203,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 25;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4213,6 +4228,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 25;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4244,6 +4260,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 25;
+			priorityMessageCount = 0;
 		}
 	}
 	else
@@ -4272,6 +4289,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 23;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4295,6 +4313,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 65;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4318,6 +4337,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 65;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4341,6 +4361,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 65;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4364,6 +4385,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 65;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4387,6 +4409,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 66;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4410,6 +4433,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 67;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4433,6 +4457,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 67;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4456,6 +4481,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 67;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4479,6 +4505,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 72;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4502,6 +4529,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 72;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4525,6 +4553,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 73;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4548,6 +4577,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 74;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4571,6 +4601,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 74;
+			priorityMessageCount = 0;
 		}
 	}
 
@@ -4594,6 +4625,7 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 74;
+			priorityMessageCount = 0;
 		}
 	}
 
