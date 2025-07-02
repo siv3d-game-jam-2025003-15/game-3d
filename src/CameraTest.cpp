@@ -3579,7 +3579,7 @@ void CameraTest::lockon()
 
 				playSEandBGMStop(U"WoodDoor_Close");
 
-				inventoryOnOff();
+			//	inventoryOnOff();
 
 				// ゲームクリア（仮）
 				changeScene(State::ToBeContinued);
