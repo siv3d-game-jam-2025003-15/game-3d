@@ -896,7 +896,7 @@ void CameraTest::update()
 			{
 				// 引き出しを開け閉めしていない時だけ操作可能
 
-				if (KeyA.down())
+				if (KeyA.down() && bDrawerClear == false)
 				{
 					drawerIndex--;
 					if (drawerIndex < 0)
@@ -905,7 +905,7 @@ void CameraTest::update()
 					}
 					bDrawerNone = false;
 				}
-				if (KeyD.down())
+				if (KeyD.down() && bDrawerClear == false)
 				{
 					drawerIndex++;
 					if (drawerIndex > 6)
@@ -930,7 +930,7 @@ void CameraTest::update()
 		{
 			// 石板モード中
 
-			if (KeyA.down())
+			if (KeyA.down() && bStoneclear == false)
 			{
 				stoneIndex--;
 				if (stoneIndex < 0)
@@ -938,7 +938,7 @@ void CameraTest::update()
 					stoneIndex = 0;
 				}
 			}
-			if (KeyD.down())
+			if (KeyD.down() && bStoneclear == false)
 			{
 				stoneIndex++;
 				if (stoneIndex > 4)
