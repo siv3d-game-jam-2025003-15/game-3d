@@ -766,9 +766,6 @@ private:
 	// 火かき棒を持っている
 	bool bPokerHave = false;
 
-	// 火かき棒で鍵をとった時のメッセージを表示する時間
-	float pokerMessageCount = 0;
-
 	// 羊皮紙を持っている
 	bool bParchmentHave = false;
 
@@ -1237,6 +1234,14 @@ private:
 		U"引き出しは正しく解いたはずだ。だが扉は開かない……。何かまだ“鍵”となるものが必要らしい。",
 		U"",
 		U"",
+
+		// TODO 埋め込み形式にしたい…
+		// 77 パンを入手した
+		U"パンを入手した",
+		U"",
+		U"",
+
+
 	};
 
 	// インベントリ用のテキスト
@@ -1529,4 +1534,13 @@ private:
 	float breathCount = 0;
 
 	int bookingMessage = 0;
+
+	// 優先メッセージ
+	int priorityMessage = 0;
+
+	// 強制メッセージを表示する時間
+	float priorityMessageCount = 0;
+
+	// 優先メッセージ表示時間
+	const float priorityMessageCountMax = 3.0;
 };

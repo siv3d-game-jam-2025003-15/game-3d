@@ -737,11 +737,11 @@ void CameraTest::update()
 			// 例外：錆びた鍵を使ったとき
 			messagePattern = 0;
 		}
-		else if (pokerMessageCount > 0)
+		else if (priorityMessageCount > 0)
 		{
-			// 例外：火かき棒を使って鍵を取ったとき
-			message = 71;
-			pokerMessageCount -= deltaTime;
+			// 優先メッセージを表示
+			message = priorityMessage;
+			priorityMessageCount -= deltaTime;
 		}
 		else if (bLockon)
 		{
@@ -2955,7 +2955,8 @@ void CameraTest::viewInventory()
 				playSEandBGMStop(U"KeyGimmick01");
 
 				// 火かき棒で鍵をとった時のメッセージを表示する時間
-				pokerMessageCount = 4.0;
+				priorityMessage = 71;
+				priorityMessageCount = priorityMessageCountMax;
 			}
 		}
 		else if (items[selectItem] == Parchment)
@@ -3257,6 +3258,9 @@ void CameraTest::lockon()
 			bgmStopCount = c;
 
 			scenario = 1;	// パンを取った後
+
+			priorityMessage = 77;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
