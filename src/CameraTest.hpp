@@ -743,7 +743,7 @@ private:
 	// メッセージ番号
 	int message = 0;
 	int messagePattern = 0;
-	double messagePatternCount = 0.0;
+//	double messagePatternCount = 0.0;
 	int itemMessage = -1;
 
 	// ライト関係の変数
@@ -847,7 +847,7 @@ private:
 	// メッセージのパターン数
 	const int MessagePatternMax = 3;
 
-	Array<int> messageRead;
+//	Array<int> messageRead;
 
 	// 画面下のテキスト
 	Array<String> Text =

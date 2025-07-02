@@ -38,10 +38,10 @@ CameraTest::CameraTest(const InitData& init)
 //#endif
 
 	// メッセージを読んだかどうかのフラグをリセット
-	for (int i = 0; i < Text.size() / MessagePatternMax; i++)
-	{
-		messageRead.push_back(-1);
-	}
+	//for (int i = 0; i < Text.size() / MessagePatternMax; i++)
+	//{
+	//	messageRead.push_back(-1);
+	//}
 
 	// ドアの回転
 	//toDoorRotY = doorRot.y;
@@ -548,8 +548,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"bookingMessage=" << bookingMessage;
-	Print << U"message=" << message;
+	Print << U"messagePattern=" << messagePattern;
+//	Print << U"messagePatternCount=" << messagePatternCount;
 
 #endif
 }
@@ -742,6 +742,7 @@ void CameraTest::update()
 			// 優先メッセージを表示
 			message = priorityMessage;
 			priorityMessageCount -= deltaTime;
+			messagePattern = 0;
 		}
 		else if (bLockon)
 		{
@@ -755,6 +756,7 @@ void CameraTest::update()
 		else
 		{
 			message = scenario;
+			messagePattern = 0;
 		}
 	}
 
@@ -1173,39 +1175,48 @@ void CameraTest::update()
 		lockon();
 
 		// メッセージパターンの自動変更
-		messagePatternCount += deltaTime;
+	//	messagePatternCount += deltaTime;
 
 		// メッセージを切り替える
 		if (bLockon == false)
 		{
-			if (messagePatternCount > 5.0)
-			{
-				messagePattern++;
-				messagePattern %= MessagePatternMax;
-				messagePatternCount = 0;
-			}
+			//if (messagePatternCount > 5.0)
+			//{
+			//	messagePattern++;
+			//	messagePattern %= MessagePatternMax;
+			//	messagePatternCount = 0;
+			//}
+			//messagePattern = -1;
 		}
 		else
 		{
 			if (MouseL.down() || controller.buttonA.down())
 			{
 				messagePattern++;
-				messagePattern %= 3;
+			//	messagePattern %= 3;
+				if (messagePattern >= MessagePatternMax)
+				{
+					messagePattern = -1;
+				}
 			}
 
-			if (messagePattern > messageRead[message])
-			{
-				messageRead[message]++;
-				messagePattern = messageRead[message];
-			}
+			//if (messagePattern > messageRead[message])
+			//{
+			//	messageRead[message]++;
+			//	messagePattern = messageRead[message];
+			//}
 		}
 
-		int m = message * MessagePatternMax + messagePattern;
-		if (Text[m].isEmpty())
+		if (messagePattern >= 0)
 		{
-			// メッセージが空の場合、０に戻す
-			messagePattern = 0;
+			int m = message * MessagePatternMax + messagePattern;
+			if (Text[m].isEmpty())
+			{
+				// メッセージが空の場合、０に戻す
+				messagePattern = -1;
+			}
 		}
+		
 
 
 
@@ -2324,7 +2335,7 @@ void CameraTest::draw() const
 	}
 
 	// セリフ表示
-	if (0 <= message && message < Text.size() / MessagePatternMax)
+	if (0 <= message && message < Text.size() / MessagePatternMax && messagePattern >= 0)
 	{
 		// 画面下を黒い半透明で描画
 		Rect{ 0, Scene::Height()-40, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
