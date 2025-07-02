@@ -2832,6 +2832,9 @@ void CameraTest::viewInventory()
 				//{
 				//	scenario = 2;	// なし
 				//}
+
+				priorityMessage = 86;
+				priorityMessageCount = priorityMessageCountMax;
 			}
 		}
 		else if (items[selectItem] == Hanger)
@@ -2971,6 +2974,9 @@ void CameraTest::viewInventory()
 				// SEを鳴らす
 			//	playSE(U"GET");
 				playSEandBGMStop(U"Item");
+
+				priorityMessage = 85;
+				priorityMessageCount = priorityMessageCountMax;
 			}
 		}
 		else if (items[selectItem] == ToastedParchment)
@@ -2995,6 +3001,9 @@ void CameraTest::viewInventory()
 				// SEを鳴らす
 			//	playSE(U"GET");
 				playSEandBGMStop(U"Water");
+
+				priorityMessage = 84;
+				priorityMessageCount = priorityMessageCountMax;
 			}
 		}
 		else if (items[selectItem] == Cloth)
@@ -3299,6 +3308,9 @@ void CameraTest::lockon()
 			bRustedKeyHave = true;
 			bgmStopCount = c;
 			scenario = 3;	// なし
+
+			priorityMessage = 79;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
@@ -3332,6 +3344,9 @@ void CameraTest::lockon()
 			bgmStopCount = c;
 
 			scenario = 3;	// なし
+
+			priorityMessage = 78;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
@@ -3365,6 +3380,9 @@ void CameraTest::lockon()
 			bgmStopCount = c;
 
 			scenario = 3;	// なし
+
+			priorityMessage = 82;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
@@ -3429,6 +3447,9 @@ void CameraTest::lockon()
 			items << Poker;
 			bPokerHave = a;
 			bgmStopCount = c;
+
+			priorityMessage = 80;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
@@ -3663,6 +3684,9 @@ void CameraTest::lockon()
 			items << Parchment;
 			bParchmentHave = a;
 			bgmStopCount = c;
+
+			priorityMessage = 81;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
@@ -3766,6 +3790,9 @@ void CameraTest::lockon()
 			bDirtyClothHave = true;
 			items << DirtyCloth;
 			bgmStopCount = c;
+
+			priorityMessage = 83;
+			priorityMessageCount = priorityMessageCountMax;
 		}
 		if (b)
 		{
