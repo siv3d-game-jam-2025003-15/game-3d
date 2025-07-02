@@ -441,7 +441,7 @@ private:
 	// 引き出しテスト用
 	Vec3 drawerTestPos = { 14.61, 0, 1.45 };
 
-	// 
+	// 引き出し中
 	bool bDrawerPullNow = false;
 
 	double debugDrawerY = 0;
@@ -513,6 +513,9 @@ private:
 
 	// 石板の向き
 	Vec3 stoneRot = { 0, 90_deg, 0 };
+
+	// 石板を押している最中
+	bool bStonePullNow = false;
 
 	// 詰所の壁際の椅子
 	Vec3 chairPos = { 19.88, 0.72, -4.05 };

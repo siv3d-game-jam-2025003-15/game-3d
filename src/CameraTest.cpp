@@ -892,11 +892,11 @@ void CameraTest::update()
 			//	}
 			//}
 
-			if (bDrawerPullNow == false)
+			if (bDrawerPullNow == false && bDrawerClear == false)
 			{
 				// 引き出しを開け閉めしていない時だけ操作可能
 
-				if (KeyA.down() && bDrawerClear == false)
+				if (KeyA.down())
 				{
 					drawerIndex--;
 					if (drawerIndex < 0)
@@ -905,7 +905,7 @@ void CameraTest::update()
 					}
 					bDrawerNone = false;
 				}
-				if (KeyD.down() && bDrawerClear == false)
+				if (KeyD.down())
 				{
 					drawerIndex++;
 					if (drawerIndex > 6)
@@ -930,20 +930,23 @@ void CameraTest::update()
 		{
 			// 石板モード中
 
-			if (KeyA.down() && bStoneclear == false)
+			if (bStonePullNow == false && bStoneclear == false)
 			{
-				stoneIndex--;
-				if (stoneIndex < 0)
+				if (KeyA.down())
 				{
-					stoneIndex = 0;
+					stoneIndex--;
+					if (stoneIndex < 0)
+					{
+						stoneIndex = 0;
+					}
 				}
-			}
-			if (KeyD.down() && bStoneclear == false)
-			{
-				stoneIndex++;
-				if (stoneIndex > 4)
+				if (KeyD.down())
 				{
-					stoneIndex = 4;
+					stoneIndex++;
+					if (stoneIndex > 4)
+					{
+						stoneIndex = 4;
+					}
 				}
 			}
 
@@ -1738,6 +1741,8 @@ void CameraTest::update()
 				stoneOrder += (stoneIndex + 1) * std::pow(10, stoneCounter);
 				stoneCounter++;
 
+				bStonePullNow = true;
+
 				// 最後の石板
 				if (stoneOrder == 4132)
 				{
@@ -1788,9 +1793,15 @@ void CameraTest::update()
 	}
 
 	// 石板の移動
+	bStonePullNow = false;
 	for (int i = 1; i < 5; i++)
 	{
 		stonePos[i].x = Math::Lerp(stonePos[i].x, toStonePos[i].x, 0.06);
+
+		if (stonePos[i].x + 0.001 < toStonePos[i].x)
+		{
+			bStonePullNow = true;
+		}
 	}
 
 	// カメラ関係
