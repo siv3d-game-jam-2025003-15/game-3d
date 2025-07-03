@@ -1076,7 +1076,7 @@ void CameraTest::update()
 						if (AudioAsset(U"breath_pant").isPlaying() == false)
 						{
 							// 鳴ってなかったら鳴らす
-							AudioAsset(U"breath_pant").setVolume(1.0);
+							AudioAsset(U"breath_pant").setVolume(0.5);
 							AudioAsset(U"breath_pant").play();
 						}
 					}
@@ -1110,7 +1110,7 @@ void CameraTest::update()
 					AudioAsset(U"breath_pant").stop();
 					if (AudioAsset(U"breath_deep").isPlaying() == false)
 					{
-						AudioAsset(U"breath_deep").setVolume(1.0);
+						AudioAsset(U"breath_deep").setVolume(0.5);
 						AudioAsset(U"breath_deep").play();
 					}
 				}
