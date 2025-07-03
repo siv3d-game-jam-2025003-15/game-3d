@@ -549,7 +549,8 @@ void CameraTest::debug()
 	Print << U"CameraZ=" << toCameraPos.z;
 
 	Print << U"messagePattern=" << messagePattern;
-//	Print << U"messagePatternCount=" << messagePatternCount;
+	Print << U"message=" << message;
+	Print << U"lastMessage=" << lastMessage;
 
 #endif
 }
@@ -1178,38 +1179,35 @@ void CameraTest::update()
 	//	messagePatternCount += deltaTime;
 
 		// メッセージを切り替える
-		if (bLockon == false)
-		{
-			//if (messagePatternCount > 5.0)
-			//{
-			//	messagePattern++;
-			//	messagePattern %= MessagePatternMax;
-			//	messagePatternCount = 0;
-			//}
-			//messagePattern = -1;
-		}
-		else
+		if (bLockon)
 		{
 			if (MouseL.down() || controller.buttonA.down())
 			{
-				messagePattern++;
-			//	messagePattern %= 3;
-				if (messagePattern >= MessagePatternMax)
+				if (lastMessage != message)
 				{
 					messagePattern = -1;
 				}
-			}
+				lastMessage = message;
 
-			//if (messagePattern > messageRead[message])
-			//{
-			//	messageRead[message]++;
-			//	messagePattern = messageRead[message];
-			//}
+				messagePattern++;
+				if (messagePattern >= MessagePatternMax * 2)
+				{
+					messagePattern = 0;
+				}
+
+				// 下と同じ条件ですが、クリックしたときは０に戻したいため
+				int m = message * MessagePatternMax + messagePattern / 2;
+				if (Text[m].isEmpty())
+				{
+					// メッセージが空の場合、０に戻す
+					messagePattern = 0;
+				}
+			}
 		}
 
 		if (messagePattern >= 0)
 		{
-			int m = message * MessagePatternMax + messagePattern;
+			int m = message * MessagePatternMax + messagePattern / 2;
 			if (Text[m].isEmpty())
 			{
 				// メッセージが空の場合、０に戻す
@@ -2335,12 +2333,12 @@ void CameraTest::draw() const
 	}
 
 	// セリフ表示
-	if (0 <= message && message < Text.size() / MessagePatternMax && messagePattern >= 0)
+	if (0 <= message && message < Text.size() / MessagePatternMax && messagePattern % 2 == 0)
 	{
 		// 画面下を黒い半透明で描画
 		Rect{ 0, Scene::Height()-40, Scene::Width(), Scene::Height() }.draw(ColorF{ 0.0, 0.5 });
 
-		int m = message * MessagePatternMax + messagePattern;
+		int m = message * MessagePatternMax + messagePattern / 2;
 
 		// 今、表示するための文字数
 		int messageIndex = messageCount * MessageSpeed;

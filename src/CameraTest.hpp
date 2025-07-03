@@ -1578,4 +1578,7 @@ private:
 
 	// 優先メッセージ表示時間
 	const float priorityMessageCountMax = 3.0;
+
+	// 前回のメッセージ
+	int lastMessage = 0;
 };
