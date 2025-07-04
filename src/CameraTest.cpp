@@ -123,8 +123,8 @@ void CameraTest::loadResources() const
 		Model::RegisterDiffuseTextures(*modelDrawerFlower, TextureDesc::MippedSRGB);
 		break;
 	case 10:
-		modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
-		Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
+		//modelDrawerNon = std::make_unique<Model>(modelDrawerNonPath);
+		//Model::RegisterDiffuseTextures(*modelDrawerNon, TextureDesc::MippedSRGB);
 		break;
 	case 11:
 		modelDrawerSnake = std::make_unique<Model>(modelDrawerSnakePath);
@@ -283,8 +283,8 @@ void CameraTest::loadResources() const
 		dummyTextView(clothText);
 		break;
 	case 47:
-		modelDrawerTest = std::make_unique<Model>(modelDrawerTestPath);
-		Model::RegisterDiffuseTextures(*modelDrawerTest, TextureDesc::MippedSRGB);
+	//	modelDrawerTest = std::make_unique<Model>(modelDrawerTestPath);
+	//	Model::RegisterDiffuseTextures(*modelDrawerTest, TextureDesc::MippedSRGB);
 		break;
 	default:
 		bLoaded = true;	// リソースが読み込まれた
@@ -3135,7 +3135,7 @@ void CameraTest::viewModel()
 			modelShelf->draw();
 			break;
 		case 1:
-			modelDrawerNon->draw();
+		//	modelDrawerNon->draw();
 			break;
 		case 2:
 			modelDrawerFlower->draw();
@@ -3156,12 +3156,12 @@ void CameraTest::viewModel()
 	}
 
 	// 引き出しテスト
-	{
-		Transformer3D t{
-			Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerTestPos)
-		};
-		modelDrawerTest->draw();
-	}
+	//{
+	//	Transformer3D t{
+	//		Mat4x4::RotateY(0_deg).scaled(0.01).translated(drawerTestPos)
+	//	};
+	//	modelDrawerTest->draw();
+	//}
 
 	// 羊皮紙の描画
 	if (bParchmentHave == false)
