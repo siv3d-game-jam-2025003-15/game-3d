@@ -1834,7 +1834,8 @@ void CameraTest::update()
 	for (int i = 1; i < 7; i++)
 	{
 	//	drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.1);
-		drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.06);
+	//	drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.06);
+		drawerPos[i].z = Math::Lerp(drawerPos[i].z, toDrawerPos[i].z, 0.065);
 	}
 
 	// 石板の移動
