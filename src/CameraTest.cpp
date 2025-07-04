@@ -744,6 +744,16 @@ void CameraTest::update()
 			message = priorityMessage;
 			priorityMessageCount -= deltaTime;
 			messagePattern = 0;
+
+			// 例外：火かき棒で鉄製の鍵を入手したメッセージの後、【鉄製の鍵】を入手したというメッセージを表示
+			if (priorityMessageCount <= 0 && message == 71 )
+			{
+				// SEを鳴らす
+				playSEandBGMStop(U"Item");
+
+				priorityMessage = 87;
+				priorityMessageCount = priorityMessageCountMax;
+			}
 		}
 		else if (bLockon)
 		{
