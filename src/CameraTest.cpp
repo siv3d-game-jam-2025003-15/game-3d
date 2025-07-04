@@ -923,9 +923,9 @@ void CameraTest::update()
 				if (KeyD.down())
 				{
 					drawerIndex++;
-					if (drawerIndex > 6)
+					if (drawerIndex > 5)
 					{
-						drawerIndex = 6;
+						drawerIndex = 5;
 					}
 
 					bDrawerNone = false;
@@ -1663,8 +1663,8 @@ void CameraTest::update()
 							bDrawerOpen = true;
 
 							// 開けた（クリア）
-							toDrawerPos[drawerIndex + 1].z -= 0.2;
-							drawerPull[drawerIndex] = true;
+						//	toDrawerPos[drawerIndex + 1].z -= 0.2;
+						//	drawerPull[drawerIndex] = true;
 
 							bDrawerClear = true;
 
