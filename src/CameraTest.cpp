@@ -426,63 +426,39 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		debugPos.x += 0.0001;
+	//	debugPos.x += 0.0001;
 	}
 	if (KeyX.pressed())
 	{
-		debugPos.x -= 0.0001;
+	//	debugPos.x -= 0.0001;
 	}
 
 	if (KeyC.pressed())
 	{
-		debugPos.y += 0.0001;
+	//	debugPos.y += 0.0001;
 	}
 	if (KeyV.pressed())
 	{
-		debugPos.y -= 0.0001;
+	//	debugPos.y -= 0.0001;
 	}
 
 	if (KeyB.pressed())
 	{
-		debugPos.z += 0.0001;
+	//	debugPos.z += 0.0001;
 	}
 	if (KeyN.pressed())
 	{
-		debugPos.z -= 0.0001;
+	//	debugPos.z -= 0.0001;
 	}
 
 	if (KeyM.pressed())
 	{
-		debugPosY2 += 0.0001;
+	//	debugPosY2 += 0.0001;
 	}
 	if (KeyL.pressed())
 	{
-		debugPosY2 -= 0.0001;
+	//	debugPosY2 -= 0.0001;
 	}
-
-	drawerPos[0].x = debugPos.x;
-	drawerPos[0].y = 0;
-	drawerPos[0].z = debugPos.z;
-
-	drawerPos[1].x = debugPos.x;
-	drawerPos[1].y = debugPosY2 + debugPos.y * 4;
-	drawerPos[1].z = debugPos.z;
-
-	drawerPos[2].x = debugPos.x;
-	drawerPos[2].y = debugPosY2 + debugPos.y * 3;
-	drawerPos[2].z = debugPos.z;
-
-	drawerPos[3].x = debugPos.x;
-	drawerPos[3].y = debugPosY2 + debugPos.y * 2;
-	drawerPos[3].z = debugPos.z;
-
-	drawerPos[4].x = debugPos.x;
-	drawerPos[4].y = debugPosY2 + debugPos.y * 1;
-	drawerPos[4].z = debugPos.z;
-
-	drawerPos[5].x = debugPos.x;
-	drawerPos[5].y = debugPosY2 + debugPos.y * 0;
-	drawerPos[5].z = debugPos.z;
 
 	if (mouseDirectionX == 1)
 	{

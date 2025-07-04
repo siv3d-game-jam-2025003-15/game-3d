@@ -440,8 +440,8 @@ private:
 		{ 0, 0, 0 }	// ダミー
 	};
 
-	Vec3 debugPos = { 16.3, 0.118, 1.49 };
-	float debugPosY2 =0;
+	//Vec3 debugPos = { 16.3, 0.118, 1.49 };
+	//float debugPosY2 =0;
 
 	// 引き出しの移動先
 	Array<Vec3> toDrawerPos = drawerPos;
