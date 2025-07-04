@@ -3870,8 +3870,9 @@ void CameraTest::lockon()
 	{
 		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
-		temp.y += 0.5;
-		temp.z -= 0.3;
+		temp.y += 0.4;
+	//	temp.z -= 0.3;
+		temp.z -= 0.5;
 
 		auto [a, b, c, d] = drawerController.update(
 			temp,
