@@ -552,6 +552,8 @@ void CameraTest::debug()
 	Print << U"message=" << message;
 	Print << U"lastMessage=" << lastMessage;
 
+	Print << U"drawerOrder=" << drawerOrder;
+
 #endif
 }
 
@@ -930,7 +932,8 @@ void CameraTest::update()
 				}
 			}
 
-			message = 38 + drawerIndex;
+		//	message = 38 + drawerIndex;
+			message = 39 + drawerIndex;
 
 			// 「無」をクリックした
 			if (bDrawerNone)
@@ -1576,7 +1579,8 @@ void CameraTest::update()
 		if (MouseL.down() && bMouseL)
 		{
 			// クリックした
-			if (drawerIndex == 6)
+		//	if (drawerIndex == 6)
+			if (drawerIndex == 5)
 			{
 				// 引き出しモード解除
 				bDrawerMode = false;
@@ -1587,10 +1591,11 @@ void CameraTest::update()
 
 				to_m_focusY = -0.3;
 
-				if (bDrawerClear == false)
-				{
+			//	if (bDrawerClear == false)
+			//	{
 					// 各引き出しを元の位置に戻す
-					for (int i = 0; i < 6; i++)
+				//	for (int i = 0; i < 6; i++)
+					for (int i = 0; i < 5; i++)
 					{
 						toDrawerPos[i + 1].z = 1.6;
 						drawerPull[i] = false;
@@ -1598,40 +1603,40 @@ void CameraTest::update()
 
 					drawerCounter = 0;
 					drawerOrder = 0;
-				}
+			//	}
 
 				bMouseL = false;
 			}
 			else if (drawerPull[drawerIndex] == false)
 			{
-				if (drawerIndex == 0)
-				{
-					// 一番上の引き出し
-				//	if (drawerOrder == 51432)
-					if (bDrawerOpen == true)
-					{
-						// 開けた（クリア）
-						toDrawerPos[drawerIndex + 1].z -= 0.2;
-						drawerPull[drawerIndex] = true;
+				//if (drawerIndex == 0)
+				//{
+				//	// 一番上の引き出し
+				////	if (drawerOrder == 51432)
+				//	if (bDrawerOpen == true)
+				//	{
+				//		// 開けた（クリア）
+				//		toDrawerPos[drawerIndex + 1].z -= 0.2;
+				//		drawerPull[drawerIndex] = true;
 
-					//	items << GoldKey;
+				//	//	items << GoldKey;
 
-						bDrawerClear = true;
+				//		bDrawerClear = true;
 
-						playSEandBGMStop(U"Item");
+				//		playSEandBGMStop(U"Item");
 
-						// ゲーム画面に戻るためのカウントとして使う
-						drawerPullCount = 1.0;
+				//		// ゲーム画面に戻るためのカウントとして使う
+				//		drawerPullCount = 1.0;
 
-						bMouseL = false;
-					}
-					else
-					{
-						// しまっている
-						bDrawerNone = bDrawerNone ? false : true;
-					}
-				}
-				else
+				//		bMouseL = false;
+				//	}
+				//	else
+				//	{
+				//		// しまっている
+				//		bDrawerNone = bDrawerNone ? false : true;
+				//	}
+				//}
+				//else
 				{
 					// それ以外の引き出し
 					toDrawerPos[drawerIndex + 1].z -= 0.2;
@@ -1639,7 +1644,7 @@ void CameraTest::update()
 					drawerPullCount = 1.0;
 					bDrawerPullNow = true;
 
-					if (drawerIndex == 2)
+					if (drawerIndex == 1)
 					{
 						// いったんリセット
 						drawerOrder = 0;
@@ -1648,13 +1653,27 @@ void CameraTest::update()
 
 					if (lastDrawerIndex != drawerIndex)
 					{
-						drawerOrder += drawerIndex * std::pow(10, drawerCounter);
+						drawerOrder += (drawerIndex+1) * std::pow(10, drawerCounter);
 						drawerCounter++;
 
-						if (drawerIndex == 5 && drawerOrder == 51432 && bDrawerOpen == false)
+					//	if (drawerIndex == 5 && drawerOrder == 51432 && bDrawerOpen == false)
+						if (drawerIndex == 4 && drawerOrder == 51432 && bDrawerOpen == false)
 						{
-							playSE(U"牢屋の扉を開ける");
+						//	playSE(U"牢屋の扉を開ける");
 							bDrawerOpen = true;
+
+							// 開けた（クリア）
+							toDrawerPos[drawerIndex + 1].z -= 0.2;
+							drawerPull[drawerIndex] = true;
+
+							bDrawerClear = true;
+
+							playSEandBGMStop(U"Item");
+
+							// ゲーム画面に戻るためのカウントとして使う
+							drawerPullCount = 1.0;
+
+							bMouseL = false;
 						}
 						else
 						{
@@ -1680,7 +1699,8 @@ void CameraTest::update()
 		if (drawerPullCount <= 0)
 		{
 			// 閉じる
-			for (int i = 1; i < 6; i++)
+		//	for (int i = 1; i < 6; i++)
+			for (int i = 0; i < 5; i++)
 			{
 				if (drawerPull[i] == true)
 				{
@@ -3134,22 +3154,22 @@ void CameraTest::viewModel()
 		case 0:
 			modelShelf->draw();
 			break;
-		case 1:
+		//case 1:
 		//	modelDrawerNon->draw();
-			break;
-		case 2:
+		//	break;
+		case 1:
 			modelDrawerFlower->draw();
 			break;
-		case 3:
+		case 2:
 			modelDrawerChain->draw();
 			break;
-		case 4:
+		case 3:
 			modelDrawerFeather->draw();
 			break;
-		case 5:
+		case 4:
 			modelDrawerSnake->draw();
 			break;
-		case 6:
+		case 5:
 			modelDrawerEye->draw();
 			break;
 		}
