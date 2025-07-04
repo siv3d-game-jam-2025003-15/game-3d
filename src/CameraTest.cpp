@@ -557,8 +557,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"debugPos=" << debugPos;
-	Print << U"debugPosY2=" << debugPosY2;
+	//Print << U"debugPos=" << debugPos;
+	//Print << U"debugPosY2=" << debugPosY2;
 
 #endif
 }
@@ -3910,13 +3910,19 @@ void CameraTest::lockon()
 				toCameraPos.x = 16.3;
 				//	toCameraPos.y = 0.65;
 				//	toCameraPos.y = 1.58;
-				toCameraPos.y = 1.1;
+			//	toCameraPos.y = 1.1;
+			//	toCameraPos.y = 0.6;
+			//	toCameraPos.y = 0.8;
+				toCameraPos.y = 1;
 				//	toCameraPos.z = 0.3;
 				//	toCameraPos.z = 1.2;
-				toCameraPos.z = 0.55;
+				//toCameraPos.z = 0.55;
+				toCameraPos.z = 0.4;
 
 				//	to_m_focusY = 0;
-				to_m_focusY = -0.53;
+				//to_m_focusY = -0.53;
+			//	to_m_focusY = -0.2;
+				to_m_focusY = -0.6;
 				phiController.setCameraPosition(toCameraPos);
 				phiController.setFocusPosition(drawerPos[0]);
 			}
