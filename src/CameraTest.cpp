@@ -780,11 +780,11 @@ void CameraTest::update()
 	}
 
 	// 指定したプレイヤーインデックスの XInput コントローラを取得
-	auto controller = XInput(playerIndex);
-	controller.setLeftTriggerDeadZone();
-	controller.setRightTriggerDeadZone();
-	controller.setLeftThumbDeadZone();
-	controller.setRightThumbDeadZone();
+	auto xboxController = XInput(playerIndex);
+	xboxController.setLeftTriggerDeadZone();
+	xboxController.setRightTriggerDeadZone();
+	xboxController.setLeftThumbDeadZone();
+	xboxController.setRightThumbDeadZone();
 
 	// マウスのRayを取得
 	Ray ray = getMouseRay();
@@ -866,9 +866,9 @@ void CameraTest::update()
 				phiController.rotate(60_deg, deltaTime, 1.0);
 			}
 
-			if (controller.rightThumbX < -0.1)
+			if (xboxController.rightThumbX < -0.1)
 			{
-				phiController.rotate(60_deg, deltaTime, -controller.rightThumbX);
+				phiController.rotate(60_deg, deltaTime, -xboxController.rightThumbX);
 			}
 
 			if (diffMousePosX < -0.1)
@@ -881,9 +881,9 @@ void CameraTest::update()
 				phiController.rotate(-60_deg, deltaTime, 1.0);
 			}
 
-			if (controller.rightThumbX > 0.1)
+			if (xboxController.rightThumbX > 0.1)
 			{
-				phiController.rotate(-60_deg, deltaTime, controller.rightThumbX);
+				phiController.rotate(-60_deg, deltaTime, xboxController.rightThumbX);
 			}
 
 			if (diffMousePosX > 0.1)
@@ -991,10 +991,10 @@ void CameraTest::update()
 				toCameraPos.z += zr;
 				isWalk = true;
 			}
-			if (controller.leftThumbY > 0.1)
+			if (xboxController.leftThumbY > 0.1)
 			{
-				toCameraPos.x += (xr * controller.leftThumbY);
-				toCameraPos.z += (zr * controller.leftThumbY);
+				toCameraPos.x += (xr * xboxController.leftThumbY);
+				toCameraPos.z += (zr * xboxController.leftThumbY);
 				isWalk = true;
 			}
 
@@ -1004,10 +1004,10 @@ void CameraTest::update()
 				toCameraPos.z -= zr;
 				isWalk = true;
 			}
-			if (controller.leftThumbY < -0.1)
+			if (xboxController.leftThumbY < -0.1)
 			{
-				toCameraPos.x -= (xr * -controller.leftThumbY);
-				toCameraPos.z -= (zr * -controller.leftThumbY);
+				toCameraPos.x -= (xr * -xboxController.leftThumbY);
+				toCameraPos.z -= (zr * -xboxController.leftThumbY);
 				isWalk = true;
 			}
 
@@ -1017,10 +1017,10 @@ void CameraTest::update()
 				toCameraPos.z += xr;
 				isWalk = true;
 			}
-			if (controller.leftThumbX < -0.1)
+			if (xboxController.leftThumbX < -0.1)
 			{
-				toCameraPos.x -= (zr * -controller.leftThumbX);
-				toCameraPos.z += (xr * -controller.leftThumbX);
+				toCameraPos.x -= (zr * -xboxController.leftThumbX);
+				toCameraPos.z += (xr * -xboxController.leftThumbX);
 				isWalk = true;
 			}
 
@@ -1030,10 +1030,10 @@ void CameraTest::update()
 				toCameraPos.z -= xr;
 				isWalk = true;
 			}
-			if (controller.leftThumbX > 0.1)
+			if (xboxController.leftThumbX > 0.1)
 			{
-				toCameraPos.x += (zr * controller.leftThumbX);
-				toCameraPos.z -= (xr * controller.leftThumbX);
+				toCameraPos.x += (zr * xboxController.leftThumbX);
+				toCameraPos.z -= (xr * xboxController.leftThumbX);
 				isWalk = true;
 			}
 
@@ -1159,9 +1159,9 @@ void CameraTest::update()
 				to_m_focusY += yDelta;
 			}
 
-			if (controller.rightThumbY > 0.1)
+			if (xboxController.rightThumbY > 0.1)
 			{
-				to_m_focusY += (yDelta * controller.rightThumbY);
+				to_m_focusY += (yDelta * xboxController.rightThumbY);
 			}
 
 			if (diffMousePosY > 0.1)
@@ -1175,9 +1175,9 @@ void CameraTest::update()
 				to_m_focusY -= yDelta;
 			}
 
-			if (controller.rightThumbY < -0.1)
+			if (xboxController.rightThumbY < -0.1)
 			{
-				to_m_focusY -= (yDelta * -controller.rightThumbY);
+				to_m_focusY -= (yDelta * -xboxController.rightThumbY);
 			}
 
 			if (diffMousePosY < -0.1)
@@ -1205,7 +1205,7 @@ void CameraTest::update()
 		// メッセージを切り替える
 		if (bLockon)
 		{
-			if (MouseL.down() || controller.buttonA.down())
+			if (MouseL.down() || xboxController.buttonA.down())
 			{
 				if (lastMessage != message)
 				{
@@ -1320,7 +1320,7 @@ void CameraTest::update()
 	// インベントリの表示・非表示
 //	if (KeyI.down()
 	if (KeySpace.down()
-		|| controller.buttonY.down()
+		|| xboxController.buttonY.down()
 	)
 	{
 		inventoryOnOff();
@@ -2148,18 +2148,21 @@ void CameraTest::update()
 		//	prologueCount += deltaTime;
 		//}
 
-		if (MouseL.down() && prologueCount < 28)
+		if (MouseL.down() || xboxController.buttonA.down())
 		{
-			float prologueIndex = prologueCount * 5;
-			prologueCount = 0;
-			for (int i = 0; i < prologueText.size(); ++i)
+			if (prologueCount < 28)
 			{
-				prologueCount += (float)prologueText[i].size() / 5.0f;
-				prologueIndex -= prologueText[i].size();
-
-				if (prologueIndex <= 0)
+				float prologueIndex = prologueCount * 5;
+				prologueCount = 0;
+				for (int i = 0; i < prologueText.size(); ++i)
 				{
-					break;
+					prologueCount += (float)prologueText[i].size() / 5.0f;
+					prologueIndex -= prologueText[i].size();
+
+					if (prologueIndex <= 0)
+					{
+						break;
+					}
 				}
 			}
 		}
@@ -2185,7 +2188,7 @@ void CameraTest::update()
 		Print << U"Text[message*MessagePatternMax].size()=" << Text[message * MessagePatternMax].size();
 		Print << U"message=" << message;
 #endif
-		if (MouseL.down())
+		if (MouseL.down() || xboxController.buttonA.down())
 		{
 			if (messageCount < Text[message * MessagePatternMax].size() / MessageSpeed - 0.8)
 			{
