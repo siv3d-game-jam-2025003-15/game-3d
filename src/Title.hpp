@@ -54,4 +54,6 @@ private:
 	bool KeyMode = false;
 
 	Vec2 lastCursorPos;
+
+	bool ButtonDown = false;
 };

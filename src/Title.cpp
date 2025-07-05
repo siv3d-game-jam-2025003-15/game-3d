@@ -66,10 +66,26 @@ void Title::update()
 			cursorIndex = 1;
 		}
 	}
+	if (xboxController.buttonA.down() || xboxController.buttonStart.down())
+	{
+		KeyMode = true;
+		if (cursorIndex == -1)
+		{
+			cursorIndex = 0;
+			ButtonDown = true;
+		}
+	}
 
 	if(KeyMode)
 	{
-		if (KeyEnter.down() || xboxController.buttonA.down() || xboxController.buttonStart.down())
+		if (ButtonDown)
+		{
+			if (KeyEnter.up() || xboxController.buttonA.up() || xboxController.buttonStart.up())
+			{
+				ButtonDown = false;
+			}
+		}
+		else if (KeyEnter.down() || xboxController.buttonA.down() || xboxController.buttonStart.down())
 		{
 			if (cursorIndex == 0)
 			{
@@ -91,14 +107,15 @@ void Title::update()
 	}
 	lastCursorPos = currentCursorPos;
 
-	// マウスオーバー
 	if (KeyMode == false)
 	{
+		// マウスオーバー
 		gamestartColor = mouseOver(gamestartColor, U"GAME START", m_cameraTestButton.center());
 		exitColor = mouseOver(exitColor, U"EXIT", m_exitButton.center());
 	}
 	else
 	{
+		// キーボード・XBOXコントローラー
 		if (cursorIndex == 0)
 		{
 			gamestartColor = Math::Lerp(gamestartColor, maxColor, 0.1);
