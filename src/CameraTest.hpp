@@ -749,7 +749,8 @@ private:
 //	float markSize = 0.3;
 //	float markSize = 0.2;
 	float markSize = 0.1;
-	float markHigh = 0.2;
+//	float markHigh = 0.2;
+	float markHigh = 0.15;
 
 	// 取得しているアイテム一覧
 	Array<int> items;
