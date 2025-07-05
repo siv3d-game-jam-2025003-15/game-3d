@@ -47,4 +47,12 @@ private:
 	const float maxColor = 1.0;
 	float gamestartColor = minColor;
 	float exitColor = minColor;
+
+	// カーソルの位置
+	int cursorIndex = 0;
+
+	// 
+	bool KeyMode = false;
+
+	Vec2 lastCursorPos;
 };

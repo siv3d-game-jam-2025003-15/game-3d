@@ -39,9 +39,72 @@ void Title::update()
 		changeScene(State::CameraTest);
 	}
 
+	// 指定したプレイヤーインデックスの XInput コントローラを取得
+	size_t playerIndex = 0;
+	auto xboxController = XInput(playerIndex);
+	xboxController.setLeftTriggerDeadZone();
+	xboxController.setRightTriggerDeadZone();
+	xboxController.setLeftThumbDeadZone();
+	xboxController.setRightThumbDeadZone();
+	
+	// キーボード＆XBOXコントローラー
+	if (KeyW.down() || xboxController.leftThumbY > 0.1 || xboxController.buttonUp.down())
+	{
+		KeyMode = true;
+		cursorIndex = 0;
+	}
+	else if (KeyS.down() || xboxController.leftThumbY < -0.1 || xboxController.buttonDown.down())
+	{
+		KeyMode = true;
+		cursorIndex = 1;
+	}
+
+	if(KeyMode)
+	{
+		if (KeyEnter.down() || xboxController.buttonA.down() || xboxController.buttonStart.down())
+		{
+			if (cursorIndex == 0)
+			{
+				AudioAsset(U"Title").play();
+				changeScene(State::CameraTest);
+			}
+			else
+			{
+				System::Exit();
+			}
+		}
+	}
+	
+	// マウスを動かしたかどうか
+	Vec2 currentCursorPos = Cursor::PosF();
+	if (currentCursorPos != lastCursorPos)
+	{
+		KeyMode = false;
+	}
+	lastCursorPos = currentCursorPos;
+
 	// マウスオーバー
-	gamestartColor = mouseOver(gamestartColor, U"GAME START", m_cameraTestButton.center());
-	exitColor      = mouseOver(exitColor     , U"EXIT"      , m_exitButton.center());
+	if (KeyMode == false)
+	{
+		gamestartColor = mouseOver(gamestartColor, U"GAME START", m_cameraTestButton.center());
+		exitColor = mouseOver(exitColor, U"EXIT", m_exitButton.center());
+	}
+	else
+	{
+		if (cursorIndex == 0)
+		{
+			gamestartColor = Math::Lerp(gamestartColor, maxColor, 0.1);
+			exitColor      = Math::Lerp(exitColor, minColor, 0.1);
+		}
+		else
+		{
+			gamestartColor = Math::Lerp(gamestartColor, minColor, 0.1);
+			exitColor      = Math::Lerp(exitColor, maxColor, 0.1);
+		}
+	}
+	
+//	Print << U"KeyMode=" << KeyMode;
+
 }
 
 void Title::draw() const
@@ -106,3 +169,4 @@ float Title::mouseOver(float color, String text, RoundRect::position_type button
 	
 	return result;
 }
+
