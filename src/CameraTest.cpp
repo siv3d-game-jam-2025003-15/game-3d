@@ -1651,10 +1651,9 @@ void CameraTest::update()
 			if (bMouseL)
 			{
 				// クリックした
-				if (priorityMessageCount > 0)
+				if (message == 88 && priorityMessageCount > 0)
 				{
 					priorityMessageCount = 0;
-
 				}
 				else if (drawerIndex == 5)
 				{
@@ -1828,10 +1827,9 @@ void CameraTest::update()
 			if (bMouseL)
 			{
 				// クリックした
-				if (priorityMessageCount > 0)
+				if (message == 90 && priorityMessageCount > 0)
 				{
 					priorityMessageCount = 0;
-
 				}
 				else if (stoneIndex == 4)	// 戻るを選択
 				{
