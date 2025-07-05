@@ -3028,6 +3028,23 @@ void CameraTest::viewInventory()
 				// コメント
 				itemMessage = items[selectItem];
 			}
+			else
+			{
+				Color rectColor = Palette::Black;
+
+				// 合成中なら色を変える
+				if (synthesisIndex >= 0)
+				{
+					if (synthesisIndex == i)
+					{
+						// 合成元
+						rectColor = Palette::Greenyellow;
+					}
+				}
+
+				// 枠線
+				rect.drawFrame(1, rectColor);
+			}
 		}
 
 	}
