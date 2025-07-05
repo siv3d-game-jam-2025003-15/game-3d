@@ -548,7 +548,8 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"boardPos=" << boardPos;
+	Print << U"messagePattern=" << messagePattern;
+	Print << U"messagePattern%2=" << messagePattern%2;
 
 #endif
 }
@@ -3990,16 +3991,28 @@ void CameraTest::lockon()
 			{
 				// 石板だけクリア
 				message = 75;
+				if (messagePattern % 2 == 1 || messagePattern == -1)
+				{
+					playSE(U"WoodDoor_Close");
+				}
 			}
 			else if (bStoneclear == false && bDrawerClear)
 			{
 				// 引き出しだけクリア
 				message = 76;
+				if (messagePattern % 2 == 1 || messagePattern == -1)
+				{
+					playSE(U"WoodDoor_Close");
+				}
 			}
 			else
 			{
 				// 何もクリアしていない
 				message = 30;
+				if (messagePattern % 2 == 1 || messagePattern == -1)
+				{
+					playSE(U"WoodDoor_Close");
+				}
 			}
 			priorityMessageCount = 0;
 		}
