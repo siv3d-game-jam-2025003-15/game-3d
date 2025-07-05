@@ -953,28 +953,31 @@ void CameraTest::update()
 		else if (bStoneMode)
 		{
 			// 石板モード中
-
-			if (bStonePullNow == false && bStoneclear == false)
+			if (priorityMessageCount <= 0)
 			{
-				if (KeyA.down())
-				{
-					stoneIndex--;
-					if (stoneIndex < 0)
-					{
-						stoneIndex = 0;
-					}
-				}
-				if (KeyD.down())
-				{
-					stoneIndex++;
-					if (stoneIndex > 4)
-					{
-						stoneIndex = 4;
-					}
-				}
-			}
 
-			message = 60 + stoneIndex;
+				if (bStonePullNow == false && bStoneclear == false)
+				{
+					if (KeyA.down())
+					{
+						stoneIndex--;
+						if (stoneIndex < 0)
+						{
+							stoneIndex = 0;
+						}
+					}
+					if (KeyD.down())
+					{
+						stoneIndex++;
+						if (stoneIndex > 4)
+						{
+							stoneIndex = 4;
+						}
+					}
+				}
+
+				message = 60 + stoneIndex;
+			}
 		}
 		else
 		{
@@ -1587,8 +1590,12 @@ void CameraTest::update()
 		if (MouseL.down() && bMouseL)
 		{
 			// クリックした
-		//	if (drawerIndex == 6)
-			if (drawerIndex == 5)
+			if (priorityMessageCount > 0)
+			{
+				priorityMessageCount = 0;
+
+			}
+			else if (drawerIndex == 5)
 			{
 				// 引き出しモード解除
 				bDrawerMode = false;
@@ -1753,8 +1760,12 @@ void CameraTest::update()
 		if (MouseL.down() && bMouseL)
 		{
 			// クリックした
+			if (priorityMessageCount > 0)
+			{
+				priorityMessageCount = 0;
 
-			if (stoneIndex == 4)	// 戻るを選択
+			}
+			else if (stoneIndex == 4)	// 戻るを選択
 			{
 				// 石板モード解除
 				bStoneMode = false;
@@ -1846,7 +1857,7 @@ void CameraTest::update()
 	{
 		stonePos[i].x = Math::Lerp(stonePos[i].x, toStonePos[i].x, 0.06);
 
-		if (stonePos[i].x + 0.001 < toStonePos[i].x)
+		if (stonePos[i].x + 0.003 < toStonePos[i].x)
 		{
 			bStonePullNow = true;
 		}
@@ -3932,6 +3943,8 @@ void CameraTest::lockon()
 
 				priorityMessage = 88;
 				priorityMessageCount = priorityMessageCountMax;
+
+				drawerIndex = 0;
 			}
 			else
 			{
@@ -3993,6 +4006,11 @@ void CameraTest::lockon()
 
 				phiController.setCameraPosition(toCameraPos);
 				phiController.setFocusPosition(stonePos[0]);
+
+				priorityMessage = 90;
+				priorityMessageCount = priorityMessageCountMax;
+
+				stoneIndex = 0;
 			}
 			else
 			{
