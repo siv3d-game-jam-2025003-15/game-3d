@@ -2795,6 +2795,7 @@ void CameraTest::viewInventory()
 #ifdef _DEBUG
 	Print << U"selectItem=" << selectItem;
 	Print << U"KeyMode=" << KeyMode;
+	Print << U"items.size()=" << items.size();
 #endif
 
 	// 初期化
@@ -2830,6 +2831,59 @@ void CameraTest::viewInventory()
 		}
 	}
 
+	if (KeyA.down() || xboxController.buttonLeft.down())
+	{
+		KeyMode = true;
+
+		selectItem--;
+		if (selectItem < 0)
+		{
+			selectItem = 0;
+		}
+	}
+
+	if (KeyW.down() || xboxController.buttonUp.down())
+	{
+		KeyMode = true;
+
+		selectItem -= 4;
+		if (selectItem < 0)
+		{
+			selectItem = 0;
+		}
+	}
+
+	if (KeyS.down() || xboxController.buttonDown.down())
+	{
+		KeyMode = true;
+
+		selectItem += 4;
+		if (selectItem > items.size() - 1)
+		{
+			selectItem = items.size() - 1;
+		}
+	}
+
+	if (KeyD.down() || xboxController.buttonRight.down())
+	{
+		KeyMode = true;
+
+		selectItem++;
+		if (selectItem > items.size() - 1)
+		{
+			selectItem = items.size() - 1;
+		}
+	}
+
+	// マウスを動かしたかどうか
+	Vec2 currentCursorPos = Cursor::PosF();
+	if (currentCursorPos != lastCursorPos)
+	{
+		KeyMode = false;
+	}
+	lastCursorPos = currentCursorPos;
+
+
 	// アイテム
 	for (int i = 0; i < items.size(); i++)
 	{
@@ -2843,63 +2897,6 @@ void CameraTest::viewInventory()
 			// 選択できないようにする
 			continue;
 		}
-
-		if (KeyA.down() || xboxController.buttonLeft.down())
-		{
-			KeyMode = true;
-
-			selectItem--;
-			if (selectItem < 0)
-			{
-				selectItem = 0;
-			}
-		}
-
-		if (KeyW.down() || xboxController.buttonUp.down())
-		{
-			KeyMode = true;
-
-			selectItem -= 4;
-			if (selectItem < 0)
-			{
-				selectItem = 0;
-			}
-		}
-			
-		if (KeyS.down() || xboxController.buttonDown.down())
-		{
-			KeyMode = true;
-
-			selectItem += 4;
-			if (selectItem < 0)
-			{
-				selectItem = 0;
-			}
-		}
-
-		if (KeyD.down() || xboxController.buttonRight.down())
-		{
-			KeyMode = true;
-
-			selectItem++;
-			if (selectItem < 0)
-			{
-				selectItem = 0;
-			}
-		}
-
-		if (selectItem >= items.size())
-		{
-			selectItem = items.size()-1;
-		}
-
-		// マウスを動かしたかどうか
-		Vec2 currentCursorPos = Cursor::PosF();
-		if (currentCursorPos != lastCursorPos)
-		{
-			KeyMode = false;
-		}
-		lastCursorPos = currentCursorPos;
 
 		// 現在選択中のアイテムに枠を表示
 		Rect rect(itemMiniX, itemMiniY, itemMiniWidth, itemMiniHeight);
