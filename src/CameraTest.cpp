@@ -1690,6 +1690,9 @@ void CameraTest::update()
 							drawerPullCount = 1.0;
 
 							bMouseL = false;
+
+							priorityMessage = 89;
+							priorityMessageCount = priorityMessageCountMax;
 						}
 						else
 						{
