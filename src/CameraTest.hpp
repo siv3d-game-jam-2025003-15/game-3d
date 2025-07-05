@@ -1616,4 +1616,10 @@ private:
 	float xboxCameraSpeed = 2.0;
 
 	bool xboxControllerDown = false;
+
+	bool KeyMode = false;
+
+	Vec2 lastCursorPos;
+
+	int selectItem = -1;
 };

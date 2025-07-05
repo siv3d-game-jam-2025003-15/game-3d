@@ -2792,7 +2792,9 @@ void CameraTest::viewInventory()
 	int itemY = center.y - inventoryHeight / 2;
 	inventorySprite.scaled(0.5).draw(itemX, itemY);
 
-	int selectItem = -1;
+#ifdef _DEBUG
+	Print << U"selectItem=" << selectItem;
+#endif
 
 	// 初期化
 	itemMessage = -1;
@@ -2841,53 +2843,143 @@ void CameraTest::viewInventory()
 			continue;
 		}
 
+		if (KeyA.down())
+		{
+			KeyMode = true;
+
+			selectItem--;
+			if (selectItem < 0)
+			{
+				selectItem = 0;
+			}
+		}
+
+		if (KeyW.down())
+		{
+			KeyMode = true;
+
+			selectItem -= 4;
+			if (selectItem < 0)
+			{
+				selectItem = 0;
+			}
+		}
+			
+		if (KeyS.down())
+		{
+			KeyMode = true;
+
+			selectItem += 4;
+			if (selectItem < 0)
+			{
+				selectItem = 0;
+			}
+		}
+
+		if (KeyD.down())
+		{
+			KeyMode = true;
+
+			selectItem++;
+			if (selectItem < 0)
+			{
+				selectItem = 0;
+			}
+		}
+
+		if (selectItem >= items.size())
+		{
+			selectItem = items.size()-1;
+		}
+
+		// マウスを動かしたかどうか
+		Vec2 currentCursorPos = Cursor::PosF();
+		if (currentCursorPos != lastCursorPos)
+		{
+			KeyMode = false;
+		}
+		lastCursorPos = currentCursorPos;
+
 		// 現在選択中のアイテムに枠を表示
 		Rect rect(itemMiniX, itemMiniY, itemMiniWidth, itemMiniHeight);
 
-		if (rect.mouseOver())
+		if (KeyMode == false)
 		{
-			selectItem = i;
-
-			Color rectColor = Palette::Skyblue;
-
-			// 合成中なら色を変える
-			if (synthesisIndex >= 0)
+			if (rect.mouseOver())
 			{
-				if (synthesisIndex == i)
-				{
-					// 合成元
-					rectColor = Palette::Greenyellow;
-				}
-				else
-				{
-					// 合成先
-					rectColor = Palette::Yellow;
-				}
-			}
-		
-			// 枠線
-			rect.drawFrame(2, rectColor);
+				selectItem = i;
 
-			// コメント
-			itemMessage = items[selectItem];
+				Color rectColor = Palette::Skyblue;
+
+				// 合成中なら色を変える
+				if (synthesisIndex >= 0)
+				{
+					if (synthesisIndex == i)
+					{
+						// 合成元
+						rectColor = Palette::Greenyellow;
+					}
+					else
+					{
+						// 合成先
+						rectColor = Palette::Yellow;
+					}
+				}
+
+				// 枠線
+				rect.drawFrame(2, rectColor);
+
+				// コメント
+				itemMessage = items[selectItem];
+			}
+			else
+			{
+				Color rectColor = Palette::Black;
+
+				// 合成中なら色を変える
+				if (synthesisIndex >= 0)
+				{
+					if (synthesisIndex == i)
+					{
+						// 合成元
+						rectColor = Palette::Greenyellow;
+					}
+				}
+
+				// 枠線
+				rect.drawFrame(1, rectColor);
+			}
 		}
 		else
 		{
-			Color rectColor = Palette::Black;
-
-			// 合成中なら色を変える
-			if (synthesisIndex >= 0)
+			// キーボード対応
+			if (selectItem == i)
 			{
-				if (synthesisIndex == i)
-				{
-					// 合成元
-					rectColor = Palette::Greenyellow;
-				}
-			}
+				Color rectColor = Palette::Skyblue;
 
-			// 枠線
-			rect.drawFrame( 1, rectColor);
+				// 合成中なら色を変える
+				if (synthesisIndex >= 0)
+				{
+					if (synthesisIndex == i)
+					{
+						// 合成元
+						rectColor = Palette::Greenyellow;
+					}
+					else
+					{
+						// 合成先
+						rectColor = Palette::Yellow;
+					}
+				}
+
+				// 枠線
+				rect.drawFrame(2, rectColor);
+
+				// コメント
+				itemMessage = items[selectItem];
+			}
 		}
+
 	}
 
 	//現在選択中のアイテム

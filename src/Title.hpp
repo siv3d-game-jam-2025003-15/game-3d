@@ -51,7 +51,6 @@ private:
 	// カーソルの位置
 	int cursorIndex = -1;
 
-	// 
 	bool KeyMode = false;
 
 	Vec2 lastCursorPos;
