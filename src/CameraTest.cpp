@@ -791,13 +791,13 @@ void CameraTest::update()
 
 	// 移動速度
 	double addSpeed = 1.0;
-	if ((KeyControl | KeyCommand).pressed())
+	if ((KeyControl | KeyCommand).pressed() || xboxController.rightTrigger > 0.1)
 	{
 		// コントロールキーを押しているときの速度
 	//	addSpeed = 20.0;
 		addSpeed = 5.0;
 	}
-	else if (KeyShift.pressed())
+	else if (KeyShift.pressed() || xboxController.buttonRB.pressed())
 	{
 		// シフトキーを押しているときの速度
 	//	addSpeed = 5.0;
