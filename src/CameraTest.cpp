@@ -3305,7 +3305,7 @@ void CameraTest::viewInventory()
 		}
 
 		// ニュートラルの位置に戻す
-		selectItem = -1;
+	//	selectItem = -1;
 	}
 }
 
