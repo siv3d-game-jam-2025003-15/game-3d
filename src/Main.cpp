@@ -60,9 +60,12 @@ void Main()
 	AudioAsset::Register(U"Water", U"assets/sound/se/SE_Water01.mp3");
 	AudioAsset::Register(U"Inventory", U"assets/sound/se/SE_Inventory_Open01.mp3");
 
-	// SE 火かき棒入手
+	// SE 火かき棒で鉄製のカギを入手
 	AudioAsset::Register(U"KeyGimmick01", U"assets/sound/se/SE_KeyGimmick01.mp3");
-	
+
+	// SE 石板、引き出しのギミックを説いた後のSE
+	AudioAsset::Register(U"lock_wood_door1", U"assets/sound/se/lock_wood_door1.mp3");
+
 	// SE はぁはぁ
 	AudioAsset::Register(U"breath_pant", U"assets/sound/se/se_breath_pant.wav");
 	AudioAsset::Register(U"breath_deep", U"assets/sound/se/se_breath_deep.wav");

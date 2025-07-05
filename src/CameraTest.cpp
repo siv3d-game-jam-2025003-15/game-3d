@@ -1734,7 +1734,8 @@ void CameraTest::update()
 
 								bDrawerClear = true;
 
-								playSEandBGMStop(U"Item");
+							//	playSEandBGMStop(U"Item");
+								playSEandBGMStop(U"lock_wood_door1");
 
 								// ゲーム画面に戻るためのカウントとして使う
 								drawerPullCount = 1.0;
@@ -1868,7 +1869,8 @@ void CameraTest::update()
 
 						bStoneclear = true;
 
-						playSEandBGMStop(U"Item");
+						//playSEandBGMStop(U"Item");
+						playSEandBGMStop(U"lock_wood_door1");
 
 						stonePushCount = 1.0;
 
