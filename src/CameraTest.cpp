@@ -1804,6 +1804,8 @@ void CameraTest::update()
 				// 最後の石板
 				if (stoneOrder == 4132)
 				{
+					// 石板クリア
+					
 				//	items << GoldKey;
 
 				//	bGoldKeyHave = true;
@@ -1815,6 +1817,9 @@ void CameraTest::update()
 					stonePushCount = 1.0;
 
 					bMouseL = false;
+
+					priorityMessage = 91;
+					priorityMessageCount = priorityMessageCountMax;
 				}
 				else
 				{
