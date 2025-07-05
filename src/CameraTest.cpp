@@ -2797,6 +2797,12 @@ void CameraTest::viewInventory()
 	// 初期化
 	itemMessage = -1;
 
+	auto xboxController = XInput(playerIndex);
+	xboxController.setLeftTriggerDeadZone();
+	xboxController.setRightTriggerDeadZone();
+	xboxController.setLeftThumbDeadZone();
+	xboxController.setRightThumbDeadZone();
+
 	// インベントリ全体
 	{
 		Rect rect(itemX, itemY, inventoryWidth, inventoryHeight);
@@ -2812,6 +2818,12 @@ void CameraTest::viewInventory()
 				// インベントリを非表示にする
 				inventoryOnOff();
 			}
+		}
+
+		if (xboxController.buttonB.down())
+		{ 
+			// インベントリを非表示にする
+			inventoryOnOff();
 		}
 	}
 
