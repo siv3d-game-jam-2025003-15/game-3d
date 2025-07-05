@@ -2794,6 +2794,7 @@ void CameraTest::viewInventory()
 
 #ifdef _DEBUG
 	Print << U"selectItem=" << selectItem;
+	Print << U"KeyMode=" << KeyMode;
 #endif
 
 	// 初期化
@@ -2843,7 +2844,7 @@ void CameraTest::viewInventory()
 			continue;
 		}
 
-		if (KeyA.down())
+		if (KeyA.down() || xboxController.buttonLeft.down())
 		{
 			KeyMode = true;
 
@@ -2854,7 +2855,7 @@ void CameraTest::viewInventory()
 			}
 		}
 
-		if (KeyW.down())
+		if (KeyW.down() || xboxController.buttonUp.down())
 		{
 			KeyMode = true;
 
@@ -2865,7 +2866,7 @@ void CameraTest::viewInventory()
 			}
 		}
 			
-		if (KeyS.down())
+		if (KeyS.down() || xboxController.buttonDown.down())
 		{
 			KeyMode = true;
 
@@ -2876,7 +2877,7 @@ void CameraTest::viewInventory()
 			}
 		}
 
-		if (KeyD.down())
+		if (KeyD.down() || xboxController.buttonRight.down())
 		{
 			KeyMode = true;
 
@@ -3002,7 +3003,7 @@ void CameraTest::viewInventory()
 		bRustedKeyUse = false;
 	}
 
-	if (MouseL.down())
+	if (MouseL.down() || xboxController.buttonA.down())
 	{
 		// アイテムを使う
 		if (bMemo || bToastedParchmentRead || bClothRead)	// TODO 増えたら困る
@@ -3253,6 +3254,9 @@ void CameraTest::viewInventory()
 			//	playSE(U"Item");
 			}
 		}
+
+		// ニュートラルの位置に戻す
+		selectItem = -1;
 	}
 }
 
