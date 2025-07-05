@@ -13,6 +13,19 @@ void ToBeContinued::update()
     {
         changeScene(State::Title);
     }
+
+    // 指定したプレイヤーインデックスの XInput コントローラを取得
+    size_t playerIndex = 0;
+    auto xboxController = XInput(playerIndex);
+    xboxController.setLeftTriggerDeadZone();
+    xboxController.setRightTriggerDeadZone();
+    xboxController.setLeftThumbDeadZone();
+    xboxController.setRightThumbDeadZone();
+
+    if (xboxController.buttonA.down() || xboxController.buttonStart.down())
+    {
+        changeScene(State::Title);
+    }
 }
 
 void ToBeContinued::draw() const
