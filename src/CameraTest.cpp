@@ -3298,10 +3298,10 @@ void CameraTest::viewModel()
 		double distance = curCameraPosition.distanceFrom(markPosition);
 
 		float tempSize = distance * markSize;
-
-		Print << U"distance" << distance;
-		Print << U"tempSize" << tempSize;
-
+#ifdef _DEBUG
+		//Print << U"distance" << distance;
+		//Print << U"tempSize" << tempSize;
+#endif
 		// ビルボードの表示
 		const Mat4x4 billboardMat = camera.getInvView();
 		billboard.draw(camera.billboard(markPosition, tempSize), uvChecker);
