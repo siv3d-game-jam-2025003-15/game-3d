@@ -548,8 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"messagePattern=" << messagePattern;
-	Print << U"messagePattern%2=" << messagePattern%2;
+	Print << U"bMouseL=" << bMouseL;
 
 #endif
 }
@@ -1905,6 +1904,8 @@ void CameraTest::update()
 			toCameraPos.z = stonePos[0].z;
 
 			to_m_focusY = -0.3;
+
+			bMouseL = false;
 		}
 	}
 
