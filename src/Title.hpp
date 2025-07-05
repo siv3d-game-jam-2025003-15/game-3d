@@ -49,7 +49,7 @@ private:
 	float exitColor = minColor;
 
 	// カーソルの位置
-	int cursorIndex = 0;
+	int cursorIndex = -1;
 
 	// 
 	bool KeyMode = false;

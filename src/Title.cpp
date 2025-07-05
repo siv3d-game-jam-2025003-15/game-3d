@@ -51,12 +51,20 @@ void Title::update()
 	if (KeyW.down() || xboxController.leftThumbY > 0.1 || xboxController.buttonUp.down())
 	{
 		KeyMode = true;
-		cursorIndex = 0;
+		cursorIndex--;
+		if (cursorIndex < 0)
+		{
+			cursorIndex = 0;
+		}
 	}
 	else if (KeyS.down() || xboxController.leftThumbY < -0.1 || xboxController.buttonDown.down())
 	{
 		KeyMode = true;
-		cursorIndex = 1;
+		cursorIndex++;
+		if (cursorIndex >= 1)
+		{
+			cursorIndex = 1;
+		}
 	}
 
 	if(KeyMode)
