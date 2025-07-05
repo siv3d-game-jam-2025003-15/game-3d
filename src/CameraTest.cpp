@@ -2890,6 +2890,8 @@ void CameraTest::viewInventory()
 	{
 		xboxControllerDownY = true;
 
+		KeyMode = true;
+
 		selectItem += 4;
 		if (selectItem > items.size() - 1)
 		{
@@ -2911,6 +2913,8 @@ void CameraTest::viewInventory()
 	{
 		xboxControllerDownY = true;
 
+		KeyMode = true;
+
 		selectItem -= 4;
 		if (selectItem < 0)
 		{
@@ -2918,9 +2922,10 @@ void CameraTest::viewInventory()
 		}
 	}
 
-
-
-
+	if (items.size() == 0)
+	{
+		selectItem = -1;
+	}
 
 	// マウスを動かしたかどうか
 	Vec2 currentCursorPos = Cursor::PosF();
