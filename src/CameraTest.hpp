@@ -744,7 +744,8 @@ private:
 	// ビックリマーク
 	Vec3 markPosition{ 0.0, 0.0, 0.0 };
 //	float markSize = 0.3;
-	float markSize = 0.2;
+//	float markSize = 0.2;
+	float markSize = 0.1;
 	float markHigh = 0.2;
 
 	// 取得しているアイテム一覧
