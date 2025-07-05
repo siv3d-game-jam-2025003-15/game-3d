@@ -38,8 +38,6 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 	Vec3 focus = camera.getFocusPosition();
 	double distance = focus.distanceFrom(objPos);
 
-	//Print << U"focusDistance=" << focusDistance;
-
 	if (
 		screenPos.x >= (WINDOW_WIDTH / 2 - focusWidth)
 		&& screenPos.x <= (WINDOW_WIDTH / 2 + focusWidth)
@@ -53,13 +51,14 @@ std::tuple<bool, bool, int, bool> ObjectController::update(
 		Print << U"オブジェクトが画面の中心にある";
 		Print << U"左クリックで取る";
 		Print << U"エンターキーで取る";
+		Print << U"screenPos=" << screenPos;
 #endif
 		isLockon = true;
 
 		MarkPosition = objPos;
 
 		// マウスの当たり判定の描画
-		Box box = Box{ objPos, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
+	//	Box box = Box{ objPos, 0.3 }.drawFrame(ColorF{ 1, 1, 1, 1 });
 
 		if (KeyEnter.pressed() && bHave
 		|| (

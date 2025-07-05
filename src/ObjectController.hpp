@@ -17,6 +17,7 @@ public:
 	);
 
 private:
+
 	bool m_isHave;
 
 	void playSE(String SE);

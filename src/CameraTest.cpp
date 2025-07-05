@@ -43,14 +43,14 @@ CameraTest::CameraTest(const InitData& init)
 	//	messageRead.push_back(-1);
 	//}
 
-	// ドアの回転
+	// 扉の回転
 	//toDoorRotY = doorRot.y;
 	
-	// ドアの移動（横に開ける）
+	// 扉の移動（横に開ける）
 	toDoorPosX = doorPos.x;
 	toDoor2PosX = door2Pos.x;
 
-	// ドアが開いているかどうか
+	// 扉が開いているかどうか
 	bDoorOpen[0] = false;	// 最初の部屋
 	bDoorOpen[1] = false;	// 左下の部屋
 	bDoorOpen[2] = true;	// 奥の部屋
@@ -1903,13 +1903,13 @@ void CameraTest::update()
 	Graphics3D::SetCameraTransform(camera);
 
 
-	// ドアの回転
+	// 扉の回転
 //	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth);
-//	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth/10);	// ドアはゆっくり開ける
+//	doorRot.y = Math::Lerp(doorRot.y, toDoorRotY, smooth/10);	// 扉はゆっくり開ける
 
-	// ドアの移動
-	doorPos.x = Math::Lerp(doorPos.x, toDoorPosX, smooth / 10);	// ドアはゆっくり開ける
-	door2Pos.x = Math::Lerp(door2Pos.x, toDoor2PosX, smooth / 10);	// ドアはゆっくり開ける
+	// 扉の移動
+	doorPos.x = Math::Lerp(doorPos.x, toDoorPosX, smooth / 10);	// 扉はゆっくり開ける
+	door2Pos.x = Math::Lerp(door2Pos.x, toDoor2PosX, smooth / 10);	// 扉はゆっくり開ける
 
 
 
@@ -2878,7 +2878,7 @@ void CameraTest::viewInventory()
 			{
 				if (bDoorLockon)
 				{
-					// ドアの前で使う
+					// 扉の前で使う
 					message = 69;
 					bRustedKeyUse = true;
 				}
@@ -2957,9 +2957,9 @@ void CameraTest::viewInventory()
 		{
 			if (bDoorLockon)
 			{
-				// ドアの前で使う
+				// 扉の前で使う
 
-				// ドアを開いた
+				// 扉を開いた
 				bDoorOpen[0] = true;
 				toDoorPosX = doorPos.x + 1.49;	// 移動で開ける
 				
@@ -2980,9 +2980,9 @@ void CameraTest::viewInventory()
 		{
 			if (bDoor2Lockon)
 			{
-				// ドア２の前で使う
+				// 扉２の前で使う
 
-				// ドア２を開いた
+				// 扉２を開いた
 				bDoorOpen[1] = true;
 				toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
 
@@ -2998,7 +2998,7 @@ void CameraTest::viewInventory()
 		//{
 		//	if (bDoor3Lockon)
 		//	{
-		//		// ドア３の前で使う
+		//		// 扉３の前で使う
 
 		//		// SEを鳴らす
 		//		playSEandBGMStop(U"WoodDoor_Close");
@@ -3115,7 +3115,7 @@ void CameraTest::viewModel()
 		model->draw();
 	}
 
-	// ドア
+	// 扉
 	{
 		Transformer3D t{
 			Mat4x4::RotateY(doorRot.y).scaled(roomScale).translated(doorPos)
@@ -3123,7 +3123,7 @@ void CameraTest::viewModel()
 		modelDoor->draw();
 	}
 
-	// ドア２
+	// 扉２
 	{
 		Transformer3D t{
 			Mat4x4::RotateY(door2Rot.y).scaled(roomScale).translated(door2Pos)
@@ -3285,7 +3285,7 @@ void CameraTest::viewModel()
 	if (bLockon)
 	{
 		// 少し上にする
-		markPosition.y += markHigh;
+	//	markPosition.y += markHigh;	// 近づきすぎると表示されなくなるのでやめる
 
 		// 3Dのビックリマーク
 		//Transformer3D t{
@@ -3318,8 +3318,11 @@ void CameraTest::lockon()
 	// パン
 	if (!bLockon)
 	{
+		Vec3 temp = breadPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = breadController.update(
-			breadPos,
+			temp,
 			camera,
 			curCameraPosition, 
 		//	ray,
@@ -3358,7 +3361,7 @@ void CameraTest::lockon()
 		// 座標の調整
 		Vec3 temp = rustedKeyPos;
 		temp.x -= 0.12;
-		temp.y += 0.2;
+		temp.y += 0.2+ markHigh;
 		temp.z += 0.0;
 
 		auto [a, b, c, d] = rustedKeyController.update(
@@ -3397,8 +3400,11 @@ void CameraTest::lockon()
 	// 手記
 	if (!bLockon && bMemoHave == false && bTutorial == false)
 	{
+		Vec3 temp = memoPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = memoController.update(
-			memoPos,
+			temp,
 			camera,
 			curCameraPosition,
 			//	ray, 
@@ -3434,8 +3440,11 @@ void CameraTest::lockon()
 	// ハンガー
 	if (!bLockon && bHangerHave == false && bTutorial == false)
 	{
+		Vec3 temp = hangerPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = hangerController.update(
-			hangerPos,
+			temp,
 			camera,
 			curCameraPosition,
 			//	ray,
@@ -3471,8 +3480,11 @@ void CameraTest::lockon()
 	// 鉄製の鍵
 	if (!bLockon && bIronKeyHave == false)
 	{
+		Vec3 temp = IronkeyPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = ironkeyController.update(
-			IronkeyPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -3505,8 +3517,11 @@ void CameraTest::lockon()
 	// 火かき棒
 	if (!bLockon)
 	{
+		Vec3 temp = pokerPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = pokerController.update(
-			pokerPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray, 
@@ -3537,15 +3552,30 @@ void CameraTest::lockon()
 		}
 	}
 
-	// ドア
+	// 扉
 	if (!bLockon && bDoorOpen[0] == false)
 	{
 		// 座標の調整
 		Vec3 temp = doorPos;
 		//temp.x += 0.70;	// 原点が端っこの時
 		temp.x += 0.0;
-		temp.y += 1.2;
+		temp.y += 1.2+ markHigh;
 		temp.z += 0.2;
+
+		Print << U"扉";
+
+		Vec3 screenPos = camera.worldToScreenPoint(temp);
+		Vec3 focus = camera.getFocusPosition();
+		double distance = focus.distanceFrom(temp);
+
+		Print << U"screenPos=" << screenPos;
+		Print << U"focus=" << focus;
+		Print << U"distance=" << distance;
+
+		Print << U"(WINDOW_WIDTH / 2 - focusWidth)=" << (WINDOW_WIDTH / 2 - focusWidth);
+		Print << U"(WINDOW_WIDTH / 2 + focusWidth)=" << (WINDOW_WIDTH / 2 + focusWidth);
+		Print << U"(WINDOW_HEIGHT / 2 - focusHeight)=" << (WINDOW_HEIGHT / 2 - focusHeight);
+		Print << U"(WINDOW_HEIGHT / 2 + focusHeight)=" << (WINDOW_HEIGHT / 2 + focusHeight);
 
 		auto [a, b, c, d] = doorController.update(
 			temp,
@@ -3556,10 +3586,13 @@ void CameraTest::lockon()
 			-1,
 			false
 		);
+
+		Print << U"扉END";
+
 		// TODO インベントリから開ける
 		//if (a == true && bDoorOpen[0] == false && bWireKey)
 		//{
-		//	// ドアを開いた
+		//	// 扉を開いた
 		//	bDoorOpen[0] = true;
 		////	toDoorRotY = 270_deg;	// 回転で開ける
 		////	toDoorPosX = -0.11;	// 移動で開ける
@@ -3597,13 +3630,13 @@ void CameraTest::lockon()
 		bDoorLockon = false;
 	}
 
-	// ドア２
+	// 扉２
 	if (!bLockon && bDoorOpen[1] == false)
 	{
 		// 座標の調整
 		Vec3 temp = door2Pos;
 		temp.x += 0.0;
-		temp.y += 1.2;
+		temp.y += 1.2 + markHigh;
 		temp.z -= 0.2;
 
 		auto [a, b, c, d] = door2Controller.update(
@@ -3618,7 +3651,7 @@ void CameraTest::lockon()
 		// TODO インベントリから開ける
 		//if (a == true && bDoorOpen[1] == false)
 		//{
-		//	// ドアを開いた
+		//	// 扉を開いた
 		//	bDoorOpen[1] = true;
 		//	toDoor2PosX = door2Pos.x + 1.49;	// 移動で開ける
 		//	bgmStopCount = c;
@@ -3645,11 +3678,14 @@ void CameraTest::lockon()
 		bDoor2Lockon = false;
 	}
 
-	// ドア３（木のドア）
+	// 扉３（木の扉）
 	if (!bLockon)
 	{
+		Vec3 temp = door3Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = door3Controller.update(
-			door3Pos, 
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -3719,11 +3755,14 @@ void CameraTest::lockon()
 		bDoor3Lockon = false;
 	}
 
-	// ドア４（右上の部屋）
+	// 扉４（右上の部屋）
 	if (!bLockon)
 	{
+		Vec3 temp = door4Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = door2Controller.update(
-			door4Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			//	ray,
@@ -3747,8 +3786,11 @@ void CameraTest::lockon()
 	// 羊皮紙
 	if (!bLockon)
 	{
+		Vec3 temp = parchmentPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = parchmentController.update(
-			parchmentPos,
+			temp,
 			camera,
 			curCameraPosition, 
 		//	ray,
@@ -3782,8 +3824,11 @@ void CameraTest::lockon()
 	// トイレ２（左上の部屋）
 	if (!bLockon)
 	{
+		Vec3 temp = toilet2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = toiletController.update(
-			toilet2Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			//	ray,
@@ -3816,9 +3861,12 @@ void CameraTest::lockon()
 	// 暖炉（火が弱い）
 	if (!bLockon && bFireplaceStrong == false)
 	{
+		Vec3 temp = fireplacePos;
+		temp.y += markHigh;
+
 		//	auto [a, b, c, d] = fireplaceController.update(fireplacePos, camera, m_eyePosition, ray, MarkPosition, 0, bPokerHave);
 		auto [a, b, c, d] = fireplaceController.update(
-			fireplacePos,
+			temp,
 			camera,
 			curCameraPosition,
 			//	ray,
@@ -3856,8 +3904,11 @@ void CameraTest::lockon()
 	// 汚れた布
 	if (!bLockon && bDirtyClothHave == false)
 	{
+		Vec3 temp = dirtyClothPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = dirtyClothController.update(
-			dirtyClothPos,
+			temp,
 			camera,
 			curCameraPosition,
 			//	ray, 
@@ -3893,7 +3944,7 @@ void CameraTest::lockon()
 	{
 		Vec3 temp = drawerPos[0];
 		temp.x += 0.0;
-		temp.y += 0.4;
+		temp.y += 0.4 + markHigh;
 	//	temp.z -= 0.3;
 		temp.z -= 0.5;
 
@@ -3969,6 +4020,7 @@ void CameraTest::lockon()
 	{
 		Vec3 temp = stonePos[0];
 		temp.x -= 0.15;
+		temp.y += markHigh;
 		//	temp.y += 0.5;
 		//	temp.z -= 0.3;
 
@@ -4037,8 +4089,11 @@ void CameraTest::lockon()
 	// 自分のベッド
 	if (!bLockon)
 	{
+		Vec3 temp = bedPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = bedController.update(
-			bedPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -4062,8 +4117,11 @@ void CameraTest::lockon()
 	// 他人のベッド2
 	if (!bLockon)
 	{
+		Vec3 temp = bed2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = bed2Controller.update(
-			bed2Pos,
+			temp,
 			camera,
 			curCameraPosition, 
 		//	ray,
@@ -4087,8 +4145,11 @@ void CameraTest::lockon()
 	// 他人のベッド3
 	if (!bLockon)
 	{
+		Vec3 temp = bed3Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = bed3Controller.update(
-			bed3Pos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray, 
@@ -4112,8 +4173,11 @@ void CameraTest::lockon()
 	// 他人のベッド4
 	if (!bLockon)
 	{
+		Vec3 temp = bed4Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = bed4Controller.update(
-			bed4Pos, 
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -4137,8 +4201,11 @@ void CameraTest::lockon()
 	// 古いベッド
 	if (!bLockon)
 	{
+		Vec3 temp = oldBedPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = oldBedController.update(
-			oldBedPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -4162,8 +4229,11 @@ void CameraTest::lockon()
 	// トイレ
 	if (!bLockon)
 	{
+		Vec3 temp = toiletPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = toiletController.update(
-			toiletPos, 
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -4187,8 +4257,11 @@ void CameraTest::lockon()
 	// 棚
 	if (!bLockon)
 	{
+		Vec3 temp = shelfPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = shelfController.update(
-			shelfPos,
+			temp,
 			camera, 
 			curCameraPosition,
 		//	ray,
@@ -4270,8 +4343,11 @@ void CameraTest::lockon()
 	// 樽
 	if (!bLockon)
 	{
+		Vec3 temp = barrelPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = barrelController.update(
-			barrelPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -4295,8 +4371,11 @@ void CameraTest::lockon()
 	// 樽2
 	if (!bLockon)
 	{
+		Vec3 temp = barrel2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = barrelController.update(
-			barrel2Pos,
+			temp,
 			camera, 
 			curCameraPosition,
 		//	ray,
@@ -4320,8 +4399,11 @@ void CameraTest::lockon()
 	// 樽3
 	if (!bLockon)
 	{
+		Vec3 temp = barrel3Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = barrelController.update(
-			barrel3Pos,
+			temp,
 			camera, 
 			curCameraPosition,
 		//	ray,
@@ -4356,8 +4438,11 @@ void CameraTest::lockon()
 	// 教団の紋章
 	if (!bLockon)
 	{
+		Vec3 temp = emblemPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = barrelController.update(
-			emblemPos,
+			temp,
 			camera,
 			curCameraPosition,
 		//	ray,
@@ -4381,8 +4466,11 @@ void CameraTest::lockon()
 	// 詰所の壁際の椅子1
 	if (!bLockon)
 	{
+		Vec3 temp = chairPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			chairPos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4405,8 +4493,11 @@ void CameraTest::lockon()
 	// 詰所の壁際の椅子2
 	if (!bLockon)
 	{
+		Vec3 temp = chair2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			chair2Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4429,8 +4520,11 @@ void CameraTest::lockon()
 	// 詰所の壁際の椅子3
 	if (!bLockon)
 	{
+		Vec3 temp = chair3Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			chair3Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4453,8 +4547,11 @@ void CameraTest::lockon()
 	// 詰所の壁際の椅子4
 	if (!bLockon)
 	{
+		Vec3 temp = chair4Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			chair4Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4477,8 +4574,11 @@ void CameraTest::lockon()
 	// 詰所のテーブル
 	if (!bLockon)
 	{
+		Vec3 temp = tablePos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			tablePos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4501,8 +4601,11 @@ void CameraTest::lockon()
 	// 木箱
 	if (!bLockon)
 	{
+		Vec3 temp = woodenBoxPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			woodenBoxPos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4525,8 +4628,11 @@ void CameraTest::lockon()
 	// 木箱2
 	if (!bLockon)
 	{
+		Vec3 temp = woodenBox2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			woodenBox2Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4549,8 +4655,11 @@ void CameraTest::lockon()
 	// 木箱3
 	if (!bLockon)
 	{
+		Vec3 temp = woodenBox3Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = chairController.update(
-			woodenBox3Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4573,8 +4682,11 @@ void CameraTest::lockon()
 	// 手錠1
 	if (!bLockon)
 	{
+		Vec3 temp = handcuffsPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = handcuffsController.update(
-			handcuffsPos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4597,8 +4709,11 @@ void CameraTest::lockon()
 	// 手錠2
 	if (!bLockon)
 	{
+		Vec3 temp = handcuffs2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = handcuffsController.update(
-			handcuffs2Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4621,8 +4736,11 @@ void CameraTest::lockon()
 	// 絵画
 	if (!bLockon)
 	{
+		Vec3 temp = paintingPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = paintingController.update(
-			paintingPos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4645,8 +4763,11 @@ void CameraTest::lockon()
 	// 小さい棚
 	if (!bLockon)
 	{
+		Vec3 temp = smallShelfPos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = smallShelfController.update(
-			smallShelfPos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4669,8 +4790,11 @@ void CameraTest::lockon()
 	// 小さい棚2
 	if (!bLockon)
 	{
+		Vec3 temp = smallShelf2Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = smallShelfController.update(
-			smallShelf2Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
@@ -4693,8 +4817,11 @@ void CameraTest::lockon()
 	// 小さい棚3
 	if (!bLockon)
 	{
+		Vec3 temp = smallShelf3Pos;
+		temp.y += markHigh;
+
 		auto [a, b, c, d] = smallShelfController.update(
-			smallShelf3Pos,
+			temp,
 			camera,
 			curCameraPosition,
 			markPosition,
