@@ -46,7 +46,10 @@ void Main()
 	AudioAsset::Register(U"牢屋の扉を開ける", U"assets/sound/se/牢屋の扉を開ける.wav");
 //	AudioAsset::Register(U"Cancellation", U"assets/sound/se/SE_Cancellation01.mp3");
 	AudioAsset::Register(U"IronDoor_Close", U"assets/sound/se/SE_IronDoor_Close01.mp3");
+	
+	// SE 木製の扉
 	AudioAsset::Register(U"WoodDoor_Close", U"assets/sound/se/SE_WoodDoor_Close01.mp3");
+	AudioAsset::Register(U"WoodDoor_open01", U"assets/sound/se/SE_WoodDoor_open01.mp3");
 
 	// SE 石板
 //	AudioAsset::Register(U"Stone", U"assets/sound/se/SE_Stone01.mp3");

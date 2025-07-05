@@ -3978,8 +3978,9 @@ void CameraTest::lockon()
 				// メッセージを消す
 				message = 3;
 
-				playSEandBGMStop(U"WoodDoor_Close");
-
+			//	playSEandBGMStop(U"WoodDoor_Close");
+				playSEandBGMStop(U"WoodDoor_open01");
+				
 			//	inventoryOnOff();
 
 				// ゲームクリア（仮）
