@@ -1612,7 +1612,8 @@ void CameraTest::update()
 				//	for (int i = 0; i < 6; i++)
 					for (int i = 0; i < 5; i++)
 					{
-						toDrawerPos[i + 1].z = drawerPos[i+1].z;
+					//	toDrawerPos[i + 1].z = drawerPos[i + 1].z;	// これだと開けっ放しになる
+						toDrawerPos[i + 1].z = 1.49;
 						drawerPull[i] = false;
 					}
 
