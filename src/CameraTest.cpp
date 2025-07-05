@@ -919,7 +919,12 @@ void CameraTest::update()
 				{
 					// 引き出しを開け閉めしていない時だけ操作可能
 
-					if (KeyA.down())
+					if (-0.1 < xboxController.leftThumbX && xboxController.leftThumbX < 0.1)
+					{
+						xboxControllerDown = false;
+					}
+
+					if (KeyA.down() || xboxController.buttonLeft.down())
 					{
 						drawerIndex--;
 						if (drawerIndex < 0)
@@ -928,8 +933,34 @@ void CameraTest::update()
 						}
 						bDrawerNone = false;
 					}
-					if (KeyD.down())
+					if (xboxController.leftThumbX < -0.1 && xboxControllerDown == false)
 					{
+						xboxControllerDown = true;
+
+						// TODO 共通化
+						drawerIndex--;
+						if (drawerIndex < 0)
+						{
+							drawerIndex = 0;
+						}
+						bDrawerNone = false;
+					}
+
+					if (KeyD.down() || xboxController.buttonRight.down())
+					{
+						drawerIndex++;
+						if (drawerIndex > 5)
+						{
+							drawerIndex = 5;
+						}
+
+						bDrawerNone = false;
+					}
+					if (xboxController.leftThumbX > 0.1 && xboxControllerDown == false)
+					{
+						xboxControllerDown = true;
+
+						// TODO 共通化
 						drawerIndex++;
 						if (drawerIndex > 5)
 						{
@@ -958,7 +989,12 @@ void CameraTest::update()
 
 				if (bStonePullNow == false && bStoneclear == false)
 				{
-					if (KeyA.down())
+					if (-0.1 < xboxController.leftThumbX && xboxController.leftThumbX < 0.1)
+					{
+						xboxControllerDown = false;
+					}
+
+					if (KeyA.down() || xboxController.buttonLeft.down())
 					{
 						stoneIndex--;
 						if (stoneIndex < 0)
@@ -966,8 +1002,31 @@ void CameraTest::update()
 							stoneIndex = 0;
 						}
 					}
-					if (KeyD.down())
+					if (xboxController.leftThumbX < -0.1 && xboxControllerDown == false)
 					{
+						xboxControllerDown = true;
+
+						// TODO 共通化
+						stoneIndex--;
+						if (stoneIndex < 0)
+						{
+							stoneIndex = 0;
+						}
+					}
+
+					if (KeyD.down() || xboxController.buttonRight.down())
+					{
+						stoneIndex++;
+						if (stoneIndex > 4)
+						{
+							stoneIndex = 4;
+						}
+					}
+					if (xboxController.leftThumbX > 0.1 && xboxControllerDown == false)
+					{
+						xboxControllerDown = true;
+
+						// TODO 共通化
 						stoneIndex++;
 						if (stoneIndex > 4)
 						{
@@ -1581,130 +1640,133 @@ void CameraTest::update()
 	// 引き出しモード
 	if (bDrawerMode && bInventory == false)
 	{
-		if (MouseL.up())
+		if (MouseL.up() || xboxController.buttonA.up())
 		{
 			// いっかいマウスを離してから有効にする
 			bMouseL = true;
 		}
 
-		if (MouseL.down() && bMouseL)
+		if (MouseL.down() || xboxController.buttonA.down())
 		{
-			// クリックした
-			if (priorityMessageCount > 0)
+			if (bMouseL)
 			{
-				priorityMessageCount = 0;
+				// クリックした
+				if (priorityMessageCount > 0)
+				{
+					priorityMessageCount = 0;
 
-			}
-			else if (drawerIndex == 5)
-			{
-				// 引き出しモード解除
-				bDrawerMode = false;
+				}
+				else if (drawerIndex == 5)
+				{
+					// 引き出しモード解除
+					bDrawerMode = false;
 
-				toCameraPos.x = drawerPos[0].x;
-				toCameraPos.y = 1.5;
-				toCameraPos.z = drawerPos[0].z - 2.0;
+					toCameraPos.x = drawerPos[0].x;
+					toCameraPos.y = 1.5;
+					toCameraPos.z = drawerPos[0].z - 2.0;
 
-				to_m_focusY = -0.3;
+					to_m_focusY = -0.3;
 
-			//	if (bDrawerClear == false)
-			//	{
-					// 各引き出しを元の位置に戻す
-				//	for (int i = 0; i < 6; i++)
+					//	if (bDrawerClear == false)
+					//	{
+							// 各引き出しを元の位置に戻す
+						//	for (int i = 0; i < 6; i++)
 					for (int i = 0; i < 5; i++)
 					{
-					//	toDrawerPos[i + 1].z = drawerPos[i + 1].z;	// これだと開けっ放しになる
+						//	toDrawerPos[i + 1].z = drawerPos[i + 1].z;	// これだと開けっ放しになる
 						toDrawerPos[i + 1].z = 1.49;
 						drawerPull[i] = false;
 					}
 
 					drawerCounter = 0;
 					drawerOrder = 0;
-			//	}
+					//	}
 
-				bMouseL = false;
-			}
-			else if (drawerPull[drawerIndex] == false)
-			{
-				//if (drawerIndex == 0)
-				//{
-				//	// 一番上の引き出し
-				////	if (drawerOrder == 51432)
-				//	if (bDrawerOpen == true)
-				//	{
-				//		// 開けた（クリア）
-				//		toDrawerPos[drawerIndex + 1].z -= 0.2;
-				//		drawerPull[drawerIndex] = true;
-
-				//	//	items << GoldKey;
-
-				//		bDrawerClear = true;
-
-				//		playSEandBGMStop(U"Item");
-
-				//		// ゲーム画面に戻るためのカウントとして使う
-				//		drawerPullCount = 1.0;
-
-				//		bMouseL = false;
-				//	}
-				//	else
-				//	{
-				//		// しまっている
-				//		bDrawerNone = bDrawerNone ? false : true;
-				//	}
-				//}
-				//else
+					bMouseL = false;
+				}
+				else if (drawerPull[drawerIndex] == false)
 				{
-					// それ以外の引き出し
-					toDrawerPos[drawerIndex + 1].z -= 0.2;
-					drawerPull[drawerIndex] = true;
-					drawerPullCount = 1.0;
-					bDrawerPullNow = true;
+					//if (drawerIndex == 0)
+					//{
+					//	// 一番上の引き出し
+					////	if (drawerOrder == 51432)
+					//	if (bDrawerOpen == true)
+					//	{
+					//		// 開けた（クリア）
+					//		toDrawerPos[drawerIndex + 1].z -= 0.2;
+					//		drawerPull[drawerIndex] = true;
 
-					if (drawerIndex == 1)
+					//	//	items << GoldKey;
+
+					//		bDrawerClear = true;
+
+					//		playSEandBGMStop(U"Item");
+
+					//		// ゲーム画面に戻るためのカウントとして使う
+					//		drawerPullCount = 1.0;
+
+					//		bMouseL = false;
+					//	}
+					//	else
+					//	{
+					//		// しまっている
+					//		bDrawerNone = bDrawerNone ? false : true;
+					//	}
+					//}
+					//else
 					{
-						// いったんリセット
-						drawerOrder = 0;
-						drawerCounter = 0;
-					}
+						// それ以外の引き出し
+						toDrawerPos[drawerIndex + 1].z -= 0.2;
+						drawerPull[drawerIndex] = true;
+						drawerPullCount = 1.0;
+						bDrawerPullNow = true;
 
-					if (lastDrawerIndex != drawerIndex)
-					{
-						drawerOrder += (drawerIndex+1) * std::pow(10, drawerCounter);
-						drawerCounter++;
-
-					//	if (drawerIndex == 5 && drawerOrder == 51432 && bDrawerOpen == false)
-						if (drawerIndex == 4 && drawerOrder == 51432 && bDrawerOpen == false)
+						if (drawerIndex == 1)
 						{
-						//	playSE(U"牢屋の扉を開ける");
-							bDrawerOpen = true;
+							// いったんリセット
+							drawerOrder = 0;
+							drawerCounter = 0;
+						}
 
-							// 開けた（クリア）
-						//	toDrawerPos[drawerIndex + 1].z -= 0.2;
-						//	drawerPull[drawerIndex] = true;
+						if (lastDrawerIndex != drawerIndex)
+						{
+							drawerOrder += (drawerIndex + 1) * std::pow(10, drawerCounter);
+							drawerCounter++;
 
-							bDrawerClear = true;
+							//	if (drawerIndex == 5 && drawerOrder == 51432 && bDrawerOpen == false)
+							if (drawerIndex == 4 && drawerOrder == 51432 && bDrawerOpen == false)
+							{
+								//	playSE(U"牢屋の扉を開ける");
+								bDrawerOpen = true;
 
-							playSEandBGMStop(U"Item");
+								// 開けた（クリア）
+							//	toDrawerPos[drawerIndex + 1].z -= 0.2;
+							//	drawerPull[drawerIndex] = true;
 
-							// ゲーム画面に戻るためのカウントとして使う
-							drawerPullCount = 1.0;
+								bDrawerClear = true;
 
-							bMouseL = false;
+								playSEandBGMStop(U"Item");
 
-							priorityMessage = 89;
-							priorityMessageCount = priorityMessageCountMax;
+								// ゲーム画面に戻るためのカウントとして使う
+								drawerPullCount = 1.0;
+
+								bMouseL = false;
+
+								priorityMessage = 89;
+								priorityMessageCount = priorityMessageCountMax;
+							}
+							else
+							{
+								playSE(U"drawer_open");
+							}
 						}
 						else
 						{
 							playSE(U"drawer_open");
 						}
-					}
-					else
-					{
-						playSE(U"drawer_open");
-					}
 
-					lastDrawerIndex = drawerIndex;
+						lastDrawerIndex = drawerIndex;
+					}
 				}
 			}
 		}
@@ -1755,80 +1817,83 @@ void CameraTest::update()
 	// 石板モード
 	if (bStoneMode && bInventory == false)
 	{
-		if (MouseL.up())
+		if (MouseL.up() || xboxController.buttonA.up())
 		{
 			// いっかいマウスを離してから有効にする
 			bMouseL = true;
 		}
 
-		if (MouseL.down() && bMouseL)
+		if (MouseL.down() || xboxController.buttonA.down())
 		{
-			// クリックした
-			if (priorityMessageCount > 0)
+			if (bMouseL)
 			{
-				priorityMessageCount = 0;
-
-			}
-			else if (stoneIndex == 4)	// 戻るを選択
-			{
-				// 石板モード解除
-				bStoneMode = false;
-
-				toCameraPos.x = stonePos[0].x - 2.0;
-				toCameraPos.y = 1.5;
-				toCameraPos.z = stonePos[0].z;
-
-				to_m_focusY = -0.3;
-
-				if (bStoneclear == false)
+				// クリックした
+				if (priorityMessageCount > 0)
 				{
-					for (int i = 0; i < 4; i++)
+					priorityMessageCount = 0;
+
+				}
+				else if (stoneIndex == 4)	// 戻るを選択
+				{
+					// 石板モード解除
+					bStoneMode = false;
+
+					toCameraPos.x = stonePos[0].x - 2.0;
+					toCameraPos.y = 1.5;
+					toCameraPos.z = stonePos[0].z;
+
+					to_m_focusY = -0.3;
+
+					if (bStoneclear == false)
 					{
-						toStonePos[i + 1].x = 20.18;
-						stonePull[i] = false;
+						for (int i = 0; i < 4; i++)
+						{
+							toStonePos[i + 1].x = 20.18;
+							stonePull[i] = false;
+						}
+
+						stoneCounter = 0;
+						stoneOrder = 0;
 					}
 
-					stoneCounter = 0;
-					stoneOrder = 0;
-				}
-
-				bMouseL = false;
-			}
-			else if (stonePull[stoneIndex] == false)
-			{
-				// 石板の移動
-				toStonePos[stoneIndex + 1].x += 0.02;
-				stonePull[stoneIndex] = true;
-
-				stoneOrder += (stoneIndex + 1) * std::pow(10, stoneCounter);
-				stoneCounter++;
-
-				bStonePullNow = true;
-
-				// 最後の石板
-				if (stoneOrder == 4132)
-				{
-					// 石板クリア
-					
-				//	items << GoldKey;
-
-				//	bGoldKeyHave = true;
-
-					bStoneclear = true;
-
-					playSEandBGMStop(U"Item");
-
-					stonePushCount = 1.0;
-
 					bMouseL = false;
-
-					priorityMessage = 91;
-					priorityMessageCount = priorityMessageCountMax;
 				}
-				else
+				else if (stonePull[stoneIndex] == false)
 				{
-					// それ以外の石板
-					playSE(U"Stone");
+					// 石板の移動
+					toStonePos[stoneIndex + 1].x += 0.02;
+					stonePull[stoneIndex] = true;
+
+					stoneOrder += (stoneIndex + 1) * std::pow(10, stoneCounter);
+					stoneCounter++;
+
+					bStonePullNow = true;
+
+					// 最後の石板
+					if (stoneOrder == 4132)
+					{
+						// 石板クリア
+
+					//	items << GoldKey;
+
+					//	bGoldKeyHave = true;
+
+						bStoneclear = true;
+
+						playSEandBGMStop(U"Item");
+
+						stonePushCount = 1.0;
+
+						bMouseL = false;
+
+						priorityMessage = 91;
+						priorityMessageCount = priorityMessageCountMax;
+					}
+					else
+					{
+						// それ以外の石板
+						playSE(U"Stone");
+					}
 				}
 			}
 		}
@@ -4035,7 +4100,8 @@ void CameraTest::lockon()
 	{
 		Vec3 temp = stonePos[0];
 		temp.x -= 0.22;
-		temp.y += markHigh;
+		//temp.y += markHigh;
+		temp.y += 0.1;
 		//	temp.y += 0.5;
 		//	temp.z -= 0.3;
 

@@ -1613,4 +1613,6 @@ private:
 	int lastMessage = 0;
 
 	float xboxCameraSpeed = 2.0;
+
+	bool xboxControllerDown = false;
 };
