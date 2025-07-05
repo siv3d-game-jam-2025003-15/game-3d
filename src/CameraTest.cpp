@@ -426,29 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-		painting2Pos.x += 0.01;
+		boardPos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-		painting2Pos.x -= 0.01;
+		boardPos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-		painting2Pos.y += 0.01;
+		boardPos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-		painting2Pos.y -= 0.01;
+		boardPos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-		painting2Pos.z += 0.01;
+		boardPos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-		painting2Pos.z -= 0.01;
+		boardPos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -548,7 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	Print << U"painting2Pos=" << painting2Pos;
+	Print << U"boardPos=" << boardPos;
 
 #endif
 }
@@ -5039,6 +5039,33 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 74;
+			priorityMessageCount = 0;
+		}
+	}
+
+	//  脱出の扉の左にボード
+	if (!bLockon)
+	{
+		Vec3 temp = boardPos;
+		temp.y += markHigh;
+
+		auto [a, b, c, d] = boardController.update(
+			temp,
+			camera,
+			curCameraPosition,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			bookingMessage = 93;
+		}
+		if (d)
+		{
+			message = 93;
 			priorityMessageCount = 0;
 		}
 	}

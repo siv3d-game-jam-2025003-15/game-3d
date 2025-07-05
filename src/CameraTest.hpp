@@ -555,6 +555,9 @@ private:
 	Vec3 smallShelf2Pos = { 12.6, 2, -5.17 };
 	Vec3 smallShelf3Pos = { 18.81, 2.05, -7.19 };
 
+	// 脱出の扉の左にボード
+	Vec3 boardPos = {20.11, 1.44, 0.29};
+
 	// オブジェクトクラス
 	ObjectController breadController;
 	ObjectController rustedKeyController;
@@ -584,6 +587,7 @@ private:
 	ObjectController handcuffsController;
 	ObjectController paintingController;
 	ObjectController smallShelfController;
+	ObjectController boardController;
 
 	double GlobalAmbientColorR = 0.4;
 	double GlobalAmbientColorG = 0.4;
@@ -1316,6 +1320,11 @@ private:
 		// 92 暖炉上の絵画
 		U"不気味な絵画だ……何を描いているのか、判然としない。",
 		U"特に変わった点はないようだ。",
+		U"",
+
+		// 93 脱出の扉の左にボード
+		U"知と象徴、両輪の理解なしに、この扉を越えること能わず。",
+		U"",
 		U"",
 	};
 
