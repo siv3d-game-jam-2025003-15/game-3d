@@ -913,40 +913,42 @@ void CameraTest::update()
 			//	}
 			//}
 
-			if (bDrawerPullNow == false && bDrawerClear == false)
+			if (priorityMessageCount <= 0)
 			{
-				// 引き出しを開け閉めしていない時だけ操作可能
-
-				if (KeyA.down())
+				if (bDrawerPullNow == false && bDrawerClear == false)
 				{
-					drawerIndex--;
-					if (drawerIndex < 0)
+					// 引き出しを開け閉めしていない時だけ操作可能
+
+					if (KeyA.down())
 					{
-						drawerIndex = 0;
+						drawerIndex--;
+						if (drawerIndex < 0)
+						{
+							drawerIndex = 0;
+						}
+						bDrawerNone = false;
 					}
-					bDrawerNone = false;
+					if (KeyD.down())
+					{
+						drawerIndex++;
+						if (drawerIndex > 5)
+						{
+							drawerIndex = 5;
+						}
+
+						bDrawerNone = false;
+					}
 				}
-				if (KeyD.down())
-				{
-					drawerIndex++;
-					if (drawerIndex > 5)
-					{
-						drawerIndex = 5;
-					}
 
-					bDrawerNone = false;
+				//	message = 38 + drawerIndex;
+				message = 39 + drawerIndex;
+
+				// 「無」をクリックした
+				if (bDrawerNone)
+				{
+					message = 68;
 				}
 			}
-
-		//	message = 38 + drawerIndex;
-			message = 39 + drawerIndex;
-
-			// 「無」をクリックした
-			if (bDrawerNone)
-			{
-				message = 68;
-			}
-
 		}
 		else if (bStoneMode)
 		{
@@ -3927,6 +3929,9 @@ void CameraTest::lockon()
 				to_m_focusY = -0.6;
 				phiController.setCameraPosition(toCameraPos);
 				phiController.setFocusPosition(drawerPos[0]);
+
+				priorityMessage = 88;
+				priorityMessageCount = priorityMessageCountMax;
 			}
 			else
 			{
