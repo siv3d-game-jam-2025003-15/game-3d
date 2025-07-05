@@ -868,7 +868,7 @@ void CameraTest::update()
 
 			if (xboxController.rightThumbX < -0.1)
 			{
-				phiController.rotate(60_deg, deltaTime, -xboxController.rightThumbX);
+				phiController.rotate(60_deg, deltaTime, -xboxController.rightThumbX * xboxCameraSpeed);
 			}
 
 			if (diffMousePosX < -0.1)
@@ -883,7 +883,7 @@ void CameraTest::update()
 
 			if (xboxController.rightThumbX > 0.1)
 			{
-				phiController.rotate(-60_deg, deltaTime, xboxController.rightThumbX);
+				phiController.rotate(-60_deg, deltaTime, xboxController.rightThumbX * xboxCameraSpeed);
 			}
 
 			if (diffMousePosX > 0.1)
@@ -1161,7 +1161,7 @@ void CameraTest::update()
 
 			if (xboxController.rightThumbY > 0.1)
 			{
-				to_m_focusY += (yDelta * xboxController.rightThumbY);
+				to_m_focusY += (yDelta * xboxController.rightThumbY * xboxCameraSpeed);
 			}
 
 			if (diffMousePosY > 0.1)
@@ -1177,7 +1177,7 @@ void CameraTest::update()
 
 			if (xboxController.rightThumbY < -0.1)
 			{
-				to_m_focusY -= (yDelta * -xboxController.rightThumbY);
+				to_m_focusY -= (yDelta * -xboxController.rightThumbY * xboxCameraSpeed);
 			}
 
 			if (diffMousePosY < -0.1)

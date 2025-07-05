@@ -1611,4 +1611,6 @@ private:
 
 	// 前回のメッセージ
 	int lastMessage = 0;
+
+	float xboxCameraSpeed = 2.0;
 };
