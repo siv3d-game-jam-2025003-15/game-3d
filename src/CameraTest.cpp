@@ -2271,7 +2271,7 @@ void CameraTest::update()
 			Vec2{ fireplacePos.x, fireplacePos.z }
 		);
 #if _DEBUG
-		Print << U"GetDistance=" << d;
+//		Print << U"GetDistance=" << d;
 #endif
 		double Volume = 3 - d;
 		if (Volume < 0)
@@ -3293,9 +3293,18 @@ void CameraTest::viewModel()
 		//};
 		//modelExclamationMark.draw();
 
+		// ビックリマークとカメラの距離
+	//	Vec3 focus = camera.getFocusPosition();
+		double distance = curCameraPosition.distanceFrom(markPosition);
+
+		float tempSize = distance * markSize;
+
+		Print << U"distance" << distance;
+		Print << U"tempSize" << tempSize;
+
 		// ビルボードの表示
 		const Mat4x4 billboardMat = camera.getInvView();
-		billboard.draw(camera.billboard(markPosition, markSize), uvChecker);
+		billboard.draw(camera.billboard(markPosition, tempSize), uvChecker);
 	}
 
 	// 暖炉の炎
@@ -3360,7 +3369,8 @@ void CameraTest::lockon()
 	{
 		// 座標の調整
 		Vec3 temp = rustedKeyPos;
-		temp.x -= 0.12;
+	//	temp.x -= 0.12;
+		temp.x -= 0.22;
 		temp.y += 0.2+ markHigh;
 		temp.z += 0.0;
 
@@ -3442,6 +3452,7 @@ void CameraTest::lockon()
 	{
 		Vec3 temp = hangerPos;
 		temp.y += markHigh;
+		temp.z -= 0.05;
 
 		auto [a, b, c, d] = hangerController.update(
 			temp,
@@ -3559,23 +3570,23 @@ void CameraTest::lockon()
 		Vec3 temp = doorPos;
 		//temp.x += 0.70;	// 原点が端っこの時
 		temp.x += 0.0;
-		temp.y += 1.2+ markHigh;
+		temp.y += 1.3+ markHigh;
 		temp.z += 0.2;
 
-		Print << U"扉";
+		//Print << U"扉";
 
 		Vec3 screenPos = camera.worldToScreenPoint(temp);
 		Vec3 focus = camera.getFocusPosition();
 		double distance = focus.distanceFrom(temp);
 
-		Print << U"screenPos=" << screenPos;
-		Print << U"focus=" << focus;
-		Print << U"distance=" << distance;
+		//Print << U"screenPos=" << screenPos;
+		//Print << U"focus=" << focus;
+		//Print << U"distance=" << distance;
 
-		Print << U"(WINDOW_WIDTH / 2 - focusWidth)=" << (WINDOW_WIDTH / 2 - focusWidth);
-		Print << U"(WINDOW_WIDTH / 2 + focusWidth)=" << (WINDOW_WIDTH / 2 + focusWidth);
-		Print << U"(WINDOW_HEIGHT / 2 - focusHeight)=" << (WINDOW_HEIGHT / 2 - focusHeight);
-		Print << U"(WINDOW_HEIGHT / 2 + focusHeight)=" << (WINDOW_HEIGHT / 2 + focusHeight);
+		//Print << U"(WINDOW_WIDTH / 2 - focusWidth)=" << (WINDOW_WIDTH / 2 - focusWidth);
+		//Print << U"(WINDOW_WIDTH / 2 + focusWidth)=" << (WINDOW_WIDTH / 2 + focusWidth);
+		//Print << U"(WINDOW_HEIGHT / 2 - focusHeight)=" << (WINDOW_HEIGHT / 2 - focusHeight);
+		//Print << U"(WINDOW_HEIGHT / 2 + focusHeight)=" << (WINDOW_HEIGHT / 2 + focusHeight);
 
 		auto [a, b, c, d] = doorController.update(
 			temp,
@@ -3587,7 +3598,7 @@ void CameraTest::lockon()
 			false
 		);
 
-		Print << U"扉END";
+		//Print << U"扉END";
 
 		// TODO インベントリから開ける
 		//if (a == true && bDoorOpen[0] == false && bWireKey)
@@ -3636,7 +3647,7 @@ void CameraTest::lockon()
 		// 座標の調整
 		Vec3 temp = door2Pos;
 		temp.x += 0.0;
-		temp.y += 1.2 + markHigh;
+		temp.y += 1.3 + markHigh;
 		temp.z -= 0.2;
 
 		auto [a, b, c, d] = door2Controller.update(
@@ -3760,6 +3771,7 @@ void CameraTest::lockon()
 	{
 		Vec3 temp = door4Pos;
 		temp.y += markHigh;
+		temp.z += 0.05;
 
 		auto [a, b, c, d] = door2Controller.update(
 			temp,
@@ -4019,7 +4031,7 @@ void CameraTest::lockon()
 	if (!bLockon && bStoneMode == false)
 	{
 		Vec3 temp = stonePos[0];
-		temp.x -= 0.15;
+		temp.x -= 0.22;
 		temp.y += markHigh;
 		//	temp.y += 0.5;
 		//	temp.z -= 0.3;

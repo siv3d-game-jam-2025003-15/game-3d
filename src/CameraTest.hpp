@@ -528,14 +528,15 @@ private:
 	// 詰所の壁際の椅子
 	Vec3 chairPos = { 19.88, 0.72, -4.05 };
 	Vec3 chair2Pos = { 19.88, 0.72, -4.70 };
-	Vec3 chair3Pos = { 16.23, 1.1, -2.11 };
-	Vec3 chair4Pos = { 16.23, 1.1, -3.68 };
+	Vec3 chair3Pos = { 16.23, 1.15, -2.11 };
+	Vec3 chair4Pos = { 16.23, 1.15, -3.68 };
 
 	// 詰所のテーブル
 	Vec3 tablePos = { 16.25, 0.75, -2.92 };
 
 	// 木箱
-	Vec3 woodenBoxPos = { 19.76, 1.14, 1.37 };
+//	Vec3 woodenBoxPos = { 19.76, 1.14, 1.37 };
+	Vec3 woodenBoxPos = { 19.76, 1.2, 1.37 };
 	Vec3 woodenBox2Pos = { -3.57, 0.86, -3.16 };
 	Vec3 woodenBox3Pos = { 14.1, 0.79, -6.56 };
 
@@ -544,12 +545,12 @@ private:
 	Vec3 handcuffs2Pos = { 13.11, 1.23, 1.75 };
 
 	// 絵画
-	Vec3 paintingPos = { 20.05, 1.45, -5.76 };
+	Vec3 paintingPos = { 20.00, 1.45, -5.76 };
 
 	// 小さい棚
 	Vec3 smallShelfPos = { -3.79, 2, -0.93 };
-	Vec3 smallShelf2Pos = { 12.56, 2, -5.17 };
-	Vec3 smallShelf3Pos = { 18.81, 2, -7.19 };
+	Vec3 smallShelf2Pos = { 12.6, 2, -5.17 };
+	Vec3 smallShelf3Pos = { 18.81, 2.05, -7.19 };
 
 	// オブジェクトクラス
 	ObjectController breadController;
@@ -742,7 +743,8 @@ private:
 
 	// ビックリマーク
 	Vec3 markPosition{ 0.0, 0.0, 0.0 };
-	float markSize = 0.3;
+//	float markSize = 0.3;
+	float markSize = 0.2;
 	float markHigh = 0.2;
 
 	// 取得しているアイテム一覧
