@@ -985,7 +985,7 @@ void CameraTest::update()
 			const double zr = (scaledSpeed * ccc);
 
 			bool isWalk = false;
-			if (KeyW.pressed())
+			if (KeyW.pressed() || xboxController.buttonUp.pressed())
 			{
 				toCameraPos.x += xr;
 				toCameraPos.z += zr;
@@ -998,7 +998,7 @@ void CameraTest::update()
 				isWalk = true;
 			}
 
-			if (KeyS.pressed())
+			if (KeyS.pressed() || xboxController.buttonDown.pressed())
 			{
 				toCameraPos.x -= xr;
 				toCameraPos.z -= zr;
@@ -1011,7 +1011,7 @@ void CameraTest::update()
 				isWalk = true;
 			}
 
-			if (KeyA.pressed())
+			if (KeyA.pressed() || xboxController.buttonLeft.pressed())
 			{
 				toCameraPos.x -= zr;
 				toCameraPos.z += xr;
@@ -1024,7 +1024,7 @@ void CameraTest::update()
 				isWalk = true;
 			}
 
-			if (KeyD.pressed())
+			if (KeyD.pressed() || xboxController.buttonRight.pressed())
 			{
 				toCameraPos.x += zr;
 				toCameraPos.z -= xr;
