@@ -2821,6 +2821,15 @@ void CameraTest::viewInventory()
 		}
 	}
 
+	if (-0.1 < xboxController.leftThumbX && xboxController.leftThumbX < 0.1)
+	{
+		xboxControllerDownX = false;
+	}
+	if (-0.1 < xboxController.leftThumbY && xboxController.leftThumbY < 0.1)
+	{
+		xboxControllerDownY = false;
+	}
+
 	if (KeyA.down() || xboxController.buttonLeft.down())
 	{
 		KeyMode = true;
@@ -2831,26 +2840,16 @@ void CameraTest::viewInventory()
 			selectItem = 0;
 		}
 	}
-
-	if (KeyW.down() || xboxController.buttonUp.down())
+	if (xboxController.leftThumbX < -0.1 && xboxControllerDownX == false)
 	{
+		xboxControllerDownX = true;
+
 		KeyMode = true;
 
-		selectItem -= 4;
+		selectItem--;
 		if (selectItem < 0)
 		{
 			selectItem = 0;
-		}
-	}
-
-	if (KeyS.down() || xboxController.buttonDown.down())
-	{
-		KeyMode = true;
-
-		selectItem += 4;
-		if (selectItem > items.size() - 1)
-		{
-			selectItem = items.size() - 1;
 		}
 	}
 
@@ -2864,6 +2863,64 @@ void CameraTest::viewInventory()
 			selectItem = items.size() - 1;
 		}
 	}
+	if (xboxController.leftThumbX > 0.1 && xboxControllerDownX == false)
+	{
+		xboxControllerDownX = true;
+
+		KeyMode = true;
+
+		selectItem++;
+		if (selectItem > items.size() - 1)
+		{
+			selectItem = items.size() - 1;
+		}
+	}
+
+	if (KeyS.down() || xboxController.buttonDown.down())
+	{
+		KeyMode = true;
+
+		selectItem += 4;
+		if (selectItem > items.size() - 1)
+		{
+			selectItem = items.size() - 1;
+		}
+	}
+	if (xboxController.leftThumbY < -0.1 && xboxControllerDownY == false)
+	{
+		xboxControllerDownY = true;
+
+		selectItem += 4;
+		if (selectItem > items.size() - 1)
+		{
+			selectItem = items.size() - 1;
+		}
+	}
+
+	if (KeyW.down() || xboxController.buttonUp.down())
+	{
+		KeyMode = true;
+
+		selectItem -= 4;
+		if (selectItem < 0)
+		{
+			selectItem = 0;
+		}
+	}
+	if (xboxController.leftThumbY > 0.1 && xboxControllerDownY == false)
+	{
+		xboxControllerDownY = true;
+
+		selectItem -= 4;
+		if (selectItem < 0)
+		{
+			selectItem = 0;
+		}
+	}
+
+
+
+
 
 	// マウスを動かしたかどうか
 	Vec2 currentCursorPos = Cursor::PosF();

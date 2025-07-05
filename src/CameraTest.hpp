@@ -1634,6 +1634,8 @@ private:
 	float xboxCameraSpeed = 2.0;
 
 	bool xboxControllerDown = false;
+	bool xboxControllerDownX = false;
+	bool xboxControllerDownY = false;
 
 	bool KeyMode = false;
 
