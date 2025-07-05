@@ -426,38 +426,29 @@ void CameraTest::debug()
 
 	if (KeyZ.pressed())
 	{
-	//	debugPos.x += 0.0001;
+		painting2Pos.x += 0.01;
 	}
 	if (KeyX.pressed())
 	{
-	//	debugPos.x -= 0.0001;
+		painting2Pos.x -= 0.01;
 	}
 
 	if (KeyC.pressed())
 	{
-	//	debugPos.y += 0.0001;
+		painting2Pos.y += 0.01;
 	}
 	if (KeyV.pressed())
 	{
-	//	debugPos.y -= 0.0001;
+		painting2Pos.y -= 0.01;
 	}
 
 	if (KeyB.pressed())
 	{
-	//	debugPos.z += 0.0001;
+		painting2Pos.z += 0.01;
 	}
 	if (KeyN.pressed())
 	{
-	//	debugPos.z -= 0.0001;
-	}
-
-	if (KeyM.pressed())
-	{
-	//	debugPosY2 += 0.0001;
-	}
-	if (KeyL.pressed())
-	{
-	//	debugPosY2 -= 0.0001;
+		painting2Pos.z -= 0.01;
 	}
 
 	if (mouseDirectionX == 1)
@@ -557,8 +548,7 @@ void CameraTest::debug()
 	Print << U"CameraY=" << toCameraPos.y;
 	Print << U"CameraZ=" << toCameraPos.z;
 
-	//Print << U"debugPos=" << debugPos;
-	//Print << U"debugPosY2=" << debugPosY2;
+	Print << U"painting2Pos=" << painting2Pos;
 
 #endif
 }
@@ -4643,6 +4633,34 @@ void CameraTest::lockon()
 		if (d)
 		{
 			message = 23;
+			priorityMessageCount = 0;
+		}
+	}
+
+	// 暖炉上の絵画
+	if (!bLockon)
+	{
+		Vec3 temp = painting2Pos;
+		temp.y += markHigh;
+
+		auto [a, b, c, d] = paintingController.update(
+			temp,
+			camera,
+			curCameraPosition,
+			//	ray,
+			markPosition,
+			-1,
+			false
+		);
+		if (b)
+		{
+			// 見ている
+			bLockon = b;
+			bookingMessage = 92;
+		}
+		if (d)
+		{
+			message = 92;
 			priorityMessageCount = 0;
 		}
 	}
